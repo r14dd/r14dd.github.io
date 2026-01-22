@@ -1,0 +1,60 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { profile } from "../data/profile";
+---
+
+<BaseLayout>
+  <section>
+    <h1>{profile.hero.name}</h1>
+    <strong>{profile.hero.title}</strong>
+    <p>{profile.hero.tagline}</p>
+  </section>
+
+  <section>
+    <a href={profile.links.resume}>Resume</a> ·
+    <a href={profile.links.linkedin}>LinkedIn</a> ·
+    <a href={profile.links.github}>GitHub</a>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+    {profile.experience.map((exp) => (
+      <div>
+        <h3>{exp.role}</h3>
+        <small>{exp.org} — {exp.location} · {exp.period}</small>
+        <ul>
+          {exp.bullets.map((b) => <li>{b}</li>)}
+        </ul>
+      </div>
+    ))}
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+    {profile.projects.map((p) => (
+      <div>
+        <h3>{p.name}</h3>
+        <small>{p.tech.join(" · ")} · {p.date}</small>
+        <ul>
+          {p.bullets.map((b) => <li>{b}</li>)}
+        </ul>
+        {p.links?.github && <a href={p.links.github}>GitHub</a>}
+      </div>
+    ))}
+  </section>
+
+  <section>
+  <h2>Teaching</h2>
+
+  {profile.teaching.map((t) => (
+    <div style="margin-bottom: 2rem">
+      <h3>{t.title}</h3>
+      <small>{t.skills}</small>
+      <ul>
+        {t.bullets.map((b) => <li>{b}</li>)}
+      </ul>
+    </div>
+  ))}
+</section>
+
+</BaseLayout>
