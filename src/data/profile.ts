@@ -44,7 +44,7 @@ export const profile: Profile = {
     name: "Riad Mukhtarov",
     title: "Software Engineer",
     tagline:
-      "Software engineer building scalable and reliable software with a focus in distributed systems.",
+      "Riad is an engineer building reliable software with a focus in distributed systems.",
   },
 
   links: {

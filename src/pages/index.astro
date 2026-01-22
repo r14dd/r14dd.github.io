@@ -4,11 +4,16 @@ import { profile } from "../data/profile";
 ---
 
 <BaseLayout>
-  <section>
-    <h1>{profile.hero.name}</h1>
-    <strong>{profile.hero.title}</strong>
-    <p>{profile.hero.tagline}</p>
-  </section>
+<section>
+  <h1>{profile.hero.name}</h1>
+  <p>
+    <span style="color: var(--accent)">$</span>{" "}
+    {profile.hero.title}
+  </p>
+  <p style="color: var(--text-muted)">
+    {profile.hero.tagline}
+  </p>
+</section>
 
   <section>
     <a href={profile.links.resume}>Resume</a> ·
