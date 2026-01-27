@@ -93,6 +93,28 @@ export const profile: Profile = {
 
   projects: [
     {
+      name: "MatchSentinel",
+      tech: [
+        "Java",
+        "Spring Boot",
+        "RabbitMQ",
+        "PostgreSQL",
+        "Liquibase",
+        "React",
+        "TypeScript",
+        "Docker",
+      ],
+      date: "Jan 2026",
+      bullets: [
+        "Built a fraud pipeline with REST APIs and RabbitMQ across AI, rules, cases, notifications, and reporting",
+        "Implemented per-service persistence with Liquibase and idempotent reporting updates for reliable event handling",
+        "Delivered a live analyst dashboard with filters, drill-downs, and a pipeline simulator for end-to-end flow",
+      ],
+      links: {
+        github: "https://github.com/r14dd/MatchSentinel",
+      },
+    },
+    {
       name: "FinFlow Wallet API",
       tech: ["Java", "Spring Boot", "JWT", "MySQL", "JPA"],
       date: "Jan 2026",
@@ -104,33 +126,33 @@ export const profile: Profile = {
       ],
     },
     {
-    name: "RAFT-based Consensus Algorithm",
-    tech: ["Go", "UDP", "Protobuf"],
-    date: "May 2024",
-    bullets: [
-      "Implemented Raft consensus including leader election and log replication",
-      "Built fault-tolerant coordination ensuring consistency across nodes",
-      "Engineered concurrent server logic handling failures and client requests",
-        ],
+      name: "RAFT-based Consensus Algorithm",
+      tech: ["Go", "UDP", "Protobuf"],
+      date: "May 2024",
+      bullets: [
+        "Implemented Raft consensus including leader election and log replication",
+        "Built fault-tolerant coordination ensuring consistency across nodes",
+        "Engineered concurrent server logic handling failures and client requests",
+      ],
     },
     {
-    name: "Distributed Hash Table (Kademlia)",
-    tech: ["Go", "TCP", "Protobuf"],
-    date: "Feb 2024",
-    bullets: [
-      "Built a peer-to-peer distributed hash table using Kademlia routing",
-      "Implemented recursive node discovery for dynamic networks",
-      "Designed Protobuf-based messaging for efficient data retrieval",
-        ],
+      name: "Distributed Hash Table (Kademlia)",
+      tech: ["Go", "TCP", "Protobuf"],
+      date: "Feb 2024",
+      bullets: [
+        "Built a peer-to-peer distributed hash table using Kademlia routing",
+        "Implemented recursive node discovery for dynamic networks",
+        "Designed Protobuf-based messaging for efficient data retrieval",
+      ],
     },
     {
-    name: "RL Environment Algorithm",
-    tech: ["Python", "Gymnasium", "NumPy", "Matplotlib"],
-    date: "Nov 2023",
-    bullets: [
-      "Designed a custom Gym-compliant reinforcement learning environment",
-      "Implemented SARSA, Q-learning, and Double Q-learning algorithms",
-      "Analyzed agent performance under varying reward and learning conditions",
+      name: "RL Environment Algorithm",
+      tech: ["Python", "Gymnasium", "NumPy", "Matplotlib"],
+      date: "Nov 2023",
+      bullets: [
+        "Designed a custom Gym-compliant reinforcement learning environment",
+        "Implemented SARSA, Q-learning, and Double Q-learning algorithms",
+        "Analyzed agent performance under varying reward and learning conditions",
       ],
     },
   ],
