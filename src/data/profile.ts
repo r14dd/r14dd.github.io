@@ -124,6 +124,9 @@ export const profile: Profile = {
         "Applied security best practices including hashing and token expiration",
         "Developed integration tests for protected endpoints",
       ],
+      links: {
+        github: "https://github.com/r14dd/FinFlow",
+      },
     },
     {
       name: "RAFT-based Consensus Algorithm",
