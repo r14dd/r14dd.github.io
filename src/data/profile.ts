@@ -248,9 +248,9 @@ export const profile: Profile = {
     },
   ],
   reading: {
-    title: "",
+    title: "Reading",
     description:
-      "Narrative structure, human behavior under constraints, and ambiguity — useful lenses for modeling real-world problems.",
+      "I’ve been reading the writers below for the past 3–4 years; their narrative structure, human behavior under constraints, and ambiguity are useful lenses for modeling real‑world problems.",
     authors: [
       "Erich Maria Remarque *",
       "Émile Zola",
