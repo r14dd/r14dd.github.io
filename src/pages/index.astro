@@ -4,62 +4,130 @@ import { profile } from "../data/profile";
 ---
 
 <BaseLayout>
-<section>
-  <h1>{profile.hero.name}</h1>
-  <p>
-    <span style="color: var(--accent)">$</span>{" "}
-    {profile.hero.title}
-  </p>
-  <p style="color: var(--text-muted)">
-    {profile.hero.tagline}
-  </p>
-</section>
+  <div class="page">
+    <aside class="sidebar">
+      <div class="sidebar-title">Sections</div>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#education">Education</a>
+      <a href="#skills">Skills</a>
+      <a href="#reading">Reading</a>
+    </aside>
 
-  <section>
-    <a href={profile.links.resume}>Resume</a> ·
-    <a href={profile.links.linkedin}>LinkedIn</a> ·
-    <a href={profile.links.github}>GitHub</a>
-  </section>
+    <div class="content">
+      <section>
+        <h1>{profile.hero.name}</h1>
+        <p>
+          <span style="color: var(--accent)">$</span>{" "}
+          {profile.hero.title}
+        </p>
+        <p style="color: var(--text-muted)">
+          {profile.hero.tagline}
+        </p>
+      </section>
 
-  <section>
-    <h2>Experience</h2>
-    {profile.experience.map((exp) => (
-      <div>
-        <h3>{exp.role}</h3>
-        <small>{exp.org} — {exp.location} · {exp.period}</small>
-        <ul>
-          {exp.bullets.map((b) => <li>{b}</li>)}
-        </ul>
-      </div>
-    ))}
-  </section>
+      <section>
+        <a href={profile.links.resume}>Resume</a> ·
+        <a href={profile.links.linkedin}>LinkedIn</a> ·
+        <a href={profile.links.github}>GitHub</a>
+      </section>
 
-  <section>
-    <h2>Projects</h2>
-    {profile.projects.map((p) => (
-      <div>
-        <h3>{p.name}</h3>
-        <small>{p.tech.join(" · ")} · {p.date}</small>
-        <ul>
-          {p.bullets.map((b) => <li>{b}</li>)}
-        </ul>
-        {p.links?.github && <a href={p.links.github}>GitHub</a>}
-      </div>
-    ))}
-  </section>
+      <section id="experience">
+        <details class="accordion" data-accordion>
+          <summary><h2>Experience</h2></summary>
+          {profile.experience.map((exp) => (
+            <div>
+              <h3>{exp.role}</h3>
+              <small>{exp.org} — {exp.location} · {exp.period}</small>
+              <ul>
+                {exp.bullets.map((b) => <li>{b}</li>)}
+              </ul>
+            </div>
+          ))}
+        </details>
+      </section>
 
-  <section>
-  <h2>Teaching</h2>
+      <section id="projects">
+        <details class="accordion" data-accordion>
+          <summary><h2>Projects</h2></summary>
+          {profile.projects.map((p) => (
+            <div>
+              <h3>{p.name}</h3>
+              <small>{p.tech.join(" · ")} · {p.date}</small>
+              <ul>
+                {p.bullets.map((b) => <li>{b}</li>)}
+              </ul>
+              {p.links?.github && <a href={p.links.github}>GitHub</a>}
+            </div>
+          ))}
+        </details>
+      </section>
 
-  {profile.teaching.map((t) => (
-    <div style="margin-bottom: 2rem">
-      <h3>{t.title}</h3>
-      <small>{t.skills}</small>
-      <ul>
-        {t.bullets.map((b) => <li>{b}</li>)}
-      </ul>
+      <section id="teaching">
+        <details class="accordion" data-accordion>
+          <summary><h2>Teaching</h2></summary>
+          {profile.teaching.map((t) => (
+            <div style="margin-bottom: 2rem">
+              <h3>{t.title}</h3>
+              <small>{t.skills}</small>
+              <ul>
+                {t.bullets.map((b) => <li>{b}</li>)}
+              </ul>
+            </div>
+          ))}
+        </details>
+      </section>
+
+      <section id="education">
+        <details class="accordion" data-accordion>
+          <summary><h2>Education</h2></summary>
+          <div>
+            <h3>University at Buffalo — BS in Computer Science</h3>
+            <small>Aug 2020 – May 2024 · Buffalo, New York</small>
+            <ul>
+              <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <section id="skills">
+        <details class="accordion" data-accordion>
+          <summary><h2>Technical Skills</h2></summary>
+          {profile.skills.map((s) => (
+            <div>
+              <h3>{s.category}</h3>
+              <small>{s.items.join(" · ")}</small>
+            </div>
+          ))}
+        </details>
+      </section>
+
+      <section id="reading">
+        <details class="accordion" data-accordion>
+          <summary><h2>{profile.reading.title}</h2></summary>
+          <p>{profile.reading.description}</p>
+          <ul>
+            {profile.reading.authors.map((a) => <li>{a}</li>)}
+          </ul>
+        </details>
+      </section>
     </div>
-  ))}
-</section>
+  </div>
 
+  <script>
+    const openFromHash = () => {
+      const id = window.location.hash.replace("#", "");
+      if (!id) return;
+      const section = document.getElementById(id);
+      if (!section) return;
+      const details = section.querySelector("details");
+      if (details) details.open = true;
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    window.addEventListener("hashchange", openFromHash);
+    window.addEventListener("load", openFromHash);
+  </script>
 </BaseLayout>

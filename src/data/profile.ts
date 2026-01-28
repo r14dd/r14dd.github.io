@@ -36,6 +36,15 @@ export type Profile = {
   }[];
   projects: Project[];
   teaching: Teaching[];
+  skills: {
+    category: string;
+    items: string[];
+  }[];
+  reading: {
+    title: string;
+    description: string;
+    authors: string[];
+  };
 };
 
 
@@ -44,7 +53,7 @@ export const profile: Profile = {
     name: "Riad Mukhtarov",
     title: "Software Engineer",
     tagline:
-      "Riad is an engineer building reliable software with a focus in distributed systems.",
+      "Riad is a software engineer building reliable, production-ready systems and event-driven architectures.",
   },
 
   links: {
@@ -55,15 +64,15 @@ export const profile: Profile = {
 
   experience: [
     {
-      role: "Information Communication Technology Assistant",
+      role: "Information and Communication Technology (ICT) Assistant",
       org: "COP29 United Nations Climate Change Conference",
       location: "Baku, Azerbaijan",
       period: "Oct 2024 – Nov 2024",
       bullets: [
-        "Supported ICT operations for 500+ UN delegates across network, AV, and collaboration systems",
-        "Resolved hybrid session issues in real time, preventing communication delays",
-        "Improved system security through access controls, device hardening, and data handling",
-        "Deployed and optimized hardware/software with vendors to increase reliability",
+        "Supported ICT operations for 500+ international delegates in a mission-critical environment",
+        "Resolved real-time infrastructure and hybrid session incidents under strict availability requirements",
+        "Assisted with access control, device hardening, and secure system handling",
+        "Collaborated with vendors and technical teams to ensure uninterrupted operations",
       ],
     },
     {
@@ -93,49 +102,48 @@ export const profile: Profile = {
 
   projects: [
     {
-      name: "MatchSentinel",
+      name: "MatchSentinel — Transaction Monitoring Platform",
       tech: [
         "Java",
         "Spring Boot",
         "RabbitMQ",
         "PostgreSQL",
         "Liquibase",
-        "React",
-        "TypeScript",
         "Docker",
+        "AWS EC2",
       ],
       date: "Jan 2026",
       bullets: [
-        "Built a fraud pipeline with REST APIs and RabbitMQ across AI, rules, cases, notifications, and reporting",
-        "Implemented per-service persistence with Liquibase and idempotent reporting updates for reliable event handling",
-        "Delivered a live analyst dashboard with filters, drill-downs, and a pipeline simulator for end-to-end flow",
+        "Designed an event-driven microservices architecture spanning scoring, rules, cases, notifications, and reporting",
+        "Built async inter-service communication with RabbitMQ and idempotent consumers for safe reprocessing",
+        "Implemented per-service databases with Liquibase migrations plus environment-based configuration",
+        "Deployed to AWS EC2 using Docker Compose, Linux networking, and public service endpoints",
       ],
       links: {
-        github: "https://github.com/r14dd/MatchSentinel",
+        github: "https://github.com/r14dd/matchsentinel",
       },
     },
     {
-      name: "FinFlow Wallet API",
-      tech: ["Java", "Spring Boot", "JWT", "MySQL", "JPA"],
+      name: "FinFlow — Wallet API",
+      tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL", "JPA"],
       date: "Jan 2026",
       bullets: [
-        "Implemented secure JWT-based authentication and authorization",
-        "Designed relational data models with JPA/Hibernate",
-        "Applied security best practices including hashing and token expiration",
-        "Developed integration tests for protected endpoints",
+        "Implemented secure authentication and authorization using JWT-based stateless sessions",
+        "Designed relational data models using JPA/Hibernate with optimized repository queries",
+        "Applied security best practices including password hashing, token expiration, and request filtering",
+        "Developed integration tests to validate authentication flows and protected endpoints",
       ],
       links: {
-        github: "https://github.com/r14dd/FinFlow",
+        github: "https://github.com/r14dd/finflow",
       },
     },
     {
-      name: "RAFT-based Consensus Algorithm",
+      name: "Raft-Based Consensus Algorithm",
       tech: ["Go", "UDP", "Protobuf"],
       date: "May 2024",
       bullets: [
-        "Implemented Raft consensus including leader election and log replication",
-        "Built fault-tolerant coordination ensuring consistency across nodes",
-        "Engineered concurrent server logic handling failures and client requests",
+        "Implemented Raft consensus with leader election, log replication, and fault tolerance",
+        "Built concurrent server components to maintain consistency across distributed nodes",
       ],
     },
     {
@@ -143,19 +151,8 @@ export const profile: Profile = {
       tech: ["Go", "TCP", "Protobuf"],
       date: "Feb 2024",
       bullets: [
-        "Built a peer-to-peer distributed hash table using Kademlia routing",
-        "Implemented recursive node discovery for dynamic networks",
-        "Designed Protobuf-based messaging for efficient data retrieval",
-      ],
-    },
-    {
-      name: "RL Environment Algorithm",
-      tech: ["Python", "Gymnasium", "NumPy", "Matplotlib"],
-      date: "Nov 2023",
-      bullets: [
-        "Designed a custom Gym-compliant reinforcement learning environment",
-        "Implemented SARSA, Q-learning, and Double Q-learning algorithms",
-        "Analyzed agent performance under varying reward and learning conditions",
+        "Implemented a peer-to-peer distributed storage system using Kademlia routing",
+        "Achieved efficient O(log n) lookups and resilient data routing across nodes",
       ],
     },
   ],
@@ -220,4 +217,46 @@ export const profile: Profile = {
     ],
   },
 ],
+  skills: [
+    {
+      category: "Programming Languages",
+      items: ["Java", "Python", "Go", "Rust (familiar)", "JavaScript (familiar)", "Scala (familiar)", "C (familiar)"],
+    },
+    {
+      category: "Backend & Frameworks",
+      items: ["Spring Boot", "Spring Security", "REST APIs", "JWT Authentication", "FastAPI"],
+    },
+    {
+      category: "Architecture & Concepts",
+      items: ["Microservices Architecture", "Event-Driven Systems", "Asynchronous Messaging", "Idempotent Consumers", "Distributed Systems"],
+    },
+    {
+      category: "Messaging & Integration",
+      items: ["RabbitMQ", "AMQP", "Inter-Service Communication"],
+    },
+    {
+      category: "Databases & Persistence",
+      items: ["PostgreSQL", "MySQL", "MongoDB", "JPA/Hibernate", "Liquibase", "SQL Query Design"],
+    },
+    {
+      category: "Cloud & Infrastructure",
+      items: ["AWS EC2", "Linux", "Docker", "Docker Compose", "Environment-Based Configuration", "SSH", "Networking Basics"],
+    },
+    {
+      category: "Testing & Tooling",
+      items: ["JUnit", "Testcontainers", "Integration Testing", "Git", "GitHub", "CI/CD Basics"],
+    },
+  ],
+  reading: {
+    title: "",
+    description:
+      "Narrative structure, human behavior under constraints, and ambiguity — useful lenses for modeling real-world problems.",
+    authors: [
+      "Erich Maria Remarque *",
+      "Émile Zola",
+      "Vladimir Nabokov",
+      "Charlotte Brontë",
+      "Chuck Palahniuk",
+    ],
+  },
 };
