@@ -220,11 +220,11 @@ export const profile: Profile = {
   skills: [
     {
       category: "Programming Languages",
-      items: ["Java", "Python", "Go", "Rust (familiar)", "JavaScript (familiar)", "Scala (familiar)", "C (familiar)"],
+      items: ["Java", "Python", "Rust", "Go (familiar)", "C (familiar)", "JavaScript (familiar)", "Scala (familiar)"],
     },
     {
       category: "Backend & Frameworks",
-      items: ["Spring Boot", "Spring Security", "REST APIs", "JWT Authentication", "FastAPI"],
+      items: ["Spring Boot", "Spring Security", "REST APIs", "JWT Authentication", "FastAPI", "Flask"],
     },
     {
       category: "Architecture & Concepts",

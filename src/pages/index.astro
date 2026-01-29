@@ -159,11 +159,11 @@ import { profile } from "../data/profile";
             <div class="tech-meta skills-line">{s.items.join(" · ")}</div>
           </div>
         ))}
-      </section>
+    </section>
 
-      <section id="reading" class="section-block">
-        <h2>{profile.reading.title}</h2>
-        <p>{profile.reading.description}</p>
+    <section id="reading" class="section-block">
+      <h2>{profile.reading.title}</h2>
+      <p>{profile.reading.description}</p>
         <div class="reading-inline">
           <div class="reading-row"><span class="author">Erich Maria Remarque*</span><span class="reading-quote">"We become not as we want to be, but as we are."</span></div>
           <div class="reading-row"><span class="author">Mikhail Bulgakov</span><span class="reading-quote">"Manuscripts don't burn."</span></div>
@@ -171,6 +171,13 @@ import { profile } from "../data/profile";
           <div class="reading-row"><span class="author">Chuck Palahniuk</span><span class="reading-quote">"The future will be better tomorrow."</span></div>
           <div class="reading-row"><span class="author">Emile Zola</span><span class="reading-quote">"Truth is on the march, and nothing will stop it."</span></div>
         </div>
+      </section>
+      <section id="connect" class="section-block">
+        <h2>Connect</h2>
+        <p>
+          Reach me at <a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a> or
+          <a href="tel:+994508998676" target="_blank" rel="noopener"> +994 50 899 8676</a>
+        </p>
       </section>
   </main>
 
@@ -205,6 +212,7 @@ import { profile } from "../data/profile";
       if (mobileCurrent) {
         const label = active?.textContent ?? current.id;
         mobileCurrent.textContent = label;
+        mobileCurrent.classList.add("active");
       }
     };
 
