@@ -218,12 +218,21 @@
         color: var(--muted);
       }
 
-      .mobile-nav {
+      .mobile-bar {
         display: none;
         position: fixed;
-        top: 1.2rem;
-        left: 1.2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(1rem + env(safe-area-inset-bottom));
         z-index: 12;
+        background: rgba(10, 10, 10, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        padding: 0.4rem 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        backdrop-filter: blur(10px);
       }
 
       .hamburger {
@@ -248,14 +257,25 @@
         opacity: 0.7;
       }
 
+      .mobile-current {
+        font-size: 0.8rem;
+        color: var(--text-soft);
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
       .mobile-menu {
         display: none;
-        margin-top: 0.6rem;
+        position: fixed;
+        left: 1rem;
+        right: 1rem;
+        bottom: calc(4.2rem + env(safe-area-inset-bottom));
         background: rgba(10, 10, 10, 0.8);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 10px;
-        padding: 0.6rem 0.8rem;
+        padding: 0.8rem 1rem;
         backdrop-filter: blur(10px);
+        z-index: 12;
       }
 
       .mobile-menu.open {
@@ -350,7 +370,11 @@
       .exp-meta {
         opacity: 0.4;
         transition: opacity 0.2s ease;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
+        font-weight: 400;
+        font-family: inherit;
+        line-height: 1.4;
+        color: var(--muted);
       }
 
       .project-card:hover .exp-meta {
@@ -363,14 +387,6 @@
         gap: 0.2rem;
       }
 
-      .project-card small {
-        opacity: 0.4;
-        transition: opacity 0.2s ease;
-      }
-
-      .project-card:hover small {
-        opacity: 1;
-      }
 
       .job-title {
         font-weight: 600;
@@ -380,8 +396,18 @@
       .project-tech {
         color: var(--muted);
         font-size: 0.85rem;
+        font-weight: 400;
+        line-height: 1.4;
         opacity: 0.4;
         transition: opacity 0.2s ease;
+      }
+
+      .tech-meta {
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-weight: 400;
+        line-height: 1.4;
+        opacity: 0.4;
       }
 
       .project-header {
@@ -559,8 +585,13 @@
           display: none;
         }
 
-        .mobile-nav {
-          display: block;
+        .mobile-bar {
+          display: flex;
+          bottom: calc(2.2rem + env(safe-area-inset-bottom));
+        }
+
+        .mobile-menu {
+          bottom: calc(5.4rem + env(safe-area-inset-bottom));
         }
 
         .hero-links {
@@ -589,6 +620,18 @@
         }
 
         .project-tech {
+          opacity: 0.7;
+        }
+
+        .tech-meta {
+          opacity: 0.7;
+        }
+
+        .exp-meta {
+          opacity: 0.7;
+        }
+
+        .project-card:hover .exp-meta {
           opacity: 0.7;
         }
 
