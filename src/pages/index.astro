@@ -8,20 +8,21 @@ import { profile } from "../data/profile";
     <div class="scroll-progress" id="scroll-progress"></div>
   </div>
 
-  <div class="mobile-nav">
+  <div class="mobile-bar">
     <button class="hamburger" type="button" aria-label="Open menu">
       <span></span>
       <span></span>
       <span></span>
     </button>
-    <div class="mobile-menu" aria-hidden="true">
-      <a href="#experience">Experience</a>
-      <a href="#projects">Projects</a>
-      <a href="#teaching">Teaching</a>
-      <a href="#education">Education</a>
-      <a href="#skills">Skills</a>
-      <a href="#reading">Reading</a>
-    </div>
+    <div class="mobile-current" aria-live="polite">Experience</div>
+  </div>
+  <div class="mobile-menu" aria-hidden="true">
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#teaching">Teaching</a>
+    <a href="#education">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#reading">Reading</a>
   </div>
 
   <aside class="side-nav">
@@ -58,8 +59,8 @@ import { profile } from "../data/profile";
           <h3 class="job-title">{exp.role}</h3>
           <div class="experience-stack">
             <span class="company-name">{exp.org}</span>
-            <small class="exp-meta mono">{exp.period}</small>
-            <small class="exp-meta mono">{exp.location}</small>
+            <small class="exp-meta">{exp.period}</small>
+            <small class="exp-meta">{exp.location}</small>
           </div>
           <ul>
             {exp.bullets.map((b) => <li>{b}</li>)}
@@ -131,7 +132,7 @@ import { profile } from "../data/profile";
       {profile.teaching.map((t) => (
         <div style="margin-bottom: 2rem" class="project-card">
           <h3>{t.title}</h3>
-          <small class="mono">{t.skills}</small>
+          <div class="tech-meta">{t.skills}</div>
           <ul>
             {t.bullets.map((b) => <li>{b}</li>)}
           </ul>
@@ -143,7 +144,7 @@ import { profile } from "../data/profile";
       <h2>Education</h2>
       <div>
         <h3>University at Buffalo — BS in Computer Science</h3>
-        <small class="mono">Aug 2020 – May 2024 · Buffalo, New York</small>
+        <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
         <ul>
           <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
         </ul>
@@ -155,7 +156,7 @@ import { profile } from "../data/profile";
         {profile.skills.map((s) => (
           <div>
             <h3>{s.category}</h3>
-            <small class="mono skills-line">{s.items.join(" · ")}</small>
+            <div class="tech-meta skills-line">{s.items.join(" · ")}</div>
           </div>
         ))}
       </section>
@@ -187,6 +188,7 @@ import { profile } from "../data/profile";
 
     const sections = Array.from(document.querySelectorAll("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
+    const mobileCurrent = document.querySelector(".mobile-current");
 
     const setActiveLink = () => {
       const scrollPos = window.scrollY + 120;
@@ -200,6 +202,10 @@ import { profile } from "../data/profile";
       navLinks.forEach((link) => link.classList.remove("active"));
       const active = navLinks.find((link) => link.getAttribute("href") === `#${current.id}`);
       active?.classList.add("active");
+      if (mobileCurrent) {
+        const label = active?.textContent ?? current.id;
+        mobileCurrent.textContent = label;
+      }
     };
 
     const updateProgress = () => {
@@ -246,6 +252,13 @@ import { profile } from "../data/profile";
         "aria-hidden",
         mobileMenu.classList.contains("open") ? "false" : "true"
       );
+    });
+
+    mobileMenu?.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.remove("open");
+        mobileMenu.setAttribute("aria-hidden", "true");
+      });
     });
 
   </script>
