@@ -165,11 +165,26 @@ import { profile } from "../data/profile";
       <h2>{profile.reading.title}</h2>
       <p>{profile.reading.description}</p>
         <div class="reading-inline">
-          <div class="reading-row"><span class="author">Erich Maria Remarque*</span><span class="reading-quote">"We become not as we want to be, but as we are."</span></div>
-          <div class="reading-row"><span class="author">Mikhail Bulgakov</span><span class="reading-quote">"Manuscripts don't burn."</span></div>
-          <div class="reading-row"><span class="author">Charlotte Bronte</span><span class="reading-quote">"I am no bird; and no net ensnares me."</span></div>
-          <div class="reading-row"><span class="author">Chuck Palahniuk</span><span class="reading-quote">"The future will be better tomorrow."</span></div>
-          <div class="reading-row"><span class="author">Emile Zola</span><span class="reading-quote">"Truth is on the march, and nothing will stop it."</span></div>
+          <div class="reading-row author-remarque" data-author="remarque">
+            <span class="author">Erich Maria Remarque*</span>
+            <span class="reading-quote">"We become not as we want to be, but as we are."</span>
+          </div>
+          <div class="reading-row author-bulgakov" data-author="bulgakov">
+            <span class="author">Mikhail Bulgakov</span>
+            <span class="reading-quote">"Manuscripts don't burn."</span>
+          </div>
+          <div class="reading-row author-bronte" data-author="bronte">
+            <span class="author">Charlotte Bronte</span>
+            <span class="reading-quote">"I am no bird; and no net ensnares me."</span>
+          </div>
+          <div class="reading-row author-palahniuk" data-author="palahniuk">
+            <span class="author">Chuck Palahniuk</span>
+            <span class="reading-quote">"The future will be better tomorrow."</span>
+          </div>
+          <div class="reading-row author-zola" data-author="zola">
+            <span class="author">Emile Zola</span>
+            <span class="reading-quote">"Truth is on the march, and nothing will stop it."</span>
+          </div>
         </div>
       </section>
       <section id="connect" class="section-block">
@@ -266,6 +281,69 @@ import { profile } from "../data/profile";
       link.addEventListener("click", () => {
         mobileMenu.classList.remove("open");
         mobileMenu.setAttribute("aria-hidden", "true");
+      });
+    });
+
+    const readingRows = Array.from(document.querySelectorAll(".reading-row"));
+    const zolaRow = document.querySelector(".author-zola");
+    const bodyEl = document.body;
+    let palahniukTimeout;
+
+    const clickShutter = () => {
+      bodyEl.classList.remove("flash");
+      void bodyEl.offsetWidth;
+      bodyEl.classList.add("flash");
+      if (window.AudioContext || window.webkitAudioContext) {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.value = 800;
+        gain.gain.value = 0.05;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      }
+    };
+
+    zolaRow?.addEventListener("mouseenter", clickShutter);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-active");
+            if (entry.target.classList.contains("author-zola")) {
+              clickShutter();
+            }
+          }
+        });
+      },
+      { root: null, threshold: 0.1, rootMargin: "-35% 0px -35% 0px" }
+    );
+
+    readingRows.forEach((row) => observer.observe(row));
+
+    readingRows.forEach((row) => {
+      row.addEventListener("mouseenter", () => {
+        row.classList.add("is-active");
+        if (row.classList.contains("author-palahniuk")) {
+          palahniukTimeout = window.setTimeout(() => {
+            row.classList.add("break");
+          }, 900);
+        }
+      });
+      row.addEventListener("mouseleave", () => {
+        row.classList.remove("is-active");
+        row.classList.remove("break");
+        if (palahniukTimeout) window.clearTimeout(palahniukTimeout);
+      });
+      row.addEventListener("click", () => {
+        if (row.classList.contains("author-palahniuk")) {
+          row.classList.add("break");
+          setTimeout(() => row.classList.remove("break"), 600);
+        }
       });
     });
 
