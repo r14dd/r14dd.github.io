@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { profile } from "../data/profile";
+
+const taglineParts = profile.hero.tagline.split(". ");
+const taglinePrimary = taglineParts[0]?.trim() ?? "";
+const taglineSecondary = taglineParts.slice(1).join(". ").trim();
 ---
 
 <BaseLayout>
@@ -36,7 +40,12 @@ import { profile } from "../data/profile";
 
   <aside class="side-links">
     <span class="mono">Links</span>
-    <a href={profile.links.resume} target="_blank" rel="noopener">Resume</a>
+    <div class="resume-hover">
+      <a href={profile.links.resume} target="_blank" rel="noopener">Resume</a>
+      <div class="resume-preview" aria-hidden="true">
+        <iframe title="Resume preview" src="/resume.pdf#page=1&zoom=page-width"></iframe>
+      </div>
+    </div>
     <a href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
     <a href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
   </aside>
@@ -44,7 +53,10 @@ import { profile } from "../data/profile";
   <main class="content">
     <section>
       <h1>{profile.hero.name}</h1>
-      <p style="color: var(--muted)">{profile.hero.tagline}</p>
+      <p class="hero-tagline">{taglinePrimary}{taglinePrimary.endsWith(".") ? "" : "."}</p>
+      {taglineSecondary && (
+        <p class="hero-tagline secondary">{taglineSecondary}</p>
+      )}
       <div class="hero-links">
         <a href={profile.links.resume} target="_blank" rel="noopener">Resume</a>
         <a href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
@@ -79,13 +91,15 @@ import { profile } from "../data/profile";
               <div class="project-tech">{p.tech.join(" · ")}</div>
             </div>
             <div class="project-actions">
+              {/* Simulate only for Raft and DHT */}
               {p.links?.github && <a class="project-link" href={p.links.github} target="_blank" rel="noopener">GitHub</a>}
               {(p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table")) && (
                 <button class="simulate-btn" type="button">Simulate</button>
               )}
             </div>
           </div>
-          <ul>
+          {p.impact && <div class="project-impact"><strong>Impact:</strong> {p.impact.replace(/^Impact:\s*/i, "")}</div>}
+          <ul class="project-bullets">
             {p.bullets.map((b) => <li>{b}</li>)}
           </ul>
           {(p.name.includes("RAFT") || p.name.includes("Raft")) && (
@@ -208,7 +222,7 @@ import { profile } from "../data/profile";
     window.addEventListener("hashchange", openFromHash);
     window.addEventListener("load", openFromHash);
 
-    const sections = Array.from(document.querySelectorAll("section[id]"));
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
     const mobileCurrent = document.querySelector(".mobile-current");
 
