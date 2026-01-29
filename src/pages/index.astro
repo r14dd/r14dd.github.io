@@ -284,68 +284,7 @@ import { profile } from "../data/profile";
       });
     });
 
-    const readingRows = Array.from(document.querySelectorAll(".reading-row"));
-    const zolaRow = document.querySelector(".author-zola");
-    const bodyEl = document.body;
-    let palahniukTimeout;
-
-    const clickShutter = () => {
-      bodyEl.classList.remove("flash");
-      void bodyEl.offsetWidth;
-      bodyEl.classList.add("flash");
-      if (window.AudioContext || window.webkitAudioContext) {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "triangle";
-        osc.frequency.value = 800;
-        gain.gain.value = 0.05;
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.08);
-      }
-    };
-
-    zolaRow?.addEventListener("mouseenter", clickShutter);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-active");
-            if (entry.target.classList.contains("author-zola")) {
-              clickShutter();
-            }
-          }
-        });
-      },
-      { root: null, threshold: 0.1, rootMargin: "-35% 0px -35% 0px" }
-    );
-
-    readingRows.forEach((row) => observer.observe(row));
-
-    readingRows.forEach((row) => {
-      row.addEventListener("mouseenter", () => {
-        row.classList.add("is-active");
-        if (row.classList.contains("author-palahniuk")) {
-          palahniukTimeout = window.setTimeout(() => {
-            row.classList.add("break");
-          }, 900);
-        }
-      });
-      row.addEventListener("mouseleave", () => {
-        row.classList.remove("is-active");
-        row.classList.remove("break");
-        if (palahniukTimeout) window.clearTimeout(palahniukTimeout);
-      });
-      row.addEventListener("click", () => {
-        if (row.classList.contains("author-palahniuk")) {
-          row.classList.add("break");
-          setTimeout(() => row.classList.remove("break"), 600);
-        }
-      });
-    });
+    // Reading section effects removed
 
   </script>
 </BaseLayout>
