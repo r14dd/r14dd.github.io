@@ -4,117 +4,174 @@ import { profile } from "../data/profile";
 ---
 
 <BaseLayout>
-  <div class="page">
-    <aside class="sidebar">
-      <div class="sidebar-title">Sections</div>
+  <div class="scroll-rail">
+    <div class="scroll-progress" id="scroll-progress"></div>
+  </div>
+
+  <div class="mobile-nav">
+    <button class="hamburger" type="button" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="mobile-menu" aria-hidden="true">
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
       <a href="#teaching">Teaching</a>
       <a href="#education">Education</a>
       <a href="#skills">Skills</a>
       <a href="#reading">Reading</a>
-    </aside>
-
-    <div class="content">
-      <section>
-        <h1>{profile.hero.name}</h1>
-        <p>
-          <span style="color: var(--accent)">$</span>{" "}
-          {profile.hero.title}
-        </p>
-        <p style="color: var(--text-muted)">
-          {profile.hero.tagline}
-        </p>
-      </section>
-
-      <section>
-        <a href={profile.links.resume}>Resume</a> ·
-        <a href={profile.links.linkedin}>LinkedIn</a> ·
-        <a href={profile.links.github}>GitHub</a>
-      </section>
-
-      <section id="experience">
-        <details class="accordion" data-accordion>
-          <summary><h2>Experience</h2></summary>
-          {profile.experience.map((exp) => (
-            <div>
-              <h3>{exp.role}</h3>
-              <small>{exp.org} — {exp.location} · {exp.period}</small>
-              <ul>
-                {exp.bullets.map((b) => <li>{b}</li>)}
-              </ul>
-            </div>
-          ))}
-        </details>
-      </section>
-
-      <section id="projects">
-        <details class="accordion" data-accordion>
-          <summary><h2>Projects</h2></summary>
-          {profile.projects.map((p) => (
-            <div>
-              <h3>{p.name}</h3>
-              <small>{p.tech.join(" · ")} · {p.date}</small>
-              <ul>
-                {p.bullets.map((b) => <li>{b}</li>)}
-              </ul>
-              {p.links?.github && <a href={p.links.github}>GitHub</a>}
-            </div>
-          ))}
-        </details>
-      </section>
-
-      <section id="teaching">
-        <details class="accordion" data-accordion>
-          <summary><h2>Teaching</h2></summary>
-          {profile.teaching.map((t) => (
-            <div style="margin-bottom: 2rem">
-              <h3>{t.title}</h3>
-              <small>{t.skills}</small>
-              <ul>
-                {t.bullets.map((b) => <li>{b}</li>)}
-              </ul>
-            </div>
-          ))}
-        </details>
-      </section>
-
-      <section id="education">
-        <details class="accordion" data-accordion>
-          <summary><h2>Education</h2></summary>
-          <div>
-            <h3>University at Buffalo — BS in Computer Science</h3>
-            <small>Aug 2020 – May 2024 · Buffalo, New York</small>
-            <ul>
-              <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
-            </ul>
-          </div>
-        </details>
-      </section>
-
-      <section id="skills">
-        <details class="accordion" data-accordion>
-          <summary><h2>Technical Skills</h2></summary>
-          {profile.skills.map((s) => (
-            <div>
-              <h3>{s.category}</h3>
-              <small>{s.items.join(" · ")}</small>
-            </div>
-          ))}
-        </details>
-      </section>
-
-      <section id="reading">
-        <details class="accordion" data-accordion>
-          <summary><h2>{profile.reading.title}</h2></summary>
-          <p>{profile.reading.description}</p>
-          <ul>
-            {profile.reading.authors.map((a) => <li>{a}</li>)}
-          </ul>
-        </details>
-      </section>
     </div>
   </div>
+
+  <aside class="side-nav">
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#teaching">Teaching</a>
+    <a href="#education">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#reading">Reading</a>
+  </aside>
+
+  <aside class="side-links">
+    <span class="mono">Links</span>
+    <a href={profile.links.resume} target="_blank" rel="noopener">Resume</a>
+    <a href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+    <a href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
+  </aside>
+
+  <main class="content">
+    <section>
+      <h1>{profile.hero.name}</h1>
+      <p style="color: var(--muted)">{profile.hero.tagline}</p>
+      <div class="hero-links">
+        <a href={profile.links.resume} target="_blank" rel="noopener">Resume</a>
+        <a href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+        <a href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+
+    <section id="experience" class="section-block">
+      <h2>Experience</h2>
+      {profile.experience.map((exp) => (
+        <div class="project-card">
+          <h3 class="job-title">{exp.role}</h3>
+          <div class="experience-stack">
+            <span class="company-name">{exp.org}</span>
+            <small class="exp-meta mono">{exp.period}</small>
+            <small class="exp-meta mono">{exp.location}</small>
+          </div>
+          <ul>
+            {exp.bullets.map((b) => <li>{b}</li>)}
+          </ul>
+        </div>
+      ))}
+    </section>
+
+    <section id="projects" class="section-block">
+      <h2>Projects</h2>
+      {profile.projects.map((p) => (
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <h3>{p.name}</h3>
+              <div class="project-tech">{p.tech.join(" · ")}</div>
+            </div>
+            <div class="project-actions">
+              {p.links?.github && <a class="project-link" href={p.links.github} target="_blank" rel="noopener">GitHub</a>}
+              {(p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table")) && (
+                <button class="simulate-btn" type="button">Simulate</button>
+              )}
+            </div>
+          </div>
+          <ul>
+            {p.bullets.map((b) => <li>{b}</li>)}
+          </ul>
+          {(p.name.includes("RAFT") || p.name.includes("Raft")) && (
+            <div class="sim-visual" data-sim="raft">
+              <svg width="260" height="80" viewBox="0 0 260 80">
+                <line class="sim-link" x1="30" y1="40" x2="130" y2="15" />
+                <line class="sim-link" x1="30" y1="40" x2="130" y2="65" />
+                <line class="sim-link" x1="230" y1="40" x2="130" y2="15" />
+                <line class="sim-link" x1="230" y1="40" x2="130" y2="65" />
+                <circle class="sim-node" cx="30" cy="40" r="10" />
+                <circle class="sim-node" cx="130" cy="15" r="10" />
+                <circle class="sim-node" cx="130" cy="65" r="10" />
+                <circle class="sim-node" cx="230" cy="40" r="10" />
+                <circle class="sim-pulse" cx="30" cy="40" r="3">
+                  <animate attributeName="cx" values="30;130;230;130;30" dur="3s" repeatCount="indefinite" />
+                  <animate attributeName="cy" values="40;15;40;65;40" dur="3s" repeatCount="indefinite" />
+                </circle>
+              </svg>
+            </div>
+          )}
+          {(p.name.includes("Hash Table") || p.name.includes("Distributed")) && (
+            <div class="sim-visual" data-sim="kademlia">
+              <svg width="260" height="80" viewBox="0 0 260 80">
+                <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
+                <line class="sim-link" x1="120" y1="40" x2="200" y2="20" />
+                <line class="sim-link" x1="120" y1="40" x2="200" y2="65" />
+                <circle class="sim-node" cx="40" cy="20" r="10" />
+                <circle class="sim-node" cx="120" cy="40" r="10" />
+                <circle class="sim-node" cx="200" cy="20" r="10" />
+                <circle class="sim-node" cx="200" cy="65" r="10" />
+                <circle class="sim-pulse" cx="40" cy="20" r="3">
+                  <animate attributeName="cx" values="40;120;200;120;40" dur="2.6s" repeatCount="indefinite" />
+                  <animate attributeName="cy" values="20;40;65;40;20" dur="2.6s" repeatCount="indefinite" />
+                </circle>
+              </svg>
+            </div>
+          )}
+        </div>
+      ))}
+    </section>
+
+    <section id="teaching" class="section-block">
+      <h2>Teaching</h2>
+      {profile.teaching.map((t) => (
+        <div style="margin-bottom: 2rem" class="project-card">
+          <h3>{t.title}</h3>
+          <small class="mono">{t.skills}</small>
+          <ul>
+            {t.bullets.map((b) => <li>{b}</li>)}
+          </ul>
+        </div>
+      ))}
+    </section>
+
+    <section id="education" class="section-block">
+      <h2>Education</h2>
+      <div>
+        <h3>University at Buffalo — BS in Computer Science</h3>
+        <small class="mono">Aug 2020 – May 2024 · Buffalo, New York</small>
+        <ul>
+          <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
+        </ul>
+      </div>
+    </section>
+
+      <section id="skills" class="section-block">
+        <h2>Technical Skills</h2>
+        {profile.skills.map((s) => (
+          <div>
+            <h3>{s.category}</h3>
+            <small class="mono skills-line">{s.items.join(" · ")}</small>
+          </div>
+        ))}
+      </section>
+
+      <section id="reading" class="section-block">
+        <h2>{profile.reading.title}</h2>
+        <p>{profile.reading.description}</p>
+        <div class="reading-inline">
+          <div class="reading-row"><span class="author">Erich Maria Remarque*</span><span class="reading-quote">"We become not as we want to be, but as we are."</span></div>
+          <div class="reading-row"><span class="author">Mikhail Bulgakov</span><span class="reading-quote">"Manuscripts don't burn."</span></div>
+          <div class="reading-row"><span class="author">Charlotte Bronte</span><span class="reading-quote">"I am no bird; and no net ensnares me."</span></div>
+          <div class="reading-row"><span class="author">Chuck Palahniuk</span><span class="reading-quote">"The future will be better tomorrow."</span></div>
+          <div class="reading-row"><span class="author">Emile Zola</span><span class="reading-quote">"Truth is on the march, and nothing will stop it."</span></div>
+        </div>
+      </section>
+  </main>
 
   <script>
     const openFromHash = () => {
@@ -122,12 +179,74 @@ import { profile } from "../data/profile";
       if (!id) return;
       const section = document.getElementById(id);
       if (!section) return;
-      const details = section.querySelector("details");
-      if (details) details.open = true;
       section.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
     window.addEventListener("hashchange", openFromHash);
     window.addEventListener("load", openFromHash);
+
+    const sections = Array.from(document.querySelectorAll("section[id]"));
+    const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
+
+    const setActiveLink = () => {
+      const scrollPos = window.scrollY + 120;
+      let current = sections[0];
+      sections.forEach((section) => {
+        if (section.offsetTop <= scrollPos) current = section;
+      });
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 4) {
+        current = sections[sections.length - 1];
+      }
+      navLinks.forEach((link) => link.classList.remove("active"));
+      const active = navLinks.find((link) => link.getAttribute("href") === `#${current.id}`);
+      active?.classList.add("active");
+    };
+
+    const updateProgress = () => {
+      const progress = document.getElementById("scroll-progress");
+      if (!progress) return;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const percent = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+      progress.style.height = `${percent}%`;
+    };
+
+    const updateNavBlur = () => {
+      const nav = document.querySelector(".side-nav");
+      const links = document.querySelector(".side-links");
+      if (!nav && !links) return;
+      const shouldBlur = window.scrollY > 40;
+      nav?.classList.toggle("blurred", shouldBlur);
+      links?.classList.toggle("blurred", shouldBlur);
+    };
+
+    window.addEventListener("scroll", () => {
+      setActiveLink();
+      updateProgress();
+      updateNavBlur();
+    });
+    window.addEventListener("load", () => {
+      setActiveLink();
+      updateProgress();
+      updateNavBlur();
+    });
+
+    document.querySelectorAll(".simulate-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const card = btn.closest(".project-card");
+        const sim = card?.querySelector(".sim-visual");
+        sim?.classList.toggle("active");
+      });
+    });
+
+    const hamburger = document.querySelector(".hamburger");
+    const mobileMenu = document.querySelector(".mobile-menu");
+    hamburger?.addEventListener("click", () => {
+      mobileMenu?.classList.toggle("open");
+      mobileMenu?.setAttribute(
+        "aria-hidden",
+        mobileMenu.classList.contains("open") ? "false" : "true"
+      );
+    });
+
   </script>
 </BaseLayout>
