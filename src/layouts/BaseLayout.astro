@@ -37,7 +37,7 @@
         color: var(--text-soft);
         font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         margin: 0;
-        padding: 5.5rem 1.5rem 4rem;
+        padding: 3rem 1.5rem 4rem;
         line-height: 1.8;
         font-size: 16px;
       }
@@ -73,6 +73,10 @@
       section {
         padding: 0;
         margin: 8rem 0 0;
+      }
+
+      section:first-of-type {
+        margin-top: 2.5rem;
       }
 
       p {
@@ -579,6 +583,12 @@
         font-weight: 400;
         line-height: 1.4;
         opacity: 0.4;
+        transition: opacity 0.2s ease;
+      }
+
+      .project-card:hover .tech-meta,
+      .meta-card:hover .tech-meta {
+        opacity: 1;
       }
 
       .project-header {
@@ -615,12 +625,22 @@
         opacity: 1;
       }
 
+      .project-link.always-visible {
+        opacity: 1;
+      }
+
       .project-card:hover .project-link:hover {
         border-color: rgba(255, 255, 255, 0.5);
       }
 
       .project-card:hover .project-tech {
         opacity: 1;
+      }
+
+      @media (min-width: 1170px) {
+        .side-links .mono {
+          display: none;
+        }
       }
 
       .simulate-btn {
@@ -813,7 +833,7 @@
 
       @media (max-width: 1169px) {
         body {
-          padding: 3rem 1rem 3rem;
+          padding: 2.5rem 1rem 3rem;
         }
 
         .side-nav {
@@ -847,6 +867,10 @@
 
         section {
           margin: 5rem 0 0;
+        }
+
+        section:first-of-type {
+          margin-top: 2rem;
         }
 
         .experience-header,
