@@ -92,7 +92,16 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
             </div>
             <div class="project-actions">
               {/* Simulate only for Raft and DHT */}
-              {p.links?.github && <a class="project-link" href={p.links.github} target="_blank" rel="noopener">GitHub</a>}
+              {p.links?.github && (
+                <a
+                  class={`project-link${(p.name.includes("MatchSentinel") || p.name.includes("FinFlow")) ? " always-visible" : ""}`}
+                  href={p.links.github}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  GitHub
+                </a>
+              )}
               {(p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table")) && (
                 <button class="simulate-btn" type="button">Simulate</button>
               )}
@@ -156,7 +165,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
 
     <section id="education" class="section-block">
       <h2>Education</h2>
-      <div>
+      <div class="meta-card">
         <h3>University at Buffalo — BS in Computer Science</h3>
         <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
         <ul>
@@ -168,7 +177,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       <section id="skills" class="section-block">
         <h2>Technical Skills</h2>
         {profile.skills.map((s) => (
-          <div>
+          <div class="meta-card">
             <h3>{s.category}</h3>
             <div class="tech-meta skills-line">{s.items.join(" · ")}</div>
           </div>
@@ -201,7 +210,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
           </div>
         </div>
       </section>
-      <section id="connect" class="section-block">
+      <section id="connect" class="section-block" data-label="Connect">
         <h2>Connect</h2>
         <p>
           Reach me at <a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a> or
@@ -239,7 +248,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       const active = navLinks.find((link) => link.getAttribute("href") === `#${current.id}`);
       active?.classList.add("active");
       if (mobileCurrent) {
-        const label = active?.textContent ?? current.id;
+        const label = active?.textContent ?? current.getAttribute("data-label") ?? current.id;
         mobileCurrent.textContent = label;
         mobileCurrent.classList.add("active");
       }
