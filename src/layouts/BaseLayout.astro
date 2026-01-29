@@ -243,6 +243,28 @@
         transform: translateX(18px);
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        .page-intro,
+        .intro-bricks {
+          display: none !important;
+        }
+
+        .intro-name span,
+        .intro-name,
+        .intro-phrase,
+        .intro-phrase .lead {
+          animation: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+        }
+
+        section {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+        }
+      }
+
       footer {
         margin-top: 4rem;
         padding-top: 2rem;
@@ -323,6 +345,42 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--muted);
+      }
+
+      .resume-hover {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+      }
+
+      .resume-preview {
+        position: absolute;
+        top: 1.6rem;
+        right: 0;
+        width: 220px;
+        height: 280px;
+        background: rgba(10, 10, 10, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+        opacity: 0;
+        transform: translateY(6px);
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        overflow: hidden;
+        z-index: 3;
+      }
+
+      .resume-preview iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      .resume-hover:hover .resume-preview,
+      .resume-hover:focus-within .resume-preview {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .mobile-bar {
@@ -531,6 +589,17 @@
         flex-wrap: wrap;
       }
 
+      .project-impact {
+        margin-top: 0.6rem;
+        color: var(--text-soft);
+        font-size: 0.95rem;
+      }
+
+      .project-impact strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
       .project-link {
         opacity: 0;
         transition: opacity 0.2s ease, border-color 0.2s ease;
@@ -562,19 +631,13 @@
         border-radius: 999px;
         font-size: 0.8rem;
         cursor: pointer;
-        transition: opacity 0.2s ease, border-color 0.2s ease;
-      }
-
-      .project-actions .simulate-btn {
-        opacity: 0;
-      }
-
-      .project-card:hover .simulate-btn {
+        transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
         opacity: 1;
       }
 
       .project-card:hover .simulate-btn:hover {
         border-color: rgba(255, 255, 255, 0.5);
+        color: var(--text);
       }
 
       .sim-visual {
@@ -590,14 +653,35 @@
         max-height: 120px;
       }
 
+      .sim-visual svg {
+        width: 260px;
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+
       .sim-node {
-        fill: rgba(255, 255, 255, 0.15);
-        stroke: rgba(255, 255, 255, 0.2);
+        fill: rgba(255, 255, 255, 0.12);
+        stroke: rgba(255, 255, 255, 0.28);
+        stroke-width: 1;
       }
 
       .sim-link {
-        stroke: rgba(255, 255, 255, 0.3);
+        stroke: rgba(255, 255, 255, 0.28);
         stroke-width: 1;
+      }
+
+      .sim-label {
+        fill: rgba(237, 237, 237, 0.55);
+        font-size: 9px;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+
+      .sim-legend {
+        margin-top: 0.3rem;
+        font-size: 0.78rem;
+        color: rgba(237, 237, 237, 0.55);
       }
 
       .sim-pulse {
@@ -613,6 +697,19 @@
         animation: dash 1.2s linear infinite;
       }
 
+      .sim-visual.active .sim-node {
+        animation: nodeGlow 1.6s ease forwards;
+      }
+
+      .sim-visual.active .node-1 { animation-delay: 0s; }
+      .sim-visual.active .node-2 { animation-delay: 0.15s; }
+      .sim-visual.active .node-3 { animation-delay: 0.3s; }
+      .sim-visual.active .node-4 { animation-delay: 0.45s; }
+      .sim-visual.active .node-5 { animation-delay: 0.6s; }
+      .sim-visual.active .node-6 { animation-delay: 0.75s; }
+      .sim-visual.active .node-7 { animation-delay: 0.9s; }
+      .sim-visual.active .node-8 { animation-delay: 1.05s; }
+
       @keyframes pulse {
         0%, 100% { opacity: 0.4; transform: scale(0.9); }
         50% { opacity: 1; transform: scale(1.2); }
@@ -620,6 +717,34 @@
 
       @keyframes dash {
         to { stroke-dashoffset: -14; }
+      }
+
+      @keyframes nodeGlow {
+        0% { fill: rgba(255, 255, 255, 0.12); stroke: rgba(255, 255, 255, 0.28); }
+        40% { fill: rgba(255, 255, 255, 0.45); stroke: rgba(255, 255, 255, 0.6); }
+        100% { fill: rgba(255, 255, 255, 0.18); stroke: rgba(255, 255, 255, 0.3); }
+      }
+
+      .mono {
+        font-family: 'SFMono-Regular', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+
+      .sim-label.mono {
+        opacity: 0.32;
+        transition: opacity 0.2s ease;
+      }
+
+      .sim-visual.active .step-ingest,
+      .sim-visual.active .step-hub,
+      .sim-visual.active .step-ai,
+      .sim-visual.active .step-rule,
+      .sim-visual.active .step-case {
+        animation: labelPulse 2.4s ease-in-out infinite;
+      }
+
+      @keyframes labelPulse {
+        0%, 100% { opacity: 0.32; }
+        40% { opacity: 0.8; }
       }
 
       .skills-line {
@@ -663,11 +788,26 @@
         min-width: 140px;
       }
 
+      .project-bullets {
+        transition: opacity 0.25s ease, max-height 0.25s ease;
+      }
+
       .hero-links {
         display: none;
         gap: 1rem;
         margin-top: 0.6rem;
         flex-wrap: wrap;
+      }
+
+      .hero-tagline {
+        margin: 0.6rem 0 0;
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      .hero-tagline.secondary {
+        margin-top: 0.25rem;
+        color: var(--muted);
       }
 
 
@@ -691,6 +831,10 @@
         .mobile-bar {
           display: flex;
           bottom: calc(2.2rem + env(safe-area-inset-bottom));
+        }
+
+        .resume-preview {
+          display: none;
         }
 
         .mobile-menu {
@@ -803,6 +947,11 @@
     <slot />
     <script>
       window.addEventListener("load", () => {
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduced) {
+          document.body.classList.add("intro-done");
+          return;
+        }
         setTimeout(() => {
           document.body.classList.add("intro-done");
         }, 1400);

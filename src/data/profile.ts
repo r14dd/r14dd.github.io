@@ -2,6 +2,7 @@ export type Project = {
   name: string;
   tech: string[];
   date?: string;
+  impact?: string;
   bullets: string[];
   links?: {
     github?: string;
@@ -53,7 +54,7 @@ export const profile: Profile = {
     name: "Riad Mukhtarov",
     title: "Software Engineer",
     tagline:
-      "Riad is a software engineer building reliable, production-ready systems and event-driven architectures.",
+      "Open to Software/Backend roles. Building reliable, production-ready systems and event-driven architectures.",
   },
 
   links: {
@@ -112,6 +113,7 @@ export const profile: Profile = {
         "Docker",
         "AWS EC2",
       ],
+      impact: "Impact: End-to-end fraud pipeline deployed on AWS with live dashboard + reliable event processing.",
       date: "Jan 2026",
       bullets: [
         "Designed an event-driven microservices architecture spanning scoring, rules, cases, notifications, and reporting",
@@ -126,6 +128,7 @@ export const profile: Profile = {
     {
       name: "FinFlow — Wallet API",
       tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL", "JPA"],
+      impact: "Impact: Secured wallet API with JWT auth, guarded endpoints, and verified access flows.",
       date: "Jan 2026",
       bullets: [
         "Implemented secure authentication and authorization using JWT-based stateless sessions",
@@ -140,6 +143,7 @@ export const profile: Profile = {
     {
       name: "Raft-Based Consensus Algorithm",
       tech: ["Go", "UDP", "Protobuf"],
+      impact: "Impact: Demonstrated fault-tolerant leader election and log replication in a distributed cluster.",
       date: "May 2024",
       bullets: [
         "Implemented Raft consensus with leader election, log replication, and fault tolerance",
@@ -149,6 +153,7 @@ export const profile: Profile = {
     {
       name: "Distributed Hash Table (Kademlia)",
       tech: ["Go", "TCP", "Protobuf"],
+      impact: "Impact: Achieved scalable peer-to-peer lookups with logarithmic routing performance.",
       date: "Feb 2024",
       bullets: [
         "Implemented a peer-to-peer distributed storage system using Kademlia routing",
