@@ -4,7 +4,7 @@ Minimalist, high‑end personal portfolio built to present backend engineering w
 
 ## Live
 
-- **Website:** htps://r14dd.github.io
+- **Website:** https://r14dd.github.io
 
 ## Why this site exists
 
