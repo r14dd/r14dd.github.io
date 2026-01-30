@@ -141,6 +141,20 @@ export const profile: Profile = {
       },
     },
     {
+      name: "Minimalist Portfolio",
+      tech: ["Astro", "TypeScript", "CSS"],
+      impact: "Impact: Built a premium, responsive portfolio with clear hierarchy and accessibility-first motion.",
+      date: "Jan 2026",
+      bullets: [
+        "Designed a minimalist layout with strong typographic hierarchy and readable spacing",
+        "Implemented responsive navigation for desktop and mobile with smooth interactions",
+        "Added polished micro-animations while honoring prefers-reduced-motion",
+      ],
+      links: {
+        github: "https://github.com/r14dd/r14dd.github.io",
+      },
+    },
+    {
       name: "Raft-Based Consensus Algorithm",
       tech: ["Go", "UDP", "Protobuf"],
       impact: "Impact: Demonstrated fault-tolerant leader election and log replication in a distributed cluster.",
