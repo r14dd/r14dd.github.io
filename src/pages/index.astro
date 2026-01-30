@@ -1,7 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { profile } from "../data/profile";
+import { profiles } from "../data/profile-i18n";
 
+const profile = profiles.en;
 const taglineParts = profile.hero.tagline.split(". ");
 const taglinePrimary = taglineParts[0]?.trim() ?? "";
 const taglineSecondary = taglineParts.slice(1).join(". ").trim();
@@ -12,42 +13,60 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
     <div class="scroll-progress" id="scroll-progress"></div>
   </div>
 
+  <script type="application/json" id="i18n-data" set:html={JSON.stringify(profiles)}></script>
+
+  <div class="lang-switcher" aria-label="Language">
+    <button class="lang-toggle" id="lang-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">
+      <span class="lang-globe" aria-hidden="true">🌐</span>
+      <span class="lang-label" id="lang-current">English</span>
+      <span class="lang-caret" aria-hidden="true">▾</span>
+    </button>
+    <div class="lang-menu" id="lang-menu" role="listbox" aria-label="Select language">
+      <button type="button" data-lang="en">English</button>
+      <button type="button" data-lang="ru">Русский</button>
+      <button type="button" data-lang="az">Azərbaycanca</button>
+      <button type="button" data-lang="es">Español</button>
+    </div>
+  </div>
+
   <div class="mobile-bar">
     <button class="hamburger" type="button" aria-label="Open menu">
       <span></span>
       <span></span>
       <span></span>
     </button>
-    <div class="mobile-current" aria-live="polite">Experience</div>
+    <div class="mobile-current" aria-live="polite">{profile.labels.nav.experience}</div>
   </div>
   <div class="mobile-menu" aria-hidden="true">
-    <a href="#experience">Experience</a>
-    <a href="#projects">Projects</a>
-    <a href="#teaching">Teaching</a>
-    <a href="#education">Education</a>
-    <a href="#skills">Skills</a>
-    <a href="#reading">Reading</a>
+    <a href="#experience">{profile.labels.nav.experience}</a>
+    <a href="#projects">{profile.labels.nav.projects}</a>
+    <a href="#teaching">{profile.labels.nav.teaching}</a>
+    <a href="#education">{profile.labels.nav.education}</a>
+    <a href="#skills">{profile.labels.nav.skills}</a>
+    <a href="#reading">{profile.labels.nav.reading}</a>
+    <a href="#connect">{profile.labels.nav.connect}</a>
   </div>
 
   <aside class="side-nav">
-    <a href="#experience">Experience</a>
-    <a href="#projects">Projects</a>
-    <a href="#teaching">Teaching</a>
-    <a href="#education">Education</a>
-    <a href="#skills">Skills</a>
-    <a href="#reading">Reading</a>
+    <a href="#experience">{profile.labels.nav.experience}</a>
+    <a href="#projects">{profile.labels.nav.projects}</a>
+    <a href="#teaching">{profile.labels.nav.teaching}</a>
+    <a href="#education">{profile.labels.nav.education}</a>
+    <a href="#skills">{profile.labels.nav.skills}</a>
+    <a href="#reading">{profile.labels.nav.reading}</a>
+    <a href="#connect">{profile.labels.nav.connect}</a>
   </aside>
 
   <aside class="side-links">
     <span class="mono">Links</span>
     <div class="resume-hover">
-      <a href={profile.links.resume} target="_blank" rel="noopener">Resume</a>
+      <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
       <div class="resume-preview" aria-hidden="true">
         <iframe title="Resume preview" src="/resume.pdf#page=1&zoom=page-width"></iframe>
       </div>
     </div>
-    <a href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-    <a href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
+    <a href={profile.links.linkedin} target="_blank" rel="noopener">{profile.labels.links.linkedin}</a>
+    <a href={profile.links.github} target="_blank" rel="noopener">{profile.labels.links.github}</a>
   </aside>
 
   <main class="content">
@@ -58,14 +77,14 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
         <p class="hero-tagline secondary">{taglineSecondary}</p>
       )}
       <div class="hero-links">
-        <a href={profile.links.resume} target="_blank" rel="noopener">Resume</a>
-        <a href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-        <a href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
+        <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
+        <a href={profile.links.linkedin} target="_blank" rel="noopener">{profile.labels.links.linkedin}</a>
+        <a href={profile.links.github} target="_blank" rel="noopener">{profile.labels.links.github}</a>
       </div>
     </section>
 
-    <section id="experience" class="section-block">
-      <h2>Experience</h2>
+    <section id="experience" class="section-block" data-label={profile.labels.headings.experience}>
+      <h2>{profile.labels.headings.experience}</h2>
       {profile.experience.map((exp) => (
         <div class="project-card">
           <h3 class="job-title">{exp.role}</h3>
@@ -81,8 +100,8 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       ))}
     </section>
 
-    <section id="projects" class="section-block">
-      <h2>Projects</h2>
+    <section id="projects" class="section-block" data-label={profile.labels.headings.projects}>
+      <h2>{profile.labels.headings.projects}</h2>
       {profile.projects.map((p) => (
         <div class="project-card">
           <div class="project-header">
@@ -141,8 +160,8 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       ))}
     </section>
 
-    <section id="teaching" class="section-block">
-      <h2>Teaching</h2>
+    <section id="teaching" class="section-block" data-label={profile.labels.headings.teaching}>
+      <h2>{profile.labels.headings.teaching}</h2>
       {profile.teaching.map((t) => (
         <div style="margin-bottom: 2rem" class="project-card">
           <h3>{t.title}</h3>
@@ -154,8 +173,8 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       ))}
     </section>
 
-    <section id="education" class="section-block">
-      <h2>Education</h2>
+    <section id="education" class="section-block" data-label={profile.labels.headings.education}>
+      <h2>{profile.labels.headings.education}</h2>
       <div class="meta-card">
         <h3>State University of New York at Buffalo — BS in Computer Science</h3>
         <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
@@ -165,8 +184,8 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       </div>
     </section>
 
-      <section id="skills" class="section-block">
-        <h2>Technical Skills</h2>
+      <section id="skills" class="section-block" data-label={profile.labels.headings.skills}>
+        <h2>{profile.labels.headings.skills}</h2>
         {profile.skills.map((s) => (
           <div class="meta-card">
             <h3>{s.category}</h3>
@@ -175,35 +194,21 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
         ))}
     </section>
 
-    <section id="reading" class="section-block">
-      <h2>{profile.reading.title}</h2>
+    <section id="reading" class="section-block" data-label={profile.labels.headings.reading}>
+      <h2>{profile.labels.headings.reading}</h2>
       <p>{profile.reading.description}</p>
         <div class="reading-inline">
-          <div class="reading-row author-remarque" data-author="remarque">
-            <span class="author">Erich Maria Remarque*</span>
-            <span class="reading-quote">"We become not as we want to be, but as we are."</span>
-          </div>
-          <div class="reading-row author-bulgakov" data-author="bulgakov">
-            <span class="author">Mikhail Bulgakov</span>
-            <span class="reading-quote">"Manuscripts don't burn."</span>
-          </div>
-          <div class="reading-row author-bronte" data-author="bronte">
-            <span class="author">Charlotte Bronte</span>
-            <span class="reading-quote">"I am no bird; and no net ensnares me."</span>
-          </div>
-          <div class="reading-row author-palahniuk" data-author="palahniuk">
-            <span class="author">Chuck Palahniuk</span>
-            <span class="reading-quote">"The future will be better tomorrow."</span>
-          </div>
-          <div class="reading-row author-zola" data-author="zola">
-            <span class="author">Emile Zola</span>
-            <span class="reading-quote">"Truth is on the march, and nothing will stop it."</span>
-          </div>
+          {profile.reading.items.map((item) => (
+            <div class="reading-row">
+              <span class="author">{item.author}</span>
+              <span class="reading-quote">"{item.quote}"</span>
+            </div>
+          ))}
         </div>
       </section>
-      <section id="connect" class="section-block" data-label="Connect">
-        <h2>Connect</h2>
-        <p>
+      <section id="connect" class="section-block" data-label={profile.labels.headings.connect}>
+        <h2>{profile.labels.headings.connect}</h2>
+        <p class="connect-text">
           Reach me at <a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a> or
           <a href="tel:+994508998676" target="_blank" rel="noopener"> +994 50 899 8676</a>
         </p>
@@ -211,6 +216,16 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
   </main>
 
   <script>
+    // @ts-nocheck
+    const i18nEl = document.getElementById("i18n-data");
+    const I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {};
+    const languageLabels = {
+      en: "English",
+      ru: "Русский",
+      az: "Azərbaycanca",
+      es: "Español",
+    };
+
     const openFromHash = () => {
       const id = window.location.hash.replace("#", "");
       if (!id) return;
@@ -222,7 +237,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
     window.addEventListener("hashchange", openFromHash);
     window.addEventListener("load", openFromHash);
 
-    const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
+    const sections = Array.from(document.querySelectorAll("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
     const mobileCurrent = document.querySelector(".mobile-current");
 
@@ -299,6 +314,316 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
     });
 
     // Reading section effects removed
+
+    const langToggle = document.getElementById("lang-toggle");
+    const langMenu = document.getElementById("lang-menu");
+    const langCurrent = document.getElementById("lang-current");
+
+    const buildExperience = (data) => {
+      return `
+        <h2>${data.labels.headings.experience}</h2>
+        ${data.experience
+          .map(
+            (exp) => `
+              <div class="project-card">
+                <h3 class="job-title">${exp.role}</h3>
+                <div class="experience-stack">
+                  <span class="company-name">${exp.org}</span>
+                  <small class="exp-meta">${exp.period}</small>
+                  <small class="exp-meta">${exp.location}</small>
+                </div>
+                <ul>
+                  ${exp.bullets.map((b) => `<li>${b}</li>`).join("")}
+                </ul>
+              </div>
+            `
+          )
+          .join("")}
+      `;
+    };
+
+    const buildProjectActions = (p) => {
+      const actions = [];
+      if (p.links?.github) {
+        actions.push(`<a class="project-link" href="${p.links.github}" target="_blank" rel="noopener">${currentProfile.labels.links.github}</a>`);
+      }
+      if (p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table") || p.name.includes("Distributed")) {
+        actions.push(`<button class="simulate-btn" type="button">Simulate</button>`);
+      }
+      return actions.join("");
+    };
+
+    const buildProjectSim = (p) => {
+      if (p.name.includes("RAFT") || p.name.includes("Raft")) {
+        return `
+          <div class="sim-visual" data-sim="raft">
+            <svg width="260" height="80" viewBox="0 0 260 80">
+              <line class="sim-link" x1="30" y1="40" x2="130" y2="15" />
+              <line class="sim-link" x1="30" y1="40" x2="130" y2="65" />
+              <line class="sim-link" x1="230" y1="40" x2="130" y2="15" />
+              <line class="sim-link" x1="230" y1="40" x2="130" y2="65" />
+              <circle class="sim-node" cx="30" cy="40" r="10" />
+              <circle class="sim-node" cx="130" cy="15" r="10" />
+              <circle class="sim-node" cx="130" cy="65" r="10" />
+              <circle class="sim-node" cx="230" cy="40" r="10" />
+              <circle class="sim-pulse" cx="30" cy="40" r="3">
+                <animate attributeName="cx" values="30;130;230;130;30" dur="3s" repeatCount="indefinite" />
+                <animate attributeName="cy" values="40;15;40;65;40" dur="3s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+          </div>
+        `;
+      }
+      if (p.name.includes("Hash Table") || p.name.includes("Distributed")) {
+        return `
+          <div class="sim-visual" data-sim="kademlia">
+            <svg width="260" height="80" viewBox="0 0 260 80">
+              <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
+              <line class="sim-link" x1="120" y1="40" x2="200" y2="20" />
+              <line class="sim-link" x1="120" y1="40" x2="200" y2="65" />
+              <circle class="sim-node" cx="40" cy="20" r="10" />
+              <circle class="sim-node" cx="120" cy="40" r="10" />
+              <circle class="sim-node" cx="200" cy="20" r="10" />
+              <circle class="sim-node" cx="200" cy="65" r="10" />
+              <circle class="sim-pulse" cx="40" cy="20" r="3">
+                <animate attributeName="cx" values="40;120;200;120;40" dur="2.6s" repeatCount="indefinite" />
+                <animate attributeName="cy" values="20;40;65;40;20" dur="2.6s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+          </div>
+        `;
+      }
+      return "";
+    };
+
+    let currentProfile = I18N.en;
+
+    const buildProjects = (data) => {
+      currentProfile = data;
+      return `
+        <h2>${data.labels.headings.projects}</h2>
+        ${data.projects
+          .map(
+            (p) => `
+              <div class="project-card">
+                <div class="project-header">
+                  <div>
+                    <h3>${p.name}</h3>
+                    <div class="project-tech">${p.tech.join(" · ")}</div>
+                  </div>
+                  <div class="project-actions">
+                    ${buildProjectActions(p)}
+                  </div>
+                </div>
+                ${p.impact ? `<div class="project-impact"><strong>Impact:</strong> ${p.impact.replace(/^Impact:\\s*/i, "")}</div>` : ""}
+                <ul class="project-bullets">
+                  ${p.bullets.map((b) => `<li>${b}</li>`).join("")}
+                </ul>
+                ${buildProjectSim(p)}
+              </div>
+            `
+          )
+          .join("")}
+      `;
+    };
+
+    const buildTeaching = (data) => {
+      return `
+        <h2>${data.labels.headings.teaching}</h2>
+        ${data.teaching
+          .map(
+            (t) => `
+              <div style="margin-bottom: 2rem" class="project-card">
+                <h3>${t.title}</h3>
+                <div class="tech-meta">${t.skills}</div>
+                <ul>
+                  ${t.bullets.map((b) => `<li>${b}</li>`).join("")}
+                </ul>
+              </div>
+            `
+          )
+          .join("")}
+      `;
+    };
+
+    const buildEducation = (data) => {
+      return `
+        <h2>${data.labels.headings.education}</h2>
+        <div class="meta-card">
+          <h3>${data.education.title}</h3>
+          <div class="tech-meta">${data.education.meta}</div>
+          <ul>
+            ${data.education.bullets.map((b) => `<li>${b}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+    };
+
+    const buildSkills = (data) => {
+      return `
+        <h2>${data.labels.headings.skills}</h2>
+        ${data.skills
+          .map(
+            (s) => `
+              <div class="meta-card">
+                <h3>${s.category}</h3>
+                <div class="tech-meta skills-line">${s.items.join(" · ")}</div>
+              </div>
+            `
+          )
+          .join("")}
+      `;
+    };
+
+    const buildReading = (data) => {
+      return `
+        <h2>${data.labels.headings.reading}</h2>
+        <p>${data.reading.description}</p>
+        <div class="reading-inline">
+          ${data.reading.items
+            .map(
+              (item) => `
+                <div class="reading-row">
+                  <span class="author">${item.author}</span>
+                  <span class="reading-quote">"${item.quote}"</span>
+                </div>
+              `
+            )
+            .join("")}
+        </div>
+      `;
+    };
+
+    const buildConnect = (data) => {
+      const template = data.labels.connectTemplate || "Reach me at {email} or {phone}";
+      const html = template
+        .replace("{email}", `<a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>`)
+        .replace("{phone}", `<a href="tel:+994508998676" target="_blank" rel="noopener"> +994 50 899 8676</a>`);
+      return `
+        <h2>${data.labels.headings.connect}</h2>
+        <p class="connect-text">${html}</p>
+      `;
+    };
+
+    const applyLanguage = (lang) => {
+      const data = I18N[lang] || I18N.en;
+      currentProfile = data;
+      document.documentElement.lang = lang;
+      if (langCurrent) langCurrent.textContent = languageLabels[lang] || "English";
+
+      const heroTitle = document.querySelector("main section h1");
+      const heroLinks = document.querySelector(".hero-links");
+      const heroTaglines = document.querySelectorAll(".hero-tagline");
+      if (heroTitle) heroTitle.textContent = data.hero.name;
+      if (heroTaglines.length) {
+        const parts = data.hero.tagline.split(". ");
+        const primary = parts[0]?.trim() ?? "";
+        const secondary = parts.slice(1).join(". ").trim();
+        heroTaglines[0].textContent = `${primary}${primary.endsWith(".") ? "" : "."}`;
+        if (heroTaglines[1]) {
+          heroTaglines[1].textContent = secondary;
+        }
+      }
+      if (heroLinks) {
+        const links = heroLinks.querySelectorAll("a");
+        if (links[0]) links[0].textContent = data.labels.links.resume;
+        if (links[1]) links[1].textContent = data.labels.links.linkedin;
+        if (links[2]) links[2].textContent = data.labels.links.github;
+      }
+
+      const introLead = document.querySelector(".intro-phrase .lead");
+      if (introLead) introLead.textContent = data.labels.introLead;
+
+      const sideLinks = document.querySelector(".side-links");
+      if (sideLinks) {
+        const links = sideLinks.querySelectorAll("a");
+        if (links[0]) links[0].textContent = data.labels.links.resume;
+        if (links[1]) links[1].textContent = data.labels.links.linkedin;
+        if (links[2]) links[2].textContent = data.labels.links.github;
+      }
+
+      const sideNav = document.querySelectorAll(".side-nav a");
+      const mobileNav = document.querySelectorAll(".mobile-menu a");
+      const labels = [
+        data.labels.nav.experience,
+        data.labels.nav.projects,
+        data.labels.nav.teaching,
+        data.labels.nav.education,
+        data.labels.nav.skills,
+        data.labels.nav.reading,
+        data.labels.nav.connect,
+      ];
+      sideNav.forEach((link, idx) => {
+        if (labels[idx]) link.textContent = labels[idx];
+      });
+      mobileNav.forEach((link, idx) => {
+        if (labels[idx]) link.textContent = labels[idx];
+      });
+
+      const expSection = document.getElementById("experience");
+      const projSection = document.getElementById("projects");
+      const teachSection = document.getElementById("teaching");
+      const eduSection = document.getElementById("education");
+      const skillsSection = document.getElementById("skills");
+      const readSection = document.getElementById("reading");
+      const connectSection = document.getElementById("connect");
+
+      if (expSection) expSection.innerHTML = buildExperience(data);
+      if (projSection) projSection.innerHTML = buildProjects(data);
+      if (teachSection) teachSection.innerHTML = buildTeaching(data);
+      if (eduSection) eduSection.innerHTML = buildEducation(data);
+      if (skillsSection) skillsSection.innerHTML = buildSkills(data);
+      if (readSection) readSection.innerHTML = buildReading(data);
+      if (connectSection) connectSection.innerHTML = buildConnect(data);
+
+      expSection?.setAttribute("data-label", data.labels.headings.experience);
+      projSection?.setAttribute("data-label", data.labels.headings.projects);
+      teachSection?.setAttribute("data-label", data.labels.headings.teaching);
+      eduSection?.setAttribute("data-label", data.labels.headings.education);
+      skillsSection?.setAttribute("data-label", data.labels.headings.skills);
+      readSection?.setAttribute("data-label", data.labels.headings.reading);
+      connectSection?.setAttribute("data-label", data.labels.headings.connect);
+
+      document.querySelectorAll(".simulate-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const card = btn.closest(".project-card");
+          const sim = card?.querySelector(".sim-visual");
+          sim?.classList.toggle("active");
+        });
+      });
+
+      setActiveLink();
+    };
+
+    const langWrapper = document.querySelector(".lang-switcher");
+    langToggle?.addEventListener("click", () => {
+      const isOpen = langMenu?.classList.contains("open");
+      langMenu?.classList.toggle("open", !isOpen);
+      langWrapper?.classList.toggle("open", !isOpen);
+      langToggle?.setAttribute("aria-expanded", String(!isOpen));
+    });
+
+    langMenu?.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const lang = btn.getAttribute("data-lang") || "en";
+        localStorage.setItem("portfolio-lang", lang);
+        applyLanguage(lang);
+        langMenu.classList.remove("open");
+        langWrapper?.classList.remove("open");
+        langToggle?.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!langMenu || !langToggle) return;
+      if (langMenu.contains(event.target) || langToggle.contains(event.target)) return;
+      langMenu.classList.remove("open");
+      langWrapper?.classList.remove("open");
+      langToggle.setAttribute("aria-expanded", "false");
+    });
+
+    const savedLang = localStorage.getItem("portfolio-lang") || "en";
+    applyLanguage(savedLang);
 
   </script>
 </BaseLayout>

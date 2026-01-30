@@ -44,7 +44,10 @@ export type Profile = {
   reading: {
     title: string;
     description: string;
-    authors: string[];
+    items: {
+      author: string;
+      quote: string;
+    }[];
   };
 };
 
@@ -270,12 +273,27 @@ export const profile: Profile = {
     title: "Reading",
     description:
       "I’ve been reading the writers below for the past 3–4 years; their narrative structure, human behavior under constraints, and ambiguity are useful lenses for modeling real‑world problems.",
-    authors: [
-      "Erich Maria Remarque *",
-      "Émile Zola",
-      "Vladimir Nabokov",
-      "Charlotte Brontë",
-      "Chuck Palahniuk",
+    items: [
+      {
+        author: "Erich Maria Remarque *",
+        quote: "We become not as we want to be, but as we are.",
+      },
+      {
+        author: "Mikhail Bulgakov",
+        quote: "Manuscripts don't burn.",
+      },
+      {
+        author: "Charlotte Brontë",
+        quote: "I am no bird; and no net ensnares me.",
+      },
+      {
+        author: "Chuck Palahniuk",
+        quote: "The future will be better tomorrow.",
+      },
+      {
+        author: "Émile Zola",
+        quote: "Truth is on the march, and nothing will stop it.",
+      },
     ],
   },
 };
