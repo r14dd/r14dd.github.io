@@ -26,6 +26,7 @@ type Labels = {
     connect: string;
   };
   introLead: string;
+  introTail: string;
   connectTemplate: string;
 };
 
@@ -65,6 +66,7 @@ export const profiles: Record<string, I18nProfile> = {
         connect: "Connect",
       },
       introLead: "Who is",
+      introTail: "",
       connectTemplate: "Reach me at {email} or {phone}",
     },
     education: {
@@ -77,19 +79,19 @@ export const profiles: Record<string, I18nProfile> = {
     ...profile,
     hero: {
       ...profile.hero,
-      title: "Инженер-программист",
+      title: "Software Engineer | Backend & Distributed Systems",
       tagline:
-        "Открыт для ролей Software/Backend. Строю надежные, production-ready системы и event-driven архитектуры.",
+        "Software Engineer | Backend & Distributed Systems. Специализируюсь на проектировании высоконагруженных event-driven систем и отказоустойчивых микросервисных архитектур. Превращаю сложные академические концепции в масштабируемый production-ready код.",
     },
     experience: [
       {
-        role: "Специалист по ИКТ",
+        role: "Специалист по ИТ‑поддержке",
         org: "COP29 United Nations Climate Change Conference",
         location: "Баку, Азербайджан",
         period: "Окт 2024 – Ноя 2024",
         bullets: [
-          "Поддерживал ИКТ‑операции для 500+ международных делегатов в критически важной среде",
-          "Решал инциденты инфраструктуры и гибридных сессий в реальном времени при жестких требованиях доступности",
+          "Обеспечил 99.9% uptime ИТ-инфраструктуры для 500 международных делегатов, соблюдая жесткие SLA в режиме реального времени",
+          "Решал инциденты инфраструктуры и гибридных сессий в режиме реального времени при жестких требованиях доступности",
           "Помогал с контролем доступа, усилением устройств и безопасным обращением с системами",
           "Сотрудничал с вендорами и техническими командами для бесперебойной работы",
         ],
@@ -107,14 +109,14 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: "Инженер‑программист",
+        role: "Разработчик программного обеспечения",
         org: "EZ Pro Billing and Collection Inc.",
         location: "New York, NY",
         period: "Сен 2021 – Май 2023",
         bullets: [
           "Разрабатывал backend‑системы на Python и MongoDB с ADA‑совместимыми фронтенд‑компонентами",
           "Создал систему аутентификации и распределения баллов по задачам",
-          "Реализовал чат на WebSocket, снизив нагрузку примерно на 90%",
+          "Оптимизировал WebSockets: снизил нагрузку сервера на 90% и внедрил мгновенную синхронизацию в распределенной системе",
         ],
       },
     ],
@@ -123,11 +125,11 @@ export const profiles: Record<string, I18nProfile> = {
         name: "MatchSentinel — Платформа мониторинга транзакций",
         tech: profile.projects[0].tech,
         impact:
-          "Impact: Полный fraud‑pipeline, развернутый на AWS, с live‑дашбордом и надежной обработкой событий.",
+          "Спроектировал и развернул end-to-end pipeline мониторинга транзакций. Внедрил принципы Clean Architecture и асинхронную обработку через RabbitMQ, обеспечив строгую консистентность данных и защиту от дублирования (Idempotency).",
         date: "Янв 2026",
         bullets: [
-          "Спроектировал event‑driven микросервисную архитектуру для скоринга, правил, кейсов, уведомлений и отчетности",
-          "Построил асинхронное взаимодействие через RabbitMQ и идемпотентных потребителей для безопасного повторного чтения",
+          "Спроектировал event‑driven архитектуру для скоринга, уведомлений и отчетности",
+          "Построил асинхронность через RabbitMQ и безопасные повторные чтения",
           "Реализовал per‑service БД с миграциями Liquibase и конфигурацией по окружениям",
           "Развернул на AWS EC2 через Docker Compose, Linux‑сети и публичные сервисные endpoints",
         ],
@@ -137,12 +139,12 @@ export const profiles: Record<string, I18nProfile> = {
         name: "FinFlow — Wallet API",
         tech: profile.projects[1].tech,
         impact:
-          "Impact: Безопасный wallet API с JWT‑аутентификацией и проверенными потоками доступа.",
+          "Безопасный wallet API с JWT‑аутентификацией и проверенными потоками доступа.",
         date: "Янв 2026",
         bullets: [
-          "Реализовал безопасную аутентификацию и авторизацию на JWT без состояния",
+          "Реализовал безопасную аутентификацию и авторизацию на JWT (stateless)",
           "Спроектировал реляционные модели данных через JPA/Hibernate с оптимизированными запросами",
-          "Применил практики безопасности: хэширование паролей, срок действия токенов, фильтрация запросов",
+          "Применил практики безопасности: хэширование паролей, время жизни токенов (TTL), фильтрация запросов",
           "Написал интеграционные тесты для проверки аутентификации и защищенных эндпоинтов",
         ],
         links: profile.projects[1].links,
@@ -151,7 +153,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Минималистичное портфолио",
         tech: profile.projects[2].tech,
         impact:
-          "Impact: Премиальное адаптивное портфолио с четкой иерархией и доступной анимацией.",
+          "Премиальное адаптивное портфолио с четкой иерархией и адаптивной анимацией.",
         date: "Янв 2026",
         bullets: [
           "Спроектировал минималистичный интерфейс с сильной типографикой и читаемыми отступами",
@@ -164,7 +166,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Алгоритм консенсуса Raft",
         tech: profile.projects[3].tech,
         impact:
-          "Impact: Продемонстрировал отказоустойчивое лидерство и репликацию логов в распределенном кластере.",
+          "Глубокая реализация консенсуса Raft: лидер-элекция, репликация логов и отказоустойчивость для сохранения согласованности при сбоях.",
         date: "Май 2024",
         bullets: [
           "Реализовал Raft с выбором лидера, репликацией логов и отказоустойчивостью",
@@ -175,7 +177,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Распределенная хеш‑таблица (Kademlia)",
         tech: profile.projects[4].tech,
         impact:
-          "Impact: Масштабируемые peer‑to‑peer запросы с логарифмической маршрутизацией.",
+          "Построил Kademlia‑DHT для устойчивого peer‑discovery и O(log n) поиска в динамических сетях.",
         date: "Фев 2024",
         bullets: [
           "Реализовал peer‑to‑peer хранилище с маршрутизацией Kademlia",
@@ -215,7 +217,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        title: "Введение в информатику",
+        title: "Основы компьютерных наук",
         skills: profile.teaching[3].skills,
         bullets: [
           "Обучал основам Python и алгоритмическому мышлению",
@@ -234,7 +236,18 @@ export const profiles: Record<string, I18nProfile> = {
       },
     ],
     skills: [
-      { category: "Языки программирования", items: profile.skills[0].items },
+      {
+        category: "Языки программирования",
+        items: [
+          "Java",
+          "Python",
+          "Rust",
+          "Go (базовый уровень)",
+          "JavaScript (базовый уровень)",
+          "Scala (базовый уровень)",
+          "C (базовый уровень)",
+        ],
+      },
       { category: "Backend и фреймворки", items: profile.skills[1].items },
       { category: "Архитектура и концепции", items: profile.skills[2].items },
       { category: "Сообщения и интеграции", items: profile.skills[3].items },
@@ -279,30 +292,31 @@ export const profiles: Record<string, I18nProfile> = {
         connect: "Связь",
       },
       introLead: "Кто такой",
+      introTail: "",
       connectTemplate: "Свяжитесь со мной: {email} или {phone}",
     },
     education: {
-      title: "State University of New York at Buffalo — Бакалавр по Computer Science",
+      title: "State University of New York at Buffalo — Бакалавр по направлению Компьютерные Науки",
       meta: "Авг 2020 – Май 2024 · Buffalo, NY",
-      bullets: ["Награды: Премия старшего ассистента преподавателя, многократные Dean's List Honors"],
+      bullets: ["Награды: Премия старшего ассистента преподавателя, многократные отличия списка декана"],
     },
   },
   az: {
     ...profile,
     hero: {
       ...profile.hero,
-      title: "Proqram mühəndisi",
+      title: "Software Engineer | Backend & Distributed Systems",
       tagline:
-        "Software/Backend rolları üçün açığam. Etibarlı, production‑ready sistemlər və event‑driven arxitekturalar qururam.",
+        "Software Engineer | Backend & Distributed Systems. Yüksək yüklü event-driven sistemlərin və dayanıqlı mikroservis arxitekturaların dizaynında ixtisaslaşıram. Mürəkkəb akademik konseptləri miqyaslana bilən, production-ready koda çevirirəm.",
     },
     experience: [
       {
-        role: "İKT üzrə assistent",
+        role: "İT‑dəstək üzrə mütəxəssis",
         org: "COP29 United Nations Climate Change Conference",
         location: "Bakı, Azərbaycan",
         period: "Okt 2024 – Noy 2024",
         bullets: [
-          "500+ beynəlxalq nümayəndə üçün kritik mühitdə İKT əməliyyatlarını dəstəklədim",
+          "500+ nümayəndə üçün kritik İT infrastrukturu üzrə 99.9% uptime təmin etdim və sərt SLA‑lara əməl etdim",
           "İnfrastruktur və hibrid sessiya insidentlərini real vaxtda həll etdim",
           "Giriş nəzarəti, cihazların sərtləşdirilməsi və təhlükəsiz sistem istifadəsində kömək etdim",
           "Fasiləsiz əməliyyatlar üçün vendor və texniki komandalarla işlədim",
@@ -328,7 +342,7 @@ export const profiles: Record<string, I18nProfile> = {
         bullets: [
           "Python və MongoDB ilə backend sistemlər, ADA‑uyğun frontend komponentlər qurdum",
           "Autentifikasiya və tapşırıq‑əsaslı xal bölüşdürmə sistemi hazırladım",
-          "WebSocket real‑vaxt çat tətbiq edib yüklənməni ~90% azaltdım",
+          "WebSocket arxitekturasını optimallaşdırdım, server yükünü 90% azaltdım və ani sinxronizasiya təmin etdim",
         ],
       },
     ],
@@ -337,13 +351,13 @@ export const profiles: Record<string, I18nProfile> = {
         name: "MatchSentinel — Tranzaksiya monitorinq platforması",
         tech: profile.projects[0].tech,
         impact:
-          "Impact: AWS üzərində yerləşdirilmiş, live paneli və etibarlı event emalı olan end‑to‑end fraud pipeline.",
+          "End-to-end tranzaksiya monitorinqi pipeline‑ını dizayn edib yerləşdirdim. Clean Architecture prinsiplərini və RabbitMQ ilə asinxron emalı tətbiq edərək ciddi məlumat konsistensiyası və dublikatdan qorunma (idempotency) təmin etdim.",
         date: "Yan 2026",
         bullets: [
-          "Skorinq, qaydalar, case, bildiriş və reportinq üçün event‑driven mikroservis arxitekturası qurdu",
-          "RabbitMQ ilə asinxron xidmətlərarası əlaqə və idempotent consumer‑lar qurdu",
-          "Liquibase ilə per‑service DB və mühit‑əsaslı konfiqurasiyanı tətbiq etdi",
-          "Docker Compose, Linux şəbəkəsi və public endpoint‑lərlə AWS EC2‑yə yerləşdirdi",
+          "Skorinq, bildiriş və reportinq üçün event‑driven arxitektura qurdum",
+          "RabbitMQ ilə asinxron emal və təhlükəsiz təkrar emalı təmin etdim",
+          "Liquibase ilə per‑service DB və mühit‑əsaslı konfiqurasiyanı tətbiq etdim",
+          "Docker Compose, Linux şəbəkəsi və public endpoint‑lərlə AWS EC2‑yə yerləşdirdim",
         ],
         links: profile.projects[0].links,
       },
@@ -351,13 +365,13 @@ export const profiles: Record<string, I18nProfile> = {
         name: "FinFlow — Wallet API",
         tech: profile.projects[1].tech,
         impact:
-          "Impact: JWT autentifikasiya ilə qorunan wallet API və təsdiqlənmiş giriş axınları.",
+          "JWT autentifikasiya ilə qorunan wallet API və təsdiqlənmiş giriş axınları.",
         date: "Yan 2026",
         bullets: [
-          "JWT əsasında stateless autentifikasiya və avtorizasiya qurdu",
-          "JPA/Hibernate ilə optimallaşdırılmış sorğular və relasiya modeli dizayn etdi",
-          "Parol hash‑ləmə, token expiry və request filtering kimi təhlükəsizlik praktikalı tətbiq etdi",
-          "Auth axınları və qorunan endpoint‑lər üçün inteqrasiya testləri yazdı",
+          "JWT əsasında stateless autentifikasiya və avtorizasiya qurdum",
+          "JPA/Hibernate ilə optimallaşdırılmış sorğular və relasiya modeli dizayn etdim",
+          "Parol hash‑ləmə, token TTL və request filtering kimi təhlükəsizlik praktikalı tətbiq etdim",
+          "Auth axınları və qorunan endpoint‑lər üçün inteqrasiya testləri yazdım",
         ],
         links: profile.projects[1].links,
       },
@@ -365,12 +379,12 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Minimalist Portfel",
         tech: profile.projects[2].tech,
         impact:
-          "Impact: Premium, adaptiv portfel — aydın iyerarxiya və əlçatan animasiya ilə.",
+          "Premium, adaptiv portfel — aydın iyerarxiya və əlçatan animasiya ilə.",
         date: "Yan 2026",
         bullets: [
-          "Minimalist layout və güclü tipografik iyerarxiya qurdu",
-          "Desktop və mobil üçün adaptiv navigasiya reallaşdırdı",
-          "prefers-reduced-motion dəstəkli mikro‑animasiya əlavə etdi",
+          "Minimalist layout və güclü tipoqrafik iyerarxiya qurdum",
+          "Desktop və mobil üçün adaptiv naviqasiya reallaşdırdım",
+          "prefers-reduced-motion dəstəkli mikro‑animasiya əlavə etdim",
         ],
         links: profile.projects[2].links,
       },
@@ -378,22 +392,22 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Raft əsaslı konsensus alqoritmi",
         tech: profile.projects[3].tech,
         impact:
-          "Impact: Paylanmış klasterdə lider seçimi və log repliksiyasını nümayiş etdirdi.",
+          "Raft konsensusu üzrə dərin reallaşdırma: lider seçimi, log repliksiyası və nasazlıqlara davamlılıq.",
         date: "May 2024",
         bullets: [
-          "Raft lider seçimi, log repliksiyası və fault tolerance tətbiq etdi",
-          "Node‑lar arasında konsistensiya üçün paralel server komponentləri qurdu",
+          "Raft lider seçimi, log repliksiyası və fault tolerance tətbiq etdim",
+          "Node‑lar arasında konsistensiya üçün paralel server komponentləri qurdum",
         ],
       },
       {
         name: "Paylanmış Hash Table (Kademlia)",
         tech: profile.projects[4].tech,
         impact:
-          "Impact: Logaritmik marşrutlama ilə skalabil P2P sorğular.",
+          "Dinamik şəbəkələr üçün dayanıqlı peer‑discovery və O(log n) axtarış təmin edən Kademlia‑DHT.",
         date: "Fev 2024",
         bullets: [
-          "Kademlia marşrutlaması ilə P2P paylanmış storage sistemi qurdu",
-          "O(log n) axtarış və dayanıqlı data yönləndirmə əldə etdi",
+          "Kademlia marşrutlaması ilə P2P paylanmış storage sistemi qurdum",
+          "O(log n) axtarış və dayanıqlı data yönləndirmə əldə etdim",
         ],
       },
     ],
@@ -402,53 +416,64 @@ export const profiles: Record<string, I18nProfile> = {
         title: "Məlumat strukturları",
         skills: profile.teaching[0].skills,
         bullets: [
-          "900+ tələbəyə office hours və təkrar sessiyalarla dəstək göstərdi",
-          "Real problemlər üçün əsas data strukturlarını və alqoritmləri izah etdi",
-          "Komplekslik analizi və düzgün struktur seçimi üzərində işlədi",
-          "Java və Scala ilə data strukturlarının implementasiyasını izah etdi",
-          "Data strukturları və alqoritmlərin sistem dizaynındakı rolunu göstərdi",
+          "900+ tələbəyə office hours və təkrar sessiyalarla dəstək göstərdim",
+          "Real problemlər üçün əsas data strukturlarını və alqoritmləri izah etdim",
+          "Komplekslik analizi və düzgün struktur seçimi üzərində işlədim",
+          "Java və Scala ilə data strukturlarının implementasiyasını izah etdim",
+          "Data strukturları və alqoritmlərin sistem dizaynındakı rolunu göstərdim",
         ],
       },
       {
         title: "Veb tətbiqləri",
         skills: profile.teaching[1].skills,
         bullets: [
-          "240 tələbəyə full‑stack tətbiqlər üzrə dəstək verdi",
-          "HTTP/REST, routing və backend arxitekturasını izah etdi",
-          "Layihələrin keyfiyyətini artırmaq üçün review etdi",
-          "Deployment və debugging mövzusunda kömək etdi",
+          "240 tələbəyə full‑stack tətbiqlər üzrə dəstək verdim",
+          "HTTP/REST, routing və backend arxitekturasını izah etdim",
+          "Layihələrin keyfiyyətini artırmaq üçün review etdim",
+          "Deployment və debugging mövzusunda kömək etdim",
         ],
       },
       {
         title: "Diskret strukturlar",
         skills: profile.teaching[2].skills,
         bullets: [
-          "Məntiq, sübutlar və diskret riyaziyyat üzrə dərslər keçdi",
-          "Tapşırıqları yoxladı və formal sübutlarda kömək etdi",
-          "Əsas konseptləri mənimsəməyə dəstək oldu",
+          "Məntiq, sübutlar və diskret riyaziyyat üzrə dərslər keçdim",
+          "Tapşırıqları yoxladım və formal sübutlarda kömək etdim",
+          "Əsas konseptləri mənimsəməyə dəstək oldum",
         ],
       },
       {
         title: "İnformatikaya giriş",
         skills: profile.teaching[3].skills,
         bullets: [
-          "Python və alqoritmik düşüncə üzrə təməl dərslər keçdi",
-          "Lab sessiyalarında əsas konseptləri izah etdi",
-          "Proqramlaşdırma çətinliklərini aşmaqda tələbələrə kömək etdi",
+          "Python və alqoritmik düşüncə üzrə təməl dərslər keçdim",
+          "Lab sessiyalarında əsas konseptləri izah etdim",
+          "Proqramlaşdırma çətinliklərini aşmaqda tələbələrə kömək etdim",
         ],
       },
       {
         title: "Kompüter təşkilatı",
         skills: profile.teaching[4].skills,
         bullets: [
-          "Prosessor arxitekturası və yaddaş iyerarxiyası üzrə dəstək verdi",
-          "ALU, pipeline və control unit mövzularını izah etdi",
-          "Tapşırıqları yoxladı və review sessiyalar keçirdi",
+          "Prosessor arxitekturası və yaddaş iyerarxiyası üzrə dəstək verdim",
+          "ALU, pipeline və control unit mövzularını izah etdim",
+          "Tapşırıqları yoxladım və review sessiyalar keçirdim",
         ],
       },
     ],
     skills: [
-      { category: "Proqramlaşdırma dilləri", items: profile.skills[0].items },
+      {
+        category: "Proqramlaşdırma dilləri",
+        items: [
+          "Java",
+          "Python",
+          "Rust",
+          "Go (təməl)",
+          "C (təməl)",
+          "JavaScript (təməl)",
+          "Scala (təməl)",
+        ],
+      },
       { category: "Backend və framework‑lər", items: profile.skills[1].items },
       { category: "Arxitektura və konseptlər", items: profile.skills[2].items },
       { category: "Messaging və inteqrasiya", items: profile.skills[3].items },
@@ -475,7 +500,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Tədris",
         education: "Təhsil",
         skills: "Bacarıqlar",
-        reading: "Oxu",
+        reading: "Ədəbiyyat",
         connect: "Əlaqə",
       },
       links: {
@@ -492,34 +517,35 @@ export const profiles: Record<string, I18nProfile> = {
         reading: "Ədəbiyyat",
         connect: "Əlaqə",
       },
-      introLead: "Kimdir",
+      introLead: "kimdir",
+      introTail: "",
       connectTemplate: "Əlaqə: {email} və ya {phone}",
     },
     education: {
-      title: "State University of New York at Buffalo — Computer Science üzrə bakalavr",
+      title: "State University of New York at Buffalo — Kompüter elmləri üzrə Bakalavr",
       meta: "Avq 2020 – May 2024 · Buffalo, NY",
-      bullets: ["Mükafatlar: Baş Tədris Asisstenti Mükafatı, dəfələrlə Dean's List Honors"],
+      bullets: ["Mükafatlar: Baş Tədris Assistenti Mükafatı, bir neçə dəfə Dekan siyahısına daxil edilmə"],
     },
   },
   es: {
     ...profile,
     hero: {
       ...profile.hero,
-      title: "Ingeniero de software",
+      title: "Software Engineer | Backend & Distributed Systems",
       tagline:
-        "Abierto a roles de Software/Backend. Construyo sistemas confiables, production‑ready y arquitecturas event‑driven.",
+        "Software Engineer | Backend & Distributed Systems. Me especializo en diseñar sistemas event-driven de alta carga y arquitecturas de microservicios tolerantes a fallos. Transformo conceptos académicos complejos en código escalable y production-ready.",
     },
     experience: [
       {
-        role: "Asistente de TIC",
+        role: "Especialista en TI",
         org: "COP29 United Nations Climate Change Conference",
         location: "Bakú, Azerbaiyán",
         period: "Oct 2024 – Nov 2024",
         bullets: [
-          "Respaldé operaciones de TIC para 500+ delegados internacionales en un entorno crítico",
+          "Garanticé el funcionamiento ininterrumpido de infraestructura crítica de TI para 500+ delegados internacionales, con 99.9% de uptime en sesiones híbridas bajo SLA estrictos y tiempo real",
           "Resolví incidentes de infraestructura y sesiones híbridas en tiempo real bajo alta disponibilidad",
           "Apoyé control de acceso, hardening de dispositivos y manejo seguro de sistemas",
-          "Colaboré con vendors y equipos técnicos para asegurar operaciones continuas",
+          "Colaboré con proveedores y equipos técnicos para asegurar operaciones continuas",
         ],
       },
       {
@@ -542,7 +568,7 @@ export const profiles: Record<string, I18nProfile> = {
         bullets: [
           "Construí sistemas backend con Python y MongoDB y componentes frontend ADA",
           "Desarrollé autenticación y asignación de puntos por tareas",
-          "Implementé chat en tiempo real con WebSocket, reduciendo carga ~90%",
+          "Optimicé la arquitectura de mensajería con WebSockets, reduje la carga del servidor en 90% y aseguré sincronización instantánea de datos en un sistema distribuido",
         ],
       },
     ],
@@ -551,11 +577,11 @@ export const profiles: Record<string, I18nProfile> = {
         name: "MatchSentinel — Plataforma de monitoreo de transacciones",
         tech: profile.projects[0].tech,
         impact:
-          "Impact: Pipeline completo de fraude desplegado en AWS con dashboard en vivo y procesamiento fiable.",
+          "Diseñé y desplegué un pipeline end-to-end de monitoreo de transacciones. Apliqué principios de Clean Architecture y procesamiento asíncrono con RabbitMQ, garantizando consistencia estricta e idempotencia.",
         date: "Ene 2026",
         bullets: [
-          "Diseñé una arquitectura de microservicios event‑driven para scoring, reglas, casos, notificaciones y reporting",
-          "Construí comunicación asíncrona con RabbitMQ e idempotent consumers",
+          "Diseñé una arquitectura event‑driven para scoring, notificaciones y reportes",
+          "Construí procesamiento asíncrono con RabbitMQ y re‑procesamiento seguro",
           "Implementé BD por servicio con migraciones Liquibase y configuración por entorno",
           "Desplegué en AWS EC2 con Docker Compose, redes Linux y endpoints públicos",
         ],
@@ -565,12 +591,12 @@ export const profiles: Record<string, I18nProfile> = {
         name: "FinFlow — Wallet API",
         tech: profile.projects[1].tech,
         impact:
-          "Impact: Wallet API seguro con autenticación JWT y flujos verificados.",
+          "Wallet API seguro con autenticación JWT y flujos verificados.",
         date: "Ene 2026",
         bullets: [
           "Implementé autenticación y autorización JWT sin estado",
           "Diseñé modelos relacionales con JPA/Hibernate y consultas optimizadas",
-          "Apliqué buenas prácticas: hashing de contraseñas, expiración de tokens y filtros",
+          "Apliqué buenas prácticas: hashing de contraseñas, TTL de tokens y filtros",
           "Desarrollé pruebas de integración para endpoints protegidos",
         ],
         links: profile.projects[1].links,
@@ -579,7 +605,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Portafolio minimalista",
         tech: profile.projects[2].tech,
         impact:
-          "Impact: Portafolio premium y responsive con jerarquía clara y animación accesible.",
+          "Portafolio premium y responsive con jerarquía clara y animación accesible.",
         date: "Ene 2026",
         bullets: [
           "Diseñé un layout minimalista con jerarquía tipográfica fuerte",
@@ -592,7 +618,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Algoritmo de consenso Raft",
         tech: profile.projects[3].tech,
         impact:
-          "Impact: Consenso tolerante a fallos con elección de líder y replicación de logs.",
+          "Implementación profunda de Raft: elección de líder, replicación de logs y tolerancia a fallos para mantener consistencia.",
         date: "May 2024",
         bullets: [
           "Implementé Raft con elección de líder, replicación de logs y tolerancia a fallos",
@@ -603,7 +629,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Tabla hash distribuida (Kademlia)",
         tech: profile.projects[4].tech,
         impact:
-          "Impact: Búsquedas P2P escalables con enrutamiento logarítmico.",
+          "Implementé una DHT Kademlia para descubrimiento de nodos y búsquedas O(log n) en redes dinámicas.",
         date: "Feb 2024",
         bullets: [
           "Implementé almacenamiento P2P con enrutamiento Kademlia",
@@ -662,7 +688,18 @@ export const profiles: Record<string, I18nProfile> = {
       },
     ],
     skills: [
-      { category: "Lenguajes de programación", items: profile.skills[0].items },
+      {
+        category: "Lenguajes de programación",
+        items: [
+          "Java",
+          "Python",
+          "Rust",
+          "Go (básico)",
+          "C (básico)",
+          "JavaScript (básico)",
+          "Scala (básico)",
+        ],
+      },
       { category: "Backend y frameworks", items: profile.skills[1].items },
       { category: "Arquitectura y conceptos", items: profile.skills[2].items },
       { category: "Mensajería e integración", items: profile.skills[3].items },
@@ -707,12 +744,13 @@ export const profiles: Record<string, I18nProfile> = {
         connect: "Contacto",
       },
       introLead: "Quién es",
+      introTail: "",
       connectTemplate: "Contáctame en {email} o {phone}",
     },
     education: {
-      title: "State University of New York at Buffalo — Licenciatura en Computer Science",
+      title: "State University of New York at Buffalo — Ciencias de la Computación",
       meta: "Ago 2020 – May 2024 · Buffalo, NY",
-      bullets: ["Premios: Undergraduate Teaching Assistant Award, múltiples Dean's List Honors"],
+      bullets: ["Premios: Undergraduate Teaching Assistant Award, múltiples menciones en la Dean's List"],
     },
   },
 };

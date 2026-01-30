@@ -8,7 +8,7 @@ const taglinePrimary = taglineParts[0]?.trim() ?? "";
 const taglineSecondary = taglineParts.slice(1).join(". ").trim();
 ---
 
-<BaseLayout>
+<BaseLayout introLead={profile.labels.introLead}>
   <div class="scroll-rail">
     <div class="scroll-progress" id="scroll-progress"></div>
   </div>
@@ -35,23 +35,23 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       <span></span>
       <span></span>
     </button>
-    <div class="mobile-current" aria-live="polite">{profile.labels.nav.experience}</div>
+    <div class="mobile-current" aria-live="polite">{profile.labels.nav.education}</div>
   </div>
   <div class="mobile-menu" aria-hidden="true">
+    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
     <a href="#projects">{profile.labels.nav.projects}</a>
     <a href="#teaching">{profile.labels.nav.teaching}</a>
-    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#reading">{profile.labels.nav.reading}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
   </div>
 
   <aside class="side-nav">
+    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
     <a href="#projects">{profile.labels.nav.projects}</a>
     <a href="#teaching">{profile.labels.nav.teaching}</a>
-    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#reading">{profile.labels.nav.reading}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
@@ -80,6 +80,17 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
         <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
         <a href={profile.links.linkedin} target="_blank" rel="noopener">{profile.labels.links.linkedin}</a>
         <a href={profile.links.github} target="_blank" rel="noopener">{profile.labels.links.github}</a>
+      </div>
+    </section>
+
+    <section id="education" class="section-block" data-label={profile.labels.headings.education}>
+      <h2>{profile.labels.headings.education}</h2>
+      <div class="meta-card">
+        <h3>State University of New York at Buffalo — BS in Computer Science</h3>
+        <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
+        <ul>
+          <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
+        </ul>
       </div>
     </section>
 
@@ -112,7 +123,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
             <div class="project-actions">
               {/* Simulate only for Raft and DHT */}
               {p.links?.github && <a class="project-link" href={p.links.github} target="_blank" rel="noopener">GitHub</a>}
-              {(p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table")) && (
+              {(p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Kademlia") || p.name.includes("Hash Table")) && (
                 <button class="simulate-btn" type="button">Simulate</button>
               )}
             </div>
@@ -139,7 +150,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
               </svg>
             </div>
           )}
-          {(p.name.includes("Hash Table") || p.name.includes("Distributed")) && (
+          {(p.name.includes("Hash Table") || p.name.includes("Distributed") || p.name.includes("Kademlia")) && (
             <div class="sim-visual" data-sim="kademlia">
               <svg width="260" height="80" viewBox="0 0 260 80">
                 <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
@@ -171,17 +182,6 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
           </ul>
         </div>
       ))}
-    </section>
-
-    <section id="education" class="section-block" data-label={profile.labels.headings.education}>
-      <h2>{profile.labels.headings.education}</h2>
-      <div class="meta-card">
-        <h3>State University of New York at Buffalo — BS in Computer Science</h3>
-        <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
-        <ul>
-          <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
-        </ul>
-      </div>
     </section>
 
       <section id="skills" class="section-block" data-label={profile.labels.headings.skills}>
@@ -216,7 +216,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
   </main>
 
   <script>
-    // @ts-nocheck
+// @ts-nocheck
     const i18nEl = document.getElementById("i18n-data");
     const I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {};
     const languageLabels = {
@@ -237,6 +237,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
     window.addEventListener("hashchange", openFromHash);
     window.addEventListener("load", openFromHash);
 
+    /** @type {HTMLElement[]} */
     const sections = Array.from(document.querySelectorAll("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
     const mobileCurrent = document.querySelector(".mobile-current");
@@ -347,7 +348,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       if (p.links?.github) {
         actions.push(`<a class="project-link" href="${p.links.github}" target="_blank" rel="noopener">${currentProfile.labels.links.github}</a>`);
       }
-      if (p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table") || p.name.includes("Distributed")) {
+      if (p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table") || p.name.includes("Distributed") || p.name.includes("Kademlia")) {
         actions.push(`<button class="simulate-btn" type="button">Simulate</button>`);
       }
       return actions.join("");
@@ -374,7 +375,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
           </div>
         `;
       }
-      if (p.name.includes("Hash Table") || p.name.includes("Distributed")) {
+      if (p.name.includes("Hash Table") || p.name.includes("Distributed") || p.name.includes("Kademlia")) {
         return `
           <div class="sim-visual" data-sim="kademlia">
             <svg width="260" height="80" viewBox="0 0 260 80">
@@ -532,7 +533,9 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       }
 
       const introLead = document.querySelector(".intro-phrase .lead");
-      if (introLead) introLead.textContent = data.labels.introLead;
+      if (introLead) {
+        introLead.textContent = data.labels.introLead ?? "";
+      }
 
       const sideLinks = document.querySelector(".side-links");
       if (sideLinks) {
@@ -545,10 +548,10 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       const sideNav = document.querySelectorAll(".side-nav a");
       const mobileNav = document.querySelectorAll(".mobile-menu a");
       const labels = [
+        data.labels.nav.education,
         data.labels.nav.experience,
         data.labels.nav.projects,
         data.labels.nav.teaching,
-        data.labels.nav.education,
         data.labels.nav.skills,
         data.labels.nav.reading,
         data.labels.nav.connect,
@@ -606,17 +609,25 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
     langMenu?.querySelectorAll("button").forEach((btn) => {
       btn.addEventListener("click", () => {
         const lang = btn.getAttribute("data-lang") || "en";
+        const current = document.documentElement.lang || "en";
+        if (lang === current) {
+          langMenu.classList.remove("open");
+          langWrapper?.classList.remove("open");
+          langToggle?.setAttribute("aria-expanded", "false");
+          return;
+        }
         localStorage.setItem("portfolio-lang", lang);
-        applyLanguage(lang);
         langMenu.classList.remove("open");
         langWrapper?.classList.remove("open");
         langToggle?.setAttribute("aria-expanded", "false");
+        window.location.reload();
       });
     });
 
     document.addEventListener("click", (event) => {
       if (!langMenu || !langToggle) return;
-      if (langMenu.contains(event.target) || langToggle.contains(event.target)) return;
+      const target = event.target;
+      if (target instanceof Node && (langMenu.contains(target) || langToggle.contains(target))) return;
       langMenu.classList.remove("open");
       langWrapper?.classList.remove("open");
       langToggle.setAttribute("aria-expanded", "false");
