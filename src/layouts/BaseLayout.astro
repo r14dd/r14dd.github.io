@@ -1,3 +1,6 @@
+---
+const { introLead = "Who is" } = Astro.props;
+---
 <!DOCTYPE html>
 <html lang="en" translate="no">
   <head>
@@ -47,6 +50,23 @@
       .content {
         max-width: 840px;
         margin: 0 auto;
+      }
+
+      .content,
+      .side-nav,
+      .side-links,
+      .mobile-bar,
+      .lang-switcher {
+        transition: opacity 0.2s ease;
+      }
+
+      body.lang-switching .content,
+      body.lang-switching .side-nav,
+      body.lang-switching .side-links,
+      body.lang-switching .mobile-bar,
+      body.lang-switching .lang-switcher {
+        opacity: 0;
+        pointer-events: none;
       }
 
       h1 {
@@ -245,10 +265,16 @@
         font-size: clamp(1rem, 3vw, 1.4rem);
         letter-spacing: 0.08em;
         text-transform: uppercase;
+        opacity: 0;
+        transition: opacity 0.15s ease;
       }
 
       .intro-phrase .lead {
         opacity: 0.65;
+      }
+
+      body.intro-ready .intro-phrase {
+        opacity: 1;
       }
 
       .intro-name {
@@ -339,8 +365,7 @@
 
         .intro-name span,
         .intro-name,
-        .intro-phrase,
-        .intro-phrase .lead {
+        .intro-phrase {
           animation: none !important;
           transform: none !important;
           opacity: 1 !important;
@@ -1047,7 +1072,7 @@
   <body>
     <div class="page-intro" aria-hidden="true">
       <div class="intro-phrase">
-        <span class="lead">Who is</span>
+        <span class="lead">{introLead}</span>
         <span class="intro-name" aria-label="Riad Mukhtarov">
           <span>R</span><span>i</span><span>a</span><span>d</span>
           <span>&nbsp;</span>
@@ -1064,6 +1089,19 @@
           document.body.classList.add("intro-done");
           return;
         }
+        const introLeadEl = document.querySelector(".intro-phrase .lead");
+        const savedLang = localStorage.getItem("portfolio-lang") || "en";
+        try {
+          const i18nEl = document.getElementById("i18n-data");
+          if (i18nEl?.textContent) {
+            const data = JSON.parse(i18nEl.textContent);
+            const lead = data?.[savedLang]?.labels?.introLead;
+            if (introLeadEl && lead) introLeadEl.textContent = lead;
+          }
+        } catch {
+          // noop
+        }
+        document.body.classList.add("intro-ready");
         setTimeout(() => {
           document.body.classList.add("intro-done");
         }, 1400);

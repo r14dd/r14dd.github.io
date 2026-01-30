@@ -57,7 +57,7 @@ export const profile: Profile = {
     name: "Riad Mukhtarov",
     title: "Software Engineer",
     tagline:
-      "Open to Software/Backend roles. Building reliable, production-ready systems and event-driven architectures.",
+      "Software Engineer | Backend & Distributed Systems. I specialize in designing high-load event-driven systems and fault-tolerant microservice architectures. I turn complex academic concepts into scalable, production-ready code.",
   },
 
   links: {
@@ -73,7 +73,7 @@ export const profile: Profile = {
       location: "Baku, Azerbaijan",
       period: "Oct 2024 – Nov 2024",
       bullets: [
-        "Supported ICT operations for 500+ international delegates in a mission-critical environment",
+        "Ensured 99.9% uptime for IT infrastructure supporting 500+ delegates under strict SLAs",
         "Resolved real-time infrastructure and hybrid session incidents under strict availability requirements",
         "Assisted with access control, device hardening, and secure system handling",
         "Collaborated with vendors and technical teams to ensure uninterrupted operations",
@@ -99,7 +99,7 @@ export const profile: Profile = {
       bullets: [
         "Built backend systems using Python and MongoDB with ADA-compliant frontend components",
         "Developed authentication and task-based point allocation system",
-        "Implemented WebSocket-based real-time chat, reducing workload by ~90%",
+        "Optimized WebSockets, cutting server load 90% and enabling instant sync",
       ],
     },
   ],
@@ -116,13 +116,14 @@ export const profile: Profile = {
         "Docker",
         "AWS EC2",
       ],
-      impact: "Impact: End-to-end fraud pipeline deployed on AWS with live dashboard + reliable event processing.",
+      impact:
+        "Impact: Designed and deployed an end-to-end transaction monitoring pipeline. Applied Clean Architecture and asynchronous processing via RabbitMQ, ensuring strong data consistency and protection against duplication (idempotency).",
       date: "Jan 2026",
       bullets: [
-        "Designed an event-driven microservices architecture spanning scoring, rules, cases, notifications, and reporting",
-        "Built async inter-service communication with RabbitMQ and idempotent consumers for safe reprocessing",
-        "Implemented per-service databases with Liquibase migrations plus environment-based configuration",
-        "Deployed to AWS EC2 using Docker Compose, Linux networking, and public service endpoints",
+        "Designed event-driven architecture for scoring, notifications, and reporting",
+        "Built async processing with RabbitMQ and safe reprocessing",
+        "Implemented per-service databases with Liquibase migrations and environment-based configuration",
+        "Deployed to AWS EC2 with Docker Compose, Linux networking, and public endpoints",
       ],
       links: {
         github: "https://github.com/r14dd/matchsentinel",
@@ -136,7 +137,7 @@ export const profile: Profile = {
       bullets: [
         "Implemented secure authentication and authorization using JWT-based stateless sessions",
         "Designed relational data models using JPA/Hibernate with optimized repository queries",
-        "Applied security best practices including password hashing, token expiration, and request filtering",
+        "Applied security best practices including password hashing, token TTL, and request filtering",
         "Developed integration tests to validate authentication flows and protected endpoints",
       ],
       links: {
@@ -160,7 +161,8 @@ export const profile: Profile = {
     {
       name: "Raft-Based Consensus Algorithm",
       tech: ["Go", "UDP", "Protobuf"],
-      impact: "Impact: Demonstrated fault-tolerant leader election and log replication in a distributed cluster.",
+      impact:
+        "Impact: Implemented Raft consensus to preserve consistency under failures, focusing on leader election, log replication, and fault tolerance.",
       date: "May 2024",
       bullets: [
         "Implemented Raft consensus with leader election, log replication, and fault tolerance",
@@ -170,7 +172,8 @@ export const profile: Profile = {
     {
       name: "Distributed Hash Table (Kademlia)",
       tech: ["Go", "TCP", "Protobuf"],
-      impact: "Impact: Achieved scalable peer-to-peer lookups with logarithmic routing performance.",
+      impact:
+        "Impact: Built a Kademlia-based DHT for resilient peer discovery and O(log n) lookups in dynamic networks.",
       date: "Feb 2024",
       bullets: [
         "Implemented a peer-to-peer distributed storage system using Kademlia routing",
