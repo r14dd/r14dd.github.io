@@ -92,16 +92,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
             </div>
             <div class="project-actions">
               {/* Simulate only for Raft and DHT */}
-              {p.links?.github && (
-                <a
-                  class={`project-link${(p.name.includes("MatchSentinel") || p.name.includes("FinFlow")) ? " always-visible" : ""}`}
-                  href={p.links.github}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  GitHub
-                </a>
-              )}
+              {p.links?.github && <a class="project-link" href={p.links.github} target="_blank" rel="noopener">GitHub</a>}
               {(p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table")) && (
                 <button class="simulate-btn" type="button">Simulate</button>
               )}
@@ -166,7 +157,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
     <section id="education" class="section-block">
       <h2>Education</h2>
       <div class="meta-card">
-        <h3>University at Buffalo — BS in Computer Science</h3>
+        <h3>State University of New York at Buffalo — BS in Computer Science</h3>
         <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
         <ul>
           <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>

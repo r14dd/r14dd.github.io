@@ -623,14 +623,12 @@
 
       .project-card:hover .project-link {
         opacity: 1;
-      }
-
-      .project-link.always-visible {
-        opacity: 1;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
       }
 
       .project-card:hover .project-link:hover {
         border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 14px rgba(255, 255, 255, 0.22);
       }
 
       .project-card:hover .project-tech {
@@ -652,12 +650,18 @@
         font-size: 0.8rem;
         cursor: pointer;
         transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        opacity: 0;
+      }
+
+      .project-card:hover .simulate-btn {
         opacity: 1;
+        box-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
       }
 
       .project-card:hover .simulate-btn:hover {
         border-color: rgba(255, 255, 255, 0.5);
         color: var(--text);
+        box-shadow: 0 0 14px rgba(255, 255, 255, 0.22);
       }
 
       .sim-visual {
