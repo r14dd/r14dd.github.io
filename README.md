@@ -17,8 +17,7 @@ Minimalist, high‑end personal portfolio built to present backend engineering w
 
 ## Why this site exists
 
-This portfolio is meant to read like a calm, confident system: clear sections, sharp typography, and purposeful interactions.  
-The design keeps attention on the work itself—experience, projects, and results—while still feeling premium.
+This portfolio is meant to read like a calm, confident system: clear sections, sharp typography, and purposeful interactions. The design keeps attention on the work itself—experience, projects, and results—while still feeling premium.
 
 ## Highlights
 
