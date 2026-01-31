@@ -1,13 +1,15 @@
-# Riad Mukhtarov — Portfolio
-
-Minimalist, high‑end personal portfolio built to present backend engineering work with clarity, focus, and production‑grade polish.
-
 <p align="center">
   <img src="https://img.shields.io/badge/Astro-111827?style=for-the-badge&logo=astro&logoColor=white" alt="Astro" />
   <img src="https://img.shields.io/badge/TypeScript-111827?style=for-the-badge&logo=typescript&logoColor=3178C6" alt="TypeScript" />
   <img src="https://img.shields.io/badge/CSS-111827?style=for-the-badge&logo=css3&logoColor=1572B6" alt="CSS" />
   <img src="https://img.shields.io/badge/HTML-111827?style=for-the-badge&logo=html5&logoColor=E34F26" alt="HTML5" />
 </p>
+
+# Riad Mukhtarov — Portfolio
+
+Minimalist, high‑end personal portfolio built to present backend engineering work with clarity, focus, and production‑grade polish.
+
+
 
 ## Live
 
