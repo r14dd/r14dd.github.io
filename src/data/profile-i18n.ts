@@ -79,6 +79,7 @@ export const profiles: Record<string, I18nProfile> = {
     ...profile,
     hero: {
       ...profile.hero,
+      name: "Риад Мухтаров",
       title: "Software Engineer | Backend & Distributed Systems",
       tagline:
         "Software Engineer | Backend & Distributed Systems. Специализируюсь на проектировании высоконагруженных event-driven систем и отказоустойчивых микросервисных архитектур. Превращаю сложные академические концепции в масштабируемый production-ready код.",
@@ -305,6 +306,7 @@ export const profiles: Record<string, I18nProfile> = {
     ...profile,
     hero: {
       ...profile.hero,
+      name: "Riad Muxtarov",
       title: "Software Engineer | Backend & Distributed Systems",
       tagline:
         "Software Engineer | Backend & Distributed Systems. Yüksək yüklü event-driven sistemlərin və dayanıqlı mikroservis arxitekturaların dizaynında ixtisaslaşıram. Mürəkkəb akademik konseptləri miqyaslana bilən, production-ready koda çevirirəm.",

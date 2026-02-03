@@ -6,9 +6,27 @@ const profile = profiles.en;
 const taglineParts = profile.hero.tagline.split(". ");
 const taglinePrimary = taglineParts[0]?.trim() ?? "";
 const taglineSecondary = taglineParts.slice(1).join(". ").trim();
+const metaTitle = `${profile.hero.name} — Portfolio`;
+const metaDescription = profile.hero.tagline;
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.hero.name,
+  jobTitle: profile.hero.title,
+  url: "https://r14dd.github.io",
+  sameAs: [profile.links.linkedin, profile.links.github],
+  email: "mailto:riadmukh@gmail.com",
+});
 ---
 
-<BaseLayout introLead={profile.labels.introLead}>
+<BaseLayout
+  introLead={profile.labels.introLead}
+  introName={profile.hero.name}
+  metaTitle={metaTitle}
+  metaDescription={metaDescription}
+  structuredData={structuredData}
+  lang="en"
+>
   <div class="scroll-rail">
     <div class="scroll-progress" id="scroll-progress"></div>
   </div>
@@ -76,6 +94,20 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       {taglineSecondary && (
         <p class="hero-tagline secondary">{taglineSecondary}</p>
       )}
+      <div class="hero-cta">
+        <a
+          class="cta-btn"
+          href={profile.links.resume}
+          target="_blank"
+          rel="noopener"
+          download
+        >
+          <svg class="cta-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 4v10m0 0l-4-4m4 4l4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          {profile.labels.links.resume}
+        </a>
+      </div>
       <div class="hero-links">
         <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
         <a href={profile.links.linkedin} target="_blank" rel="noopener">{profile.labels.links.linkedin}</a>
@@ -506,6 +538,19 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
       `;
     };
 
+    const setIntroName = (name) => {
+      const introName = document.querySelector(".intro-name");
+      if (!introName) return;
+      introName.setAttribute("aria-label", name);
+      introName.innerHTML = "";
+      Array.from(name).forEach((char, idx) => {
+        const span = document.createElement("span");
+        span.textContent = char === " " ? "\u00A0" : char;
+        span.style.animationDelay = `${(0.05 + idx * 0.08).toFixed(2)}s`;
+        introName.appendChild(span);
+      });
+    };
+
     const applyLanguage = (lang) => {
       const data = I18N[lang] || I18N.en;
       currentProfile = data;
@@ -514,6 +559,7 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
 
       const heroTitle = document.querySelector("main section h1");
       const heroLinks = document.querySelector(".hero-links");
+      const heroCta = document.querySelector(".hero-cta .cta-btn");
       const heroTaglines = document.querySelectorAll(".hero-tagline");
       if (heroTitle) heroTitle.textContent = data.hero.name;
       if (heroTaglines.length) {
@@ -531,11 +577,16 @@ const taglineSecondary = taglineParts.slice(1).join(". ").trim();
         if (links[1]) links[1].textContent = data.labels.links.linkedin;
         if (links[2]) links[2].textContent = data.labels.links.github;
       }
+      if (heroCta) {
+        heroCta.setAttribute("href", data.links.resume);
+        heroCta.innerHTML = `<svg class="cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>${data.labels.links.resume}`;
+      }
 
       const introLead = document.querySelector(".intro-phrase .lead");
       if (introLead) {
         introLead.textContent = data.labels.introLead ?? "";
       }
+      setIntroName(data.hero.name);
 
       const sideLinks = document.querySelector(".side-links");
       if (sideLinks) {
