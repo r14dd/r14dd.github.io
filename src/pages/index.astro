@@ -6,6 +6,17 @@ const profile = profiles.en;
 const taglineParts = profile.hero.tagline.split(". ");
 const taglinePrimary = taglineParts[0]?.trim() ?? "";
 const taglineSecondary = taglineParts.slice(1).join(". ").trim();
+const hasSimulation = (name: string) =>
+  name.includes("RAFT") ||
+  name.includes("Raft") ||
+  name.includes("Kademlia") ||
+  name.includes("Hash Table") ||
+  name.includes("Distributed") ||
+  name.includes("Redis");
+const isRaft = (name: string) => name.includes("RAFT") || name.includes("Raft");
+const isKademlia = (name: string) =>
+  name.includes("Hash Table") || name.includes("Distributed") || name.includes("Kademlia");
+const isRedis = (name: string) => name.includes("Redis");
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.hero.tagline;
 const structuredData = JSON.stringify({
@@ -155,7 +166,7 @@ const structuredData = JSON.stringify({
             <div class="project-actions">
               {/* Simulate only for Raft and DHT */}
               {p.links?.github && <a class="project-link" href={p.links.github} target="_blank" rel="noopener">GitHub</a>}
-              {(p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Kademlia") || p.name.includes("Hash Table")) && (
+              {hasSimulation(p.name) && (
                 <button class="simulate-btn" type="button">Simulate</button>
               )}
             </div>
@@ -164,7 +175,7 @@ const structuredData = JSON.stringify({
           <ul class="project-bullets">
             {p.bullets.map((b) => <li>{b}</li>)}
           </ul>
-          {(p.name.includes("RAFT") || p.name.includes("Raft")) && (
+          {isRaft(p.name) && (
             <div class="sim-visual" data-sim="raft">
               <svg width="260" height="80" viewBox="0 0 260 80">
                 <line class="sim-link" x1="30" y1="40" x2="130" y2="15" />
@@ -182,7 +193,7 @@ const structuredData = JSON.stringify({
               </svg>
             </div>
           )}
-          {(p.name.includes("Hash Table") || p.name.includes("Distributed") || p.name.includes("Kademlia")) && (
+          {isKademlia(p.name) && (
             <div class="sim-visual" data-sim="kademlia">
               <svg width="260" height="80" viewBox="0 0 260 80">
                 <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
@@ -195,6 +206,29 @@ const structuredData = JSON.stringify({
                 <circle class="sim-pulse" cx="40" cy="20" r="3">
                   <animate attributeName="cx" values="40;120;200;120;40" dur="2.6s" repeatCount="indefinite" />
                   <animate attributeName="cy" values="20;40;65;40;20" dur="2.6s" repeatCount="indefinite" />
+                </circle>
+              </svg>
+            </div>
+          )}
+          {isRedis(p.name) && (
+            <div class="sim-visual" data-sim="redis">
+              <svg width="260" height="90" viewBox="0 0 260 90">
+                <line class="sim-link" x1="35" y1="22" x2="105" y2="22" />
+                <line class="sim-link" x1="105" y1="22" x2="160" y2="22" />
+                <line class="sim-link" x1="160" y1="22" x2="225" y2="22" />
+                <line class="sim-link" x1="160" y1="22" x2="160" y2="64" />
+                <line class="sim-link" x1="160" y1="64" x2="225" y2="64" />
+
+                <circle class="sim-node" cx="35" cy="22" r="9" />
+                <circle class="sim-node" cx="105" cy="22" r="9" />
+                <circle class="sim-node" cx="160" cy="22" r="9" />
+                <circle class="sim-node" cx="225" cy="22" r="9" />
+                <circle class="sim-node" cx="160" cy="64" r="9" />
+                <circle class="sim-node" cx="225" cy="64" r="9" />
+
+                <circle class="sim-pulse" cx="35" cy="22" r="3">
+                  <animate attributeName="cx" values="35;105;160;225;160;225;160;105;35" dur="3.4s" repeatCount="indefinite" />
+                  <animate attributeName="cy" values="22;22;22;22;22;64;64;22;22" dur="3.4s" repeatCount="indefinite" />
                 </circle>
               </svg>
             </div>
@@ -375,19 +409,31 @@ const structuredData = JSON.stringify({
       `;
     };
 
+    const hasSimulationFor = (name) =>
+      name.includes("RAFT") ||
+      name.includes("Raft") ||
+      name.includes("Hash Table") ||
+      name.includes("Distributed") ||
+      name.includes("Kademlia") ||
+      name.includes("Redis");
+    const isRaftProject = (name) => name.includes("RAFT") || name.includes("Raft");
+    const isKademliaProject = (name) =>
+      name.includes("Hash Table") || name.includes("Distributed") || name.includes("Kademlia");
+    const isRedisProject = (name) => name.includes("Redis");
+
     const buildProjectActions = (p) => {
       const actions = [];
       if (p.links?.github) {
         actions.push(`<a class="project-link" href="${p.links.github}" target="_blank" rel="noopener">${currentProfile.labels.links.github}</a>`);
       }
-      if (p.name.includes("RAFT") || p.name.includes("Raft") || p.name.includes("Hash Table") || p.name.includes("Distributed") || p.name.includes("Kademlia")) {
+      if (hasSimulationFor(p.name)) {
         actions.push(`<button class="simulate-btn" type="button">Simulate</button>`);
       }
       return actions.join("");
     };
 
     const buildProjectSim = (p) => {
-      if (p.name.includes("RAFT") || p.name.includes("Raft")) {
+      if (isRaftProject(p.name)) {
         return `
           <div class="sim-visual" data-sim="raft">
             <svg width="260" height="80" viewBox="0 0 260 80">
@@ -407,7 +453,7 @@ const structuredData = JSON.stringify({
           </div>
         `;
       }
-      if (p.name.includes("Hash Table") || p.name.includes("Distributed") || p.name.includes("Kademlia")) {
+      if (isKademliaProject(p.name)) {
         return `
           <div class="sim-visual" data-sim="kademlia">
             <svg width="260" height="80" viewBox="0 0 260 80">
@@ -421,6 +467,31 @@ const structuredData = JSON.stringify({
               <circle class="sim-pulse" cx="40" cy="20" r="3">
                 <animate attributeName="cx" values="40;120;200;120;40" dur="2.6s" repeatCount="indefinite" />
                 <animate attributeName="cy" values="20;40;65;40;20" dur="2.6s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+          </div>
+        `;
+      }
+      if (isRedisProject(p.name)) {
+        return `
+          <div class="sim-visual" data-sim="redis">
+            <svg width="260" height="90" viewBox="0 0 260 90">
+              <line class="sim-link" x1="35" y1="22" x2="105" y2="22" />
+              <line class="sim-link" x1="105" y1="22" x2="160" y2="22" />
+              <line class="sim-link" x1="160" y1="22" x2="225" y2="22" />
+              <line class="sim-link" x1="160" y1="22" x2="160" y2="64" />
+              <line class="sim-link" x1="160" y1="64" x2="225" y2="64" />
+
+              <circle class="sim-node" cx="35" cy="22" r="9" />
+              <circle class="sim-node" cx="105" cy="22" r="9" />
+              <circle class="sim-node" cx="160" cy="22" r="9" />
+              <circle class="sim-node" cx="225" cy="22" r="9" />
+              <circle class="sim-node" cx="160" cy="64" r="9" />
+              <circle class="sim-node" cx="225" cy="64" r="9" />
+
+              <circle class="sim-pulse" cx="35" cy="22" r="3">
+                <animate attributeName="cx" values="35;105;160;225;160;225;160;105;35" dur="3.4s" repeatCount="indefinite" />
+                <animate attributeName="cy" values="22;22;22;22;22;64;64;22;22" dur="3.4s" repeatCount="indefinite" />
               </circle>
             </svg>
           </div>
@@ -573,9 +644,18 @@ const structuredData = JSON.stringify({
       }
       if (heroLinks) {
         const links = heroLinks.querySelectorAll("a");
-        if (links[0]) links[0].textContent = data.labels.links.resume;
-        if (links[1]) links[1].textContent = data.labels.links.linkedin;
-        if (links[2]) links[2].textContent = data.labels.links.github;
+        if (links[0]) {
+          links[0].textContent = data.labels.links.resume;
+          links[0].setAttribute("href", data.links.resume);
+        }
+        if (links[1]) {
+          links[1].textContent = data.labels.links.linkedin;
+          links[1].setAttribute("href", data.links.linkedin);
+        }
+        if (links[2]) {
+          links[2].textContent = data.labels.links.github;
+          links[2].setAttribute("href", data.links.github);
+        }
       }
       if (heroCta) {
         heroCta.setAttribute("href", data.links.resume);

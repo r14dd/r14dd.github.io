@@ -151,8 +151,21 @@ export const profiles: Record<string, I18nProfile> = {
         links: profile.projects[1].links,
       },
       {
-        name: "Минималистичное портфолио",
+        name: "Redis Redesign",
         tech: profile.projects[2].tech,
+        impact:
+          "Перестроил распределенный Redis-кэш в двухслойную TTL-модель, устранив проблемы устаревших данных и сохранив низкую задержку.",
+        date: "Дек 2025",
+        bullets: [
+          "Заменил монолитный кэш на два слоя: key-subkey to id и id to value",
+          "Добавил TTL-управление жизненным циклом для предсказуемого истечения данных",
+          "Реализовал garbage collection для удаления просроченных записей и висячих ссылок",
+          "Сохранил низкую latency при усилении консистентности в распределенной нагрузке",
+        ],
+      },
+      {
+        name: "Минималистичное портфолио",
+        tech: profile.projects[3].tech,
         impact:
           "Премиальное адаптивное портфолио с четкой иерархией и адаптивной анимацией.",
         date: "Янв 2026",
@@ -161,11 +174,11 @@ export const profiles: Record<string, I18nProfile> = {
           "Реализовал адаптивную навигацию для десктопа и мобильных",
           "Добавил микро‑анимации с учетом prefers-reduced-motion",
         ],
-        links: profile.projects[2].links,
+        links: profile.projects[3].links,
       },
       {
         name: "Алгоритм консенсуса Raft",
-        tech: profile.projects[3].tech,
+        tech: profile.projects[4].tech,
         impact:
           "Глубокая реализация консенсуса Raft: лидер-элекция, репликация логов и отказоустойчивость для сохранения согласованности при сбоях.",
         date: "Май 2024",
@@ -176,7 +189,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         name: "Распределенная хеш‑таблица (Kademlia)",
-        tech: profile.projects[4].tech,
+        tech: profile.projects[5].tech,
         impact:
           "Построил Kademlia‑DHT для устойчивого peer‑discovery и O(log n) поиска в динамических сетях.",
         date: "Фев 2024",
@@ -378,8 +391,21 @@ export const profiles: Record<string, I18nProfile> = {
         links: profile.projects[1].links,
       },
       {
-        name: "Minimalist Portfel",
+        name: "Redis Redesign",
         tech: profile.projects[2].tech,
+        impact:
+          "Paylanmış Redis cache-i ikiqat TTL modelinə yenidən quraraq köhnəlmiş məlumat uyğunsuzluğunu aradan qaldırdım və aşağı gecikməni qorudum.",
+        date: "Dek 2025",
+        bullets: [
+          "Monolit cache-i iki laylı modelə çevirdim: key-subkey to id və id to value",
+          "Məlumatların müddətini idarə etmək üçün TTL lifecycle nəzarəti tətbiq etdim",
+          "Expired qeyd və asılı istinadları təmizləmək üçün garbage collection reallaşdırdım",
+          "Paylanmış yüklərdə konsistensiyanı artırarkən aşağı latency-ni saxladım",
+        ],
+      },
+      {
+        name: "Minimalist Portfel",
+        tech: profile.projects[3].tech,
         impact:
           "Premium, adaptiv portfel — aydın iyerarxiya və əlçatan animasiya ilə.",
         date: "Yan 2026",
@@ -388,11 +414,11 @@ export const profiles: Record<string, I18nProfile> = {
           "Desktop və mobil üçün adaptiv naviqasiya reallaşdırdım",
           "prefers-reduced-motion dəstəkli mikro‑animasiya əlavə etdim",
         ],
-        links: profile.projects[2].links,
+        links: profile.projects[3].links,
       },
       {
         name: "Raft əsaslı konsensus alqoritmi",
-        tech: profile.projects[3].tech,
+        tech: profile.projects[4].tech,
         impact:
           "Raft konsensusu üzrə dərin reallaşdırma: lider seçimi, log repliksiyası və nasazlıqlara davamlılıq.",
         date: "May 2024",
@@ -403,7 +429,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         name: "Paylanmış Hash Table (Kademlia)",
-        tech: profile.projects[4].tech,
+        tech: profile.projects[5].tech,
         impact:
           "Dinamik şəbəkələr üçün dayanıqlı peer‑discovery və O(log n) axtarış təmin edən Kademlia‑DHT.",
         date: "Fev 2024",
@@ -604,8 +630,21 @@ export const profiles: Record<string, I18nProfile> = {
         links: profile.projects[1].links,
       },
       {
-        name: "Portafolio minimalista",
+        name: "Redis Redesign",
         tech: profile.projects[2].tech,
+        impact:
+          "Rediseñé el caché Redis distribuido con un modelo de dos capas y TTL, eliminando inconsistencias por datos obsoletos sin perder baja latencia.",
+        date: "Dic 2025",
+        bullets: [
+          "Reemplacé el caché monolítico con dos capas: key-subkey to id e id to value",
+          "Apliqué control de ciclo de vida con TTL para expiración predecible",
+          "Implementé garbage collection para limpiar expirados y referencias colgantes",
+          "Mantuve acceso de baja latencia con mejor consistencia en cargas distribuidas",
+        ],
+      },
+      {
+        name: "Portafolio minimalista",
+        tech: profile.projects[3].tech,
         impact:
           "Portafolio premium y responsive con jerarquía clara y animación accesible.",
         date: "Ene 2026",
@@ -614,11 +653,11 @@ export const profiles: Record<string, I18nProfile> = {
           "Implementé navegación responsive para desktop y móvil",
           "Añadí micro‑animaciones respetando prefers-reduced-motion",
         ],
-        links: profile.projects[2].links,
+        links: profile.projects[3].links,
       },
       {
         name: "Algoritmo de consenso Raft",
-        tech: profile.projects[3].tech,
+        tech: profile.projects[4].tech,
         impact:
           "Implementación profunda de Raft: elección de líder, replicación de logs y tolerancia a fallos para mantener consistencia.",
         date: "May 2024",
@@ -629,7 +668,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         name: "Tabla hash distribuida (Kademlia)",
-        tech: profile.projects[4].tech,
+        tech: profile.projects[5].tech,
         impact:
           "Implementé una DHT Kademlia para descubrimiento de nodos y búsquedas O(log n) en redes dinámicas.",
         date: "Feb 2024",
