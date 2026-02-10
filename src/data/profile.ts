@@ -145,6 +145,25 @@ export const profile: Profile = {
       },
     },
     {
+      name: "Redis Redesign",
+      tech: [
+        "Redis",
+        "Distributed Caching",
+        "TTL",
+        "Garbage Collection",
+        "Low Latency",
+      ],
+      impact:
+        "Impact: Redesigned a distributed Redis cache into a two-layer TTL-aware model, removing stale-data inconsistency while preserving low-latency behavior.",
+      date: "Dec 2025",
+      bullets: [
+        "Replaced a monolithic cache with two layers: key-subkey to id mapping and id to value storage",
+        "Applied TTL lifecycle control to expire stale entries predictably",
+        "Implemented garbage collection to remove expired entries and dangling cross-layer references",
+        "Preserved low-latency access while improving consistency in distributed workloads",
+      ],
+    },
+    {
       name: "Minimalist Portfolio",
       tech: ["Astro", "TypeScript", "CSS"],
       impact: "Impact: Built a premium, responsive portfolio with clear hierarchy and accessibility-first motion.",
