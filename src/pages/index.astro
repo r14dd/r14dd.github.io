@@ -171,7 +171,7 @@ const structuredData = JSON.stringify({
               )}
             </div>
           </div>
-          {p.impact && <div class="project-impact"><strong>Impact:</strong> {p.impact.replace(/^Impact:\s*/i, "")}</div>}
+          {p.impact && <div class="project-impact"><strong>Impact:</strong> {p.impact.replace(/^(?:Impact:\s*)+/i, "")}</div>}
           <ul class="project-bullets">
             {p.bullets.map((b) => <li>{b}</li>)}
           </ul>
@@ -519,7 +519,7 @@ const structuredData = JSON.stringify({
                     ${buildProjectActions(p)}
                   </div>
                 </div>
-                ${p.impact ? `<div class="project-impact"><strong>Impact:</strong> ${p.impact.replace(/^Impact:\\s*/i, "")}</div>` : ""}
+                ${p.impact ? `<div class="project-impact"><strong>Impact:</strong> ${p.impact.replace(/^(?:Impact:\s*)+/i, "")}</div>` : ""}
                 <ul class="project-bullets">
                   ${p.bullets.map((b) => `<li>${b}</li>`).join("")}
                 </ul>
