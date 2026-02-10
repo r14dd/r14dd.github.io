@@ -81,7 +81,7 @@ const w=document.getElementById("i18n-data"),L=w?JSON.parse(w.textContent||"{}")
                     ${_(e)}
                   </div>
                 </div>
-                ${e.impact?`<div class="project-impact"><strong>Impact:</strong> ${e.impact.replace(/^Impact:\\s*/i,"")}</div>`:""}
+                ${e.impact?`<div class="project-impact"><strong>Impact:</strong> ${e.impact.replace(/^(?:Impact:\s*)+/i,"")}</div>`:""}
                 <ul class="project-bullets">
                   ${e.bullets.map(s=>`<li>${s}</li>`).join("")}
                 </ul>
