@@ -55,9 +55,9 @@ export type Profile = {
 export const profile: Profile = {
   hero: {
     name: "Riad Mukhtarov",
-    title: "Software Engineer",
+    title: "AI Engineer | Backend & Distributed Systems",
     tagline:
-      "Software Engineer | Backend & Distributed Systems. I specialize in designing high-load event-driven systems and fault-tolerant microservice architectures. I turn complex academic concepts into scalable, production-ready code.",
+      "AI Engineer | Backend & Distributed Systems. I design and deploy scalable AI-powered systems, working closely with data scientists to bring models from experimentation to production. I specialize in high-load event-driven architectures, fault-tolerant microservices, and turning complex research into reliable, production-grade systems.",
   },
 
   links: {
@@ -67,6 +67,13 @@ export const profile: Profile = {
   },
 
   experience: [
+    {
+      role: "Artificial Intelligence Engineer",
+      org: "ABB",
+      location: "Baku, Azerbaijan",
+      period: "Apr 2026 – Present",
+      bullets: [],
+    },
     {
       role: "Information and Communication Technology (ICT) Assistant",
       org: "COP29 United Nations Climate Change Conference",
