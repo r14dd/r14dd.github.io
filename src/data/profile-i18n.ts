@@ -80,11 +80,18 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Риад Мухтаров",
-      title: "Software Engineer | Backend & Distributed Systems",
+      title: "AI Engineer | Backend & Distributed Systems",
       tagline:
-        "Software Engineer | Backend & Distributed Systems. Специализируюсь на проектировании высоконагруженных event-driven систем и отказоустойчивых микросервисных архитектур. Превращаю сложные академические концепции в масштабируемый production-ready код.",
+        "AI Engineer | Backend & Distributed Systems. Проектирую и развертываю масштабируемые системы на основе ИИ, тесно взаимодействуя с дата-сайентистами для вывода моделей из стадии экспериментов в продакшн. Специализируюсь на высоконагруженных event-driven архитектурах, отказоустойчивых микросервисах и переводе сложных исследований в надёжные production-системы.",
     },
     experience: [
+      {
+        role: "Инженер по искусственному интеллекту",
+        org: "ABB",
+        location: "Баку, Азербайджан",
+        period: "Апр 2026 – Настоящее время",
+        bullets: [],
+      },
       {
         role: "Специалист по ИТ‑поддержке",
         org: "COP29 United Nations Climate Change Conference",
@@ -320,11 +327,18 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Riad Muxtarov",
-      title: "Software Engineer | Backend & Distributed Systems",
+      title: "AI Engineer | Backend & Distributed Systems",
       tagline:
-        "Software Engineer | Backend & Distributed Systems. Yüksək yüklü event-driven sistemlərin və dayanıqlı mikroservis arxitekturaların dizaynında ixtisaslaşıram. Mürəkkəb akademik konseptləri miqyaslana bilən, production-ready koda çevirirəm.",
+        "AI Engineer | Backend & Distributed Systems. Miqyaslana bilən süni intellekt əsaslı sistemlər dizayn edib yerləşdirirəm, modelləri eksperimentdən istehsala çıxarmaq üçün data alimləri ilə sıx əməkdaşlıq edirəm. Yüksək yüklü event-driven arxitekturalarda, dayanıqlı mikroservislərdə və mürəkkəb tədqiqatları etibarlı production sistemlərə çevirməkdə ixtisaslaşıram.",
     },
     experience: [
+      {
+        role: "Süni İntellekt Mühəndisi",
+        org: "ABB",
+        location: "Bakı, Azərbaycan",
+        period: "Apr 2026 – indiyə kimi",
+        bullets: [],
+      },
       {
         role: "İT‑dəstək üzrə mütəxəssis",
         org: "COP29 United Nations Climate Change Conference",
@@ -559,11 +573,18 @@ export const profiles: Record<string, I18nProfile> = {
     ...profile,
     hero: {
       ...profile.hero,
-      title: "Software Engineer | Backend & Distributed Systems",
+      title: "AI Engineer | Backend & Distributed Systems",
       tagline:
-        "Software Engineer | Backend & Distributed Systems. Me especializo en diseñar sistemas event-driven de alta carga y arquitecturas de microservicios tolerantes a fallos. Transformo conceptos académicos complejos en código escalable y production-ready.",
+        "AI Engineer | Backend & Distributed Systems. Diseño y despliego sistemas escalables impulsados por IA, trabajando estrechamente con científicos de datos para llevar modelos desde la experimentación hasta producción. Me especializo en arquitecturas event-driven de alta carga, microservicios tolerantes a fallos y en convertir investigaciones complejas en sistemas fiables listos para producción.",
     },
     experience: [
+      {
+        role: "Ingeniero de Inteligencia Artificial",
+        org: "ABB",
+        location: "Bakú, Azerbaiyán",
+        period: "Abr 2026 – Presente",
+        bullets: [],
+      },
       {
         role: "Especialista en TI",
         org: "COP29 United Nations Climate Change Conference",
