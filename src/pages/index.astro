@@ -15,7 +15,9 @@ const hasSimulation = (name: string) =>
   name.includes("Redis");
 const isRaft = (name: string) => name.includes("RAFT") || name.includes("Raft");
 const isKademlia = (name: string) =>
-  name.includes("Hash Table") || name.includes("Distributed") || name.includes("Kademlia");
+  name.includes("Hash Table") ||
+  name.includes("Distributed") ||
+  name.includes("Kademlia");
 const isRedis = (name: string) => name.includes("Redis");
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.hero.tagline;
@@ -42,15 +44,30 @@ const structuredData = JSON.stringify({
     <div class="scroll-progress" id="scroll-progress"></div>
   </div>
 
-  <script type="application/json" id="i18n-data" set:html={JSON.stringify(profiles)}></script>
+  <script
+    type="application/json"
+    id="i18n-data"
+    set:html={JSON.stringify(profiles)}
+  />
 
   <div class="lang-switcher" aria-label="Language">
-    <button class="lang-toggle" id="lang-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">
+    <button
+      class="lang-toggle"
+      id="lang-toggle"
+      type="button"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+    >
       <span class="lang-globe" aria-hidden="true">🌐</span>
       <span class="lang-label" id="lang-current">English</span>
       <span class="lang-caret" aria-hidden="true">▾</span>
     </button>
-    <div class="lang-menu" id="lang-menu" role="listbox" aria-label="Select language">
+    <div
+      class="lang-menu"
+      id="lang-menu"
+      role="listbox"
+      aria-label="Select language"
+    >
       <button type="button" data-lang="en">English</button>
       <button type="button" data-lang="ru">Русский</button>
       <button type="button" data-lang="az">Azərbaycanca</button>
@@ -64,7 +81,9 @@ const structuredData = JSON.stringify({
       <span></span>
       <span></span>
     </button>
-    <div class="mobile-current" aria-live="polite">{profile.labels.nav.education}</div>
+    <div class="mobile-current" aria-live="polite">
+      {profile.labels.nav.education}
+    </div>
   </div>
   <div class="mobile-menu" aria-hidden="true">
     <a href="#education">{profile.labels.nav.education}</a>
@@ -74,6 +93,7 @@ const structuredData = JSON.stringify({
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#reading">{profile.labels.nav.reading}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
+    <a href="/jury">Jury</a>
   </div>
 
   <aside class="side-nav">
@@ -89,22 +109,34 @@ const structuredData = JSON.stringify({
   <aside class="side-links">
     <span class="mono">Links</span>
     <div class="resume-hover">
-      <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
+      <a href={profile.links.resume} target="_blank" rel="noopener"
+        >{profile.labels.links.resume}</a
+      >
       <div class="resume-preview" aria-hidden="true">
-        <iframe title="Resume preview" src="/resume.pdf#page=1&zoom=page-width"></iframe>
+        <iframe title="Resume preview" src="/resume.pdf#page=1&zoom=page-width"
+        ></iframe>
       </div>
     </div>
-    <a href={profile.links.linkedin} target="_blank" rel="noopener">{profile.labels.links.linkedin}</a>
-    <a href={profile.links.github} target="_blank" rel="noopener">{profile.labels.links.github}</a>
+    <a href={profile.links.linkedin} target="_blank" rel="noopener"
+      >{profile.labels.links.linkedin}</a
+    >
+    <a href={profile.links.github} target="_blank" rel="noopener"
+      >{profile.labels.links.github}</a
+    >
+    <a href="/jury" rel="noopener">Jury</a>
   </aside>
 
   <main class="content">
     <section>
       <h1>{profile.hero.name}</h1>
-      <p class="hero-tagline">{taglinePrimary}{taglinePrimary.endsWith(".") ? "" : "."}</p>
-      {taglineSecondary && (
-        <p class="hero-tagline secondary">{taglineSecondary}</p>
-      )}
+      <p class="hero-tagline">
+        {taglinePrimary}{taglinePrimary.endsWith(".") ? "" : "."}
+      </p>
+      {
+        taglineSecondary && (
+          <p class="hero-tagline secondary">{taglineSecondary}</p>
+        )
+      }
       <div class="hero-cta">
         <a
           class="cta-btn"
@@ -114,175 +146,288 @@ const structuredData = JSON.stringify({
           download
         >
           <svg class="cta-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 4v10m0 0l-4-4m4 4l4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path
+              d="M12 4v10m0 0l-4-4m4 4l4-4M5 20h14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
           </svg>
           {profile.labels.links.resume}
         </a>
       </div>
       <div class="hero-links">
-        <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
-        <a href={profile.links.linkedin} target="_blank" rel="noopener">{profile.labels.links.linkedin}</a>
-        <a href={profile.links.github} target="_blank" rel="noopener">{profile.labels.links.github}</a>
+        <a href={profile.links.resume} target="_blank" rel="noopener"
+          >{profile.labels.links.resume}</a
+        >
+        <a href={profile.links.linkedin} target="_blank" rel="noopener"
+          >{profile.labels.links.linkedin}</a
+        >
+        <a href={profile.links.github} target="_blank" rel="noopener"
+          >{profile.labels.links.github}</a
+        >
       </div>
     </section>
 
-    <section id="education" class="section-block" data-label={profile.labels.headings.education}>
+    <section
+      id="education"
+      class="section-block"
+      data-label={profile.labels.headings.education}
+    >
       <h2>{profile.labels.headings.education}</h2>
       <div class="meta-card">
-        <h3>State University of New York at Buffalo — BS in Computer Science</h3>
+        <h3>
+          State University of New York at Buffalo — BS in Computer Science
+        </h3>
         <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
         <ul>
-          <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
+          <li>
+            Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List
+            Honors
+          </li>
         </ul>
       </div>
     </section>
 
-    <section id="experience" class="section-block" data-label={profile.labels.headings.experience}>
+    <section
+      id="experience"
+      class="section-block"
+      data-label={profile.labels.headings.experience}
+    >
       <h2>{profile.labels.headings.experience}</h2>
-      {profile.experience.map((exp) => (
-        <div class="project-card">
-          <h3 class="job-title">{exp.role}</h3>
-          <div class="experience-stack">
-            <span class="company-name">{exp.org}</span>
-            <small class="exp-meta">{exp.period}</small>
-            <small class="exp-meta">{exp.location}</small>
+      {
+        profile.experience.map((exp) => (
+          <div class="project-card">
+            <h3 class="job-title">{exp.role}</h3>
+            <div class="experience-stack">
+              <span class="company-name">{exp.org}</span>
+              <small class="exp-meta">{exp.period}</small>
+              <small class="exp-meta">{exp.location}</small>
+            </div>
+            <ul>
+              {exp.bullets.map((b) => (
+                <li>{b}</li>
+              ))}
+            </ul>
           </div>
-          <ul>
-            {exp.bullets.map((b) => <li>{b}</li>)}
-          </ul>
-        </div>
-      ))}
+        ))
+      }
     </section>
 
-    <section id="projects" class="section-block" data-label={profile.labels.headings.projects}>
+    <section
+      id="projects"
+      class="section-block"
+      data-label={profile.labels.headings.projects}
+    >
       <h2>{profile.labels.headings.projects}</h2>
-      {profile.projects.map((p) => (
-        <div class="project-card">
-          <div class="project-header">
-            <div>
-              <h3>{p.name}</h3>
-              <div class="project-tech">{p.tech.join(" · ")}</div>
+      {
+        profile.projects.map((p) => (
+          <div class="project-card">
+            <div class="project-header">
+              <div>
+                <h3>{p.name}</h3>
+                <div class="project-tech">{p.tech.join(" · ")}</div>
+              </div>
+              <div class="project-actions">
+                {/* Simulate only for Raft and DHT */}
+                {p.links?.github && (
+                  <a
+                    class="project-link"
+                    href={p.links.github}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    GitHub
+                  </a>
+                )}
+                {hasSimulation(p.name) && (
+                  <button class="simulate-btn" type="button">
+                    Simulate
+                  </button>
+                )}
+              </div>
             </div>
-            <div class="project-actions">
-              {/* Simulate only for Raft and DHT */}
-              {p.links?.github && <a class="project-link" href={p.links.github} target="_blank" rel="noopener">GitHub</a>}
-              {hasSimulation(p.name) && (
-                <button class="simulate-btn" type="button">Simulate</button>
-              )}
-            </div>
+            {p.impact && (
+              <div class="project-impact">
+                <strong>Impact:</strong>{" "}
+                {p.impact.replace(/^(?:Impact:\s*)+/i, "")}
+              </div>
+            )}
+            <ul class="project-bullets">
+              {p.bullets.map((b) => (
+                <li>{b}</li>
+              ))}
+            </ul>
+            {isRaft(p.name) && (
+              <div class="sim-visual" data-sim="raft">
+                <svg width="260" height="80" viewBox="0 0 260 80">
+                  <line class="sim-link" x1="30" y1="40" x2="130" y2="15" />
+                  <line class="sim-link" x1="30" y1="40" x2="130" y2="65" />
+                  <line class="sim-link" x1="230" y1="40" x2="130" y2="15" />
+                  <line class="sim-link" x1="230" y1="40" x2="130" y2="65" />
+                  <circle class="sim-node" cx="30" cy="40" r="10" />
+                  <circle class="sim-node" cx="130" cy="15" r="10" />
+                  <circle class="sim-node" cx="130" cy="65" r="10" />
+                  <circle class="sim-node" cx="230" cy="40" r="10" />
+                  <circle class="sim-pulse" cx="30" cy="40" r="3">
+                    <animate
+                      attributeName="cx"
+                      values="30;130;230;130;30"
+                      dur="3s"
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="cy"
+                      values="40;15;40;65;40"
+                      dur="3s"
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                </svg>
+              </div>
+            )}
+            {isKademlia(p.name) && (
+              <div class="sim-visual" data-sim="kademlia">
+                <svg width="260" height="80" viewBox="0 0 260 80">
+                  <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
+                  <line class="sim-link" x1="120" y1="40" x2="200" y2="20" />
+                  <line class="sim-link" x1="120" y1="40" x2="200" y2="65" />
+                  <circle class="sim-node" cx="40" cy="20" r="10" />
+                  <circle class="sim-node" cx="120" cy="40" r="10" />
+                  <circle class="sim-node" cx="200" cy="20" r="10" />
+                  <circle class="sim-node" cx="200" cy="65" r="10" />
+                  <circle class="sim-pulse" cx="40" cy="20" r="3">
+                    <animate
+                      attributeName="cx"
+                      values="40;120;200;120;40"
+                      dur="2.6s"
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="cy"
+                      values="20;40;65;40;20"
+                      dur="2.6s"
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                </svg>
+              </div>
+            )}
+            {isRedis(p.name) && (
+              <div class="sim-visual" data-sim="redis">
+                <svg width="260" height="90" viewBox="0 0 260 90">
+                  <line class="sim-link" x1="35" y1="22" x2="105" y2="22" />
+                  <line class="sim-link" x1="105" y1="22" x2="160" y2="22" />
+                  <line class="sim-link" x1="160" y1="22" x2="225" y2="22" />
+                  <line class="sim-link" x1="160" y1="22" x2="160" y2="64" />
+                  <line class="sim-link" x1="160" y1="64" x2="225" y2="64" />
+
+                  <circle class="sim-node" cx="35" cy="22" r="9" />
+                  <circle class="sim-node" cx="105" cy="22" r="9" />
+                  <circle class="sim-node" cx="160" cy="22" r="9" />
+                  <circle class="sim-node" cx="225" cy="22" r="9" />
+                  <circle class="sim-node" cx="160" cy="64" r="9" />
+                  <circle class="sim-node" cx="225" cy="64" r="9" />
+
+                  <circle class="sim-pulse" cx="35" cy="22" r="3">
+                    <animate
+                      attributeName="cx"
+                      values="35;105;160;225;160;225;160;105;35"
+                      dur="3.4s"
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="cy"
+                      values="22;22;22;22;22;64;64;22;22"
+                      dur="3.4s"
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                </svg>
+              </div>
+            )}
           </div>
-          {p.impact && <div class="project-impact"><strong>Impact:</strong> {p.impact.replace(/^(?:Impact:\s*)+/i, "")}</div>}
-          <ul class="project-bullets">
-            {p.bullets.map((b) => <li>{b}</li>)}
-          </ul>
-          {isRaft(p.name) && (
-            <div class="sim-visual" data-sim="raft">
-              <svg width="260" height="80" viewBox="0 0 260 80">
-                <line class="sim-link" x1="30" y1="40" x2="130" y2="15" />
-                <line class="sim-link" x1="30" y1="40" x2="130" y2="65" />
-                <line class="sim-link" x1="230" y1="40" x2="130" y2="15" />
-                <line class="sim-link" x1="230" y1="40" x2="130" y2="65" />
-                <circle class="sim-node" cx="30" cy="40" r="10" />
-                <circle class="sim-node" cx="130" cy="15" r="10" />
-                <circle class="sim-node" cx="130" cy="65" r="10" />
-                <circle class="sim-node" cx="230" cy="40" r="10" />
-                <circle class="sim-pulse" cx="30" cy="40" r="3">
-                  <animate attributeName="cx" values="30;130;230;130;30" dur="3s" repeatCount="indefinite" />
-                  <animate attributeName="cy" values="40;15;40;65;40" dur="3s" repeatCount="indefinite" />
-                </circle>
-              </svg>
-            </div>
-          )}
-          {isKademlia(p.name) && (
-            <div class="sim-visual" data-sim="kademlia">
-              <svg width="260" height="80" viewBox="0 0 260 80">
-                <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
-                <line class="sim-link" x1="120" y1="40" x2="200" y2="20" />
-                <line class="sim-link" x1="120" y1="40" x2="200" y2="65" />
-                <circle class="sim-node" cx="40" cy="20" r="10" />
-                <circle class="sim-node" cx="120" cy="40" r="10" />
-                <circle class="sim-node" cx="200" cy="20" r="10" />
-                <circle class="sim-node" cx="200" cy="65" r="10" />
-                <circle class="sim-pulse" cx="40" cy="20" r="3">
-                  <animate attributeName="cx" values="40;120;200;120;40" dur="2.6s" repeatCount="indefinite" />
-                  <animate attributeName="cy" values="20;40;65;40;20" dur="2.6s" repeatCount="indefinite" />
-                </circle>
-              </svg>
-            </div>
-          )}
-          {isRedis(p.name) && (
-            <div class="sim-visual" data-sim="redis">
-              <svg width="260" height="90" viewBox="0 0 260 90">
-                <line class="sim-link" x1="35" y1="22" x2="105" y2="22" />
-                <line class="sim-link" x1="105" y1="22" x2="160" y2="22" />
-                <line class="sim-link" x1="160" y1="22" x2="225" y2="22" />
-                <line class="sim-link" x1="160" y1="22" x2="160" y2="64" />
-                <line class="sim-link" x1="160" y1="64" x2="225" y2="64" />
-
-                <circle class="sim-node" cx="35" cy="22" r="9" />
-                <circle class="sim-node" cx="105" cy="22" r="9" />
-                <circle class="sim-node" cx="160" cy="22" r="9" />
-                <circle class="sim-node" cx="225" cy="22" r="9" />
-                <circle class="sim-node" cx="160" cy="64" r="9" />
-                <circle class="sim-node" cx="225" cy="64" r="9" />
-
-                <circle class="sim-pulse" cx="35" cy="22" r="3">
-                  <animate attributeName="cx" values="35;105;160;225;160;225;160;105;35" dur="3.4s" repeatCount="indefinite" />
-                  <animate attributeName="cy" values="22;22;22;22;22;64;64;22;22" dur="3.4s" repeatCount="indefinite" />
-                </circle>
-              </svg>
-            </div>
-          )}
-        </div>
-      ))}
+        ))
+      }
     </section>
 
-    <section id="teaching" class="section-block" data-label={profile.labels.headings.teaching}>
+    <section
+      id="teaching"
+      class="section-block"
+      data-label={profile.labels.headings.teaching}
+    >
       <h2>{profile.labels.headings.teaching}</h2>
-      {profile.teaching.map((t) => (
-        <div style="margin-bottom: 2rem" class="project-card">
-          <h3>{t.title}</h3>
-          <div class="tech-meta">{t.skills}</div>
-          <ul>
-            {t.bullets.map((b) => <li>{b}</li>)}
-          </ul>
-        </div>
-      ))}
+      {
+        profile.teaching.map((t) => (
+          <div style="margin-bottom: 2rem" class="project-card">
+            <h3>{t.title}</h3>
+            <div class="tech-meta">{t.skills}</div>
+            <ul>
+              {t.bullets.map((b) => (
+                <li>{b}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
     </section>
 
-      <section id="skills" class="section-block" data-label={profile.labels.headings.skills}>
-        <h2>{profile.labels.headings.skills}</h2>
-        {profile.skills.map((s) => (
+    <section
+      id="skills"
+      class="section-block"
+      data-label={profile.labels.headings.skills}
+    >
+      <h2>{profile.labels.headings.skills}</h2>
+      {
+        profile.skills.map((s) => (
           <div class="meta-card">
             <h3>{s.category}</h3>
             <div class="tech-meta skills-line">{s.items.join(" · ")}</div>
           </div>
-        ))}
+        ))
+      }
     </section>
 
-    <section id="reading" class="section-block" data-label={profile.labels.headings.reading}>
+    <section
+      id="reading"
+      class="section-block"
+      data-label={profile.labels.headings.reading}
+    >
       <h2>{profile.labels.headings.reading}</h2>
       <p>{profile.reading.description}</p>
-        <div class="reading-inline">
-          {profile.reading.items.map((item) => (
+      <div class="reading-inline">
+        {
+          profile.reading.items.map((item) => (
             <div class="reading-row">
               <span class="author">{item.author}</span>
               <span class="reading-quote">"{item.quote}"</span>
             </div>
-          ))}
-        </div>
-      </section>
-      <section id="connect" class="section-block" data-label={profile.labels.headings.connect}>
-        <h2>{profile.labels.headings.connect}</h2>
-        <p class="connect-text">
-          Reach me at <a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a> or
-          <a href="tel:+994508998676" target="_blank" rel="noopener"> +994 50 899 8676</a>
-        </p>
-      </section>
+          ))
+        }
+      </div>
+    </section>
+    <section
+      id="connect"
+      class="section-block"
+      data-label={profile.labels.headings.connect}
+    >
+      <h2>{profile.labels.headings.connect}</h2>
+      <p class="connect-text">
+        Reach me at <a
+          href="mailto:riadmukh@gmail.com"
+          target="_blank"
+          rel="noopener">riadmukh@gmail.com</a
+        > or
+        <a href="tel:+994508998676" target="_blank" rel="noopener">
+          +994 50 899 8676</a
+        >
+      </p>
+    </section>
   </main>
 
   <script>
-// @ts-nocheck
+    // @ts-nocheck
     const i18nEl = document.getElementById("i18n-data");
     const I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {};
     const languageLabels = {
@@ -314,14 +459,22 @@ const structuredData = JSON.stringify({
       sections.forEach((section) => {
         if (section.offsetTop <= scrollPos) current = section;
       });
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 4) {
+      if (
+        window.scrollY + window.innerHeight >=
+        document.body.scrollHeight - 4
+      ) {
         current = sections[sections.length - 1];
       }
       navLinks.forEach((link) => link.classList.remove("active"));
-      const active = navLinks.find((link) => link.getAttribute("href") === `#${current.id}`);
+      const active = navLinks.find(
+        (link) => link.getAttribute("href") === `#${current.id}`,
+      );
       active?.classList.add("active");
       if (mobileCurrent) {
-        const label = active?.textContent ?? current.getAttribute("data-label") ?? current.id;
+        const label =
+          active?.textContent ??
+          current.getAttribute("data-label") ??
+          current.id;
         mobileCurrent.textContent = label;
         mobileCurrent.classList.add("active");
       }
@@ -369,7 +522,7 @@ const structuredData = JSON.stringify({
       mobileMenu?.classList.toggle("open");
       mobileMenu?.setAttribute(
         "aria-hidden",
-        mobileMenu.classList.contains("open") ? "false" : "true"
+        mobileMenu.classList.contains("open") ? "false" : "true",
       );
     });
 
@@ -403,7 +556,7 @@ const structuredData = JSON.stringify({
                   ${exp.bullets.map((b) => `<li>${b}</li>`).join("")}
                 </ul>
               </div>
-            `
+            `,
           )
           .join("")}
       `;
@@ -416,18 +569,25 @@ const structuredData = JSON.stringify({
       name.includes("Distributed") ||
       name.includes("Kademlia") ||
       name.includes("Redis");
-    const isRaftProject = (name) => name.includes("RAFT") || name.includes("Raft");
+    const isRaftProject = (name) =>
+      name.includes("RAFT") || name.includes("Raft");
     const isKademliaProject = (name) =>
-      name.includes("Hash Table") || name.includes("Distributed") || name.includes("Kademlia");
+      name.includes("Hash Table") ||
+      name.includes("Distributed") ||
+      name.includes("Kademlia");
     const isRedisProject = (name) => name.includes("Redis");
 
     const buildProjectActions = (p) => {
       const actions = [];
       if (p.links?.github) {
-        actions.push(`<a class="project-link" href="${p.links.github}" target="_blank" rel="noopener">${currentProfile.labels.links.github}</a>`);
+        actions.push(
+          `<a class="project-link" href="${p.links.github}" target="_blank" rel="noopener">${currentProfile.labels.links.github}</a>`,
+        );
       }
       if (hasSimulationFor(p.name)) {
-        actions.push(`<button class="simulate-btn" type="button">Simulate</button>`);
+        actions.push(
+          `<button class="simulate-btn" type="button">Simulate</button>`,
+        );
       }
       return actions.join("");
     };
@@ -525,7 +685,7 @@ const structuredData = JSON.stringify({
                 </ul>
                 ${buildProjectSim(p)}
               </div>
-            `
+            `,
           )
           .join("")}
       `;
@@ -544,7 +704,7 @@ const structuredData = JSON.stringify({
                   ${t.bullets.map((b) => `<li>${b}</li>`).join("")}
                 </ul>
               </div>
-            `
+            `,
           )
           .join("")}
       `;
@@ -573,7 +733,7 @@ const structuredData = JSON.stringify({
                 <h3>${s.category}</h3>
                 <div class="tech-meta skills-line">${s.items.join(" · ")}</div>
               </div>
-            `
+            `,
           )
           .join("")}
       `;
@@ -591,7 +751,7 @@ const structuredData = JSON.stringify({
                   <span class="author">${item.author}</span>
                   <span class="reading-quote">"${item.quote}"</span>
                 </div>
-              `
+              `,
             )
             .join("")}
         </div>
@@ -599,10 +759,17 @@ const structuredData = JSON.stringify({
     };
 
     const buildConnect = (data) => {
-      const template = data.labels.connectTemplate || "Reach me at {email} or {phone}";
+      const template =
+        data.labels.connectTemplate || "Reach me at {email} or {phone}";
       const html = template
-        .replace("{email}", `<a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>`)
-        .replace("{phone}", `<a href="tel:+994508998676" target="_blank" rel="noopener"> +994 50 899 8676</a>`);
+        .replace(
+          "{email}",
+          `<a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>`,
+        )
+        .replace(
+          "{phone}",
+          `<a href="tel:+994508998676" target="_blank" rel="noopener"> +994 50 899 8676</a>`,
+        );
       return `
         <h2>${data.labels.headings.connect}</h2>
         <p class="connect-text">${html}</p>
@@ -626,7 +793,8 @@ const structuredData = JSON.stringify({
       const data = I18N[lang] || I18N.en;
       currentProfile = data;
       document.documentElement.lang = lang;
-      if (langCurrent) langCurrent.textContent = languageLabels[lang] || "English";
+      if (langCurrent)
+        langCurrent.textContent = languageLabels[lang] || "English";
 
       const heroTitle = document.querySelector("main section h1");
       const heroLinks = document.querySelector(".hero-links");
@@ -758,7 +926,11 @@ const structuredData = JSON.stringify({
     document.addEventListener("click", (event) => {
       if (!langMenu || !langToggle) return;
       const target = event.target;
-      if (target instanceof Node && (langMenu.contains(target) || langToggle.contains(target))) return;
+      if (
+        target instanceof Node &&
+        (langMenu.contains(target) || langToggle.contains(target))
+      )
+        return;
       langMenu.classList.remove("open");
       langWrapper?.classList.remove("open");
       langToggle.setAttribute("aria-expanded", "false");
@@ -766,6 +938,5 @@ const structuredData = JSON.stringify({
 
     const savedLang = localStorage.getItem("portfolio-lang") || "en";
     applyLanguage(savedLang);
-
   </script>
 </BaseLayout>
