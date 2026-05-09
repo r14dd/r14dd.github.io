@@ -93,6 +93,15 @@ export const profiles: Record<string, I18nProfile> = {
         bullets: [],
       },
       {
+        role: "Руководитель команды IT‑разработки",
+        org: "EYP Azerbaijan",
+        location: "Баку, Азербайджан",
+        period: "Фев 2026 – Настоящее время",
+        bullets: [
+          "Координация обновления веб‑сайта, улучшения внутренних платформ и внедрения новых технологических решений",
+        ],
+      },
+      {
         role: "Специалист по ИТ‑поддержке",
         org: "COP29 United Nations Climate Change Conference",
         location: "Баку, Азербайджан",
@@ -340,6 +349,15 @@ export const profiles: Record<string, I18nProfile> = {
         bullets: [],
       },
       {
+        role: "İT İnkişaf Komandasının Rəhbəri",
+        org: "EYP Azerbaijan",
+        location: "Bakı, Azərbaycan",
+        period: "Fev 2026 – indiyə kimi",
+        bullets: [
+          "Veb‑saytın yenilənməsi, daxili platformların təkmilləşdirilməsi və təşkilatın fəaliyyətini dəstəkləyən yeni texnoloji həllərin tətbiqi",
+        ],
+      },
+      {
         role: "İT‑dəstək üzrə mütəxəssis",
         org: "COP29 United Nations Climate Change Conference",
         location: "Bakı, Azərbaycan",
@@ -559,8 +577,8 @@ export const profiles: Record<string, I18nProfile> = {
         reading: "Ədəbiyyat",
         connect: "Əlaqə",
       },
-      introLead: "kimdir",
-      introTail: "",
+      introLead: "",
+      introTail: "kimdir",
       connectTemplate: "Əlaqə: {email} və ya {phone}",
     },
     education: {
@@ -584,6 +602,15 @@ export const profiles: Record<string, I18nProfile> = {
         location: "Bakú, Azerbaiyán",
         period: "Abr 2026 – Presente",
         bullets: [],
+      },
+      {
+        role: "Jefe del Equipo de Desarrollo IT",
+        org: "EYP Azerbaijan",
+        location: "Bakú, Azerbaiyán",
+        period: "Feb 2026 – Presente",
+        bullets: [
+          "Coordinación de la renovación del sitio web, mejoras de plataformas internas e implementación de nuevas soluciones tecnológicas",
+        ],
       },
       {
         role: "Especialista en TI",

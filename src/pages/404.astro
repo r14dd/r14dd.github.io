@@ -1,0 +1,88 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>404 — Page Not Found</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      if (localStorage.getItem('portfolio-theme') === 'light') {
+        document.documentElement.classList.add('light');
+      }
+    </script>
+    <style>
+      :root {
+        --bg: #050505;
+        --text: #eeeeee;
+        --muted: #888888;
+        --accent: #c9a55a;
+        --accent-rgb: 201, 165, 90;
+      }
+      html.light {
+        --bg: #faf9f6;
+        --text: #1a1a1a;
+        --muted: #777777;
+        --accent: #a8863d;
+        --accent-rgb: 168, 134, 61;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      html, body {
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", system-ui, sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+      }
+      .code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: clamp(4rem, 12vw, 7rem);
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: -0.02em;
+        opacity: 0.85;
+      }
+      .msg {
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+        color: var(--muted);
+      }
+      .back {
+        margin-top: 2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1.2rem;
+        border-radius: 999px;
+        border: 1px solid rgba(var(--accent-rgb), 0.25);
+        background: transparent;
+        color: var(--accent);
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      .back:hover {
+        border-color: rgba(var(--accent-rgb), 0.5);
+        box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="code">404</div>
+    <p class="msg">This page doesn't exist.</p>
+    <a class="back" href="/">Back to portfolio</a>
+  </body>
+</html>

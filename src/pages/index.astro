@@ -34,6 +34,7 @@ const structuredData = JSON.stringify({
 
 <BaseLayout
   introLead={profile.labels.introLead}
+  introTail={profile.labels.introTail}
   introName={profile.hero.name}
   metaTitle={metaTitle}
   metaDescription={metaDescription}
@@ -50,7 +51,10 @@ const structuredData = JSON.stringify({
     set:html={JSON.stringify(profiles)}
   />
 
-  <div class="lang-switcher" aria-label="Language">
+  <div class="lang-switcher" aria-label="Controls">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light mode">
+      <span class="theme-icon" aria-hidden="true">☀️</span>
+    </button>
     <button
       class="lang-toggle"
       id="lang-toggle"
@@ -93,7 +97,6 @@ const structuredData = JSON.stringify({
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#reading">{profile.labels.nav.reading}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
-    <a href="/jury">Jury</a>
   </div>
 
   <aside class="side-nav">
@@ -123,10 +126,9 @@ const structuredData = JSON.stringify({
     <a href={profile.links.github} target="_blank" rel="noopener"
       >{profile.labels.links.github}</a
     >
-    <a href="/jury" rel="noopener">Jury</a>
   </aside>
 
-  <main class="content">
+  <main class="content" id="main-content">
     <section>
       <h1>{profile.hero.name}</h1>
       <p class="hero-tagline">
@@ -261,90 +263,132 @@ const structuredData = JSON.stringify({
             </ul>
             {isRaft(p.name) && (
               <div class="sim-visual" data-sim="raft">
-                <svg width="260" height="80" viewBox="0 0 260 80">
-                  <line class="sim-link" x1="30" y1="40" x2="130" y2="15" />
-                  <line class="sim-link" x1="30" y1="40" x2="130" y2="65" />
-                  <line class="sim-link" x1="230" y1="40" x2="130" y2="15" />
-                  <line class="sim-link" x1="230" y1="40" x2="130" y2="65" />
-                  <circle class="sim-node" cx="30" cy="40" r="10" />
-                  <circle class="sim-node" cx="130" cy="15" r="10" />
-                  <circle class="sim-node" cx="130" cy="65" r="10" />
-                  <circle class="sim-node" cx="230" cy="40" r="10" />
-                  <circle class="sim-pulse" cx="30" cy="40" r="3">
-                    <animate
-                      attributeName="cx"
-                      values="30;130;230;130;30"
-                      dur="3s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="cy"
-                      values="40;15;40;65;40"
-                      dur="3s"
-                      repeatCount="indefinite"
-                    />
+                <svg width="320" height="130" viewBox="0 0 320 130" role="img" aria-labelledby="raft-title">
+                  <title id="raft-title">Raft consensus: leader node replicating log entries to three follower nodes</title>
+                  <defs>
+                    <filter id="raft-glow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="4" result="blur"/>
+                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+                  <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="28"/>
+                  <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="65"/>
+                  <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="102"/>
+                  <circle class="sim-leader-node" cx="55" cy="65" r="22" filter="url(#raft-glow)"/>
+                  <text class="sim-label mono" x="55" y="69">L</text>
+                  <text class="sim-desc mono" x="55" y="98">leader</text>
+                  <circle class="sim-node" cx="198" cy="28" r="14"/>
+                  <text class="sim-label mono" x="198" y="32">F</text>
+                  <circle class="sim-node" cx="198" cy="65" r="14"/>
+                  <text class="sim-label mono" x="198" y="69">F</text>
+                  <circle class="sim-node" cx="198" cy="102" r="14"/>
+                  <text class="sim-label mono" x="198" y="106">F</text>
+                  <rect class="sim-log" x="228" y="19" width="24" height="7" rx="1.5"/>
+                  <rect class="sim-log" x="228" y="29" width="24" height="7" rx="1.5"/>
+                  <rect class="sim-log-new" x="228" y="39" width="16" height="7" rx="1.5">
+                    <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" repeatCount="indefinite"/>
+                  </rect>
+                  <rect class="sim-log" x="228" y="56" width="24" height="7" rx="1.5"/>
+                  <rect class="sim-log" x="228" y="66" width="24" height="7" rx="1.5"/>
+                  <rect class="sim-log-new" x="228" y="76" width="16" height="7" rx="1.5">
+                    <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+                  </rect>
+                  <rect class="sim-log" x="228" y="93" width="24" height="7" rx="1.5"/>
+                  <rect class="sim-log" x="228" y="103" width="24" height="7" rx="1.5"/>
+                  <rect class="sim-log-new" x="228" y="113" width="16" height="7" rx="1.5">
+                    <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.6s" repeatCount="indefinite"/>
+                  </rect>
+                  <circle class="sim-pulse" r="3.5">
+                    <animate attributeName="cx" values="78;198" dur="1.6s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="65;28" dur="1.6s" repeatCount="indefinite"/>
                   </circle>
+                  <circle class="sim-pulse" r="3.5">
+                    <animate attributeName="cx" values="78;198" dur="1.6s" begin="0.2s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="65;65" dur="1.6s" begin="0.2s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle class="sim-pulse" r="3.5">
+                    <animate attributeName="cx" values="78;198" dur="1.6s" begin="0.4s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="65;102" dur="1.6s" begin="0.4s" repeatCount="indefinite"/>
+                  </circle>
+                  <text class="sim-desc mono" x="290" y="68">term 3</text>
                 </svg>
+                <div class="sim-legend">Leader replicates log entries via AppendEntries RPC</div>
               </div>
             )}
             {isKademlia(p.name) && (
               <div class="sim-visual" data-sim="kademlia">
-                <svg width="260" height="80" viewBox="0 0 260 80">
-                  <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
-                  <line class="sim-link" x1="120" y1="40" x2="200" y2="20" />
-                  <line class="sim-link" x1="120" y1="40" x2="200" y2="65" />
-                  <circle class="sim-node" cx="40" cy="20" r="10" />
-                  <circle class="sim-node" cx="120" cy="40" r="10" />
-                  <circle class="sim-node" cx="200" cy="20" r="10" />
-                  <circle class="sim-node" cx="200" cy="65" r="10" />
-                  <circle class="sim-pulse" cx="40" cy="20" r="3">
-                    <animate
-                      attributeName="cx"
-                      values="40;120;200;120;40"
-                      dur="2.6s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="cy"
-                      values="20;40;65;40;20"
-                      dur="2.6s"
-                      repeatCount="indefinite"
-                    />
+                <svg width="320" height="130" viewBox="0 0 320 130" role="img" aria-labelledby="kad-title">
+                  <title id="kad-title">Kademlia DHT: iterative lookup converging to target via decreasing XOR distance</title>
+                  <defs>
+                    <filter id="kad-glow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="4" result="blur"/>
+                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+                  <line class="sim-link sim-ghost" x1="42" y1="60" x2="72" y2="98" />
+                  <line class="sim-link sim-ghost" x1="122" y1="46" x2="148" y2="98" />
+                  <line class="sim-link sim-ghost" x1="206" y1="56" x2="228" y2="98" />
+                  <circle class="sim-node sim-ghost" cx="78" cy="104" r="8"/>
+                  <circle class="sim-node sim-ghost" cx="155" cy="104" r="8"/>
+                  <circle class="sim-node sim-ghost" cx="235" cy="104" r="8"/>
+                  <line class="sim-heartbeat" x1="48" y1="50" x2="108" y2="36"/>
+                  <line class="sim-heartbeat" x1="132" y1="36" x2="192" y2="50"/>
+                  <line class="sim-heartbeat" x1="218" y1="50" x2="272" y2="36"/>
+                  <circle class="sim-node" cx="35" cy="50" r="14"/>
+                  <text class="sim-label mono" x="35" y="54">S</text>
+                  <text class="sim-desc mono" x="35" y="74">source</text>
+                  <circle class="sim-node" cx="120" cy="36" r="14"/>
+                  <text class="sim-label mono" x="120" y="40">N</text>
+                  <text class="sim-desc mono" x="120" y="60">d = 8</text>
+                  <circle class="sim-node" cx="205" cy="50" r="14"/>
+                  <text class="sim-label mono" x="205" y="54">N</text>
+                  <text class="sim-desc mono" x="205" y="74">d = 3</text>
+                  <circle class="sim-target-node" cx="285" cy="36" r="16" filter="url(#kad-glow)"/>
+                  <text class="sim-label mono" x="285" y="40">T</text>
+                  <text class="sim-desc mono" x="285" y="60">d = 0</text>
+                  <circle class="sim-pulse" r="4">
+                    <animate attributeName="cx" values="48;120;205;285" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="50;36;50;36" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
                   </circle>
                 </svg>
+                <div class="sim-legend">Iterative FIND_NODE lookup converges via XOR distance</div>
               </div>
             )}
             {isRedis(p.name) && (
               <div class="sim-visual" data-sim="redis">
-                <svg width="260" height="90" viewBox="0 0 260 90">
-                  <line class="sim-link" x1="35" y1="22" x2="105" y2="22" />
-                  <line class="sim-link" x1="105" y1="22" x2="160" y2="22" />
-                  <line class="sim-link" x1="160" y1="22" x2="225" y2="22" />
-                  <line class="sim-link" x1="160" y1="22" x2="160" y2="64" />
-                  <line class="sim-link" x1="160" y1="64" x2="225" y2="64" />
-
-                  <circle class="sim-node" cx="35" cy="22" r="9" />
-                  <circle class="sim-node" cx="105" cy="22" r="9" />
-                  <circle class="sim-node" cx="160" cy="22" r="9" />
-                  <circle class="sim-node" cx="225" cy="22" r="9" />
-                  <circle class="sim-node" cx="160" cy="64" r="9" />
-                  <circle class="sim-node" cx="225" cy="64" r="9" />
-
-                  <circle class="sim-pulse" cx="35" cy="22" r="3">
-                    <animate
-                      attributeName="cx"
-                      values="35;105;160;225;160;225;160;105;35"
-                      dur="3.4s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="cy"
-                      values="22;22;22;22;22;64;64;22;22"
-                      dur="3.4s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
+                <svg width="320" height="140" viewBox="0 0 320 140" role="img" aria-labelledby="redis-title">
+                  <title id="redis-title">Redis two-layer cache: key-to-id mapping and id-to-value storage with TTL and garbage collection</title>
+                  <rect class="sim-layer-bg" x="8" y="10" width="135" height="120" rx="8"/>
+                  <text class="sim-layer-title mono" x="75" y="26">KEY → ID</text>
+                  <rect class="sim-entry" x="20" y="36" width="110" height="18" rx="3"/>
+                  <text class="sim-entry-text mono" x="75" y="47">user:1 → id:7</text>
+                  <rect class="sim-entry" x="20" y="60" width="110" height="18" rx="3"/>
+                  <text class="sim-entry-text mono" x="75" y="71">sess:3 → id:12</text>
+                  <rect class="sim-entry" x="20" y="84" width="110" height="18" rx="3" style="opacity:0.4"/>
+                  <text class="sim-entry-text mono" x="75" y="95" style="opacity:0.4">tok:5 → id:9</text>
+                  <rect class="sim-ttl-track" x="20" y="106" width="110" height="3" rx="1.5"/>
+                  <rect class="sim-ttl-fill" x="20" y="106" width="110" height="3" rx="1.5">
+                    <animate attributeName="width" values="110;0" dur="3.5s" repeatCount="indefinite"/>
+                  </rect>
+                  <text class="sim-desc mono" x="75" y="120">ttl</text>
+                  <line class="sim-link" x1="148" y1="60" x2="172" y2="60" style="stroke-width:1.5"/>
+                  <polygon class="sim-arrow" points="172,55 182,60 172,65"/>
+                  <rect class="sim-layer-bg" x="178" y="10" width="135" height="120" rx="8"/>
+                  <text class="sim-layer-title mono" x="245" y="26">ID → VALUE</text>
+                  <rect class="sim-entry" x="190" y="36" width="110" height="18" rx="3"/>
+                  <text class="sim-entry-text mono" x="245" y="47">id:7 → val</text>
+                  <rect class="sim-entry" x="190" y="60" width="110" height="18" rx="3"/>
+                  <text class="sim-entry-text mono" x="245" y="71">id:12 → val</text>
+                  <rect class="sim-entry" x="190" y="84" width="110" height="18" rx="3" style="opacity:0.4"/>
+                  <text class="sim-entry-text mono" x="245" y="95" style="opacity:0.4">id:9 → expired</text>
+                  <line class="sim-link" x1="190" y1="100" x2="300" y2="100" style="stroke-dasharray:3 3;stroke-width:1">
+                    <animate attributeName="y1" values="94;104;94" dur="2.5s" repeatCount="indefinite"/>
+                    <animate attributeName="y2" values="94;104;94" dur="2.5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0;0.6;0" dur="2.5s" repeatCount="indefinite"/>
+                  </line>
+                  <text class="sim-desc mono" x="245" y="120">gc sweep</text>
                 </svg>
+                <div class="sim-legend">Two-layer TTL-aware cache with garbage collection</div>
               </div>
             )}
           </div>
@@ -497,6 +541,18 @@ const structuredData = JSON.stringify({
       links?.classList.toggle("blurred", shouldBlur);
     };
 
+    document.querySelectorAll(".side-nav a, .mobile-menu a").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = link.getAttribute("href")?.replace("#", "");
+        if (!id) return;
+        const target = document.getElementById(id);
+        if (!target) return;
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.pushState(null, "", `#${id}`);
+      });
+    });
+
     window.addEventListener("scroll", () => {
       setActiveLink();
       updateProgress();
@@ -596,64 +652,133 @@ const structuredData = JSON.stringify({
       if (isRaftProject(p.name)) {
         return `
           <div class="sim-visual" data-sim="raft">
-            <svg width="260" height="80" viewBox="0 0 260 80">
-              <line class="sim-link" x1="30" y1="40" x2="130" y2="15" />
-              <line class="sim-link" x1="30" y1="40" x2="130" y2="65" />
-              <line class="sim-link" x1="230" y1="40" x2="130" y2="15" />
-              <line class="sim-link" x1="230" y1="40" x2="130" y2="65" />
-              <circle class="sim-node" cx="30" cy="40" r="10" />
-              <circle class="sim-node" cx="130" cy="15" r="10" />
-              <circle class="sim-node" cx="130" cy="65" r="10" />
-              <circle class="sim-node" cx="230" cy="40" r="10" />
-              <circle class="sim-pulse" cx="30" cy="40" r="3">
-                <animate attributeName="cx" values="30;130;230;130;30" dur="3s" repeatCount="indefinite" />
-                <animate attributeName="cy" values="40;15;40;65;40" dur="3s" repeatCount="indefinite" />
+            <svg width="320" height="130" viewBox="0 0 320 130">
+              <defs>
+                <filter id="raft-glow-js" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="28"/>
+              <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="65"/>
+              <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="102"/>
+              <circle class="sim-leader-node" cx="55" cy="65" r="22" filter="url(#raft-glow-js)"/>
+              <text class="sim-label mono" x="55" y="69">L</text>
+              <text class="sim-desc mono" x="55" y="98">leader</text>
+              <circle class="sim-node" cx="198" cy="28" r="14"/>
+              <text class="sim-label mono" x="198" y="32">F</text>
+              <circle class="sim-node" cx="198" cy="65" r="14"/>
+              <text class="sim-label mono" x="198" y="69">F</text>
+              <circle class="sim-node" cx="198" cy="102" r="14"/>
+              <text class="sim-label mono" x="198" y="106">F</text>
+              <rect class="sim-log" x="228" y="19" width="24" height="7" rx="1.5"/>
+              <rect class="sim-log" x="228" y="29" width="24" height="7" rx="1.5"/>
+              <rect class="sim-log-new" x="228" y="39" width="16" height="7" rx="1.5">
+                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" repeatCount="indefinite"/>
+              </rect>
+              <rect class="sim-log" x="228" y="56" width="24" height="7" rx="1.5"/>
+              <rect class="sim-log" x="228" y="66" width="24" height="7" rx="1.5"/>
+              <rect class="sim-log-new" x="228" y="76" width="16" height="7" rx="1.5">
+                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
+              </rect>
+              <rect class="sim-log" x="228" y="93" width="24" height="7" rx="1.5"/>
+              <rect class="sim-log" x="228" y="103" width="24" height="7" rx="1.5"/>
+              <rect class="sim-log-new" x="228" y="113" width="16" height="7" rx="1.5">
+                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.6s" repeatCount="indefinite"/>
+              </rect>
+              <circle class="sim-pulse" r="3.5">
+                <animate attributeName="cx" values="78;198" dur="1.6s" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="65;28" dur="1.6s" repeatCount="indefinite"/>
               </circle>
+              <circle class="sim-pulse" r="3.5">
+                <animate attributeName="cx" values="78;198" dur="1.6s" begin="0.2s" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="65;65" dur="1.6s" begin="0.2s" repeatCount="indefinite"/>
+              </circle>
+              <circle class="sim-pulse" r="3.5">
+                <animate attributeName="cx" values="78;198" dur="1.6s" begin="0.4s" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="65;102" dur="1.6s" begin="0.4s" repeatCount="indefinite"/>
+              </circle>
+              <text class="sim-desc mono" x="290" y="68">term 3</text>
             </svg>
+            <div class="sim-legend">Leader replicates log entries via AppendEntries RPC</div>
           </div>
         `;
       }
       if (isKademliaProject(p.name)) {
         return `
           <div class="sim-visual" data-sim="kademlia">
-            <svg width="260" height="80" viewBox="0 0 260 80">
-              <line class="sim-link" x1="40" y1="20" x2="120" y2="40" />
-              <line class="sim-link" x1="120" y1="40" x2="200" y2="20" />
-              <line class="sim-link" x1="120" y1="40" x2="200" y2="65" />
-              <circle class="sim-node" cx="40" cy="20" r="10" />
-              <circle class="sim-node" cx="120" cy="40" r="10" />
-              <circle class="sim-node" cx="200" cy="20" r="10" />
-              <circle class="sim-node" cx="200" cy="65" r="10" />
-              <circle class="sim-pulse" cx="40" cy="20" r="3">
-                <animate attributeName="cx" values="40;120;200;120;40" dur="2.6s" repeatCount="indefinite" />
-                <animate attributeName="cy" values="20;40;65;40;20" dur="2.6s" repeatCount="indefinite" />
+            <svg width="320" height="130" viewBox="0 0 320 130">
+              <defs>
+                <filter id="kad-glow-js" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <line class="sim-link sim-ghost" x1="42" y1="60" x2="72" y2="98"/>
+              <line class="sim-link sim-ghost" x1="122" y1="46" x2="148" y2="98"/>
+              <line class="sim-link sim-ghost" x1="206" y1="56" x2="228" y2="98"/>
+              <circle class="sim-node sim-ghost" cx="78" cy="104" r="8"/>
+              <circle class="sim-node sim-ghost" cx="155" cy="104" r="8"/>
+              <circle class="sim-node sim-ghost" cx="235" cy="104" r="8"/>
+              <line class="sim-heartbeat" x1="48" y1="50" x2="108" y2="36"/>
+              <line class="sim-heartbeat" x1="132" y1="36" x2="192" y2="50"/>
+              <line class="sim-heartbeat" x1="218" y1="50" x2="272" y2="36"/>
+              <circle class="sim-node" cx="35" cy="50" r="14"/>
+              <text class="sim-label mono" x="35" y="54">S</text>
+              <text class="sim-desc mono" x="35" y="74">source</text>
+              <circle class="sim-node" cx="120" cy="36" r="14"/>
+              <text class="sim-label mono" x="120" y="40">N</text>
+              <text class="sim-desc mono" x="120" y="60">d = 8</text>
+              <circle class="sim-node" cx="205" cy="50" r="14"/>
+              <text class="sim-label mono" x="205" y="54">N</text>
+              <text class="sim-desc mono" x="205" y="74">d = 3</text>
+              <circle class="sim-target-node" cx="285" cy="36" r="16" filter="url(#kad-glow-js)"/>
+              <text class="sim-label mono" x="285" y="40">T</text>
+              <text class="sim-desc mono" x="285" y="60">d = 0</text>
+              <circle class="sim-pulse" r="4">
+                <animate attributeName="cx" values="48;120;205;285" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
+                <animate attributeName="cy" values="50;36;50;36" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
               </circle>
             </svg>
+            <div class="sim-legend">Iterative FIND_NODE lookup converges via XOR distance</div>
           </div>
         `;
       }
       if (isRedisProject(p.name)) {
         return `
           <div class="sim-visual" data-sim="redis">
-            <svg width="260" height="90" viewBox="0 0 260 90">
-              <line class="sim-link" x1="35" y1="22" x2="105" y2="22" />
-              <line class="sim-link" x1="105" y1="22" x2="160" y2="22" />
-              <line class="sim-link" x1="160" y1="22" x2="225" y2="22" />
-              <line class="sim-link" x1="160" y1="22" x2="160" y2="64" />
-              <line class="sim-link" x1="160" y1="64" x2="225" y2="64" />
-
-              <circle class="sim-node" cx="35" cy="22" r="9" />
-              <circle class="sim-node" cx="105" cy="22" r="9" />
-              <circle class="sim-node" cx="160" cy="22" r="9" />
-              <circle class="sim-node" cx="225" cy="22" r="9" />
-              <circle class="sim-node" cx="160" cy="64" r="9" />
-              <circle class="sim-node" cx="225" cy="64" r="9" />
-
-              <circle class="sim-pulse" cx="35" cy="22" r="3">
-                <animate attributeName="cx" values="35;105;160;225;160;225;160;105;35" dur="3.4s" repeatCount="indefinite" />
-                <animate attributeName="cy" values="22;22;22;22;22;64;64;22;22" dur="3.4s" repeatCount="indefinite" />
-              </circle>
+            <svg width="320" height="140" viewBox="0 0 320 140">
+              <rect class="sim-layer-bg" x="8" y="10" width="135" height="120" rx="8"/>
+              <text class="sim-layer-title mono" x="75" y="26">KEY → ID</text>
+              <rect class="sim-entry" x="20" y="36" width="110" height="18" rx="3"/>
+              <text class="sim-entry-text mono" x="75" y="47">user:1 → id:7</text>
+              <rect class="sim-entry" x="20" y="60" width="110" height="18" rx="3"/>
+              <text class="sim-entry-text mono" x="75" y="71">sess:3 → id:12</text>
+              <rect class="sim-entry" x="20" y="84" width="110" height="18" rx="3" style="opacity:0.4"/>
+              <text class="sim-entry-text mono" x="75" y="95" style="opacity:0.4">tok:5 → id:9</text>
+              <rect class="sim-ttl-track" x="20" y="106" width="110" height="3" rx="1.5"/>
+              <rect class="sim-ttl-fill" x="20" y="106" width="110" height="3" rx="1.5">
+                <animate attributeName="width" values="110;0" dur="3.5s" repeatCount="indefinite"/>
+              </rect>
+              <text class="sim-desc mono" x="75" y="120">ttl</text>
+              <line class="sim-link" x1="148" y1="60" x2="172" y2="60" style="stroke-width:1.5"/>
+              <polygon class="sim-arrow" points="172,55 182,60 172,65"/>
+              <rect class="sim-layer-bg" x="178" y="10" width="135" height="120" rx="8"/>
+              <text class="sim-layer-title mono" x="245" y="26">ID → VALUE</text>
+              <rect class="sim-entry" x="190" y="36" width="110" height="18" rx="3"/>
+              <text class="sim-entry-text mono" x="245" y="47">id:7 → val</text>
+              <rect class="sim-entry" x="190" y="60" width="110" height="18" rx="3"/>
+              <text class="sim-entry-text mono" x="245" y="71">id:12 → val</text>
+              <rect class="sim-entry" x="190" y="84" width="110" height="18" rx="3" style="opacity:0.4"/>
+              <text class="sim-entry-text mono" x="245" y="95" style="opacity:0.4">id:9 → expired</text>
+              <line class="sim-link" x1="190" y1="100" x2="300" y2="100" style="stroke-dasharray:3 3;stroke-width:1">
+                <animate attributeName="y1" values="94;104;94" dur="2.5s" repeatCount="indefinite"/>
+                <animate attributeName="y2" values="94;104;94" dur="2.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.6;0" dur="2.5s" repeatCount="indefinite"/>
+              </line>
+              <text class="sim-desc mono" x="245" y="120">gc sweep</text>
             </svg>
+            <div class="sim-legend">Two-layer TTL-aware cache with garbage collection</div>
           </div>
         `;
       }
@@ -830,9 +955,54 @@ const structuredData = JSON.stringify({
         heroCta.innerHTML = `<svg class="cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>${data.labels.links.resume}`;
       }
 
-      const introLead = document.querySelector(".intro-phrase .lead");
-      if (introLead) {
-        introLead.textContent = data.labels.introLead ?? "";
+      const introPhrase = document.querySelector(".intro-phrase");
+      if (introPhrase) {
+        const leads = introPhrase.querySelectorAll(".lead");
+        const hasLead = !!(data.labels.introLead);
+        const hasTail = !!(data.labels.introTail);
+
+        if (leads.length === 0 && (hasLead || hasTail)) {
+          if (hasLead) {
+            const el = document.createElement("span");
+            el.className = "lead";
+            el.textContent = data.labels.introLead;
+            introPhrase.insertBefore(el, introPhrase.firstChild);
+          }
+          if (hasTail) {
+            const el = document.createElement("span");
+            el.className = "lead";
+            el.textContent = data.labels.introTail;
+            introPhrase.appendChild(el);
+          }
+        } else if (leads.length === 1) {
+          if (hasLead && !hasTail) {
+            introPhrase.insertBefore(leads[0], introPhrase.querySelector(".intro-name"));
+            leads[0].textContent = data.labels.introLead;
+          } else if (!hasLead && hasTail) {
+            introPhrase.appendChild(leads[0]);
+            leads[0].textContent = data.labels.introTail;
+          } else if (hasLead && hasTail) {
+            leads[0].textContent = data.labels.introLead;
+            introPhrase.insertBefore(leads[0], introPhrase.querySelector(".intro-name"));
+            const tail = document.createElement("span");
+            tail.className = "lead";
+            tail.textContent = data.labels.introTail;
+            introPhrase.appendChild(tail);
+          }
+        } else if (leads.length >= 2) {
+          if (hasLead) {
+            leads[0].textContent = data.labels.introLead;
+            leads[0].style.display = "";
+          } else {
+            leads[0].style.display = "none";
+          }
+          if (hasTail) {
+            leads[leads.length - 1].textContent = data.labels.introTail;
+            leads[leads.length - 1].style.display = "";
+          } else {
+            leads[leads.length - 1].style.display = "none";
+          }
+        }
       }
       setIntroName(data.hero.name);
 
@@ -938,5 +1108,98 @@ const structuredData = JSON.stringify({
 
     const savedLang = localStorage.getItem("portfolio-lang") || "en";
     applyLanguage(savedLang);
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle?.querySelector('.theme-icon');
+    const updateThemeIcon = () => {
+      const isLight = document.documentElement.classList.contains('light');
+      if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
+      themeToggle?.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+    };
+    themeToggle?.addEventListener('click', () => {
+      document.documentElement.classList.toggle('light');
+      const isLight = document.documentElement.classList.contains('light');
+      localStorage.setItem('portfolio-theme', isLight ? 'light' : 'dark');
+      updateThemeIcon();
+    });
+    updateThemeIcon();
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReduced) {
+      const tiltedCards = new WeakSet();
+      const initCardTilt = () => {
+        document.querySelectorAll(".project-card, .meta-card").forEach((card) => {
+          if (tiltedCards.has(card)) return;
+          tiltedCards.add(card);
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -4;
+            const rotateY = ((x - centerX) / centerX) * 4;
+            card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            card.style.setProperty("--spot-x", `${x}px`);
+            card.style.setProperty("--spot-y", `${y}px`);
+          });
+          card.addEventListener("mouseleave", () => {
+            card.style.transform = "";
+          });
+        });
+      };
+      initCardTilt();
+      const contentEl = document.querySelector(".content");
+      if (contentEl) {
+        new MutationObserver(() => initCardTilt()).observe(contentEl, { childList: true, subtree: true });
+      }
+
+      const typed = new WeakSet();
+      const typeH2 = (h2) => {
+        const text = h2.textContent;
+        if (!text || !text.trim()) return;
+        const len = text.length;
+        const perChar = 400 / len;
+        let i = 0;
+        h2.textContent = "";
+        const step = () => {
+          h2.textContent = text.slice(0, ++i);
+          if (i < len) setTimeout(step, perChar);
+        };
+        step();
+      };
+      document.querySelectorAll("section[id]").forEach((sec) => {
+        new MutationObserver((_, obs) => {
+          if (sec.classList.contains("section-revealed")) {
+            const h2 = sec.querySelector("h2");
+            if (h2 && !typed.has(h2)) {
+              typed.add(h2);
+              typeH2(h2);
+            }
+            obs.disconnect();
+          }
+        }).observe(sec, { attributes: true, attributeFilter: ["class"] });
+      });
+
+      const magneticEls = document.querySelectorAll(
+        ".side-nav a, .side-links a, .theme-toggle, .lang-toggle, .cta-btn"
+      );
+      document.addEventListener("mousemove", (e) => {
+        magneticEls.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = e.clientX - cx;
+          const dy = e.clientY - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 50) {
+            const pull = (1 - dist / 50) * 0.35;
+            el.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
+          } else if (el.style.transform) {
+            el.style.transform = "";
+          }
+        });
+      });
+    }
   </script>
 </BaseLayout>

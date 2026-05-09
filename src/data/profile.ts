@@ -75,6 +75,15 @@ export const profile: Profile = {
       bullets: [],
     },
     {
+      role: "Head of IT Development Team",
+      org: "EYP Azerbaijan",
+      location: "Baku, Azerbaijan",
+      period: "Feb 2026 – Present",
+      bullets: [
+        "Coordinating website renewal, internal platform improvements, and new technology solutions to support organizational operations",
+      ],
+    },
+    {
       role: "Information and Communication Technology (ICT) Assistant",
       org: "COP29 United Nations Climate Change Conference",
       location: "Baku, Azerbaijan",
