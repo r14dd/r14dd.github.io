@@ -19,6 +19,15 @@ const isKademlia = (name: string) =>
   name.includes("Distributed") ||
   name.includes("Kademlia");
 const isRedis = (name: string) => name.includes("Redis");
+const skillIcons: Record<string, string> = {
+  "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
+  "Backend & Frameworks": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+  "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
+  "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
+  "Databases & Persistence": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="4" rx="5" ry="1.8"/><path d="M3 4v8c0 1 2.24 1.8 5 1.8s5-.8 5-1.8V4"/><path d="M3 8c0 1 2.24 1.8 5 1.8S13 9 13 8"/></svg>',
+  "Cloud & Infrastructure": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
+  "Testing & Tooling": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
+};
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.hero.tagline;
 const structuredData = JSON.stringify({
@@ -427,8 +436,15 @@ const structuredData = JSON.stringify({
       {
         profile.skills.map((s) => (
           <div class="meta-card">
-            <h3>{s.category}</h3>
-            <div class="tech-meta skills-line">{s.items.join(" · ")}</div>
+            <div class="skill-category-header">
+              <span class="skill-icon" set:html={skillIcons[s.category] ?? ''} />
+              <h3>{s.category}</h3>
+            </div>
+            <div class="skills-pills">
+              {s.items.map((item) => (
+                <span class="skill-pill">{item}</span>
+              ))}
+            </div>
           </div>
         ))
       }
@@ -470,6 +486,21 @@ const structuredData = JSON.stringify({
 
   <script>
     // @ts-nocheck
+    const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%';
+    const scrambleText = (el, finalText, duration = 550) => {
+      const len = finalText.length;
+      const totalFrames = Math.round(duration / 35);
+      let frame = 0;
+      const id = setInterval(() => {
+        el.textContent = Array.from(finalText).map((char, i) => {
+          if (char === ' ') return ' ';
+          if (frame >= Math.floor((i / len) * totalFrames) + 2) return char;
+          return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+        }).join('');
+        if (++frame > totalFrames) { el.textContent = finalText; clearInterval(id); }
+      }, 35);
+    };
+
     const i18nEl = document.getElementById("i18n-data");
     const I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {};
     const languageLabels = {
@@ -559,15 +590,27 @@ const structuredData = JSON.stringify({
       });
     });
 
+    const heroEl = document.querySelector("main > section:first-of-type");
+    const updateParallax = () => {
+      if (!heroEl) return;
+      const scrolled = window.scrollY;
+      const h1 = heroEl.querySelector("h1");
+      const taglines = heroEl.querySelectorAll(".hero-tagline");
+      if (h1) h1.style.transform = `translateY(${scrolled * 0.12}px)`;
+      taglines.forEach((t) => { t.style.transform = `translateY(${scrolled * 0.08}px)`; });
+    };
+
     window.addEventListener("scroll", () => {
       setActiveLink();
       updateProgress();
       updateNavBlur();
+      updateParallax();
     });
     window.addEventListener("load", () => {
       setActiveLink();
       updateProgress();
       updateNavBlur();
+      updateParallax();
     });
 
     document.querySelectorAll(".simulate-btn").forEach((btn) => {
@@ -854,19 +897,34 @@ const structuredData = JSON.stringify({
       `;
     };
 
+    const skillIconMap = {
+      "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
+      "Backend & Frameworks": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+      "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
+      "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
+      "Databases & Persistence": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="4" rx="5" ry="1.8"/><path d="M3 4v8c0 1 2.24 1.8 5 1.8s5-.8 5-1.8V4"/><path d="M3 8c0 1 2.24 1.8 5 1.8S13 9 13 8"/></svg>',
+      "Cloud & Infrastructure": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
+      "Testing & Tooling": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
+    };
+    const getSkillIcon = (category) => {
+      const svg = skillIconMap[category] || '';
+      return svg ? `<span class="skill-icon">${svg}</span>` : '';
+    };
+
     const buildSkills = (data) => {
       return `
         <h2>${data.labels.headings.skills}</h2>
-        ${data.skills
-          .map(
-            (s) => `
-              <div class="meta-card">
-                <h3>${s.category}</h3>
-                <div class="tech-meta skills-line">${s.items.join(" · ")}</div>
-              </div>
-            `,
-          )
-          .join("")}
+        ${data.skills.map((s) => `
+          <div class="meta-card">
+            <div class="skill-category-header">
+              ${getSkillIcon(s.category)}
+              <h3>${s.category}</h3>
+            </div>
+            <div class="skills-pills">
+              ${s.items.map((item) => `<span class="skill-pill">${item}</span>`).join("")}
+            </div>
+          </div>
+        `).join("")}
       `;
     };
 
@@ -926,7 +984,7 @@ const structuredData = JSON.stringify({
       const heroLinks = document.querySelector(".hero-links");
       const heroCta = document.querySelector(".hero-cta .cta-btn");
       const heroTaglines = document.querySelectorAll(".hero-tagline");
-      if (heroTitle) heroTitle.textContent = data.hero.name;
+      if (heroTitle) scrambleText(heroTitle, data.hero.name);
       if (heroTaglines.length) {
         const parts = data.hero.tagline.split(". ");
         const primary = parts[0]?.trim() ?? "";
@@ -1197,7 +1255,7 @@ const structuredData = JSON.stringify({
           const dy = e.clientY - cy;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 50) {
-            const pull = (1 - dist / 50) * 0.35;
+            const pull = (1 - dist / 50) * 0.5;
             el.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
           } else if (el.style.transform) {
             el.style.transform = "";
