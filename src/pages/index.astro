@@ -100,6 +100,7 @@ const structuredData = JSON.stringify({
   </div>
 
   <aside class="side-nav">
+    <span class="nav-pill" aria-hidden="true"></span>
     <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
     <a href="#projects">{profile.labels.nav.projects}</a>
@@ -462,9 +463,6 @@ const structuredData = JSON.stringify({
           href="mailto:riadmukh@gmail.com"
           target="_blank"
           rel="noopener">riadmukh@gmail.com</a
-        > or
-        <a href="tel:+994508998676" target="_blank" rel="noopener">
-          +994 50 899 8676</a
         >
       </p>
     </section>
@@ -521,6 +519,14 @@ const structuredData = JSON.stringify({
           current.id;
         mobileCurrent.textContent = label;
         mobileCurrent.classList.add("active");
+      }
+      const pill = document.querySelector(".nav-pill");
+      const sideNav = document.querySelector(".side-nav");
+      if (pill && active && sideNav) {
+        const navRect = sideNav.getBoundingClientRect();
+        const linkRect = active.getBoundingClientRect();
+        pill.style.top = (linkRect.top - navRect.top + (linkRect.height - 26) / 2) + "px";
+        pill.style.opacity = "1";
       }
     };
 
@@ -885,7 +891,7 @@ const structuredData = JSON.stringify({
 
     const buildConnect = (data) => {
       const template =
-        data.labels.connectTemplate || "Reach me at {email} or {phone}";
+        data.labels.connectTemplate || "Reach me at {email}";
       const html = template.replace(
         "{email}",
         `<a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>`,
@@ -1127,6 +1133,7 @@ const structuredData = JSON.stringify({
           if (tiltedCards.has(card)) return;
           tiltedCards.add(card);
           card.addEventListener("mousemove", (e) => {
+            card.style.transition = "background 0.3s ease, border-color 0.3s ease";
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -1139,7 +1146,9 @@ const structuredData = JSON.stringify({
             card.style.setProperty("--spot-y", `${y}px`);
           });
           card.addEventListener("mouseleave", () => {
+            card.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, border-color 0.3s ease";
             card.style.transform = "";
+            setTimeout(() => { card.style.transition = ""; }, 650);
           });
         });
       };
