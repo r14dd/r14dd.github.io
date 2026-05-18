@@ -3,9 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { profiles } from "../data/profile-i18n";
 
 const profile = profiles.en;
-const taglineParts = profile.hero.tagline.split(". ");
-const taglinePrimary = taglineParts[0]?.trim() ?? "";
-const taglineSecondary = taglineParts.slice(1).join(". ").trim();
 const hasSimulation = (name: string) =>
   name.includes("RAFT") ||
   name.includes("Raft") ||
@@ -21,7 +18,6 @@ const isKademlia = (name: string) =>
 const isRedis = (name: string) => name.includes("Redis");
 const skillIcons: Record<string, string> = {
   "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
-  "Systems & Linux": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7.5l2 2-2 2M9 11.5h2"/></svg>',
   "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
   "AI, ML & Agentic Systems": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14"/><path d="M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M4.1 11.9l1.1-1.1M10.8 5.2l1.1-1.1"/></svg>',
   "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
@@ -33,35 +29,14 @@ const skillIcons: Record<string, string> = {
   "Developer Tooling & Ecosystem": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
 };
 
-const LOGO_MAP: Record<string, string> = {
-  'Rust': 'rust', 'Python': 'python', 'Go': 'go', 'C': 'c', 'Java': 'java',
-  'Scala': 'scala', 'JavaScript': 'javascript', 'FastAPI': 'fastapi', 'Flask': 'flask',
-  'Spring Boot': 'spring', 'Node.js': 'nodedotjs', 'Axum': 'rust',
-  'FastAPI': 'fastapi', 'Flask': 'flask',
-  'LangChain': 'langchain', 'Ollama': 'ollama', 'Pandas': 'pandas', 'NumPy': 'numpy',
-  'NVIDIA': 'nvidia', 'PostgreSQL': 'postgresql', 'MySQL': 'mysql',
-  'CockroachDB': 'cockroachlabs', 'SQLite': 'sqlite', 'MongoDB': 'mongodb',
-  'Cassandra': 'apachecassandra', 'Redis': 'redis', 'Memcached': 'memcached',
-  'Weaviate': 'weaviate', 'pgvector': 'postgresql', 'Elasticsearch': 'elasticsearch',
-  'Liquibase': 'liquibase', 'AWS': 'amazonaws', 'GCP': 'googlecloud',
-  'DigitalOcean': 'digitalocean', 'Supabase': 'supabase', 'Docker': 'docker',
-  'Kubernetes': 'kubernetes', 'GitHub Actions': 'githubactions', 'GitLab CI/CD': 'gitlab',
-  'Jenkins': 'jenkins', 'Pytest': 'pytest', 'Jest': 'jest', 'JUnit': 'junit5',
-  'rstest': 'rust', 'Testcontainers': 'testcontainers', 'Selenium': 'selenium',
-  'Postman': 'postman', 'VS Code': 'visualstudiocode', 'JetBrains': 'jetbrains',
-  'Emacs': 'gnuemacs', 'Zed': 'zed', 'Astro': 'astro', 'React': 'react',
-  'Three.js': 'threedotjs', 'Git': 'git', 'GitHub': 'github', 'GitLab': 'gitlab',
-  'GraphQL': 'graphql', 'Apache Kafka': 'apachekafka', 'RabbitMQ': 'rabbitmq',
-  'Azure Event Hubs': 'microsoftazure', 'Google Cloud Pub/Sub': 'googlecloud',
-  'Claude Code CLI': 'anthropic', 'NVIDIA OpenShell': 'nvidia',
-};
+const stripParens = (item: string): string => item.replace(/\s*\([^)]*\)/g, '').trim();
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.hero.tagline;
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.hero.name,
-  jobTitle: profile.hero.title,
+  jobTitle: profile.hero.tagline,
   url: "https://r14dd.github.io",
   sameAs: [profile.links.linkedin, profile.links.github],
   email: "mailto:riadmukh@gmail.com",
@@ -88,6 +63,7 @@ const structuredData = JSON.stringify({
   />
 
   <div class="lang-switcher" aria-label="Controls">
+    <button class="cmd-trigger" id="cmd-trigger" type="button" aria-label="Open command palette (⌘K)">⌘K</button>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light mode">
       <span class="theme-icon" aria-hidden="true">☀️</span>
     </button>
@@ -98,7 +74,13 @@ const structuredData = JSON.stringify({
       aria-haspopup="listbox"
       aria-expanded="false"
     >
-      <span class="lang-globe" aria-hidden="true">🌐</span>
+      <span class="lang-globe" aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="8" cy="8" r="6"/>
+          <path d="M8 2C7 4 6.5 6 6.5 8s.5 4 1.5 6M8 2c1 2 1.5 4 1.5 6S9 12 8 14"/>
+          <path d="M2.5 5.5h11M2.5 10.5h11"/>
+        </svg>
+      </span>
       <span class="lang-label" id="lang-current">English</span>
       <span class="lang-caret" aria-hidden="true">▾</span>
     </button>
@@ -122,26 +104,26 @@ const structuredData = JSON.stringify({
       <span></span>
     </button>
     <div class="mobile-current" aria-live="polite">
-      {profile.labels.nav.education}
+      {profile.labels.nav.experience}
     </div>
   </div>
   <div class="mobile-menu" aria-hidden="true">
-    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
     <a href="#projects">{profile.labels.nav.projects}</a>
-    <a href="#teaching">{profile.labels.nav.teaching}</a>
     <a href="#skills">{profile.labels.nav.skills}</a>
+    <a href="#teaching">{profile.labels.nav.teaching}</a>
+    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#reading">{profile.labels.nav.reading}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
   </div>
 
   <aside class="side-nav">
     <span class="nav-pill" aria-hidden="true"></span>
-    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
     <a href="#projects">{profile.labels.nav.projects}</a>
-    <a href="#teaching">{profile.labels.nav.teaching}</a>
     <a href="#skills">{profile.labels.nav.skills}</a>
+    <a href="#teaching">{profile.labels.nav.teaching}</a>
+    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#reading">{profile.labels.nav.reading}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
   </aside>
@@ -153,7 +135,7 @@ const structuredData = JSON.stringify({
         >{profile.labels.links.resume}</a
       >
       <div class="resume-preview" aria-hidden="true">
-        <iframe title="Resume preview" src="/resume.pdf#page=1&zoom=page-width"
+        <iframe title="Resume preview" data-src="/resume.pdf#page=1&zoom=page-width"
         ></iframe>
       </div>
     </div>
@@ -169,13 +151,8 @@ const structuredData = JSON.stringify({
     <section>
       <h1>{profile.hero.name}</h1>
       <p class="hero-tagline">
-        {taglinePrimary}{taglinePrimary.endsWith(".") ? "" : "."}
+        {profile.hero.tagline}
       </p>
-      {
-        taglineSecondary && (
-          <p class="hero-tagline secondary">{taglineSecondary}</p>
-        )
-      }
       <div class="hero-cta">
         <a
           class="cta-btn"
@@ -207,25 +184,19 @@ const structuredData = JSON.stringify({
           >{profile.labels.links.github}</a
         >
       </div>
-    </section>
-
-    <section
-      id="education"
-      class="section-block"
-      data-label={profile.labels.headings.education}
-    >
-      <h2>{profile.labels.headings.education}</h2>
-      <div class="meta-card">
-        <h3>
-          State University of New York at Buffalo — BS in Computer Science
-        </h3>
-        <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
-        <ul>
-          <li>
-            Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List
-            Honors
-          </li>
-        </ul>
+      <div class="stats-strip" lang="en" aria-label="Key highlights">
+        <div class="stat-item">
+          <span class="stat-number">2K+</span>
+          <span class="stat-label">Students taught</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">Teams led</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">4+</span>
+          <span class="stat-label">Years shipping</span>
+        </div>
       </div>
     </section>
 
@@ -266,7 +237,9 @@ const structuredData = JSON.stringify({
             <div class="project-header">
               <div>
                 <h3>{p.name}</h3>
-                <div class="project-tech">{p.tech.join(" · ")}</div>
+                <div class="project-tech-pills">
+                    {p.tech.map((t) => <span class="project-tech-pill">{t}</span>)}
+                  </div>
               </div>
               <div class="project-actions">
                 {/* Simulate only for Raft and DHT */}
@@ -434,27 +407,6 @@ const structuredData = JSON.stringify({
     </section>
 
     <section
-      id="teaching"
-      class="section-block"
-      data-label={profile.labels.headings.teaching}
-    >
-      <h2>{profile.labels.headings.teaching}</h2>
-      {
-        profile.teaching.map((t) => (
-          <div style="margin-bottom: 2rem" class="project-card">
-            <h3>{t.title}</h3>
-            <div class="tech-meta">{t.skills}</div>
-            <ul>
-              {t.bullets.map((b) => (
-                <li>{b}</li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </section>
-
-    <section
       id="skills"
       class="section-block"
       data-label={profile.labels.headings.skills}
@@ -468,24 +420,53 @@ const structuredData = JSON.stringify({
               <h3>{s.category}</h3>
             </div>
             {s.groups.map((g) => (
-              <div class="skill-group">
-                <div class={`skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}`}>{g.label}</div>
+              <div class={`skill-group${g.tier ? ` tier-${g.tier}` : ''}${!g.label ? ' no-label' : ''}`}>
+                {g.label && <div class={`skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}`}>{g.label}</div>}
                 <div class="skills-pills">
-                  {g.items.map((item) => {
-                    const slug = LOGO_MAP[item];
-                    return (
-                      <span class={`skill-pill${g.tier ? ` tier-${g.tier}` : ''}`}>
-                        {slug && <img class="tech-logo" src={`https://cdn.simpleicons.org/${slug}`} loading="lazy" alt="" onerror="this.style.display='none'" />}
-                        {item}
-                      </span>
-                    );
-                  })}
+                  {g.items.map((item) => (
+                    <span class="skill-pill">{stripParens(item)}</span>
+                  ))}
                 </div>
               </div>
             ))}
           </div>
         ))
       }
+    </section>
+
+    <section
+      id="teaching"
+      class="section-block"
+      data-label={profile.labels.headings.teaching}
+    >
+      <h2>{profile.labels.headings.teaching}</h2>
+      {
+        profile.teaching.map((t) => (
+          <div class="project-card">
+            <h3>{t.title}</h3>
+            <div class="skills-pills" style="margin-top:0.5rem">
+              {t.skills.split("·").map(s => (
+                <span class="skill-pill">{s.trim()}</span>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <section
+      id="education"
+      class="section-block"
+      data-label={profile.labels.headings.education}
+    >
+      <h2>{profile.labels.headings.education}</h2>
+      <div class="meta-card">
+        <h3>State University of New York at Buffalo — BS in Computer Science</h3>
+        <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
+        <ul>
+          <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
+        </ul>
+      </div>
     </section>
 
     <section
@@ -513,14 +494,34 @@ const structuredData = JSON.stringify({
     >
       <h2>{profile.labels.headings.connect}</h2>
       <p class="connect-text">
-        Reach me at <a
-          href="mailto:riadmukh@gmail.com"
-          target="_blank"
-          rel="noopener">riadmukh@gmail.com</a
-        >
+        Reach me at <a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>
       </p>
+      <div class="hero-cta">
+        <a class="cta-btn" href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+        <a class="cta-btn" href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
+        <a class="cta-btn" href={profile.links.resume} target="_blank" rel="noopener" download>{profile.labels.links.resume}</a>
+      </div>
     </section>
   </main>
+
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <div class="cmd-backdrop" id="cmd-backdrop" aria-hidden="true"></div>
+  <div class="cmd-palette" id="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette" aria-hidden="true">
+    <div class="cmd-input-wrap">
+      <span class="cmd-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
+      </span>
+      <input type="text" class="cmd-input" id="cmd-input" placeholder="Search or jump to..." autocomplete="off" spellcheck="false" aria-label="Command search"/>
+      <span class="cmd-kbd">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmd-results" role="listbox"></div>
+    <div class="cmd-footer">
+      <span class="cmd-footer-hint"><span class="cmd-kbd">↑↓</span> navigate</span>
+      <span class="cmd-footer-hint"><span class="cmd-kbd">↵</span> select</span>
+      <span class="cmd-footer-hint"><span class="cmd-kbd">ESC</span> close</span>
+    </div>
+  </div>
 
   <script>
     // @ts-nocheck
@@ -537,6 +538,21 @@ const structuredData = JSON.stringify({
         }).join('');
         if (++frame > totalFrames) { el.textContent = finalText; clearInterval(id); }
       }, 35);
+    };
+
+    let heroFirstLoad = true;
+    const weightReveal = (el, text) => {
+      if (heroFirstLoad) {
+        heroFirstLoad = false;
+        el.textContent = text;
+        setTimeout(() => {
+          el.style.animation = 'none';
+          void el.offsetWidth;
+          el.style.animation = 'name-shimmer 6s linear forwards, weight-in 800ms cubic-bezier(0.16, 1, 0.3, 1) both';
+        }, 1050);
+      } else {
+        scrambleText(el, text);
+      }
     };
 
     const i18nEl = document.getElementById("i18n-data");
@@ -885,7 +901,7 @@ const structuredData = JSON.stringify({
                 <div class="project-header">
                   <div>
                     <h3>${p.name}</h3>
-                    <div class="project-tech">${p.tech.join(" · ")}</div>
+                    <div class="project-tech-pills">${p.tech.map(t => `<span class="project-tech-pill">${t}</span>`).join('')}</div>
                   </div>
                   <div class="project-actions">
                     ${buildProjectActions(p)}
@@ -909,12 +925,11 @@ const structuredData = JSON.stringify({
         ${data.teaching
           .map(
             (t) => `
-              <div style="margin-bottom: 2rem" class="project-card">
+              <div class="project-card">
                 <h3>${t.title}</h3>
-                <div class="tech-meta">${t.skills}</div>
-                <ul>
-                  ${t.bullets.map((b) => `<li>${b}</li>`).join("")}
-                </ul>
+                <div class="skills-pills" style="margin-top:0.5rem">
+                  ${t.skills.split("·").map(s => `<span class="skill-pill">${s.trim()}</span>`).join("")}
+                </div>
               </div>
             `,
           )
@@ -937,8 +952,7 @@ const structuredData = JSON.stringify({
 
     const skillIconMap = {
       "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
-      "Systems & Linux": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7.5l2 2-2 2M9 11.5h2"/></svg>',
-      "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+          "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
       "AI, ML & Agentic Systems": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14"/><path d="M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M4.1 11.9l1.1-1.1M10.8 5.2l1.1-1.1"/></svg>',
       "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
       "Communication Protocols & APIs": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
@@ -953,27 +967,8 @@ const structuredData = JSON.stringify({
       return svg ? `<span class="skill-icon">${svg}</span>` : '';
     };
 
-    const JS_LOGO_MAP = {
-      'Rust': 'rust', 'Python': 'python', 'Go': 'go', 'C': 'c', 'Java': 'java',
-      'Scala': 'scala', 'JavaScript': 'javascript', 'FastAPI': 'fastapi', 'Flask': 'flask',
-      'Spring Boot': 'spring', 'Node.js': 'nodedotjs', 'Axum': 'rust',
-      'LangChain': 'langchain', 'Ollama': 'ollama', 'Pandas': 'pandas', 'NumPy': 'numpy',
-      'NVIDIA': 'nvidia', 'PostgreSQL': 'postgresql', 'MySQL': 'mysql',
-      'CockroachDB': 'cockroachlabs', 'SQLite': 'sqlite', 'MongoDB': 'mongodb',
-      'Cassandra': 'apachecassandra', 'Redis': 'redis', 'Memcached': 'memcached',
-      'Weaviate': 'weaviate', 'pgvector': 'postgresql', 'Elasticsearch': 'elasticsearch',
-      'Liquibase': 'liquibase', 'AWS': 'amazonaws', 'GCP': 'googlecloud',
-      'DigitalOcean': 'digitalocean', 'Supabase': 'supabase', 'Docker': 'docker',
-      'Kubernetes': 'kubernetes', 'GitHub Actions': 'githubactions', 'GitLab CI/CD': 'gitlab',
-      'Jenkins': 'jenkins', 'Pytest': 'pytest', 'Jest': 'jest', 'JUnit': 'junit5',
-      'rstest': 'rust', 'Testcontainers': 'testcontainers', 'Selenium': 'selenium',
-      'Postman': 'postman', 'VS Code': 'visualstudiocode', 'JetBrains': 'jetbrains',
-      'Emacs': 'gnuemacs', 'Zed': 'zed', 'Astro': 'astro', 'React': 'react',
-      'Three.js': 'threedotjs', 'Git': 'git', 'GitHub': 'github', 'GitLab': 'gitlab',
-      'GraphQL': 'graphql', 'Apache Kafka': 'apachekafka', 'RabbitMQ': 'rabbitmq',
-      'Azure Event Hubs': 'microsoftazure', 'Google Cloud Pub/Sub': 'googlecloud',
-      'Claude Code CLI': 'anthropic',
-    };
+
+    const stripParens = (s) => s.replace(/\s*\([^)]*\)/g, '').trim();
 
     const buildSkills = (data) => {
       return `
@@ -985,14 +980,10 @@ const structuredData = JSON.stringify({
               <h3>${s.category}</h3>
             </div>
             ${s.groups.map((g) => `
-              <div class="skill-group">
-                <div class="skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}">${g.label}</div>
+              <div class="skill-group${g.tier ? ` tier-${g.tier}` : ''}${!g.label ? ' no-label' : ''}">
+                ${g.label ? `<div class="skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}">${g.label}</div>` : ''}
                 <div class="skills-pills">
-                  ${g.items.map((item) => {
-                    const slug = JS_LOGO_MAP[item];
-                    const img = slug ? `<img class="tech-logo" src="https://cdn.simpleicons.org/${slug}" loading="lazy" alt="" onerror="this.style.display='none'" />` : '';
-                    return `<span class="skill-pill${g.tier ? ` tier-${g.tier}` : ''}">${img}${item}</span>`;
-                  }).join('')}
+                  ${g.items.map((item) => `<span class="skill-pill">${stripParens(item)}</span>`).join('')}
                 </div>
               </div>
             `).join('')}
@@ -1030,6 +1021,11 @@ const structuredData = JSON.stringify({
       return `
         <h2>${data.labels.headings.connect}</h2>
         <p class="connect-text">${html}</p>
+        <div class="hero-cta">
+          <a class="cta-btn" href="${data.links.linkedin}" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="cta-btn" href="${data.links.github}" target="_blank" rel="noopener">GitHub</a>
+          <a class="cta-btn" href="${data.links.resume}" target="_blank" rel="noopener" download>${data.labels.links.resume}</a>
+        </div>
       `;
     };
 
@@ -1040,8 +1036,8 @@ const structuredData = JSON.stringify({
       introName.innerHTML = "";
       Array.from(name).forEach((char, idx) => {
         const span = document.createElement("span");
-        span.textContent = char === " " ? "\u00A0" : char;
-        span.style.animationDelay = `${(0.05 + idx * 0.08).toFixed(2)}s`;
+        span.textContent = char === " " ? " " : char;
+        span.style.animationDelay = `${(0.03 + idx * 0.04).toFixed(2)}s`;
         introName.appendChild(span);
       });
     };
@@ -1057,15 +1053,9 @@ const structuredData = JSON.stringify({
       const heroLinks = document.querySelector(".hero-links");
       const heroCta = document.querySelector(".hero-cta .cta-btn");
       const heroTaglines = document.querySelectorAll(".hero-tagline");
-      if (heroTitle) scrambleText(heroTitle, data.hero.name);
+      if (heroTitle) weightReveal(heroTitle, data.hero.name);
       if (heroTaglines.length) {
-        const parts = data.hero.tagline.split(". ");
-        const primary = parts[0]?.trim() ?? "";
-        const secondary = parts.slice(1).join(". ").trim();
-        heroTaglines[0].textContent = `${primary}${primary.endsWith(".") ? "" : "."}`;
-        if (heroTaglines[1]) {
-          heroTaglines[1].textContent = secondary;
-        }
+        heroTaglines[0].textContent = data.hero.tagline;
       }
       if (heroLinks) {
         const links = heroLinks.querySelectorAll("a");
@@ -1149,11 +1139,11 @@ const structuredData = JSON.stringify({
       const sideNav = document.querySelectorAll(".side-nav a");
       const mobileNav = document.querySelectorAll(".mobile-menu a");
       const labels = [
-        data.labels.nav.education,
         data.labels.nav.experience,
         data.labels.nav.projects,
-        data.labels.nav.teaching,
         data.labels.nav.skills,
+        data.labels.nav.teaching,
+        data.labels.nav.education,
         data.labels.nav.reading,
         data.labels.nav.connect,
       ];
@@ -1179,6 +1169,12 @@ const structuredData = JSON.stringify({
       if (skillsSection) skillsSection.innerHTML = buildSkills(data);
       if (readSection) readSection.innerHTML = buildReading(data);
       if (connectSection) connectSection.innerHTML = buildConnect(data);
+
+      [expSection, projSection, teachSection, eduSection, skillsSection, readSection, connectSection].forEach(sec => {
+        if (!sec?.classList.contains('section-revealed')) return;
+        const h2 = sec.querySelector('h2');
+        if (h2) typeH2(h2);
+      });
 
       expSection?.setAttribute("data-label", data.labels.headings.experience);
       projSection?.setAttribute("data-label", data.labels.headings.projects);
@@ -1221,7 +1217,11 @@ const structuredData = JSON.stringify({
         langMenu.classList.remove("open");
         langWrapper?.classList.remove("open");
         langToggle?.setAttribute("aria-expanded", "false");
-        window.location.reload();
+        document.body.classList.add('lang-switching');
+        setTimeout(() => {
+          applyLanguage(lang);
+          document.body.classList.remove('lang-switching');
+        }, 200);
       });
     });
 
@@ -1256,7 +1256,148 @@ const structuredData = JSON.stringify({
     });
     updateThemeIcon();
 
+    // Lazy-load resume iframe
+    const resumeHover = document.querySelector('.resume-hover');
+    const resumeIframe = resumeHover?.querySelector('iframe');
+    let iframeLoaded = false;
+    resumeHover?.addEventListener('mouseenter', () => {
+      if (!iframeLoaded && resumeIframe && resumeIframe.dataset.src) {
+        resumeIframe.src = resumeIframe.dataset.src;
+        iframeLoaded = true;
+      }
+    });
+
+    // Toast
+    const showToast = (msg) => {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.classList.remove('show'), 2000);
+    };
+
+    // Command palette
+    const cmdBackdrop = document.getElementById('cmd-backdrop');
+    const cmdPalette = document.getElementById('cmd-palette');
+    const cmdInput = document.getElementById('cmd-input');
+    const cmdResultsEl = document.getElementById('cmd-results');
+    let cmdOpen = false;
+    let cmdHighlightIdx = 0;
+    let cmdFiltered = [];
+
+    const CMD_ICONS = {
+      nav: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 5l4 3-4 3"/></svg>',
+      link: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-3M10 2h4v4M14 2L8 8"/></svg>',
+      action: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5.5"/><path d="M8 5.5V8l1.5 1.5"/></svg>',
+    };
+
+    const getCommands = () => {
+      const nav = currentProfile?.labels?.nav || I18N.en.labels.nav;
+      const links = currentProfile?.links || I18N.en.links;
+      return [
+        { group: 'Navigate', label: nav.education,  icon: 'nav',    action: () => scrollCmd('education')  },
+        { group: 'Navigate', label: nav.experience, icon: 'nav',    action: () => scrollCmd('experience') },
+        { group: 'Navigate', label: nav.projects,   icon: 'nav',    action: () => scrollCmd('projects')   },
+        { group: 'Navigate', label: nav.teaching,   icon: 'nav',    action: () => scrollCmd('teaching')   },
+        { group: 'Navigate', label: nav.skills,     icon: 'nav',    action: () => scrollCmd('skills')     },
+        { group: 'Navigate', label: nav.reading,    icon: 'nav',    action: () => scrollCmd('reading')    },
+        { group: 'Navigate', label: nav.connect,    icon: 'nav',    action: () => scrollCmd('connect')    },
+        { group: 'Links',    label: 'Resume',        icon: 'link',   action: () => { window.open(links.resume, '_blank'); closeCmd(); } },
+        { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open('https://linkedin.com/in/riadmukhtarov', '_blank'); closeCmd(); } },
+        { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open('https://github.com/r14dd', '_blank'); closeCmd(); } },
+        { group: 'Actions',  label: 'Toggle theme',  icon: 'action', action: () => { document.getElementById('theme-toggle')?.click(); closeCmd(); } },
+        { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText('riadmukh@gmail.com').then(() => showToast('Email copied')); closeCmd(); } },
+      ];
+    };
+
+    const scrollCmd = (id) => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      closeCmd();
+    };
+
+    const openCmd = () => {
+      cmdOpen = true;
+      cmdBackdrop?.classList.add('open');
+      cmdPalette?.classList.add('open');
+      cmdPalette?.setAttribute('aria-hidden', 'false');
+      cmdInput?.focus();
+      renderCmd('');
+    };
+
+    const closeCmd = () => {
+      cmdOpen = false;
+      cmdBackdrop?.classList.remove('open');
+      cmdPalette?.classList.remove('open');
+      cmdPalette?.setAttribute('aria-hidden', 'true');
+      if (cmdInput) cmdInput.value = '';
+    };
+
+    const setHighlight = (idx) => {
+      const items = cmdResultsEl?.querySelectorAll('.cmd-item');
+      if (!items) return;
+      items.forEach(i => i.classList.remove('highlighted'));
+      const target = items[idx];
+      if (target) { target.classList.add('highlighted'); target.scrollIntoView({ block: 'nearest' }); }
+      cmdHighlightIdx = idx;
+    };
+
+    const renderCmd = (query) => {
+      if (!cmdResultsEl) return;
+      const all = getCommands();
+      cmdFiltered = query ? all.filter(c => c.label.toLowerCase().includes(query.toLowerCase()) || c.group.toLowerCase().includes(query.toLowerCase())) : all;
+      cmdHighlightIdx = 0;
+      if (!cmdFiltered.length) {
+        cmdResultsEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:0.85rem">No results</div>';
+        return;
+      }
+      let html = '';
+      let lastGroup = '';
+      cmdFiltered.forEach((cmd, idx) => {
+        if (cmd.group !== lastGroup) {
+          html += `<div class="cmd-group-label">${cmd.group}</div>`;
+          lastGroup = cmd.group;
+        }
+        html += `<div class="cmd-item${idx === 0 ? ' highlighted' : ''}" data-idx="${idx}" role="option"><span class="cmd-item-icon">${CMD_ICONS[cmd.icon]}</span>${cmd.label}</div>`;
+      });
+      cmdResultsEl.innerHTML = html;
+      cmdResultsEl.querySelectorAll('.cmd-item').forEach((item, idx) => {
+        item.addEventListener('click', () => cmdFiltered[idx]?.action());
+        item.addEventListener('mouseenter', () => { cmdHighlightIdx = idx; setHighlight(idx); });
+      });
+    };
+
+    cmdInput?.addEventListener('input', e => renderCmd(e.target.value));
+    cmdBackdrop?.addEventListener('click', closeCmd);
+    document.getElementById('cmd-trigger')?.addEventListener('click', () => cmdOpen ? closeCmd() : openCmd());
+
+    document.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); cmdOpen ? closeCmd() : openCmd(); return; }
+      if (!cmdOpen) return;
+      const items = cmdResultsEl?.querySelectorAll('.cmd-item');
+      if (e.key === 'Escape') { closeCmd(); return; }
+      if (!items?.length) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight((cmdHighlightIdx + 1) % items.length); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight((cmdHighlightIdx - 1 + items.length) % items.length); }
+      else if (e.key === 'Enter') { e.preventDefault(); cmdFiltered[cmdHighlightIdx]?.action(); }
+    });
+
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const typed = new WeakSet();
+    const typeH2 = (h2) => {
+      if (prefersReduced) return;
+      const text = h2.textContent;
+      if (!text || !text.trim()) return;
+      const len = text.length;
+      const perChar = 400 / len;
+      let i = 0;
+      h2.textContent = "";
+      const step = () => {
+        h2.textContent = text.slice(0, ++i);
+        if (i < len) setTimeout(step, perChar);
+      };
+      step();
+    };
     if (!prefersReduced) {
       const tiltedCards = new WeakSet();
       const initCardTilt = () => {
@@ -1289,20 +1430,6 @@ const structuredData = JSON.stringify({
         new MutationObserver(() => initCardTilt()).observe(contentEl, { childList: true, subtree: true });
       }
 
-      const typed = new WeakSet();
-      const typeH2 = (h2) => {
-        const text = h2.textContent;
-        if (!text || !text.trim()) return;
-        const len = text.length;
-        const perChar = 400 / len;
-        let i = 0;
-        h2.textContent = "";
-        const step = () => {
-          h2.textContent = text.slice(0, ++i);
-          if (i < len) setTimeout(step, perChar);
-        };
-        step();
-      };
       document.querySelectorAll("section[id]").forEach((sec) => {
         new MutationObserver((_, obs) => {
           if (sec.classList.contains("section-revealed")) {

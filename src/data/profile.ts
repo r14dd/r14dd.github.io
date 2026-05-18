@@ -17,21 +17,9 @@ export type Teaching = {
 };
 
 
-export type SkillGroup = {
-  label: string;
-  tier?: 'core' | 'familiar';
-  items: string[];
-};
-
-export type SkillCategory = {
-  category: string;
-  groups: SkillGroup[];
-};
-
 export type Profile = {
   hero: {
     name: string;
-    title: string;
     tagline: string;
   };
   links: {
@@ -48,7 +36,10 @@ export type Profile = {
   }[];
   projects: Project[];
   teaching: Teaching[];
-  skills: SkillCategory[];
+  skills: {
+    category: string;
+    groups: { label: string; tier?: string; items: string[] }[];
+  }[];
   reading: {
     title: string;
     description: string;
@@ -63,9 +54,7 @@ export type Profile = {
 export const profile: Profile = {
   hero: {
     name: "Riad Mukhtarov",
-    title: "AI Engineer | Backend & Distributed Systems",
-    tagline:
-      "AI Engineer | Backend & Distributed Systems. I design and deploy scalable AI-powered systems, working closely with data scientists to bring models from experimentation to production. I specialize in high-load event-driven architectures, fault-tolerant microservices, and turning complex research into reliable, production-grade systems.",
+    tagline: "AI/Software Engineer with a foundation in distributed systems and experience teaching computer science.",
   },
 
   links: {
@@ -289,92 +278,61 @@ export const profile: Profile = {
     {
       category: "Programming Languages",
       groups: [
-        { label: "Core", tier: "core", items: ["Rust", "Python", "Go", "C", "Java"] },
-        { label: "Familiar", tier: "familiar", items: ["Scala", "JavaScript"] },
-      ],
-    },
-    {
-      category: "Systems & Linux",
-      groups: [
-        { label: "OS Internals", items: ["Process Management", "Memory Management", "File Systems (ext4, ZFS)", "System Calls"] },
-        { label: "Shell & Scripting", items: ["Bash/Zsh", "POSIX scripting", "Sed", "Awk", "Grep"] },
-        { label: "Performance & Monitoring", items: ["htop/btop", "strace", "lsof", "systemd", "TCP/IP", "DNS", "IPTables"] },
-        { label: "Security", items: ["SSH/OpenSSH", "GPG", "chmod/chown", "Firewalls"] },
+        { label: "Core", tier: "core", items: ["Rust", "Python", "Go", "C", "Scala"] },
       ],
     },
     {
       category: "Backend & Runtimes",
       groups: [
-        { label: "Rust Ecosystem", items: ["Axum", "Actix-web", "Rocket", "Ratatui"] },
-        { label: "Python Ecosystem", items: ["FastAPI", "Flask"] },
-        { label: "JVM & JS", items: ["Spring Boot", "Node.js"] },
+        { label: "", items: ["Axum", "Actix-web", "FastAPI", "Flask", "Spring Boot", "Node.js"] },
       ],
     },
     {
       category: "AI, ML & Agentic Systems",
       groups: [
-        { label: "Orchestration & Agents", items: ["LangGraph", "LangChain", "DeepAgents"] },
-        { label: "Inference & Performance", items: ["Ollama", "NVIDIA"] },
-        { label: "Data Science", items: ["Pandas", "NumPy"] },
-        { label: "Evaluation & Observability", items: ["LangFuse", "LangSmith"] },
-        { label: "AI Architecture", items: ["RAG"] },
+        { label: "", items: ["LangGraph", "LangChain", "Ollama", "LangSmith", "RAG"] },
       ],
     },
     {
       category: "Architecture & Concepts",
       groups: [
-        { label: "Distributed Systems", items: ["Microservices", "Event-Driven Architecture", "Idempotent Consumers"] },
-        { label: "Design Patterns", items: ["Clean Architecture", "Domain-Driven Design"] },
-        { label: "Methodologies", items: ["TDD", "BDD"] },
-        { label: "Infrastructure Patterns", items: ["Serverless", "Distributed Locking", "Consensus Algorithms"] },
+        { label: "", items: ["Microservices", "Event-Driven Architecture", "Clean Architecture", "Domain-Driven Design", "TDD", "BDD", "Distributed Locking", "Consensus Algorithms", "Serverless"] },
       ],
     },
     {
       category: "Communication Protocols & APIs",
       groups: [
-        { label: "Inter-service", items: ["gRPC", "Webhooks"] },
-        { label: "Web & Real-time", items: ["REST APIs", "GraphQL", "WebSockets", "WebRTC"] },
+        { label: "", items: ["gRPC", "RESTful APIs", "GraphQL", "WebSockets", "WebRTC", "Webhooks"] },
       ],
     },
     {
       category: "Messaging & Integration",
       groups: [
-        { label: "Distributed Logs & Streaming", items: ["Apache Kafka", "Azure Event Hubs"] },
-        { label: "Message Brokers", items: ["RabbitMQ", "Google Cloud Pub/Sub"] },
+        { label: "", items: ["Apache Kafka", "Azure Event Hubs", "RabbitMQ"] },
       ],
     },
     {
       category: "Databases & Persistence",
       groups: [
-        { label: "Relational", items: ["PostgreSQL", "MySQL", "CockroachDB", "SQLite"] },
-        { label: "NoSQL & In-Memory", items: ["MongoDB", "Cassandra", "Redis", "Memcached"] },
-        { label: "Vector & Search", items: ["Weaviate", "pgvector", "Elasticsearch"] },
-        { label: "Migration", items: ["Liquibase"] },
+        { label: "", items: ["PostgreSQL", "MySQL", "SQLite", "MongoDB", "Redis", "pgvector", "Elasticsearch"] },
       ],
     },
     {
       category: "Cloud, Infrastructure & DevOps",
       groups: [
-        { label: "Platforms", items: ["AWS", "GCP", "DigitalOcean", "Supabase"] },
-        { label: "Containerization", items: ["Docker", "OrbStack", "Kubernetes"] },
-        { label: "CI/CD", items: ["GitHub Actions", "GitLab CI/CD", "Jenkins"] },
+        { label: "", items: ["AWS", "GCP", "DigitalOcean", "Supabase", "Docker", "Kubernetes", "GitHub Actions", "GitLab CI/CD"] },
       ],
     },
     {
       category: "Testing & Quality Assurance",
       groups: [
-        { label: "Unit & Integration", items: ["Pytest", "Jest", "JUnit", "rstest"] },
-        { label: "Environment & E2E", items: ["Testcontainers", "Selenium", "Postman"] },
+        { label: "", items: ["Pytest", "Jest", "JUnit", "rstest", "Selenium", "Postman"] },
       ],
     },
     {
       category: "Developer Tooling & Ecosystem",
       groups: [
-        { label: "IDEs & Editors", items: ["VS Code", "JetBrains", "Emacs", "Zed"] },
-        { label: "Terminal & Shell", items: ["Ghostty", "Oh My Zsh"] },
-        { label: "Frontend & 3D", items: ["Astro", "React", "Three.js"] },
-        { label: "AI-Assisted Dev", items: ["Claude Code CLI"] },
-        { label: "Version Control", items: ["Git", "GitHub", "GitLab"] },
+        { label: "", items: ["VS Code", "JetBrains Suite", "Astro", "React", "Git"] },
       ],
     },
   ],

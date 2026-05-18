@@ -80,9 +80,7 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Риад Мухтаров",
-      title: "AI Engineer | Backend & Distributed Systems",
-      tagline:
-        "AI Engineer | Backend & Distributed Systems. Проектирую и развертываю масштабируемые системы на основе ИИ, тесно взаимодействуя с дата-сайентистами для вывода моделей из стадии экспериментов в продакшн. Специализируюсь на высоконагруженных event-driven архитектурах, отказоустойчивых микросервисах и переводе сложных исследований в надёжные production-системы.",
+      tagline: "AI/Software-инженер с основой в распределённых системах и опытом преподавания компьютерных наук.",
     },
     experience: [
       {
@@ -265,26 +263,6 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
     ],
-    skills: [
-      {
-        category: "Языки программирования",
-        items: [
-          "Java",
-          "Python",
-          "Rust",
-          "Go (базовый уровень)",
-          "JavaScript (базовый уровень)",
-          "Scala (базовый уровень)",
-          "C (базовый уровень)",
-        ],
-      },
-      { category: "Backend и фреймворки", items: profile.skills[1].items },
-      { category: "Архитектура и концепции", items: profile.skills[2].items },
-      { category: "Сообщения и интеграции", items: profile.skills[3].items },
-      { category: "Базы данных и хранение", items: profile.skills[4].items },
-      { category: "Облако и инфраструктура", items: profile.skills[5].items },
-      { category: "Тестирование и инструменты", items: profile.skills[6].items },
-    ],
     reading: {
       title: "Чтение",
       description:
@@ -336,9 +314,7 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Riad Muxtarov",
-      title: "AI Engineer | Backend & Distributed Systems",
-      tagline:
-        "AI Engineer | Backend & Distributed Systems. Miqyaslana bilən süni intellekt əsaslı sistemlər dizayn edib yerləşdirirəm, modelləri eksperimentdən istehsala çıxarmaq üçün data alimləri ilə sıx əməkdaşlıq edirəm. Yüksək yüklü event-driven arxitekturalarda, dayanıqlı mikroservislərdə və mürəkkəb tədqiqatları etibarlı production sistemlərə çevirməkdə ixtisaslaşıram.",
+      tagline: "Paylanmış sistemlər üzrə baza biliklərinə və kompüter elmləri tədrisi üzrə təcrübəsi olan Süni İntellekt/Proqram mühəndisi.",
     },
     experience: [
       {
@@ -521,26 +497,6 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
     ],
-    skills: [
-      {
-        category: "Proqramlaşdırma dilləri",
-        items: [
-          "Java",
-          "Python",
-          "Rust",
-          "Go (təməl)",
-          "C (təməl)",
-          "JavaScript (təməl)",
-          "Scala (təməl)",
-        ],
-      },
-      { category: "Backend və framework‑lər", items: profile.skills[1].items },
-      { category: "Arxitektura və konseptlər", items: profile.skills[2].items },
-      { category: "Messaging və inteqrasiya", items: profile.skills[3].items },
-      { category: "Verilənlər bazası", items: profile.skills[4].items },
-      { category: "Cloud və infrastruktur", items: profile.skills[5].items },
-      { category: "Test və alətlər", items: profile.skills[6].items },
-    ],
     reading: {
       title: "Oxu",
       description:
@@ -591,9 +547,7 @@ export const profiles: Record<string, I18nProfile> = {
     ...profile,
     hero: {
       ...profile.hero,
-      title: "AI Engineer | Backend & Distributed Systems",
-      tagline:
-        "AI Engineer | Backend & Distributed Systems. Diseño y despliego sistemas escalables impulsados por IA, trabajando estrechamente con científicos de datos para llevar modelos desde la experimentación hasta producción. Me especializo en arquitecturas event-driven de alta carga, microservicios tolerantes a fallos y en convertir investigaciones complejas en sistemas fiables listos para producción.",
+      tagline: "Ingeniero de AI/Software con base en sistemas distribuidos y experiencia enseñando informática.",
     },
     experience: [
       {
@@ -775,26 +729,6 @@ export const profiles: Record<string, I18nProfile> = {
           "Califiqué tareas y conduje sesiones de repaso",
         ],
       },
-    ],
-    skills: [
-      {
-        category: "Lenguajes de programación",
-        items: [
-          "Java",
-          "Python",
-          "Rust",
-          "Go (básico)",
-          "C (básico)",
-          "JavaScript (básico)",
-          "Scala (básico)",
-        ],
-      },
-      { category: "Backend y frameworks", items: profile.skills[1].items },
-      { category: "Arquitectura y conceptos", items: profile.skills[2].items },
-      { category: "Mensajería e integración", items: profile.skills[3].items },
-      { category: "Bases de datos y persistencia", items: profile.skills[4].items },
-      { category: "Cloud e infraestructura", items: profile.skills[5].items },
-      { category: "Testing y herramientas", items: profile.skills[6].items },
     ],
     reading: {
       title: "Lectura",
