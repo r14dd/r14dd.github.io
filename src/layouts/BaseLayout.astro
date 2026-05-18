@@ -1679,6 +1679,59 @@ const {
         margin: 0.7rem 0 0.4rem 0;
       }
 
+      .skill-group {
+        margin-top: 0.65rem;
+      }
+
+      .skill-tier-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        color: var(--muted);
+        margin-bottom: 0.35rem;
+        opacity: 0.75;
+      }
+
+      .skill-tier-label.tier-core {
+        color: rgba(var(--accent-rgb), 0.8);
+        opacity: 1;
+      }
+
+      .skill-pill.tier-core {
+        border-color: rgba(var(--accent-rgb), 0.35);
+        background: rgba(var(--accent-rgb), 0.07);
+        color: var(--text-soft);
+      }
+
+      .skill-pill.tier-core:hover {
+        border-color: rgba(var(--accent-rgb), 0.6);
+        background: rgba(var(--accent-rgb), 0.14);
+      }
+
+      .skill-pill.tier-familiar {
+        border-style: dashed;
+        opacity: 0.65;
+      }
+
+      .skill-pill.tier-familiar:hover {
+        opacity: 1;
+      }
+
+      .tech-logo {
+        width: 11px;
+        height: 11px;
+        flex-shrink: 0;
+        object-fit: contain;
+        filter: brightness(0) invert(0.75);
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      html.light .tech-logo {
+        filter: brightness(0) opacity(0.55);
+      }
+
       @media (prefers-reduced-motion: reduce) {
         h1 { animation: none; background-position: 0% center; }
         .ambient-blob { animation: none; }

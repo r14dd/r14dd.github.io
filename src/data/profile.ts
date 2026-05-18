@@ -17,6 +17,17 @@ export type Teaching = {
 };
 
 
+export type SkillGroup = {
+  label: string;
+  tier?: 'core' | 'familiar';
+  items: string[];
+};
+
+export type SkillCategory = {
+  category: string;
+  groups: SkillGroup[];
+};
+
 export type Profile = {
   hero: {
     name: string;
@@ -37,10 +48,7 @@ export type Profile = {
   }[];
   projects: Project[];
   teaching: Teaching[];
-  skills: {
-    category: string;
-    items: string[];
-  }[];
+  skills: SkillCategory[];
   reading: {
     title: string;
     description: string;
@@ -280,31 +288,94 @@ export const profile: Profile = {
   skills: [
     {
       category: "Programming Languages",
-      items: ["Java", "Python", "Rust", "Go (familiar)", "C (familiar)", "JavaScript (familiar)", "Scala (familiar)"],
+      groups: [
+        { label: "Core", tier: "core", items: ["Rust", "Python", "Go", "C", "Java"] },
+        { label: "Familiar", tier: "familiar", items: ["Scala", "JavaScript"] },
+      ],
     },
     {
-      category: "Backend & Frameworks",
-      items: ["Spring Boot", "Spring Security", "REST APIs", "JWT Authentication", "FastAPI", "Flask"],
+      category: "Systems & Linux",
+      groups: [
+        { label: "OS Internals", items: ["Process Management", "Memory Management", "File Systems (ext4, ZFS)", "System Calls"] },
+        { label: "Shell & Scripting", items: ["Bash/Zsh", "POSIX scripting", "Sed", "Awk", "Grep"] },
+        { label: "Performance & Monitoring", items: ["htop/btop", "strace", "lsof", "systemd", "TCP/IP", "DNS", "IPTables"] },
+        { label: "Security", items: ["SSH/OpenSSH", "GPG", "chmod/chown", "Firewalls"] },
+      ],
+    },
+    {
+      category: "Backend & Runtimes",
+      groups: [
+        { label: "Rust Ecosystem", items: ["Axum", "Actix-web", "Rocket", "Ratatui"] },
+        { label: "Python Ecosystem", items: ["FastAPI", "Flask"] },
+        { label: "JVM & JS", items: ["Spring Boot", "Node.js"] },
+      ],
+    },
+    {
+      category: "AI, ML & Agentic Systems",
+      groups: [
+        { label: "Orchestration & Agents", items: ["LangGraph", "LangChain", "DeepAgents"] },
+        { label: "Inference & Performance", items: ["Ollama", "NVIDIA"] },
+        { label: "Data Science", items: ["Pandas", "NumPy"] },
+        { label: "Evaluation & Observability", items: ["LangFuse", "LangSmith"] },
+        { label: "AI Architecture", items: ["RAG"] },
+      ],
     },
     {
       category: "Architecture & Concepts",
-      items: ["Microservices Architecture", "Event-Driven Systems", "Asynchronous Messaging", "Idempotent Consumers", "Distributed Systems"],
+      groups: [
+        { label: "Distributed Systems", items: ["Microservices", "Event-Driven Architecture", "Idempotent Consumers"] },
+        { label: "Design Patterns", items: ["Clean Architecture", "Domain-Driven Design"] },
+        { label: "Methodologies", items: ["TDD", "BDD"] },
+        { label: "Infrastructure Patterns", items: ["Serverless", "Distributed Locking", "Consensus Algorithms"] },
+      ],
+    },
+    {
+      category: "Communication Protocols & APIs",
+      groups: [
+        { label: "Inter-service", items: ["gRPC", "Webhooks"] },
+        { label: "Web & Real-time", items: ["REST APIs", "GraphQL", "WebSockets", "WebRTC"] },
+      ],
     },
     {
       category: "Messaging & Integration",
-      items: ["RabbitMQ", "AMQP", "Inter-Service Communication"],
+      groups: [
+        { label: "Distributed Logs & Streaming", items: ["Apache Kafka", "Azure Event Hubs"] },
+        { label: "Message Brokers", items: ["RabbitMQ", "Google Cloud Pub/Sub"] },
+      ],
     },
     {
       category: "Databases & Persistence",
-      items: ["PostgreSQL", "MySQL", "MongoDB", "JPA/Hibernate", "Liquibase", "SQL Query Design"],
+      groups: [
+        { label: "Relational", items: ["PostgreSQL", "MySQL", "CockroachDB", "SQLite"] },
+        { label: "NoSQL & In-Memory", items: ["MongoDB", "Cassandra", "Redis", "Memcached"] },
+        { label: "Vector & Search", items: ["Weaviate", "pgvector", "Elasticsearch"] },
+        { label: "Migration", items: ["Liquibase"] },
+      ],
     },
     {
-      category: "Cloud & Infrastructure",
-      items: ["AWS EC2", "Linux", "Docker", "Docker Compose", "Environment-Based Configuration", "SSH", "Networking Basics"],
+      category: "Cloud, Infrastructure & DevOps",
+      groups: [
+        { label: "Platforms", items: ["AWS", "GCP", "DigitalOcean", "Supabase"] },
+        { label: "Containerization", items: ["Docker", "OrbStack", "Kubernetes"] },
+        { label: "CI/CD", items: ["GitHub Actions", "GitLab CI/CD", "Jenkins"] },
+      ],
     },
     {
-      category: "Testing & Tooling",
-      items: ["JUnit", "Testcontainers", "Integration Testing", "Git", "GitHub", "CI/CD Basics"],
+      category: "Testing & Quality Assurance",
+      groups: [
+        { label: "Unit & Integration", items: ["Pytest", "Jest", "JUnit", "rstest"] },
+        { label: "Environment & E2E", items: ["Testcontainers", "Selenium", "Postman"] },
+      ],
+    },
+    {
+      category: "Developer Tooling & Ecosystem",
+      groups: [
+        { label: "IDEs & Editors", items: ["VS Code", "JetBrains", "Emacs", "Zed"] },
+        { label: "Terminal & Shell", items: ["Ghostty", "Oh My Zsh"] },
+        { label: "Frontend & 3D", items: ["Astro", "React", "Three.js"] },
+        { label: "AI-Assisted Dev", items: ["Claude Code CLI"] },
+        { label: "Version Control", items: ["Git", "GitHub", "GitLab"] },
+      ],
     },
   ],
   reading: {
