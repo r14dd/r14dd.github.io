@@ -2056,6 +2056,7 @@ const {
         document.body.classList.add("intro-ready");
         setTimeout(() => {
           document.body.classList.add("intro-done");
+          const isTouch = window.matchMedia('(hover: none)').matches;
           const revealObs = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
@@ -2063,7 +2064,10 @@ const {
                 revealObs.unobserve(entry.target);
               }
             });
-          }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+          }, {
+            threshold: isTouch ? 0.02 : 0.08,
+            rootMargin: isTouch ? '0px 0px 20px 0px' : '0px 0px -40px 0px'
+          });
           document.querySelectorAll('section').forEach((s) => revealObs.observe(s));
         }, 1000);
       });
