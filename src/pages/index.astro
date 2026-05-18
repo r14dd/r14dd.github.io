@@ -97,25 +97,18 @@ const structuredData = JSON.stringify({
     </div>
   </div>
 
-  <div class="mobile-bar">
-    <button class="hamburger" type="button" aria-label="Open menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="mobile-current" aria-live="polite">
-      {profile.labels.nav.experience}
+  <nav class="mobile-dock" aria-label="Page navigation">
+    <div class="dock-track">
+      <span class="dock-indicator" aria-hidden="true"></span>
+      <a href="#experience" class="dock-item">{profile.labels.nav.experience}</a>
+      <a href="#projects" class="dock-item">{profile.labels.nav.projects}</a>
+      <a href="#skills" class="dock-item">{profile.labels.nav.skills}</a>
+      <a href="#teaching" class="dock-item">{profile.labels.nav.teaching}</a>
+      <a href="#education" class="dock-item">{profile.labels.nav.education}</a>
+      <a href="#reading" class="dock-item">{profile.labels.nav.reading}</a>
+      <a href="#connect" class="dock-item">{profile.labels.nav.connect}</a>
     </div>
-  </div>
-  <div class="mobile-menu" aria-hidden="true">
-    <a href="#experience">{profile.labels.nav.experience}</a>
-    <a href="#projects">{profile.labels.nav.projects}</a>
-    <a href="#skills">{profile.labels.nav.skills}</a>
-    <a href="#teaching">{profile.labels.nav.teaching}</a>
-    <a href="#education">{profile.labels.nav.education}</a>
-    <a href="#reading">{profile.labels.nav.reading}</a>
-    <a href="#connect">{profile.labels.nav.connect}</a>
-  </div>
+  </nav>
 
   <aside class="side-nav">
     <span class="nav-pill" aria-hidden="true"></span>
@@ -575,10 +568,22 @@ const structuredData = JSON.stringify({
     window.addEventListener("hashchange", openFromHash);
     window.addEventListener("load", openFromHash);
 
-    /** @type {HTMLElement[]} */
     const sections = Array.from(document.querySelectorAll("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
-    const mobileCurrent = document.querySelector(".mobile-current");
+    const dockItems = Array.from(document.querySelectorAll(".dock-item"));
+    const dockTrack = document.querySelector(".dock-track");
+    const dockIndicator = document.querySelector(".dock-indicator");
+
+    const setDockActive = (id) => {
+      const activeItem = dockItems.find(item => item.getAttribute("href") === `#${id}`);
+      dockItems.forEach(item => item.classList.remove("active"));
+      if (!activeItem || !dockTrack || !dockIndicator) return;
+      activeItem.classList.add("active");
+      dockIndicator.style.width = activeItem.offsetWidth + "px";
+      dockIndicator.style.left = activeItem.offsetLeft + "px";
+      const itemCenter = activeItem.offsetLeft + activeItem.offsetWidth / 2;
+      dockTrack.scrollTo({ left: itemCenter - dockTrack.offsetWidth / 2, behavior: "smooth" });
+    };
 
     const setActiveLink = () => {
       const scrollPos = window.scrollY + 120;
@@ -586,25 +591,12 @@ const structuredData = JSON.stringify({
       sections.forEach((section) => {
         if (section.offsetTop <= scrollPos) current = section;
       });
-      if (
-        window.scrollY + window.innerHeight >=
-        document.body.scrollHeight - 4
-      ) {
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 4) {
         current = sections[sections.length - 1];
       }
       navLinks.forEach((link) => link.classList.remove("active"));
-      const active = navLinks.find(
-        (link) => link.getAttribute("href") === `#${current.id}`,
-      );
+      const active = navLinks.find(link => link.getAttribute("href") === `#${current.id}`);
       active?.classList.add("active");
-      if (mobileCurrent) {
-        const label =
-          active?.textContent ??
-          current.getAttribute("data-label") ??
-          current.id;
-        mobileCurrent.textContent = label;
-        mobileCurrent.classList.add("active");
-      }
       const pill = document.querySelector(".nav-pill");
       const sideNav = document.querySelector(".side-nav");
       if (pill && active && sideNav) {
@@ -613,6 +605,7 @@ const structuredData = JSON.stringify({
         pill.style.top = (linkRect.top - navRect.top + (linkRect.height - 26) / 2) + "px";
         pill.style.opacity = "1";
       }
+      setDockActive(current.id);
     };
 
     const updateProgress = () => {
@@ -632,14 +625,27 @@ const structuredData = JSON.stringify({
       links?.classList.toggle("blurred", shouldBlur);
     };
 
-    document.querySelectorAll(".side-nav a, .mobile-menu a").forEach((link) => {
+    const smoothScrollTo = (el, duration = 480) => {
+      const start = window.scrollY;
+      const end = el.getBoundingClientRect().top + window.scrollY - 24;
+      const startTime = performance.now();
+      const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+      const step = (now) => {
+        const elapsed = Math.min((now - startTime) / duration, 1);
+        window.scrollTo(0, start + (end - start) * easeOutQuart(elapsed));
+        if (elapsed < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    document.querySelectorAll(".side-nav a, .dock-item").forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         const id = link.getAttribute("href")?.replace("#", "");
         if (!id) return;
         const target = document.getElementById(id);
         if (!target) return;
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        smoothScrollTo(target);
         history.pushState(null, "", `#${id}`);
       });
     });
@@ -672,23 +678,6 @@ const structuredData = JSON.stringify({
         const card = btn.closest(".project-card");
         const sim = card?.querySelector(".sim-visual");
         sim?.classList.toggle("active");
-      });
-    });
-
-    const hamburger = document.querySelector(".hamburger");
-    const mobileMenu = document.querySelector(".mobile-menu");
-    hamburger?.addEventListener("click", () => {
-      mobileMenu?.classList.toggle("open");
-      mobileMenu?.setAttribute(
-        "aria-hidden",
-        mobileMenu.classList.contains("open") ? "false" : "true",
-      );
-    });
-
-    mobileMenu?.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        mobileMenu.classList.remove("open");
-        mobileMenu.setAttribute("aria-hidden", "true");
       });
     });
 
@@ -1137,7 +1126,7 @@ const structuredData = JSON.stringify({
       }
 
       const sideNav = document.querySelectorAll(".side-nav a");
-      const mobileNav = document.querySelectorAll(".mobile-menu a");
+      const dockNav = document.querySelectorAll(".dock-item");
       const labels = [
         data.labels.nav.experience,
         data.labels.nav.projects,
@@ -1150,7 +1139,7 @@ const structuredData = JSON.stringify({
       sideNav.forEach((link, idx) => {
         if (labels[idx]) link.textContent = labels[idx];
       });
-      mobileNav.forEach((link, idx) => {
+      dockNav.forEach((link, idx) => {
         if (labels[idx]) link.textContent = labels[idx];
       });
 

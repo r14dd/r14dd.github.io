@@ -157,7 +157,7 @@ const {
       .content,
       .side-nav,
       .side-links,
-      .mobile-bar,
+      .mobile-dock,
       .lang-switcher {
         transition: opacity 0.2s ease;
       }
@@ -165,7 +165,7 @@ const {
       body.lang-switching .content,
       body.lang-switching .side-nav,
       body.lang-switching .side-links,
-      body.lang-switching .mobile-bar,
+      body.lang-switching .mobile-dock,
       body.lang-switching .lang-switcher {
         opacity: 0;
         pointer-events: none;
@@ -285,7 +285,7 @@ const {
         position: absolute;
         top: calc(100% + 0.5rem);
         right: 0;
-        display: none;
+        display: flex;
         flex-direction: column;
         min-width: 180px;
         padding: 0.5rem;
@@ -294,11 +294,17 @@ const {
         border: 1px solid var(--overlay);
         backdrop-filter: blur(12px);
         box-shadow: 0 16px 40px var(--shadow);
+        opacity: 0;
+        transform: scale(0.92) translateY(-6px);
+        transform-origin: top right;
+        pointer-events: none;
+        transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
-      .lang-switcher.open .lang-menu,
       .lang-menu.open {
-        display: flex;
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        pointer-events: auto;
       }
 
       .lang-menu button {
@@ -659,82 +665,67 @@ const {
         transform: translateY(0);
       }
 
-      .mobile-bar {
+      .mobile-dock {
         display: none;
         position: fixed;
+        bottom: calc(1rem + env(safe-area-inset-bottom));
         left: 50%;
         transform: translateX(-50%);
-        bottom: calc(1rem + env(safe-area-inset-bottom));
         z-index: 12;
+        max-width: calc(100vw - 2rem);
         background: var(--surface);
-        border: 1px solid rgba(var(--accent-rgb), 0.1);
+        border: 1px solid rgba(var(--accent-rgb), 0.12);
         border-radius: 999px;
-        padding: 0.4rem 0.8rem;
-        align-items: center;
-        gap: 0.6rem;
-        backdrop-filter: blur(12px);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        overflow: hidden;
       }
 
-      .hamburger {
-        width: 36px;
-        height: 32px;
-        border: 1px solid var(--overlay-strong);
-        background: var(--surface);
-        border-radius: 8px;
+      .dock-track {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
         align-items: center;
-        justify-content: center;
-        padding: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 0.25rem 0.4rem;
+        position: relative;
       }
 
-      .hamburger span {
-        display: block;
-        width: 18px;
-        height: 2px;
-        background: var(--text);
-        opacity: 0.7;
-      }
-
-      .mobile-current {
-        font-size: 0.85rem;
-        color: var(--text-soft);
-        letter-spacing: 0.02em;
-        white-space: nowrap;
-      }
-
-      .mobile-current.active {
-        color: var(--accent);
-        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.35);
-      }
-
-      .mobile-menu {
+      .dock-track::-webkit-scrollbar {
         display: none;
-        position: fixed;
-        left: 1rem;
-        right: 1rem;
-        bottom: calc(4.2rem + env(safe-area-inset-bottom));
-        background: var(--surface-panel);
-        border: 1px solid var(--overlay);
-        border-radius: 10px;
-        padding: 0.8rem 1rem;
-        backdrop-filter: blur(10px);
-        z-index: 12;
       }
 
-      .mobile-menu.open {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        text-align: center;
+      .dock-indicator {
+        position: absolute;
+        top: 0.25rem;
+        bottom: 0.25rem;
+        left: 0;
+        width: 0;
+        background: rgba(var(--accent-rgb), 0.1);
+        border-radius: 999px;
+        pointer-events: none;
+        transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        will-change: left, width;
       }
 
-      .mobile-menu a {
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .dock-item {
+        font-size: 0.68rem;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        transition: color 0.2s ease;
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+        text-decoration: none;
+      }
+
+      .dock-item.active {
+        color: var(--text);
       }
 
       .scroll-rail {
@@ -1236,17 +1227,17 @@ const {
           display: none;
         }
 
-        .mobile-bar {
-          display: flex;
-          bottom: calc(2.2rem + env(safe-area-inset-bottom));
+        .mobile-dock {
+          display: block;
+          bottom: calc(1.2rem + env(safe-area-inset-bottom));
+        }
+
+        .cmd-trigger {
+          display: none;
         }
 
         .resume-preview {
           display: none;
-        }
-
-        .mobile-menu {
-          bottom: calc(5.4rem + env(safe-area-inset-bottom));
         }
 
         .hero-links {
@@ -1365,18 +1356,14 @@ const {
           margin-right: -0.6rem;
         }
 
-        .mobile-bar {
-          bottom: calc(1rem + env(safe-area-inset-bottom));
-        }
-
-        .mobile-menu {
-          bottom: calc(4rem + env(safe-area-inset-bottom));
+        .mobile-dock {
+          bottom: calc(0.75rem + env(safe-area-inset-bottom));
+          max-width: calc(100vw - 1.5rem);
         }
       }
 
       @media (min-width: 1170px) {
-        .mobile-bar,
-        .mobile-menu {
+        .mobile-dock {
           display: none !important;
         }
       }
@@ -1541,7 +1528,7 @@ const {
         100% { border-color: rgba(var(--accent-rgb), 0.08); }
       }
 
-      .mobile-menu a {
+      .dock-item {
         border-bottom: none;
         background-image: none;
       }
