@@ -1232,10 +1232,6 @@ const {
           bottom: calc(1.2rem + env(safe-area-inset-bottom));
         }
 
-        .cmd-trigger {
-          display: none;
-        }
-
         .resume-preview {
           display: none;
         }
@@ -1903,6 +1899,12 @@ const {
       .cmd-trigger:hover {
         border-color: rgba(var(--accent-rgb), 0.3);
         box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.15);
+      }
+
+      @media (max-width: 1169px) {
+        .cmd-trigger {
+          display: none;
+        }
       }
 
       /* Status badge */
