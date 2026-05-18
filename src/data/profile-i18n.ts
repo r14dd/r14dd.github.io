@@ -67,7 +67,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       introLead: "Who is",
       introTail: "",
-      connectTemplate: "Reach me at {email} or {phone}",
+      connectTemplate: "Reach me at {email}",
     },
     education: {
       title: "State University of New York at Buffalo — BS in Computer Science",
@@ -323,7 +323,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       introLead: "Кто такой",
       introTail: "",
-      connectTemplate: "Свяжитесь со мной: {email} или {phone}",
+      connectTemplate: "Свяжитесь со мной: {email}",
     },
     education: {
       title: "State University of New York at Buffalo — Бакалавр по направлению Компьютерные Науки",
@@ -579,7 +579,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       introLead: "",
       introTail: "kimdir",
-      connectTemplate: "Əlaqə: {email} və ya {phone}",
+      connectTemplate: "Əlaqə: {email}",
     },
     education: {
       title: "State University of New York at Buffalo — Kompüter elmləri üzrə Bakalavr",
@@ -834,7 +834,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       introLead: "Quién es",
       introTail: "",
-      connectTemplate: "Contáctame en {email} o {phone}",
+      connectTemplate: "Contáctame en {email}",
     },
     education: {
       title: "State University of New York at Buffalo — Ciencias de la Computación",

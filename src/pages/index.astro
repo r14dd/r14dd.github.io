@@ -886,15 +886,10 @@ const structuredData = JSON.stringify({
     const buildConnect = (data) => {
       const template =
         data.labels.connectTemplate || "Reach me at {email} or {phone}";
-      const html = template
-        .replace(
-          "{email}",
-          `<a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>`,
-        )
-        .replace(
-          "{phone}",
-          `<a href="tel:+994508998676" target="_blank" rel="noopener"> +994 50 899 8676</a>`,
-        );
+      const html = template.replace(
+        "{email}",
+        `<a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>`,
+      );
       return `
         <h2>${data.labels.headings.connect}</h2>
         <p class="connect-text">${html}</p>
