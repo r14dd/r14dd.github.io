@@ -21,12 +21,39 @@ const isKademlia = (name: string) =>
 const isRedis = (name: string) => name.includes("Redis");
 const skillIcons: Record<string, string> = {
   "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
-  "Backend & Frameworks": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+  "Systems & Linux": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7.5l2 2-2 2M9 11.5h2"/></svg>',
+  "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+  "AI, ML & Agentic Systems": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14"/><path d="M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M4.1 11.9l1.1-1.1M10.8 5.2l1.1-1.1"/></svg>',
   "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
-  "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
+  "Communication Protocols & APIs": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
+  "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M2 7l6 4 6-4"/></svg>',
   "Databases & Persistence": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="4" rx="5" ry="1.8"/><path d="M3 4v8c0 1 2.24 1.8 5 1.8s5-.8 5-1.8V4"/><path d="M3 8c0 1 2.24 1.8 5 1.8S13 9 13 8"/></svg>',
-  "Cloud & Infrastructure": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
-  "Testing & Tooling": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
+  "Cloud, Infrastructure & DevOps": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
+  "Testing & Quality Assurance": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><path d="M5.5 8l2 2 3-3"/></svg>',
+  "Developer Tooling & Ecosystem": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
+};
+
+const LOGO_MAP: Record<string, string> = {
+  'Rust': 'rust', 'Python': 'python', 'Go': 'go', 'C': 'c', 'Java': 'java',
+  'Scala': 'scala', 'JavaScript': 'javascript', 'FastAPI': 'fastapi', 'Flask': 'flask',
+  'Spring Boot': 'spring', 'Node.js': 'nodedotjs', 'Axum': 'rust',
+  'FastAPI': 'fastapi', 'Flask': 'flask',
+  'LangChain': 'langchain', 'Ollama': 'ollama', 'Pandas': 'pandas', 'NumPy': 'numpy',
+  'NVIDIA': 'nvidia', 'PostgreSQL': 'postgresql', 'MySQL': 'mysql',
+  'CockroachDB': 'cockroachlabs', 'SQLite': 'sqlite', 'MongoDB': 'mongodb',
+  'Cassandra': 'apachecassandra', 'Redis': 'redis', 'Memcached': 'memcached',
+  'Weaviate': 'weaviate', 'pgvector': 'postgresql', 'Elasticsearch': 'elasticsearch',
+  'Liquibase': 'liquibase', 'AWS': 'amazonaws', 'GCP': 'googlecloud',
+  'DigitalOcean': 'digitalocean', 'Supabase': 'supabase', 'Docker': 'docker',
+  'Kubernetes': 'kubernetes', 'GitHub Actions': 'githubactions', 'GitLab CI/CD': 'gitlab',
+  'Jenkins': 'jenkins', 'Pytest': 'pytest', 'Jest': 'jest', 'JUnit': 'junit5',
+  'rstest': 'rust', 'Testcontainers': 'testcontainers', 'Selenium': 'selenium',
+  'Postman': 'postman', 'VS Code': 'visualstudiocode', 'JetBrains': 'jetbrains',
+  'Emacs': 'gnuemacs', 'Zed': 'zed', 'Astro': 'astro', 'React': 'react',
+  'Three.js': 'threedotjs', 'Git': 'git', 'GitHub': 'github', 'GitLab': 'gitlab',
+  'GraphQL': 'graphql', 'Apache Kafka': 'apachekafka', 'RabbitMQ': 'rabbitmq',
+  'Azure Event Hubs': 'microsoftazure', 'Google Cloud Pub/Sub': 'googlecloud',
+  'Claude Code CLI': 'anthropic', 'NVIDIA OpenShell': 'nvidia',
 };
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.hero.tagline;
@@ -440,11 +467,22 @@ const structuredData = JSON.stringify({
               <span class="skill-icon" set:html={skillIcons[s.category] ?? ''} />
               <h3>{s.category}</h3>
             </div>
-            <div class="skills-pills">
-              {s.items.map((item) => (
-                <span class="skill-pill">{item}</span>
-              ))}
-            </div>
+            {s.groups.map((g) => (
+              <div class="skill-group">
+                <div class={`skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}`}>{g.label}</div>
+                <div class="skills-pills">
+                  {g.items.map((item) => {
+                    const slug = LOGO_MAP[item];
+                    return (
+                      <span class={`skill-pill${g.tier ? ` tier-${g.tier}` : ''}`}>
+                        {slug && <img class="tech-logo" src={`https://cdn.simpleicons.org/${slug}`} loading="lazy" alt="" onerror="this.style.display='none'" />}
+                        {item}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         ))
       }
@@ -899,16 +937,42 @@ const structuredData = JSON.stringify({
 
     const skillIconMap = {
       "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
-      "Backend & Frameworks": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+      "Systems & Linux": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7.5l2 2-2 2M9 11.5h2"/></svg>',
+      "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+      "AI, ML & Agentic Systems": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14"/><path d="M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M4.1 11.9l1.1-1.1M10.8 5.2l1.1-1.1"/></svg>',
       "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
-      "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
+      "Communication Protocols & APIs": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
+      "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M2 7l6 4 6-4"/></svg>',
       "Databases & Persistence": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="4" rx="5" ry="1.8"/><path d="M3 4v8c0 1 2.24 1.8 5 1.8s5-.8 5-1.8V4"/><path d="M3 8c0 1 2.24 1.8 5 1.8S13 9 13 8"/></svg>',
-      "Cloud & Infrastructure": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
-      "Testing & Tooling": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
+      "Cloud, Infrastructure & DevOps": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
+      "Testing & Quality Assurance": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><path d="M5.5 8l2 2 3-3"/></svg>',
+      "Developer Tooling & Ecosystem": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
     };
     const getSkillIcon = (category) => {
       const svg = skillIconMap[category] || '';
       return svg ? `<span class="skill-icon">${svg}</span>` : '';
+    };
+
+    const JS_LOGO_MAP = {
+      'Rust': 'rust', 'Python': 'python', 'Go': 'go', 'C': 'c', 'Java': 'java',
+      'Scala': 'scala', 'JavaScript': 'javascript', 'FastAPI': 'fastapi', 'Flask': 'flask',
+      'Spring Boot': 'spring', 'Node.js': 'nodedotjs', 'Axum': 'rust',
+      'LangChain': 'langchain', 'Ollama': 'ollama', 'Pandas': 'pandas', 'NumPy': 'numpy',
+      'NVIDIA': 'nvidia', 'PostgreSQL': 'postgresql', 'MySQL': 'mysql',
+      'CockroachDB': 'cockroachlabs', 'SQLite': 'sqlite', 'MongoDB': 'mongodb',
+      'Cassandra': 'apachecassandra', 'Redis': 'redis', 'Memcached': 'memcached',
+      'Weaviate': 'weaviate', 'pgvector': 'postgresql', 'Elasticsearch': 'elasticsearch',
+      'Liquibase': 'liquibase', 'AWS': 'amazonaws', 'GCP': 'googlecloud',
+      'DigitalOcean': 'digitalocean', 'Supabase': 'supabase', 'Docker': 'docker',
+      'Kubernetes': 'kubernetes', 'GitHub Actions': 'githubactions', 'GitLab CI/CD': 'gitlab',
+      'Jenkins': 'jenkins', 'Pytest': 'pytest', 'Jest': 'jest', 'JUnit': 'junit5',
+      'rstest': 'rust', 'Testcontainers': 'testcontainers', 'Selenium': 'selenium',
+      'Postman': 'postman', 'VS Code': 'visualstudiocode', 'JetBrains': 'jetbrains',
+      'Emacs': 'gnuemacs', 'Zed': 'zed', 'Astro': 'astro', 'React': 'react',
+      'Three.js': 'threedotjs', 'Git': 'git', 'GitHub': 'github', 'GitLab': 'gitlab',
+      'GraphQL': 'graphql', 'Apache Kafka': 'apachekafka', 'RabbitMQ': 'rabbitmq',
+      'Azure Event Hubs': 'microsoftazure', 'Google Cloud Pub/Sub': 'googlecloud',
+      'Claude Code CLI': 'anthropic',
     };
 
     const buildSkills = (data) => {
@@ -920,11 +984,20 @@ const structuredData = JSON.stringify({
               ${getSkillIcon(s.category)}
               <h3>${s.category}</h3>
             </div>
-            <div class="skills-pills">
-              ${s.items.map((item) => `<span class="skill-pill">${item}</span>`).join("")}
-            </div>
+            ${s.groups.map((g) => `
+              <div class="skill-group">
+                <div class="skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}">${g.label}</div>
+                <div class="skills-pills">
+                  ${g.items.map((item) => {
+                    const slug = JS_LOGO_MAP[item];
+                    const img = slug ? `<img class="tech-logo" src="https://cdn.simpleicons.org/${slug}" loading="lazy" alt="" onerror="this.style.display='none'" />` : '';
+                    return `<span class="skill-pill${g.tier ? ` tier-${g.tier}` : ''}">${img}${item}</span>`;
+                  }).join('')}
+                </div>
+              </div>
+            `).join('')}
           </div>
-        `).join("")}
+        `).join('')}
       `;
     };
 
