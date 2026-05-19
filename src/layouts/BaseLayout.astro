@@ -1543,7 +1543,7 @@ const {
       }
 
       @media (hover: hover) {
-        body, a, button, [role="button"], input, label, select, textarea { cursor: none; }
+        * { cursor: none !important; }
       }
 
       .cursor-dot {
@@ -1926,7 +1926,6 @@ const {
         background: rgba(var(--accent-rgb), 0.04);
         margin-bottom: 1rem;
         letter-spacing: 0.03em;
-        cursor: default;
         user-select: none;
       }
 
