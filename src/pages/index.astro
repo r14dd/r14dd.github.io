@@ -126,21 +126,13 @@ const structuredData = JSON.stringify({
 
   <aside class="side-links">
     <span class="mono">Links</span>
-    <div class="resume-hover">
-      <a href={profile.links.resume} target="_blank" rel="noopener"
-        >{profile.labels.links.resume}</a
-      >
-      <div class="resume-preview" aria-hidden="true">
-        <iframe title="Resume preview" data-src="/resume.pdf#page=1&zoom=page-width"
-        ></iframe>
-      </div>
-    </div>
     <a href={profile.links.linkedin} target="_blank" rel="noopener"
       >{profile.labels.links.linkedin}</a
     >
     <a href={profile.links.github} target="_blank" rel="noopener"
       >{profile.labels.links.github}</a
     >
+    <a href="mailto:riadmukh@gmail.com">Email</a>
   </aside>
 
   <main class="content" id="main-content">
@@ -153,36 +145,14 @@ const structuredData = JSON.stringify({
       <p class="hero-currently" id="hero-currently">
         <span class="currently-label">{profile.labels.currentlyLabel}</span> {profile.currently}
       </p>
-      <div class="hero-cta">
-        <a
-          class="cta-btn"
-          href={profile.links.resume}
-          target="_blank"
-          rel="noopener"
-          download
-        >
-          <svg class="cta-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M12 4v10m0 0l-4-4m4 4l4-4M5 20h14"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.4"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-          {profile.labels.links.resume}
-        </a>
-      </div>
       <div class="hero-links">
-        <a href={profile.links.resume} target="_blank" rel="noopener"
-          >{profile.labels.links.resume}</a
-        >
         <a href={profile.links.linkedin} target="_blank" rel="noopener"
           >{profile.labels.links.linkedin}</a
         >
         <a href={profile.links.github} target="_blank" rel="noopener"
           >{profile.labels.links.github}</a
         >
+        <a href="mailto:riadmukh@gmail.com">Email</a>
       </div>
       <div class="stats-strip" lang="en" aria-label="Key highlights">
         <div class="stat-item">
@@ -198,7 +168,6 @@ const structuredData = JSON.stringify({
           <span class="stat-label">Years shipping</span>
         </div>
       </div>
-      <a class="hero-email" href="mailto:riadmukh@gmail.com">riadmukh@gmail.com</a>
     </section>
 
     <section
@@ -206,7 +175,8 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.experience}
     >
-      <h2>{profile.labels.headings.experience}</h2>
+      <h2>{profile.labels.headings.experience}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       {
         profile.experience.map((exp) => (
           <div class="project-card">
@@ -226,6 +196,7 @@ const structuredData = JSON.stringify({
           </div>
         ))
       }
+      </div></div>
     </section>
 
     <section
@@ -233,7 +204,8 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.projects}
     >
-      <h2>{profile.labels.headings.projects}</h2>
+      <h2>{profile.labels.headings.projects}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       {
         profile.projects.map((p) => (
           <div class="project-card">
@@ -407,6 +379,7 @@ const structuredData = JSON.stringify({
           </div>
         ))
       }
+      </div></div>
     </section>
 
     <section
@@ -414,7 +387,8 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.skills}
     >
-      <h2>{profile.labels.headings.skills}</h2>
+      <h2>{profile.labels.headings.skills}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       {
         profile.skills.map((s) => (
           <div class="meta-card">
@@ -435,6 +409,7 @@ const structuredData = JSON.stringify({
           </div>
         ))
       }
+      </div></div>
     </section>
 
     <section
@@ -442,7 +417,8 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.teaching}
     >
-      <h2>{profile.labels.headings.teaching}</h2>
+      <h2>{profile.labels.headings.teaching}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       {
         profile.teaching.map((t) => (
           <div class="project-card">
@@ -455,6 +431,7 @@ const structuredData = JSON.stringify({
           </div>
         ))
       }
+      </div></div>
     </section>
 
     <section
@@ -462,7 +439,8 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.education}
     >
-      <h2>{profile.labels.headings.education}</h2>
+      <h2>{profile.labels.headings.education}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       <div class="meta-card">
         <h3>State University of New York at Buffalo — BS in Computer Science</h3>
         <div class="tech-meta">Aug 2020 – May 2024 · Buffalo, New York</div>
@@ -470,6 +448,7 @@ const structuredData = JSON.stringify({
           <li>Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors</li>
         </ul>
       </div>
+      </div></div>
     </section>
 
     <section
@@ -477,19 +456,21 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.recommendations}
     >
-      <h2>{profile.labels.headings.recommendations}</h2>
+      <h2>{profile.labels.headings.recommendations}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       {
         profile.testimonials.map((t) => (
-          <div class="testimonial-card">
+          <div class="project-card">
             <blockquote class="testimonial-quote">"{t.quote}"</blockquote>
             <div class="testimonial-author">
               <span class="testimonial-name">{t.name}</span>
               <span class="testimonial-meta">{t.title}</span>
-              <span class="testimonial-course">{t.course}{t.headTA ? " (Head TA)" : ""}</span>
+              <span class="testimonial-course">{t.course} — {t.headTA ? "Head Teaching Assistant" : "Teaching Assistant"}</span>
             </div>
           </div>
         ))
       }
+      </div></div>
     </section>
 
     <section
@@ -497,7 +478,8 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.reading}
     >
-      <h2>{profile.labels.headings.reading}</h2>
+      <h2>{profile.labels.headings.reading}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       <p>{profile.reading.description}</p>
       <div class="reading-inline">
         {
@@ -509,21 +491,24 @@ const structuredData = JSON.stringify({
           ))
         }
       </div>
+      </div></div>
     </section>
     <section
       id="connect"
       class="section-block"
       data-label={profile.labels.headings.connect}
     >
-      <h2>{profile.labels.headings.connect}</h2>
+      <h2>{profile.labels.headings.connect}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
+      <div class="section-body"><div class="section-body-inner">
       <p class="connect-text">
         Reach me at <a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>
       </p>
       <div class="hero-cta">
         <a class="cta-btn" href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
         <a class="cta-btn" href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
-        <a class="cta-btn" href={profile.links.resume} target="_blank" rel="noopener" download>{profile.labels.links.resume}</a>
+        <a class="cta-btn" href="mailto:riadmukh@gmail.com">Email</a>
       </div>
+      </div></div>
     </section>
   </main>
 
@@ -563,8 +548,6 @@ const structuredData = JSON.stringify({
   </div>
 
   <div class="easter-overlay" id="easter-overlay" aria-hidden="true"></div>
-  <div class="radial-menu-bg" id="radial-bg"></div>
-  <div class="radial-menu" id="radial-menu" aria-label="Quick actions"></div>
   <div class="gyro-toast" id="gyro-toast"></div>
 
   <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
@@ -607,6 +590,34 @@ const structuredData = JSON.stringify({
       }
     };
 
+    const wrapSectionFold = (sec) => {
+      const h2 = sec.querySelector('h2');
+      if (!h2 || sec.querySelector('.section-body')) return;
+      const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      chevron.setAttribute('viewBox', '0 0 16 16');
+      chevron.setAttribute('fill', 'none');
+      chevron.setAttribute('stroke', 'currentColor');
+      chevron.setAttribute('stroke-width', '2');
+      chevron.setAttribute('stroke-linecap', 'round');
+      chevron.setAttribute('stroke-linejoin', 'round');
+      chevron.classList.add('section-chevron');
+      chevron.innerHTML = '<path d="M6 3l5 5-5 5"/>';
+      h2.appendChild(chevron);
+      const body = document.createElement('div');
+      body.className = 'section-body';
+      const inner = document.createElement('div');
+      inner.className = 'section-body-inner';
+      let sibling = h2.nextSibling;
+      while (sibling) {
+        const next = sibling.nextSibling;
+        inner.appendChild(sibling);
+        sibling = next;
+      }
+      body.appendChild(inner);
+      sec.appendChild(body);
+      h2.addEventListener('click', () => sec.classList.toggle('section-open'));
+    };
+
     const i18nEl = document.getElementById("i18n-data");
     const I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {};
     const languageLabels = {
@@ -621,6 +632,7 @@ const structuredData = JSON.stringify({
       if (!id) return;
       const section = document.getElementById(id);
       if (!section) return;
+      if (section.classList.contains('section-block')) section.classList.add('section-open');
       section.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
@@ -696,6 +708,7 @@ const structuredData = JSON.stringify({
         if (!id) return;
         const target = document.getElementById(id);
         if (!target) return;
+        if (target.classList.contains('section-block')) target.classList.add('section-open');
         smoothScrollTo(target);
         history.pushState(null, "", `#${id}`);
       });
@@ -1068,12 +1081,12 @@ const structuredData = JSON.stringify({
       return `
         <h2>${data.labels.headings.recommendations}</h2>
         ${data.testimonials.map((t) => `
-          <div class="testimonial-card">
+          <div class="project-card">
             <blockquote class="testimonial-quote">"${t.quote}"</blockquote>
             <div class="testimonial-author">
               <span class="testimonial-name">${t.name}</span>
               <span class="testimonial-meta">${t.title}</span>
-              <span class="testimonial-course">${t.course}${t.headTA ? " (Head TA)" : ""}</span>
+              <span class="testimonial-course">${t.course} — ${t.headTA ? "Head Teaching Assistant" : "Teaching Assistant"}</span>
             </div>
           </div>
         `).join("")}
@@ -1093,7 +1106,7 @@ const structuredData = JSON.stringify({
         <div class="hero-cta">
           <a class="cta-btn" href="${data.links.linkedin}" target="_blank" rel="noopener">LinkedIn</a>
           <a class="cta-btn" href="${data.links.github}" target="_blank" rel="noopener">GitHub</a>
-          <a class="cta-btn" href="${data.links.resume}" target="_blank" rel="noopener" download>${data.labels.links.resume}</a>
+          <a class="cta-btn" href="mailto:riadmukh@gmail.com">Email</a>
         </div>
       `;
     };
@@ -1120,7 +1133,6 @@ const structuredData = JSON.stringify({
 
       const heroTitle = document.querySelector("main section h1");
       const heroLinks = document.querySelector(".hero-links");
-      const heroCta = document.querySelector(".hero-cta .cta-btn");
       const heroTaglines = document.querySelectorAll(".hero-tagline");
       if (heroTitle) weightReveal(heroTitle, data.hero.name);
       if (heroTaglines.length) {
@@ -1135,21 +1147,13 @@ const structuredData = JSON.stringify({
       if (heroLinks) {
         const links = heroLinks.querySelectorAll("a");
         if (links[0]) {
-          links[0].textContent = data.labels.links.resume;
-          links[0].setAttribute("href", data.links.resume);
+          links[0].textContent = data.labels.links.linkedin;
+          links[0].setAttribute("href", data.links.linkedin);
         }
         if (links[1]) {
-          links[1].textContent = data.labels.links.linkedin;
-          links[1].setAttribute("href", data.links.linkedin);
+          links[1].textContent = data.labels.links.github;
+          links[1].setAttribute("href", data.links.github);
         }
-        if (links[2]) {
-          links[2].textContent = data.labels.links.github;
-          links[2].setAttribute("href", data.links.github);
-        }
-      }
-      if (heroCta) {
-        heroCta.setAttribute("href", data.links.resume);
-        heroCta.innerHTML = `<svg class="cta-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0l-4-4m4 4l4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>${data.labels.links.resume}`;
       }
 
       const introPhrase = document.querySelector(".intro-phrase");
@@ -1206,9 +1210,8 @@ const structuredData = JSON.stringify({
       const sideLinks = document.querySelector(".side-links");
       if (sideLinks) {
         const links = sideLinks.querySelectorAll("a");
-        if (links[0]) links[0].textContent = data.labels.links.resume;
-        if (links[1]) links[1].textContent = data.labels.links.linkedin;
-        if (links[2]) links[2].textContent = data.labels.links.github;
+        if (links[0]) links[0].textContent = data.labels.links.linkedin;
+        if (links[1]) links[1].textContent = data.labels.links.github;
       }
 
       const sideNav = document.querySelectorAll(".side-nav a");
@@ -1249,7 +1252,9 @@ const structuredData = JSON.stringify({
       if (connectSection) connectSection.innerHTML = buildConnect(data);
 
       [expSection, projSection, teachSection, eduSection, skillsSection, recsSection, readSection, connectSection].forEach(sec => {
-        if (!sec?.classList.contains('section-revealed')) return;
+        if (!sec) return;
+        wrapSectionFold(sec);
+        if (!sec.classList.contains('section-revealed')) return;
         const h2 = sec.querySelector('h2');
         if (h2) typeH2(h2);
       });
@@ -1358,17 +1363,6 @@ const structuredData = JSON.stringify({
     });
     updateThemeIcon();
 
-    // Lazy-load resume iframe
-    const resumeHover = document.querySelector('.resume-hover');
-    const resumeIframe = resumeHover?.querySelector('iframe');
-    let iframeLoaded = false;
-    resumeHover?.addEventListener('mouseenter', () => {
-      if (!iframeLoaded && resumeIframe && resumeIframe.dataset.src) {
-        resumeIframe.src = resumeIframe.dataset.src;
-        iframeLoaded = true;
-      }
-    });
-
     // Toast
     const showToast = (msg) => {
       const toast = document.getElementById('toast');
@@ -1410,26 +1404,28 @@ const structuredData = JSON.stringify({
         { group: 'Navigate', label: nav.reading,    icon: 'nav',    action: () => scrollCmd('reading')    },
         { group: 'Navigate', label: nav.connect,    icon: 'nav',    action: () => scrollCmd('connect')    },
         ...projects,
-        { group: 'Links',    label: 'Resume',        icon: 'link',   action: () => { window.open(links.resume, '_blank'); closeCmd(); } },
         { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open('https://linkedin.com/in/riadmukhtarov', '_blank'); closeCmd(); } },
         { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open('https://github.com/r14dd', '_blank'); closeCmd(); } },
         { group: 'Actions',  label: 'Toggle theme',  icon: 'action', action: () => { document.getElementById('theme-toggle')?.click(); closeCmd(); } },
         { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText('riadmukh@gmail.com').then(() => showToast('Email copied')); closeCmd(); } },
-        { group: 'Actions',  label: 'Download résumé', icon: 'action', action: () => { const a = document.createElement('a'); a.href = links.resume; a.download = ''; a.click(); closeCmd(); } },
         { group: 'Actions',  label: 'Keyboard shortcuts', icon: 'action', action: () => { closeCmd(); openKbd(); } },
       ];
     };
 
     const scrollCmd = (id) => {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const sec = document.getElementById(id);
+      if (sec?.classList.contains('section-block')) sec.classList.add('section-open');
+      sec?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       closeCmd();
     };
 
     const flashProject = (name) => {
       closeCmd();
+      const projSec = document.getElementById('projects');
+      if (projSec) projSec.classList.add('section-open');
       const card = Array.from(document.querySelectorAll('#projects .project-card'))
         .find((c) => c.querySelector('h3')?.textContent?.trim() === name);
-      if (!card) { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      if (!card) { projSec?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
       card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       card.classList.remove('cmd-flash');
       void card.offsetWidth;
@@ -1693,46 +1689,20 @@ const structuredData = JSON.stringify({
     const typed = new WeakSet();
     const typeH2 = (h2) => {
       if (prefersReduced) return;
-      const text = h2.textContent;
-      if (!text || !text.trim()) return;
+      const textNode = Array.from(h2.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
+      if (!textNode) return;
+      const text = textNode.textContent;
       const len = text.length;
       const perChar = 400 / len;
       let i = 0;
-      h2.textContent = "";
+      textNode.textContent = "";
       const step = () => {
-        h2.textContent = text.slice(0, ++i);
+        textNode.textContent = text.slice(0, ++i);
         if (i < len) setTimeout(step, perChar);
       };
       step();
     };
     if (!prefersReduced) {
-      const tiltedCards = new WeakSet();
-      const initCardTilt = () => {
-        document.querySelectorAll(".project-card, .meta-card").forEach((card) => {
-          if (tiltedCards.has(card)) return;
-          tiltedCards.add(card);
-          card.addEventListener("mousemove", (e) => {
-            card.style.transition = "background 0.3s ease, border-color 0.3s ease";
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -4;
-            const rotateY = ((x - centerX) / centerX) * 4;
-            card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            card.style.setProperty("--spot-x", `${x}px`);
-            card.style.setProperty("--spot-y", `${y}px`);
-          });
-          card.addEventListener("mouseleave", () => {
-            card.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, border-color 0.3s ease";
-            card.style.transform = "";
-            setTimeout(() => { card.style.transition = ""; }, 650);
-          });
-        });
-      };
-      initCardTilt();
-
       const simObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
@@ -1753,40 +1723,7 @@ const structuredData = JSON.stringify({
 
       const contentEl = document.querySelector(".content");
       if (contentEl) {
-        new MutationObserver(() => { initCardTilt(); observeSims(); }).observe(contentEl, { childList: true, subtree: true });
-      }
-
-      if (window.matchMedia('(hover: none)').matches) {
-        const touchTiltedCards = new WeakSet();
-        const initTouchTilt = () => {
-          document.querySelectorAll(".project-card, .meta-card").forEach((card) => {
-            if (touchTiltedCards.has(card)) return;
-            touchTiltedCards.add(card);
-            card.addEventListener("touchmove", (e) => {
-              const touch = e.touches[0];
-              const rect = card.getBoundingClientRect();
-              const x = touch.clientX - rect.left;
-              const y = touch.clientY - rect.top;
-              const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -4;
-              const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 4;
-              card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-              card.style.setProperty("--spot-x", `${x}px`);
-              card.style.setProperty("--spot-y", `${y}px`);
-            }, { passive: true });
-            card.addEventListener("touchend", () => {
-              card.style.transition = "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, border-color 0.3s ease";
-              card.style.transform = "";
-              setTimeout(() => { card.style.transition = ""; }, 650);
-            }, { passive: true });
-            card.addEventListener("touchcancel", () => {
-              card.style.transform = "";
-            }, { passive: true });
-          });
-        };
-        initTouchTilt();
-        if (contentEl) {
-          new MutationObserver(() => initTouchTilt()).observe(contentEl, { childList: true, subtree: true });
-        }
+        new MutationObserver(() => { observeSims(); }).observe(contentEl, { childList: true, subtree: true });
       }
 
       document.querySelectorAll("section[id]").forEach((sec) => {
@@ -2009,86 +1946,6 @@ const structuredData = JSON.stringify({
         }
       }
 
-      // Long-press radial menu
-      {
-        const radialMenu = document.getElementById('radial-menu');
-        const radialBg = document.getElementById('radial-bg');
-        if (radialMenu && 'ontouchstart' in window) {
-          let pressTimer = null;
-          let radialOpen = false;
-          const RADIUS = 70;
-          const ACTIONS = [
-            { label: 'Search', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>', fn: () => openCmd() },
-            { label: 'Theme', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M8 3v10"/><path d="M8 3a5 5 0 010 10"/></svg>', fn: () => document.getElementById('theme-toggle')?.click() },
-            { label: 'Top', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 13V3M4 6l4-3 4 3"/></svg>', fn: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
-            { label: 'Random', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h4l2 4 2-8h4"/></svg>', fn: () => { const ps = currentProfile?.projects || I18N.en.projects || []; const p = ps[Math.floor(Math.random()*ps.length)]; if(p){ const c = Array.from(document.querySelectorAll("#projects .project-card")).find(c=>c.querySelector("h3")?.textContent?.trim()===p.name); if(c){c.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>openProject(p,c),500);}} } },
-            { label: 'Share', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8v5a1 1 0 001 1h6a1 1 0 001-1V8M8 2v8M5 5l3-3 3 3"/></svg>', fn: () => { if(navigator.share) navigator.share({title:document.title,url:location.href}).catch(()=>{}); else { navigator.clipboard?.writeText(location.href); showToast('Link copied'); } } },
-          ];
-
-          const openRadial = (cx, cy) => {
-            radialOpen = true;
-            radialMenu.innerHTML = '<div class="radial-center"></div>';
-            radialMenu.style.left = cx + 'px';
-            radialMenu.style.top = cy + 'px';
-            const angleStep = (2 * Math.PI) / ACTIONS.length;
-            const startAngle = -Math.PI / 2;
-            ACTIONS.forEach((a, i) => {
-              const angle = startAngle + i * angleStep;
-              const x = Math.cos(angle) * RADIUS;
-              const y = Math.sin(angle) * RADIUS;
-              const btn = document.createElement('button');
-              btn.className = 'radial-item';
-              btn.setAttribute('type', 'button');
-              btn.setAttribute('aria-label', a.label);
-              btn.style.left = x + 'px';
-              btn.style.top = y + 'px';
-              btn.style.transitionDelay = (i * 0.035) + 's';
-              btn.innerHTML = a.icon + `<span class="radial-label">${a.label}</span>`;
-              btn.addEventListener('click', (e) => { e.stopPropagation(); closeRadial(); a.fn(); });
-              radialMenu.appendChild(btn);
-            });
-            requestAnimationFrame(() => {
-              radialMenu.classList.add('open');
-              radialBg.classList.add('open');
-            });
-          };
-
-          const closeRadial = () => {
-            radialOpen = false;
-            radialMenu.classList.remove('open');
-            radialBg.classList.remove('open');
-          };
-
-          radialBg.addEventListener('click', closeRadial);
-
-          let touchStartX = 0, touchStartY = 0;
-          document.addEventListener('touchstart', (e) => {
-            if (radialOpen || cmdOpen || projOpen || kbdOpen) return;
-            if (e.target.closest('a, button, input, .cmd-palette, .proj-modal, .kbd-overlay, .mobile-dock, .lang-menu, .radial-menu')) return;
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            pressTimer = setTimeout(() => {
-              openRadial(touchStartX, touchStartY);
-              if (navigator.vibrate) navigator.vibrate(20);
-            }, 500);
-          }, { passive: true });
-
-          document.addEventListener('touchmove', (e) => {
-            if (pressTimer) {
-              const dx = e.touches[0].clientX - touchStartX;
-              const dy = e.touches[0].clientY - touchStartY;
-              if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-                clearTimeout(pressTimer);
-                pressTimer = null;
-              }
-            }
-          }, { passive: true });
-
-          document.addEventListener('touchend', () => {
-            if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
-          }, { passive: true });
-        }
-      }
 
       // Pinch-to-zoom on sim visuals (inside project modal)
       {
