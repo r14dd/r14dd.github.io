@@ -16,12 +16,21 @@ export type Teaching = {
   bullets: string[];
 };
 
+export type Testimonial = {
+  name: string;
+  title: string;
+  course: string;
+  headTA?: boolean;
+  quote: string;
+};
 
 export type Profile = {
   hero: {
     name: string;
     tagline: string;
   };
+  about: string;
+  currently: string;
   links: {
     resume: string;
     linkedin: string;
@@ -40,6 +49,7 @@ export type Profile = {
     category: string;
     groups: { label: string; tier?: string; items: string[] }[];
   }[];
+  testimonials: Testimonial[];
   reading: {
     title: string;
     description: string;
@@ -56,6 +66,10 @@ export const profile: Profile = {
     name: "Riad Mukhtarov",
     tagline: "AI/Software Engineer with a foundation in distributed systems and experience teaching computer science.",
   },
+
+  about: "I build software and AI systems, mostly in Rust and Python. Before that, I taught computer science at State University of New York at Buffalo for two years. It shaped how I think about systems and how I explain them. I like complex infrastructure problems and clean abstractions.",
+
+  currently: "Building AI systems at ABB and leading dev at EYP.",
 
   links: {
     resume: "/resume.pdf",
@@ -130,7 +144,7 @@ export const profile: Profile = {
         "AWS EC2",
       ],
       impact:
-        "Impact: Designed and deployed an end-to-end transaction monitoring pipeline. Applied Clean Architecture and asynchronous processing via RabbitMQ, ensuring strong data consistency and protection against duplication (idempotency).",
+        "End-to-end transaction monitoring pipeline with event-driven scoring, async processing via RabbitMQ, and idempotent data handling.",
       date: "Jan 2026",
       bullets: [
         "Designed event-driven architecture for scoring, notifications, and reporting",
@@ -145,7 +159,7 @@ export const profile: Profile = {
     {
       name: "FinFlow — Wallet API",
       tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL", "JPA"],
-      impact: "Impact: Secured wallet API with JWT auth, guarded endpoints, and verified access flows.",
+      impact: "Secured wallet API with JWT auth, guarded endpoints, and stateless session management.",
       date: "Jan 2026",
       bullets: [
         "Implemented secure authentication and authorization using JWT-based stateless sessions",
@@ -167,7 +181,7 @@ export const profile: Profile = {
         "Low Latency",
       ],
       impact:
-        "Impact: Redesigned a distributed Redis cache into a two-layer TTL-aware model, removing stale-data inconsistency while preserving low-latency behavior.",
+        "Two-layer TTL-aware cache eliminating stale-data inconsistency while preserving low-latency access.",
       date: "Dec 2025",
       bullets: [
         "Replaced a monolithic cache with two layers: key-subkey to id mapping and id to value storage",
@@ -179,7 +193,7 @@ export const profile: Profile = {
     {
       name: "Minimalist Portfolio",
       tech: ["Astro", "TypeScript", "CSS"],
-      impact: "Impact: Built a premium, responsive portfolio with clear hierarchy and accessibility-first motion.",
+      impact: "Responsive portfolio with strong typographic hierarchy, smooth animations, and accessibility-first design.",
       date: "Jan 2026",
       bullets: [
         "Designed a minimalist layout with strong typographic hierarchy and readable spacing",
@@ -194,7 +208,7 @@ export const profile: Profile = {
       name: "Raft-Based Consensus Algorithm",
       tech: ["Go", "UDP", "Protobuf"],
       impact:
-        "Impact: Implemented Raft consensus to preserve consistency under failures, focusing on leader election, log replication, and fault tolerance.",
+        "Raft consensus preserving consistency under node failures via leader election and log replication.",
       date: "May 2024",
       bullets: [
         "Implemented Raft consensus with leader election, log replication, and fault tolerance",
@@ -205,7 +219,7 @@ export const profile: Profile = {
       name: "Distributed Hash Table (Kademlia)",
       tech: ["Go", "TCP", "Protobuf"],
       impact:
-        "Impact: Built a Kademlia-based DHT for resilient peer discovery and O(log n) lookups in dynamic networks.",
+        "Kademlia DHT for resilient peer discovery and O(log n) lookups in dynamic networks.",
       date: "Feb 2024",
       bullets: [
         "Implemented a peer-to-peer distributed storage system using Kademlia routing",
@@ -278,25 +292,19 @@ export const profile: Profile = {
     {
       category: "Programming Languages",
       groups: [
-        { label: "Core", tier: "core", items: ["Rust", "Python", "Go", "C", "Scala"] },
+        { label: "Core", tier: "core", items: ["Rust", "Python", "Go", "C"] },
       ],
     },
     {
       category: "Backend & Runtimes",
       groups: [
-        { label: "", items: ["Axum", "Actix-web", "FastAPI", "Flask", "Spring Boot", "Node.js"] },
+        { label: "", items: ["Axum", "Actix-web", "FastAPI", "Flask"] },
       ],
     },
     {
       category: "AI, ML & Agentic Systems",
       groups: [
         { label: "", items: ["LangGraph", "LangChain", "Ollama", "LangSmith", "RAG"] },
-      ],
-    },
-    {
-      category: "Architecture & Concepts",
-      groups: [
-        { label: "", items: ["Microservices", "Event-Driven Architecture", "Clean Architecture", "Domain-Driven Design", "TDD", "BDD", "Distributed Locking", "Consensus Algorithms", "Serverless"] },
       ],
     },
     {
@@ -308,32 +316,65 @@ export const profile: Profile = {
     {
       category: "Messaging & Integration",
       groups: [
-        { label: "", items: ["Apache Kafka", "Azure Event Hubs", "RabbitMQ"] },
+        { label: "", items: ["Apache Kafka", "RabbitMQ"] },
       ],
     },
     {
       category: "Databases & Persistence",
       groups: [
-        { label: "", items: ["PostgreSQL", "MySQL", "SQLite", "MongoDB", "Redis", "pgvector", "Elasticsearch"] },
+        { label: "", items: ["PostgreSQL", "MySQL", "SQLite", "MongoDB", "Redis", "pgvector"] },
       ],
     },
     {
       category: "Cloud, Infrastructure & DevOps",
       groups: [
-        { label: "", items: ["AWS", "GCP", "DigitalOcean", "Supabase", "Docker", "Kubernetes", "GitHub Actions", "GitLab CI/CD"] },
+        { label: "", items: ["AWS", "Supabase", "Docker", "Kubernetes", "GitHub Actions", "GitLab CI/CD"] },
       ],
     },
     {
       category: "Testing & Quality Assurance",
       groups: [
-        { label: "", items: ["Pytest", "Jest", "JUnit", "rstest", "Selenium", "Postman"] },
+        { label: "", items: ["Pytest", "rstest", "Selenium", "Postman", "Integration Testing"] },
       ],
     },
+  ],
+  testimonials: [
     {
-      category: "Developer Tooling & Ecosystem",
-      groups: [
-        { label: "", items: ["VS Code", "JetBrains Suite", "Astro", "React", "Git"] },
-      ],
+      name: "Oliver Kennedy",
+      title: "Associate Professor, University at Buffalo",
+      course: "CSE250 — Data Structures",
+      headTA: true,
+      quote: "Put him into a Project Manager/Team Lead role, and I guarantee to you that he will shine.",
+    },
+    {
+      name: "Jesse Hartloff",
+      title: "University at Buffalo",
+      course: "CSE312",
+      quote: "He not only demonstrated a great technical understanding of the content but was able to explain these concepts in a simple manner to students who were struggling to apply the material.",
+    },
+    {
+      name: "Carl Alphonce",
+      title: "Professor of Teaching, University at Buffalo",
+      course: "CSE306 — Software Quality in Practice",
+      quote: "He was very responsive to requests, professional in all his interactions with students and course staff, and technically competent in all the tools and processes covered in the course.",
+    },
+    {
+      name: "Nasrin Akhter",
+      title: "Assistant Professor of Teaching, University at Buffalo",
+      course: "CSE191 — Discrete Structures",
+      quote: "I was impressed by his strong work ethic, positive attitude, professionalism, and dedication. He proved himself to be an organized, efficient, and hardworking TA.",
+    },
+    {
+      name: "Sean Mackay, PhD",
+      title: "Assistant Professor of Computer Science, University of Oklahoma",
+      course: "CSE115 — Introduction to Computer Science",
+      quote: "Riad is one of the best individuals I have ever had the opportunity to work with. His ability to communicate complex concepts to a range of skill levels continually impressed me.",
+    },
+    {
+      name: "Farshad Ghanei",
+      title: "Associate Teaching Professor, Illinois Institute of Technology",
+      course: "CSE341 — Computer Organization",
+      quote: "I attest to Riad's work ethics, skill, performance, and communication. I do not hesitate to recommend Riad to any employer.",
     },
   ],
   reading: {
@@ -342,24 +383,20 @@ export const profile: Profile = {
       "I’ve been reading the writers below for the past 3–4 years; their narrative structure, human behavior under constraints, and ambiguity are useful lenses for modeling real‑world problems.",
     items: [
       {
-        author: "Erich Maria Remarque *",
-        quote: "We become not as we want to be, but as we are.",
+        author: "Erich Maria Remarque",
+        quote: "Life did not intend to make us perfect. Whoever is perfect belongs in a museum.",
       },
       {
         author: "Mikhail Bulgakov",
-        quote: "Manuscripts don't burn.",
-      },
-      {
-        author: "Charlotte Brontë",
-        quote: "I am no bird; and no net ensnares me.",
+        quote: "Everything will turn out right, the world is built on that.",
       },
       {
         author: "Chuck Palahniuk",
-        quote: "The future will be better tomorrow.",
+        quote: "We all die. The goal isn't to live forever, the goal is to create something that will.",
       },
       {
         author: "Émile Zola",
-        quote: "Truth is on the march, and nothing will stop it.",
+        quote: "The artist is nothing without the gift, but the gift is nothing without work.",
       },
     ],
   },

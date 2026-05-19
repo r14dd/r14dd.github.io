@@ -20,13 +20,11 @@ const skillIcons: Record<string, string> = {
   "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
   "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
   "AI, ML & Agentic Systems": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14"/><path d="M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M4.1 11.9l1.1-1.1M10.8 5.2l1.1-1.1"/></svg>',
-  "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
   "Communication Protocols & APIs": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
   "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M2 7l6 4 6-4"/></svg>',
   "Databases & Persistence": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="4" rx="5" ry="1.8"/><path d="M3 4v8c0 1 2.24 1.8 5 1.8s5-.8 5-1.8V4"/><path d="M3 8c0 1 2.24 1.8 5 1.8S13 9 13 8"/></svg>',
   "Cloud, Infrastructure & DevOps": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
   "Testing & Quality Assurance": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><path d="M5.5 8l2 2 3-3"/></svg>',
-  "Developer Tooling & Ecosystem": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
 };
 
 const stripParens = (item: string): string => item.replace(/\s*\([^)]*\)/g, '').trim();
@@ -52,10 +50,6 @@ const structuredData = JSON.stringify({
   structuredData={structuredData}
   lang="en"
 >
-  <div class="scroll-rail">
-    <div class="scroll-progress" id="scroll-progress"></div>
-  </div>
-
   <script
     type="application/json"
     id="i18n-data"
@@ -97,14 +91,22 @@ const structuredData = JSON.stringify({
     </div>
   </div>
 
+  <div class="pull-indicator" id="pull-indicator" aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 2v12M5 5l3-3 3 3"/></svg>
+  </div>
+
   <nav class="mobile-dock" aria-label="Page navigation">
     <div class="dock-track">
       <span class="dock-indicator" aria-hidden="true"></span>
+      <button class="dock-search" id="dock-search" type="button" aria-label="Search">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
+      </button>
       <a href="#experience" class="dock-item">{profile.labels.nav.experience}</a>
       <a href="#projects" class="dock-item">{profile.labels.nav.projects}</a>
       <a href="#skills" class="dock-item">{profile.labels.nav.skills}</a>
       <a href="#teaching" class="dock-item">{profile.labels.nav.teaching}</a>
       <a href="#education" class="dock-item">{profile.labels.nav.education}</a>
+      <a href="#recommendations" class="dock-item">{profile.labels.nav.recommendations}</a>
       <a href="#reading" class="dock-item">{profile.labels.nav.reading}</a>
       <a href="#connect" class="dock-item">{profile.labels.nav.connect}</a>
     </div>
@@ -117,6 +119,7 @@ const structuredData = JSON.stringify({
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#teaching">{profile.labels.nav.teaching}</a>
     <a href="#education">{profile.labels.nav.education}</a>
+    <a href="#recommendations">{profile.labels.nav.recommendations}</a>
     <a href="#reading">{profile.labels.nav.reading}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
   </aside>
@@ -145,6 +148,10 @@ const structuredData = JSON.stringify({
       <h1>{profile.hero.name}</h1>
       <p class="hero-tagline">
         {profile.hero.tagline}
+      </p>
+      <p class="hero-about" id="hero-about">{profile.about}</p>
+      <p class="hero-currently" id="hero-currently">
+        <span class="currently-label">{profile.labels.currentlyLabel}</span> {profile.currently}
       </p>
       <div class="hero-cta">
         <a
@@ -191,6 +198,7 @@ const structuredData = JSON.stringify({
           <span class="stat-label">Years shipping</span>
         </div>
       </div>
+      <a class="hero-email" href="mailto:riadmukh@gmail.com">riadmukh@gmail.com</a>
     </section>
 
     <section
@@ -208,11 +216,13 @@ const structuredData = JSON.stringify({
               <small class="exp-meta">{exp.period}</small>
               <small class="exp-meta">{exp.location}</small>
             </div>
-            <ul>
-              {exp.bullets.map((b) => (
-                <li>{b}</li>
-              ))}
-            </ul>
+            {exp.bullets.length > 0 && (
+              <ul>
+                {exp.bullets.map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            )}
           </div>
         ))
       }
@@ -463,6 +473,26 @@ const structuredData = JSON.stringify({
     </section>
 
     <section
+      id="recommendations"
+      class="section-block"
+      data-label={profile.labels.headings.recommendations}
+    >
+      <h2>{profile.labels.headings.recommendations}</h2>
+      {
+        profile.testimonials.map((t) => (
+          <div class="testimonial-card">
+            <blockquote class="testimonial-quote">"{t.quote}"</blockquote>
+            <div class="testimonial-author">
+              <span class="testimonial-name">{t.name}</span>
+              <span class="testimonial-meta">{t.title}</span>
+              <span class="testimonial-course">{t.course}{t.headTA ? " (Head TA)" : ""}</span>
+            </div>
+          </div>
+        ))
+      }
+    </section>
+
+    <section
       id="reading"
       class="section-block"
       data-label={profile.labels.headings.reading}
@@ -512,8 +542,37 @@ const structuredData = JSON.stringify({
     <div class="cmd-footer">
       <span class="cmd-footer-hint"><span class="cmd-kbd">↑↓</span> navigate</span>
       <span class="cmd-footer-hint"><span class="cmd-kbd">↵</span> select</span>
+      <span class="cmd-footer-hint"><span class="cmd-kbd">?</span> shortcuts</span>
       <span class="cmd-footer-hint"><span class="cmd-kbd">ESC</span> close</span>
     </div>
+  </div>
+
+  <div class="kbd-backdrop" id="kbd-backdrop" aria-hidden="true"></div>
+  <div class="kbd-overlay" id="kbd-overlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" aria-hidden="true">
+    <div class="kbd-head">
+      <span>Keyboard shortcuts</span>
+      <span class="cmd-kbd">ESC</span>
+    </div>
+    <div class="kbd-grid">
+      <div class="kbd-row"><span class="kbd-desc">Command palette</span><span class="kbd-keys"><kbd>⌘</kbd><kbd>K</kbd></span></div>
+      <div class="kbd-row"><span class="kbd-desc">This menu</span><span class="kbd-keys"><kbd>?</kbd></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Jump to section</span><span class="kbd-keys"><kbd>g</kbd><span class="kbd-then">then</span><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd>t</kbd><kbd>d</kbd><kbd>r</kbd><kbd>c</kbd></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle theme</span><span class="kbd-keys"><kbd>\</kbd></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Close overlays</span><span class="kbd-keys"><kbd>esc</kbd></span></div>
+    </div>
+  </div>
+
+  <div class="easter-overlay" id="easter-overlay" aria-hidden="true"></div>
+  <div class="radial-menu-bg" id="radial-bg"></div>
+  <div class="radial-menu" id="radial-menu" aria-label="Quick actions"></div>
+  <div class="gyro-toast" id="gyro-toast"></div>
+
+  <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
+  <div class="proj-modal" id="proj-modal" role="dialog" aria-modal="true" aria-label="Project detail" aria-hidden="true">
+    <button class="proj-close" id="proj-close" type="button" aria-label="Close project detail">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+    </button>
+    <div class="proj-modal-card" id="proj-modal-card"></div>
   </div>
 
   <script>
@@ -608,14 +667,6 @@ const structuredData = JSON.stringify({
       setDockActive(current.id);
     };
 
-    const updateProgress = () => {
-      const progress = document.getElementById("scroll-progress");
-      if (!progress) return;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const percent = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
-      progress.style.height = `${percent}%`;
-    };
-
     const updateNavBlur = () => {
       const nav = document.querySelector(".side-nav");
       const links = document.querySelector(".side-links");
@@ -660,15 +711,32 @@ const structuredData = JSON.stringify({
       taglines.forEach((t) => { t.style.transform = `translateY(${scrolled * 0.08}px)`; });
     };
 
+    let scrollTicking = false;
+    let lastScrollY = 0;
+    const mobileDock = document.querySelector('.mobile-dock');
     window.addEventListener("scroll", () => {
-      setActiveLink();
-      updateProgress();
-      updateNavBlur();
-      updateParallax();
-    });
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        setActiveLink();
+        updateNavBlur();
+        updateParallax();
+        if (mobileDock) {
+          const dy = window.scrollY - lastScrollY;
+          if (dy > 8 && window.scrollY > 100) {
+            mobileDock.style.transform = 'translateX(-50%) translateY(calc(100% + 2rem))';
+            mobileDock.style.opacity = '0';
+          } else if (dy < -4) {
+            mobileDock.style.transform = 'translateX(-50%) translateY(0)';
+            mobileDock.style.opacity = '1';
+          }
+          lastScrollY = window.scrollY;
+        }
+        scrollTicking = false;
+      });
+    }, { passive: true });
     window.addEventListener("load", () => {
       setActiveLink();
-      updateProgress();
       updateNavBlur();
       updateParallax();
     });
@@ -700,9 +768,7 @@ const structuredData = JSON.stringify({
                   <small class="exp-meta">${exp.period}</small>
                   <small class="exp-meta">${exp.location}</small>
                 </div>
-                <ul>
-                  ${exp.bullets.map((b) => `<li>${b}</li>`).join("")}
-                </ul>
+                ${exp.bullets.length ? `<ul>${exp.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
               </div>
             `,
           )
@@ -941,15 +1007,13 @@ const structuredData = JSON.stringify({
 
     const skillIconMap = {
       "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
-          "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
+      "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
       "AI, ML & Agentic Systems": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14"/><path d="M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M4.1 11.9l1.1-1.1M10.8 5.2l1.1-1.1"/></svg>',
-      "Architecture & Concepts": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2"/><circle cx="2.5" cy="4" r="1.2"/><circle cx="13.5" cy="4" r="1.2"/><circle cx="2.5" cy="12" r="1.2"/><circle cx="13.5" cy="12" r="1.2"/><line x1="6.2" y1="6.8" x2="3.7" y2="5.2"/><line x1="9.8" y1="6.8" x2="12.3" y2="5.2"/><line x1="6.2" y1="9.2" x2="3.7" y2="10.8"/><line x1="9.8" y1="9.2" x2="12.3" y2="10.8"/></svg>',
       "Communication Protocols & APIs": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
       "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M2 7l6 4 6-4"/></svg>',
       "Databases & Persistence": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="4" rx="5" ry="1.8"/><path d="M3 4v8c0 1 2.24 1.8 5 1.8s5-.8 5-1.8V4"/><path d="M3 8c0 1 2.24 1.8 5 1.8S13 9 13 8"/></svg>',
       "Cloud, Infrastructure & DevOps": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
       "Testing & Quality Assurance": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><path d="M5.5 8l2 2 3-3"/></svg>',
-      "Developer Tooling & Ecosystem": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2a3 3 0 00-2.8 4L3 11.5a1.5 1.5 0 002 2L10.5 8A3 3 0 0011 2z"/><circle cx="11" cy="4" r="1" fill="currentColor" stroke="none"/></svg>',
     };
     const getSkillIcon = (category) => {
       const svg = skillIconMap[category] || '';
@@ -1000,6 +1064,22 @@ const structuredData = JSON.stringify({
       `;
     };
 
+    const buildRecommendations = (data) => {
+      return `
+        <h2>${data.labels.headings.recommendations}</h2>
+        ${data.testimonials.map((t) => `
+          <div class="testimonial-card">
+            <blockquote class="testimonial-quote">"${t.quote}"</blockquote>
+            <div class="testimonial-author">
+              <span class="testimonial-name">${t.name}</span>
+              <span class="testimonial-meta">${t.title}</span>
+              <span class="testimonial-course">${t.course}${t.headTA ? " (Head TA)" : ""}</span>
+            </div>
+          </div>
+        `).join("")}
+      `;
+    };
+
     const buildConnect = (data) => {
       const template =
         data.labels.connectTemplate || "Reach me at {email}";
@@ -1045,6 +1125,12 @@ const structuredData = JSON.stringify({
       if (heroTitle) weightReveal(heroTitle, data.hero.name);
       if (heroTaglines.length) {
         heroTaglines[0].textContent = data.hero.tagline;
+      }
+      const heroAbout = document.getElementById("hero-about");
+      const heroCurrently = document.getElementById("hero-currently");
+      if (heroAbout) heroAbout.textContent = data.about;
+      if (heroCurrently) {
+        heroCurrently.innerHTML = `<span class="currently-label">${data.labels.currentlyLabel}</span> ${data.currently}`;
       }
       if (heroLinks) {
         const links = heroLinks.querySelectorAll("a");
@@ -1133,6 +1219,7 @@ const structuredData = JSON.stringify({
         data.labels.nav.skills,
         data.labels.nav.teaching,
         data.labels.nav.education,
+        data.labels.nav.recommendations,
         data.labels.nav.reading,
         data.labels.nav.connect,
       ];
@@ -1148,6 +1235,7 @@ const structuredData = JSON.stringify({
       const teachSection = document.getElementById("teaching");
       const eduSection = document.getElementById("education");
       const skillsSection = document.getElementById("skills");
+      const recsSection = document.getElementById("recommendations");
       const readSection = document.getElementById("reading");
       const connectSection = document.getElementById("connect");
 
@@ -1156,10 +1244,11 @@ const structuredData = JSON.stringify({
       if (teachSection) teachSection.innerHTML = buildTeaching(data);
       if (eduSection) eduSection.innerHTML = buildEducation(data);
       if (skillsSection) skillsSection.innerHTML = buildSkills(data);
+      if (recsSection) recsSection.innerHTML = buildRecommendations(data);
       if (readSection) readSection.innerHTML = buildReading(data);
       if (connectSection) connectSection.innerHTML = buildConnect(data);
 
-      [expSection, projSection, teachSection, eduSection, skillsSection, readSection, connectSection].forEach(sec => {
+      [expSection, projSection, teachSection, eduSection, skillsSection, recsSection, readSection, connectSection].forEach(sec => {
         if (!sec?.classList.contains('section-revealed')) return;
         const h2 = sec.querySelector('h2');
         if (h2) typeH2(h2);
@@ -1170,6 +1259,7 @@ const structuredData = JSON.stringify({
       teachSection?.setAttribute("data-label", data.labels.headings.teaching);
       eduSection?.setAttribute("data-label", data.labels.headings.education);
       skillsSection?.setAttribute("data-label", data.labels.headings.skills);
+      recsSection?.setAttribute("data-label", data.labels.headings.recommendations);
       readSection?.setAttribute("data-label", data.labels.headings.reading);
       connectSection?.setAttribute("data-label", data.labels.headings.connect);
 
@@ -1302,11 +1392,15 @@ const structuredData = JSON.stringify({
       nav: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 5l4 3-4 3"/></svg>',
       link: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-3M10 2h4v4M14 2L8 8"/></svg>',
       action: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5.5"/><path d="M8 5.5V8l1.5 1.5"/></svg>',
+      project: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg>',
     };
 
     const getCommands = () => {
       const nav = currentProfile?.labels?.nav || I18N.en.labels.nav;
       const links = currentProfile?.links || I18N.en.links;
+      const projects = (currentProfile?.projects || I18N.en.projects || []).map((p) => ({
+        group: 'Projects', label: p.name, icon: 'project', action: () => flashProject(p.name),
+      }));
       return [
         { group: 'Navigate', label: nav.education,  icon: 'nav',    action: () => scrollCmd('education')  },
         { group: 'Navigate', label: nav.experience, icon: 'nav',    action: () => scrollCmd('experience') },
@@ -1315,17 +1409,51 @@ const structuredData = JSON.stringify({
         { group: 'Navigate', label: nav.skills,     icon: 'nav',    action: () => scrollCmd('skills')     },
         { group: 'Navigate', label: nav.reading,    icon: 'nav',    action: () => scrollCmd('reading')    },
         { group: 'Navigate', label: nav.connect,    icon: 'nav',    action: () => scrollCmd('connect')    },
+        ...projects,
         { group: 'Links',    label: 'Resume',        icon: 'link',   action: () => { window.open(links.resume, '_blank'); closeCmd(); } },
         { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open('https://linkedin.com/in/riadmukhtarov', '_blank'); closeCmd(); } },
         { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open('https://github.com/r14dd', '_blank'); closeCmd(); } },
         { group: 'Actions',  label: 'Toggle theme',  icon: 'action', action: () => { document.getElementById('theme-toggle')?.click(); closeCmd(); } },
         { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText('riadmukh@gmail.com').then(() => showToast('Email copied')); closeCmd(); } },
+        { group: 'Actions',  label: 'Download résumé', icon: 'action', action: () => { const a = document.createElement('a'); a.href = links.resume; a.download = ''; a.click(); closeCmd(); } },
+        { group: 'Actions',  label: 'Keyboard shortcuts', icon: 'action', action: () => { closeCmd(); openKbd(); } },
       ];
     };
 
     const scrollCmd = (id) => {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       closeCmd();
+    };
+
+    const flashProject = (name) => {
+      closeCmd();
+      const card = Array.from(document.querySelectorAll('#projects .project-card'))
+        .find((c) => c.querySelector('h3')?.textContent?.trim() === name);
+      if (!card) { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.remove('cmd-flash');
+      void card.offsetWidth;
+      card.classList.add('cmd-flash');
+      setTimeout(() => card.classList.remove('cmd-flash'), 1500);
+    };
+
+    const fuzzyScore = (text, q) => {
+      text = text.toLowerCase();
+      q = q.toLowerCase();
+      let ti = 0, score = 0, streak = 0;
+      for (let qi = 0; qi < q.length; qi++) {
+        const ch = q[qi];
+        let found = -1;
+        for (let j = ti; j < text.length; j++) {
+          if (text[j] === ch) { found = j; break; }
+        }
+        if (found === -1) return -1;
+        score += found === ti ? 2 + streak : 1;
+        if (found === 0 || text[found - 1] === ' ') score += 3;
+        streak = found === ti ? streak + 1 : 0;
+        ti = found + 1;
+      }
+      return score - text.length * 0.01;
     };
 
     const openCmd = () => {
@@ -1357,7 +1485,18 @@ const structuredData = JSON.stringify({
     const renderCmd = (query) => {
       if (!cmdResultsEl) return;
       const all = getCommands();
-      cmdFiltered = query ? all.filter(c => c.label.toLowerCase().includes(query.toLowerCase()) || c.group.toLowerCase().includes(query.toLowerCase())) : all;
+      const q = query.trim();
+      let grouped = true;
+      if (q) {
+        grouped = false;
+        cmdFiltered = all
+          .map((c) => ({ c, s: Math.max(fuzzyScore(c.label, q), fuzzyScore(c.group + ' ' + c.label, q) - 4) }))
+          .filter((x) => x.s >= 0)
+          .sort((a, b) => b.s - a.s)
+          .map((x) => x.c);
+      } else {
+        cmdFiltered = all;
+      }
       cmdHighlightIdx = 0;
       if (!cmdFiltered.length) {
         cmdResultsEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:0.85rem">No results</div>';
@@ -1366,11 +1505,12 @@ const structuredData = JSON.stringify({
       let html = '';
       let lastGroup = '';
       cmdFiltered.forEach((cmd, idx) => {
-        if (cmd.group !== lastGroup) {
+        if (grouped && cmd.group !== lastGroup) {
           html += `<div class="cmd-group-label">${cmd.group}</div>`;
           lastGroup = cmd.group;
         }
-        html += `<div class="cmd-item${idx === 0 ? ' highlighted' : ''}" data-idx="${idx}" role="option"><span class="cmd-item-icon">${CMD_ICONS[cmd.icon]}</span>${cmd.label}</div>`;
+        const tag = grouped ? '' : `<span class="cmd-item-group">${cmd.group}</span>`;
+        html += `<div class="cmd-item${idx === 0 ? ' highlighted' : ''}" data-idx="${idx}" role="option"><span class="cmd-item-icon">${CMD_ICONS[cmd.icon]}</span>${cmd.label}${tag}</div>`;
       });
       cmdResultsEl.innerHTML = html;
       cmdResultsEl.querySelectorAll('.cmd-item').forEach((item, idx) => {
@@ -1384,7 +1524,12 @@ const structuredData = JSON.stringify({
     document.getElementById('cmd-trigger')?.addEventListener('click', () => cmdOpen ? closeCmd() : openCmd());
 
     document.addEventListener('keydown', e => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); cmdOpen ? closeCmd() : openCmd(); return; }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (projOpen || kbdOpen) return;
+        cmdOpen ? closeCmd() : openCmd();
+        return;
+      }
       if (!cmdOpen) return;
       const items = cmdResultsEl?.querySelectorAll('.cmd-item');
       if (e.key === 'Escape') { closeCmd(); return; }
@@ -1393,6 +1538,156 @@ const structuredData = JSON.stringify({
       else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight((cmdHighlightIdx - 1 + items.length) % items.length); }
       else if (e.key === 'Enter') { e.preventDefault(); cmdFiltered[cmdHighlightIdx]?.action(); }
     });
+
+    const kbdBackdrop = document.getElementById('kbd-backdrop');
+    const kbdOverlay = document.getElementById('kbd-overlay');
+    let kbdOpen = false;
+    const openKbd = () => {
+      kbdOpen = true;
+      kbdBackdrop?.classList.add('open');
+      kbdOverlay?.classList.add('open');
+      kbdOverlay?.setAttribute('aria-hidden', 'false');
+    };
+    const closeKbd = () => {
+      kbdOpen = false;
+      kbdBackdrop?.classList.remove('open');
+      kbdOverlay?.classList.remove('open');
+      kbdOverlay?.setAttribute('aria-hidden', 'true');
+    };
+    kbdBackdrop?.addEventListener('click', closeKbd);
+
+    const SECTION_KEYS = {
+      e: 'experience', p: 'projects', s: 'skills',
+      t: 'teaching', d: 'education', r: 'reading', c: 'connect',
+    };
+    const isTypingTarget = (el) =>
+      !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+    let gPending = false;
+    let gTimer;
+
+    document.addEventListener('keydown', (e) => {
+      if (cmdOpen || isTypingTarget(document.activeElement)) return;
+      if (projOpen) {
+        if (e.key === 'Escape') { e.preventDefault(); closeProject(); }
+        return;
+      }
+      if (kbdOpen) {
+        if (e.key === 'Escape' || e.key === '?') { e.preventDefault(); closeKbd(); }
+        return;
+      }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === '?') { e.preventDefault(); openKbd(); return; }
+      if (e.key === '\\') { e.preventDefault(); document.getElementById('theme-toggle')?.click(); return; }
+      if (gPending) {
+        gPending = false;
+        clearTimeout(gTimer);
+        const id = SECTION_KEYS[e.key.toLowerCase()];
+        if (id) {
+          e.preventDefault();
+          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.pushState(null, '', `#${id}`);
+        }
+        return;
+      }
+      if (e.key.toLowerCase() === 'g') {
+        gPending = true;
+        clearTimeout(gTimer);
+        gTimer = setTimeout(() => { gPending = false; }, 1200);
+      }
+    });
+
+    const projBackdrop = document.getElementById('proj-backdrop');
+    const projModal = document.getElementById('proj-modal');
+    const projModalCard = document.getElementById('proj-modal-card');
+    const projClose = document.getElementById('proj-close');
+    let projOpen = false;
+    let projLastCard = null;
+    const PROJ_VT = 'proj-shared';
+    const supportsVT = typeof document.startViewTransition === 'function';
+    const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stripImpact = (s) => (s || '').replace(/^(?:Impact:\s*)+/i, '');
+
+    const populateProject = (p) => {
+      if (!projModalCard) return;
+      const tech = (p.tech || []).map((t) => `<span class="project-tech-pill">${t}</span>`).join('');
+      const bullets = (p.bullets || []).map((b) => `<li>${b}</li>`).join('');
+      const sim = buildProjectSim(p);
+      const gh = p.links?.github
+        ? `<div class="hero-cta" style="margin-top:1rem"><a class="cta-btn" href="${p.links.github}" target="_blank" rel="noopener">GitHub</a></div>`
+        : '';
+      projModalCard.innerHTML = `
+        <div class="proj-modal-head">
+          <h3>${p.name}</h3>
+          ${p.date ? `<span class="proj-modal-date mono">${p.date}</span>` : ''}
+        </div>
+        <div class="project-tech-pills">${tech}</div>
+        ${p.impact ? `<div class="project-impact"><strong>Impact:</strong> ${stripImpact(p.impact)}</div>` : ''}
+        ${bullets ? `<ul class="project-bullets">${bullets}</ul>` : ''}
+        ${sim}
+        ${gh}
+      `;
+      const sv = projModalCard.querySelector('.sim-visual');
+      if (sv) sv.classList.add('active');
+    };
+
+    const showProjModal = () => {
+      projBackdrop?.classList.add('open');
+      projModal?.classList.add('open');
+      projModal?.setAttribute('aria-hidden', 'false');
+      projBackdrop?.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('proj-lock');
+      projOpen = true;
+      projClose?.focus();
+    };
+
+    const hideProjModal = () => {
+      projBackdrop?.classList.remove('open');
+      projModal?.classList.remove('open');
+      projModal?.setAttribute('aria-hidden', 'true');
+      projBackdrop?.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('proj-lock');
+      projOpen = false;
+    };
+
+    const openProject = (p, card) => {
+      projLastCard = card;
+      if (!supportsVT || reduceMotion()) { populateProject(p); showProjModal(); return; }
+      card.style.transform = '';
+      card.style.viewTransitionName = PROJ_VT;
+      const t = document.startViewTransition(() => {
+        card.style.viewTransitionName = '';
+        populateProject(p);
+        showProjModal();
+        projModalCard.style.viewTransitionName = PROJ_VT;
+      });
+      t.finished.finally(() => { if (projModalCard) projModalCard.style.viewTransitionName = ''; });
+    };
+
+    const closeProject = () => {
+      if (!projOpen) return;
+      if (!supportsVT || reduceMotion()) { hideProjModal(); return; }
+      projModalCard.style.viewTransitionName = PROJ_VT;
+      const t = document.startViewTransition(() => {
+        projModalCard.style.viewTransitionName = '';
+        hideProjModal();
+        if (projLastCard) projLastCard.style.viewTransitionName = PROJ_VT;
+      });
+      t.finished.finally(() => { if (projLastCard) projLastCard.style.viewTransitionName = ''; });
+    };
+
+    const projectsSection = document.getElementById('projects');
+    projectsSection?.addEventListener('click', (e) => {
+      const card = e.target.closest?.('.project-card');
+      if (!card || !projectsSection.contains(card)) return;
+      if (e.target.closest('a, button')) return;
+      const sel = window.getSelection?.();
+      if (sel && sel.toString().length > 0) return;
+      const title = card.querySelector('h3')?.textContent?.trim();
+      const p = (currentProfile?.projects || I18N.en.projects || []).find((x) => x.name === title);
+      if (p) openProject(p, card);
+    });
+    projBackdrop?.addEventListener('click', closeProject);
+    projClose?.addEventListener('click', closeProject);
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const typed = new WeakSet();
@@ -1437,9 +1732,28 @@ const structuredData = JSON.stringify({
         });
       };
       initCardTilt();
+
+      const simObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const sim = entry.target.querySelector(".sim-visual");
+          if (sim) sim.classList.add("active");
+          simObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.25 });
+      const observedSimCards = new WeakSet();
+      const observeSims = () => {
+        document.querySelectorAll(".project-card").forEach((card) => {
+          if (observedSimCards.has(card) || !card.querySelector(".sim-visual")) return;
+          observedSimCards.add(card);
+          simObserver.observe(card);
+        });
+      };
+      observeSims();
+
       const contentEl = document.querySelector(".content");
       if (contentEl) {
-        new MutationObserver(() => initCardTilt()).observe(contentEl, { childList: true, subtree: true });
+        new MutationObserver(() => { initCardTilt(); observeSims(); }).observe(contentEl, { childList: true, subtree: true });
       }
 
       if (window.matchMedia('(hover: none)').matches) {
@@ -1488,25 +1802,415 @@ const structuredData = JSON.stringify({
         }).observe(sec, { attributes: true, attributeFilter: ["class"] });
       });
 
+      // Mobile: dock search opens command palette
+      document.getElementById('dock-search')?.addEventListener('click', () => {
+        cmdOpen ? closeCmd() : openCmd();
+      });
+
+      // Mobile: swipe left/right on dock to cycle sections
+      {
+        const dock = document.querySelector('.mobile-dock');
+        const sectionIds = ['experience','projects','skills','teaching','education','reading','connect'];
+        if (dock) {
+          let swStartX = 0, swStartY = 0, swSwiping = false;
+          dock.addEventListener('touchstart', (e) => {
+            swStartX = e.touches[0].clientX;
+            swStartY = e.touches[0].clientY;
+            swSwiping = true;
+          }, { passive: true });
+          dock.addEventListener('touchmove', (e) => {
+            if (!swSwiping) return;
+            if (Math.abs(e.touches[0].clientY - swStartY) > 30) { swSwiping = false; }
+          }, { passive: true });
+          dock.addEventListener('touchend', (e) => {
+            if (!swSwiping) return;
+            swSwiping = false;
+            const dx = e.changedTouches[0].clientX - swStartX;
+            if (Math.abs(dx) < 50) return;
+            const currentActive = document.querySelector('.dock-item.active');
+            const currentIdx = currentActive ? sectionIds.indexOf(currentActive.getAttribute('href')?.replace('#','')) : 0;
+            const nextIdx = dx < 0
+              ? Math.min(currentIdx + 1, sectionIds.length - 1)
+              : Math.max(currentIdx - 1, 0);
+            if (nextIdx !== currentIdx) {
+              const target = document.getElementById(sectionIds[nextIdx]);
+              if (target) {
+                smoothScrollTo(target);
+                history.pushState(null, '', `#${sectionIds[nextIdx]}`);
+              }
+            }
+          }, { passive: true });
+        }
+      }
+
+      // Mobile: pull-to-refresh animation (visual only)
+      {
+        const pullEl = document.getElementById('pull-indicator');
+        if (pullEl && 'ontouchstart' in window) {
+          let pullStartY = 0, pulling = false;
+          document.addEventListener('touchstart', (e) => {
+            if (window.scrollY < 5 && !cmdOpen && !projOpen && !kbdOpen) {
+              pullStartY = e.touches[0].clientY;
+              pulling = true;
+            }
+          }, { passive: true });
+          document.addEventListener('touchmove', (e) => {
+            if (!pulling) return;
+            const dy = e.touches[0].clientY - pullStartY;
+            if (dy > 40 && dy < 160) {
+              pullEl.classList.add('visible');
+              pullEl.style.top = `${Math.min(dy * 0.4, 48)}px`;
+            } else if (dy <= 0) {
+              pullEl.classList.remove('visible');
+              pulling = false;
+            }
+          }, { passive: true });
+          const endPull = () => {
+            if (!pulling) return;
+            pulling = false;
+            if (pullEl.classList.contains('visible')) {
+              pullEl.classList.add('refreshing');
+              setTimeout(() => location.reload(), 500);
+            }
+          };
+          document.addEventListener('touchend', endPull, { passive: true });
+          document.addEventListener('touchcancel', endPull, { passive: true });
+        }
+      }
+
+      // Mobile: swipe down on bottom-sheet project modal to dismiss
+      {
+        const modal = document.getElementById('proj-modal');
+        if (modal) {
+          let mStartY = 0, mDragging = false;
+          modal.addEventListener('touchstart', (e) => {
+            if (modal.scrollTop > 5) return;
+            mStartY = e.touches[0].clientY;
+            mDragging = true;
+          }, { passive: true });
+          modal.addEventListener('touchmove', (e) => {
+            if (!mDragging) return;
+            const dy = e.touches[0].clientY - mStartY;
+            if (dy > 0) {
+              modal.style.transform = `translateY(${dy}px)`;
+            } else {
+              mDragging = false;
+              modal.style.transform = '';
+            }
+          }, { passive: true });
+          const endDrag = (e) => {
+            if (!mDragging) return;
+            mDragging = false;
+            const dy = e.changedTouches[0].clientY - mStartY;
+            if (dy > 100) {
+              closeProject();
+            }
+            modal.style.transform = '';
+          };
+          modal.addEventListener('touchend', endDrag, { passive: true });
+          modal.addEventListener('touchcancel', () => { mDragging = false; modal.style.transform = ''; }, { passive: true });
+        }
+      }
+
+      // Gyroscope parallax + shake-to-random
+      {
+        const isMobile = 'ontouchstart' in window;
+        const hero = document.querySelector('main > section:first-of-type');
+        const h1El = hero?.querySelector('h1');
+        const taglines = hero?.querySelectorAll('.hero-tagline');
+        const gyroToast = document.getElementById('gyro-toast');
+        let gyroEnabled = false;
+        let baseGamma = null, baseBeta = null;
+        let lastShake = 0;
+        let shakeCount = 0;
+        let lastAccel = { x: 0, y: 0, z: 0 };
+        const SHAKE_THRESHOLD = 25;
+        const SHAKE_COUNT_NEEDED = 3;
+        const SHAKE_WINDOW = 800;
+
+        const showGyroToast = (msg) => {
+          if (!gyroToast) return;
+          gyroToast.textContent = msg;
+          gyroToast.classList.add('show');
+          setTimeout(() => gyroToast.classList.remove('show'), 2000);
+        };
+
+        const handleOrientation = (e) => {
+          if (!gyroEnabled) return;
+          const gamma = e.gamma || 0;
+          const beta = e.beta || 0;
+          if (baseGamma === null) { baseGamma = gamma; baseBeta = beta; }
+          const dx = (gamma - baseGamma) * 0.4;
+          const dy = (beta - baseBeta) * 0.3;
+          const clampDx = Math.max(-20, Math.min(20, dx));
+          const clampDy = Math.max(-15, Math.min(15, dy));
+          document.body.style.backgroundPosition = `${12 + clampDx}px ${12 + clampDy}px`;
+          if (h1El) h1El.style.transform = `translate(${clampDx * 0.5}px, ${clampDy * 0.3}px)`;
+          if (taglines) taglines.forEach(t => {
+            t.style.transform = `translate(${clampDx * 0.3}px, ${clampDy * 0.2}px)`;
+          });
+          document.querySelectorAll('.project-card').forEach((card, i) => {
+            const factor = 0.15 + (i % 3) * 0.05;
+            card.style.transform = `translate(${clampDx * factor}px, ${clampDy * factor}px)`;
+          });
+        };
+
+        const handleMotion = (e) => {
+          const acc = e.accelerationIncludingGravity;
+          if (!acc) return;
+          const dx = Math.abs(acc.x - lastAccel.x);
+          const dy = Math.abs(acc.y - lastAccel.y);
+          const dz = Math.abs(acc.z - lastAccel.z);
+          lastAccel = { x: acc.x, y: acc.y, z: acc.z };
+          if (dx + dy + dz > SHAKE_THRESHOLD) {
+            const now = Date.now();
+            if (now - lastShake > SHAKE_WINDOW) shakeCount = 0;
+            shakeCount++;
+            lastShake = now;
+            if (shakeCount >= SHAKE_COUNT_NEEDED) {
+              shakeCount = 0;
+              triggerRandomProject();
+            }
+          }
+        };
+
+        const triggerRandomProject = () => {
+          const projects = currentProfile?.projects || I18N.en.projects || [];
+          if (!projects.length) return;
+          const p = projects[Math.floor(Math.random() * projects.length)];
+          const card = Array.from(document.querySelectorAll('#projects .project-card'))
+            .find(c => c.querySelector('h3')?.textContent?.trim() === p.name);
+          showGyroToast(`Shake → ${p.name}`);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => openProject(p, card), 500);
+          }
+        };
+
+        const enableGyro = () => {
+          gyroEnabled = true;
+          window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+          window.addEventListener('devicemotion', handleMotion, { passive: true });
+          showGyroToast('Tilt to explore · Shake for random');
+        };
+
+        if (isMobile) {
+          if (typeof DeviceOrientationEvent !== 'undefined' &&
+              typeof DeviceOrientationEvent.requestPermission === 'function') {
+            document.addEventListener('touchend', function reqGyro() {
+              DeviceOrientationEvent.requestPermission().then(state => {
+                if (state === 'granted') enableGyro();
+              }).catch(() => {});
+              document.removeEventListener('touchend', reqGyro);
+            }, { once: true });
+          } else if ('DeviceOrientationEvent' in window) {
+            enableGyro();
+          }
+        }
+      }
+
+      // Long-press radial menu
+      {
+        const radialMenu = document.getElementById('radial-menu');
+        const radialBg = document.getElementById('radial-bg');
+        if (radialMenu && 'ontouchstart' in window) {
+          let pressTimer = null;
+          let radialOpen = false;
+          const RADIUS = 70;
+          const ACTIONS = [
+            { label: 'Search', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>', fn: () => openCmd() },
+            { label: 'Theme', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M8 3v10"/><path d="M8 3a5 5 0 010 10"/></svg>', fn: () => document.getElementById('theme-toggle')?.click() },
+            { label: 'Top', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 13V3M4 6l4-3 4 3"/></svg>', fn: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+            { label: 'Random', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h4l2 4 2-8h4"/></svg>', fn: () => { const ps = currentProfile?.projects || I18N.en.projects || []; const p = ps[Math.floor(Math.random()*ps.length)]; if(p){ const c = Array.from(document.querySelectorAll("#projects .project-card")).find(c=>c.querySelector("h3")?.textContent?.trim()===p.name); if(c){c.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>openProject(p,c),500);}} } },
+            { label: 'Share', icon: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8v5a1 1 0 001 1h6a1 1 0 001-1V8M8 2v8M5 5l3-3 3 3"/></svg>', fn: () => { if(navigator.share) navigator.share({title:document.title,url:location.href}).catch(()=>{}); else { navigator.clipboard?.writeText(location.href); showToast('Link copied'); } } },
+          ];
+
+          const openRadial = (cx, cy) => {
+            radialOpen = true;
+            radialMenu.innerHTML = '<div class="radial-center"></div>';
+            radialMenu.style.left = cx + 'px';
+            radialMenu.style.top = cy + 'px';
+            const angleStep = (2 * Math.PI) / ACTIONS.length;
+            const startAngle = -Math.PI / 2;
+            ACTIONS.forEach((a, i) => {
+              const angle = startAngle + i * angleStep;
+              const x = Math.cos(angle) * RADIUS;
+              const y = Math.sin(angle) * RADIUS;
+              const btn = document.createElement('button');
+              btn.className = 'radial-item';
+              btn.setAttribute('type', 'button');
+              btn.setAttribute('aria-label', a.label);
+              btn.style.left = x + 'px';
+              btn.style.top = y + 'px';
+              btn.style.transitionDelay = (i * 0.035) + 's';
+              btn.innerHTML = a.icon + `<span class="radial-label">${a.label}</span>`;
+              btn.addEventListener('click', (e) => { e.stopPropagation(); closeRadial(); a.fn(); });
+              radialMenu.appendChild(btn);
+            });
+            requestAnimationFrame(() => {
+              radialMenu.classList.add('open');
+              radialBg.classList.add('open');
+            });
+          };
+
+          const closeRadial = () => {
+            radialOpen = false;
+            radialMenu.classList.remove('open');
+            radialBg.classList.remove('open');
+          };
+
+          radialBg.addEventListener('click', closeRadial);
+
+          let touchStartX = 0, touchStartY = 0;
+          document.addEventListener('touchstart', (e) => {
+            if (radialOpen || cmdOpen || projOpen || kbdOpen) return;
+            if (e.target.closest('a, button, input, .cmd-palette, .proj-modal, .kbd-overlay, .mobile-dock, .lang-menu, .radial-menu')) return;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            pressTimer = setTimeout(() => {
+              openRadial(touchStartX, touchStartY);
+              if (navigator.vibrate) navigator.vibrate(20);
+            }, 500);
+          }, { passive: true });
+
+          document.addEventListener('touchmove', (e) => {
+            if (pressTimer) {
+              const dx = e.touches[0].clientX - touchStartX;
+              const dy = e.touches[0].clientY - touchStartY;
+              if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+              }
+            }
+          }, { passive: true });
+
+          document.addEventListener('touchend', () => {
+            if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+          }, { passive: true });
+        }
+      }
+
+      // Pinch-to-zoom on sim visuals (inside project modal)
+      {
+        const modalEl = document.getElementById('proj-modal');
+        if (modalEl && 'ontouchstart' in window) {
+          let initDist = 0, curScale = 1, zooming = false, simTarget = null;
+          const getDist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+          modalEl.addEventListener('touchstart', (e) => {
+            if (e.touches.length !== 2) return;
+            simTarget = e.target.closest('.sim-visual');
+            if (!simTarget) return;
+            zooming = true;
+            initDist = getDist(e.touches);
+            const rect = simTarget.getBoundingClientRect();
+            const mx = ((e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left) / rect.width * 100;
+            const my = ((e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top) / rect.height * 100;
+            simTarget.style.setProperty('--pinch-x', mx + '%');
+            simTarget.style.setProperty('--pinch-y', my + '%');
+            simTarget.classList.add('pinch-zooming');
+          }, { passive: true });
+          modalEl.addEventListener('touchmove', (e) => {
+            if (!zooming || e.touches.length !== 2 || !simTarget) return;
+            const dist = getDist(e.touches);
+            curScale = Math.max(1, Math.min(3, dist / initDist));
+            simTarget.style.transform = `scale(${curScale})`;
+          }, { passive: true });
+          const endZoom = () => {
+            if (!zooming || !simTarget) return;
+            zooming = false;
+            simTarget.style.transition = 'transform 0.3s ease';
+            simTarget.style.transform = '';
+            simTarget.classList.remove('pinch-zooming');
+            setTimeout(() => { if (simTarget) simTarget.style.transition = ''; }, 300);
+            simTarget = null;
+            curScale = 1;
+          };
+          modalEl.addEventListener('touchend', endZoom, { passive: true });
+          modalEl.addEventListener('touchcancel', endZoom, { passive: true });
+        }
+      }
+
+      // Easter egg: Konami code (desktop) + triple-tap logo (mobile)
+      {
+        const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+        let konamiIdx = 0;
+        const easterOverlay = document.getElementById('easter-overlay');
+
+        const triggerEasterEgg = () => {
+          if (!easterOverlay) return;
+          easterOverlay.innerHTML = '';
+          easterOverlay.classList.add('active');
+          const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+          const colCount = Math.floor(window.innerWidth / 20);
+          for (let i = 0; i < colCount; i++) {
+            const col = document.createElement('div');
+            col.className = 'matrix-col';
+            col.style.left = (i * 20 + Math.random() * 6) + 'px';
+            col.style.animationDuration = (2 + Math.random() * 3) + 's';
+            col.style.animationDelay = (Math.random() * 2) + 's';
+            let str = '';
+            const len = 8 + Math.floor(Math.random() * 16);
+            for (let j = 0; j < len; j++) str += chars[Math.floor(Math.random() * chars.length)];
+            col.textContent = str;
+            easterOverlay.appendChild(col);
+          }
+          if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+          showToast('You found the secret');
+          setTimeout(() => {
+            easterOverlay.classList.remove('active');
+            setTimeout(() => { easterOverlay.innerHTML = ''; }, 500);
+          }, 5000);
+        };
+
+        document.addEventListener('keydown', (e) => {
+          if (cmdOpen || projOpen || kbdOpen) return;
+          if (e.key === KONAMI[konamiIdx]) {
+            konamiIdx++;
+            if (konamiIdx === KONAMI.length) { konamiIdx = 0; triggerEasterEgg(); }
+          } else {
+            konamiIdx = e.key === KONAMI[0] ? 1 : 0;
+          }
+        });
+
+        const heroH1 = document.querySelector('main > section:first-of-type h1');
+        if (heroH1) {
+          let tapCount = 0, tapTimer = null;
+          heroH1.addEventListener('click', () => {
+            tapCount++;
+            clearTimeout(tapTimer);
+            tapTimer = setTimeout(() => { tapCount = 0; }, 600);
+            if (tapCount >= 3) { tapCount = 0; triggerEasterEgg(); }
+          });
+        }
+      }
+
       const magneticEls = document.querySelectorAll(
         ".side-nav a, .side-links a, .theme-toggle, .lang-toggle, .cta-btn"
       );
+      let magTicking = false;
       document.addEventListener("mousemove", (e) => {
-        magneticEls.forEach((el) => {
-          const rect = el.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const dx = e.clientX - cx;
-          const dy = e.clientY - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 50) {
-            const pull = (1 - dist / 50) * 0.5;
-            el.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
-          } else if (el.style.transform) {
-            el.style.transform = "";
-          }
+        if (magTicking) return;
+        magTicking = true;
+        const mx = e.clientX;
+        const my = e.clientY;
+        requestAnimationFrame(() => {
+          magneticEls.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dx = mx - cx;
+            const dy = my - cy;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 50) {
+              const pull = (1 - dist / 50) * 0.5;
+              el.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
+            } else if (el.style.transform) {
+              el.style.transform = "";
+            }
+          });
+          magTicking = false;
         });
-      });
+      }, { passive: true });
     }
   </script>
 </BaseLayout>

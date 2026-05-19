@@ -8,6 +8,7 @@ type Labels = {
     teaching: string;
     education: string;
     skills: string;
+    recommendations: string;
     reading: string;
     connect: string;
   };
@@ -22,12 +23,14 @@ type Labels = {
     teaching: string;
     education: string;
     skills: string;
+    recommendations: string;
     reading: string;
     connect: string;
   };
   introLead: string;
   introTail: string;
   connectTemplate: string;
+  currentlyLabel: string;
 };
 
 type EducationInfo = {
@@ -48,6 +51,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Teaching",
         education: "Education",
         skills: "Skills",
+        recommendations: "Recommendations",
         reading: "Reading",
         connect: "Connect",
       },
@@ -62,12 +66,14 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Teaching",
         education: "Education",
         skills: "Technical Skills",
+        recommendations: "Recommendations",
         reading: "Reading",
         connect: "Connect",
       },
       introLead: "Who is",
       introTail: "",
       connectTemplate: "Reach me at {email}",
+      currentlyLabel: "Currently:",
     },
     education: {
       title: "State University of New York at Buffalo — BS in Computer Science",
@@ -82,6 +88,8 @@ export const profiles: Record<string, I18nProfile> = {
       name: "Риад Мухтаров",
       tagline: "AI/Software-инженер с основой в распределённых системах и опытом преподавания компьютерных наук.",
     },
+    about: "Разрабатываю ПО и AI-системы, в основном на Rust и Python. До этого два года преподавал информатику в State University of New York at Buffalo. Это сформировало мой подход к системам и объяснениям. Мне нравятся сложные инфраструктурные задачи и чистые абстракции.",
+    currently: "Разрабатываю AI-системы в ABB и руковожу разработкой в EYP.",
     experience: [
       {
         role: "Инженер по искусственному интеллекту",
@@ -140,7 +148,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "MatchSentinel — Платформа мониторинга транзакций",
         tech: profile.projects[0].tech,
         impact:
-          "Спроектировал и развернул end-to-end pipeline мониторинга транзакций. Внедрил принципы Clean Architecture и асинхронную обработку через RabbitMQ, обеспечив строгую консистентность данных и защиту от дублирования (Idempotency).",
+          "End-to-end pipeline мониторинга транзакций с event-driven скорингом, асинхронной обработкой через RabbitMQ и идемпотентной обработкой данных.",
         date: "Янв 2026",
         bullets: [
           "Спроектировал event‑driven архитектуру для скоринга, уведомлений и отчетности",
@@ -154,7 +162,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "FinFlow — Wallet API",
         tech: profile.projects[1].tech,
         impact:
-          "Безопасный wallet API с JWT‑аутентификацией и проверенными потоками доступа.",
+          "Безопасный wallet API с JWT‑аутентификацией, защищёнными эндпоинтами и stateless-сессиями.",
         date: "Янв 2026",
         bullets: [
           "Реализовал безопасную аутентификацию и авторизацию на JWT (stateless)",
@@ -168,7 +176,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Redis Redesign",
         tech: profile.projects[2].tech,
         impact:
-          "Перестроил распределенный Redis-кэш в двухслойную TTL-модель, устранив проблемы устаревших данных и сохранив низкую задержку.",
+          "Двухслойный TTL-кэш, устраняющий несогласованность устаревших данных при сохранении низкой задержки.",
         date: "Дек 2025",
         bullets: [
           "Заменил монолитный кэш на два слоя: key-subkey to id и id to value",
@@ -181,7 +189,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Минималистичное портфолио",
         tech: profile.projects[3].tech,
         impact:
-          "Премиальное адаптивное портфолио с четкой иерархией и адаптивной анимацией.",
+          "Адаптивное портфолио с сильной типографической иерархией, плавной анимацией и доступностью.",
         date: "Янв 2026",
         bullets: [
           "Спроектировал минималистичный интерфейс с сильной типографикой и читаемыми отступами",
@@ -194,7 +202,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Алгоритм консенсуса Raft",
         tech: profile.projects[4].tech,
         impact:
-          "Глубокая реализация консенсуса Raft: лидер-элекция, репликация логов и отказоустойчивость для сохранения согласованности при сбоях.",
+          "Консенсус Raft, сохраняющий согласованность при отказах узлов через лидер-элекцию и репликацию логов.",
         date: "Май 2024",
         bullets: [
           "Реализовал Raft с выбором лидера, репликацией логов и отказоустойчивостью",
@@ -205,7 +213,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Распределенная хеш‑таблица (Kademlia)",
         tech: profile.projects[5].tech,
         impact:
-          "Построил Kademlia‑DHT для устойчивого peer‑discovery и O(log n) поиска в динамических сетях.",
+          "Kademlia DHT для устойчивого peer-discovery и O(log n) поиска в динамических сетях.",
         date: "Фев 2024",
         bullets: [
           "Реализовал peer‑to‑peer хранилище с маршрутизацией Kademlia",
@@ -268,11 +276,10 @@ export const profiles: Record<string, I18nProfile> = {
       description:
         "Я читаю этих авторов последние 3–4 года; их структура повествования, поведение людей под ограничениями и неоднозначность помогают моделировать реальные системы.",
       items: [
-        { author: "Эрих Мария Ремарк *", quote: "Мы становимся не такими, какими хотим быть, а такими, какие мы есть." },
-        { author: "Михаил Булгаков", quote: "Рукописи не горят." },
-        { author: "Шарлотта Бронте", quote: "Я не птица; и никакая сеть не удержит меня." },
-        { author: "Чак Паланик", quote: "Будущее будет лучше завтра." },
-        { author: "Эмиль Золя", quote: "Истина в пути, и ничто её не остановит." },
+        { author: "Эрих Мария Ремарк", quote: "Жизнь не стремилась сделать нас совершенными. Кто совершенен — тому место в музее." },
+        { author: "Михаил Булгаков", quote: "Всё будет правильно, на этом построен мир." },
+        { author: "Чак Паланик", quote: "Все мы умрём. Цель не в том, чтобы жить вечно, а в том, чтобы создать нечто вечное." },
+        { author: "Эмиль Золя", quote: "Художник — ничто без дара, но дар — ничто без труда." },
       ],
     },
     labels: {
@@ -282,6 +289,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Преподавание",
         education: "Образование",
         skills: "Навыки",
+        recommendations: "Рекомендации",
         reading: "Чтение",
         connect: "Связь",
       },
@@ -296,12 +304,14 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Преподавание",
         education: "Образование",
         skills: "Технические навыки",
+        recommendations: "Рекомендации",
         reading: "Чтение",
         connect: "Связь",
       },
       introLead: "Кто такой",
       introTail: "",
       connectTemplate: "Свяжитесь со мной: {email}",
+      currentlyLabel: "Сейчас:",
     },
     education: {
       title: "State University of New York at Buffalo — Бакалавр по направлению Компьютерные Науки",
@@ -316,6 +326,8 @@ export const profiles: Record<string, I18nProfile> = {
       name: "Riad Muxtarov",
       tagline: "Paylanmış sistemlər üzrə baza biliklərinə və kompüter elmləri tədrisi üzrə təcrübəsi olan Süni İntellekt/Proqram mühəndisi.",
     },
+    about: "Proqram təminatı və AI sistemləri qururam, əsasən Rust və Python ilə. Bundan əvvəl State University of New York at Buffalo-da iki il informatika tədris etmişəm. Bu, sistemlərə və izahlara yanaşmamı formalaşdırıb. Mürəkkəb infrastruktur problemləri və təmiz abstraksiyalar xoşuma gəlir.",
+    currently: "ABB-də AI sistemləri qurur və EYP-də inkişaf komandasına rəhbərlik edirəm.",
     experience: [
       {
         role: "Süni İntellekt Mühəndisi",
@@ -374,7 +386,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "MatchSentinel — Tranzaksiya monitorinq platforması",
         tech: profile.projects[0].tech,
         impact:
-          "End-to-end tranzaksiya monitorinqi pipeline‑ını dizayn edib yerləşdirdim. Clean Architecture prinsiplərini və RabbitMQ ilə asinxron emalı tətbiq edərək ciddi məlumat konsistensiyası və dublikatdan qorunma (idempotency) təmin etdim.",
+          "Event-driven skorinq, RabbitMQ ilə asinxron emal və idempotent məlumat emalı ilə end-to-end tranzaksiya monitorinqi pipeline-ı.",
         date: "Yan 2026",
         bullets: [
           "Skorinq, bildiriş və reportinq üçün event‑driven arxitektura qurdum",
@@ -388,7 +400,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "FinFlow — Wallet API",
         tech: profile.projects[1].tech,
         impact:
-          "JWT autentifikasiya ilə qorunan wallet API və təsdiqlənmiş giriş axınları.",
+          "JWT autentifikasiya, qorunan endpoint-lər və stateless sessiya idarəetməsi ilə təhlükəsiz wallet API.",
         date: "Yan 2026",
         bullets: [
           "JWT əsasında stateless autentifikasiya və avtorizasiya qurdum",
@@ -402,7 +414,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Redis Redesign",
         tech: profile.projects[2].tech,
         impact:
-          "Paylanmış Redis cache-i ikiqat TTL modelinə yenidən quraraq köhnəlmiş məlumat uyğunsuzluğunu aradan qaldırdım və aşağı gecikməni qorudum.",
+          "Aşağı gecikmə ilə köhnəlmiş məlumat uyğunsuzluğunu aradan qaldıran ikiqat TTL-ə əsaslanan cache.",
         date: "Dek 2025",
         bullets: [
           "Monolit cache-i iki laylı modelə çevirdim: key-subkey to id və id to value",
@@ -415,7 +427,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Minimalist Portfel",
         tech: profile.projects[3].tech,
         impact:
-          "Premium, adaptiv portfel — aydın iyerarxiya və əlçatan animasiya ilə.",
+          "Güclü tipoqrafik iyerarxiya, hamar animasiya və əlçatanlıq-birinci dizaynlı adaptiv portfel.",
         date: "Yan 2026",
         bullets: [
           "Minimalist layout və güclü tipoqrafik iyerarxiya qurdum",
@@ -428,7 +440,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Raft əsaslı konsensus alqoritmi",
         tech: profile.projects[4].tech,
         impact:
-          "Raft konsensusu üzrə dərin reallaşdırma: lider seçimi, log repliksiyası və nasazlıqlara davamlılıq.",
+          "Lider seçimi və log replikasiyası vasitəsilə node nasazlıqlarında konsistensiyanı qoruyan Raft konsensusu.",
         date: "May 2024",
         bullets: [
           "Raft lider seçimi, log repliksiyası və fault tolerance tətbiq etdim",
@@ -439,7 +451,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Paylanmış Hash Table (Kademlia)",
         tech: profile.projects[5].tech,
         impact:
-          "Dinamik şəbəkələr üçün dayanıqlı peer‑discovery və O(log n) axtarış təmin edən Kademlia‑DHT.",
+          "Dinamik şəbəkələrdə dayanıqlı peer-discovery və O(log n) axtarış üçün Kademlia DHT.",
         date: "Fev 2024",
         bullets: [
           "Kademlia marşrutlaması ilə P2P paylanmış storage sistemi qurdum",
@@ -502,11 +514,10 @@ export const profiles: Record<string, I18nProfile> = {
       description:
         "Aşağıdakı müəllifləri 3–4 ildir oxuyuram; onların narrativ strukturu və məhdudiyyətlər altında davranışları real sistemləri modelləşdirmək üçün faydalıdır.",
       items: [
-        { author: "Erich Maria Remarque *", quote: "Biz olmaq istədiyimiz kimi deyil, olduğumuz kimi oluruq." },
-        { author: "Mikhail Bulgakov", quote: "Əlyazmalar yanmır." },
-        { author: "Charlotte Brontë", quote: "Mən quş deyiləm; heç bir tor məni əsir etməz." },
-        { author: "Chuck Palahniuk", quote: "Gələcək sabah daha yaxşı olacaq." },
-        { author: "Émile Zola", quote: "Həqiqət yoldadır və onu heç nə dayandıra bilməz." },
+        { author: "Erich Maria Remarque", quote: "Həyat bizi mükəmməl etmək niyyətində deyildi. Mükəmməl olan muzeyə aiddir." },
+        { author: "Mikhail Bulgakov", quote: "Hər şey düzələcək, dünya bunun üzərində qurulub." },
+        { author: "Chuck Palahniuk", quote: "Hamımız öləcəyik. Məqsəd əbədi yaşamaq deyil, əbədi qalacaq bir şey yaratmaqdır." },
+        { author: "Émile Zola", quote: "Sənətçi istedadsız heç nədir, amma istedad da zəhmətsiz heç nədir." },
       ],
     },
     labels: {
@@ -516,6 +527,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Tədris",
         education: "Təhsil",
         skills: "Bacarıqlar",
+        recommendations: "Tövsiyələr",
         reading: "Ədəbiyyat",
         connect: "Əlaqə",
       },
@@ -530,12 +542,14 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Tədris",
         education: "Təhsil",
         skills: "Texniki bacarıqlar",
+        recommendations: "Tövsiyələr",
         reading: "Ədəbiyyat",
         connect: "Əlaqə",
       },
       introLead: "",
       introTail: "kimdir",
       connectTemplate: "Əlaqə: {email}",
+      currentlyLabel: "Hazırda:",
     },
     education: {
       title: "State University of New York at Buffalo — Kompüter elmləri üzrə Bakalavr",
@@ -549,6 +563,8 @@ export const profiles: Record<string, I18nProfile> = {
       ...profile.hero,
       tagline: "Ingeniero de AI/Software con base en sistemas distribuidos y experiencia enseñando informática.",
     },
+    about: "Construyo software y sistemas de IA, principalmente en Rust y Python. Antes enseñé informática en State University of New York at Buffalo durante dos años. Eso formó mi manera de pensar sobre sistemas y explicarlos. Me gustan los problemas de infraestructura complejos y las abstracciones limpias.",
+    currently: "Construyendo sistemas de IA en ABB y liderando desarrollo en EYP.",
     experience: [
       {
         role: "Ingeniero de Inteligencia Artificial",
@@ -607,7 +623,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "MatchSentinel — Plataforma de monitoreo de transacciones",
         tech: profile.projects[0].tech,
         impact:
-          "Diseñé y desplegué un pipeline end-to-end de monitoreo de transacciones. Apliqué principios de Clean Architecture y procesamiento asíncrono con RabbitMQ, garantizando consistencia estricta e idempotencia.",
+          "Pipeline end-to-end de monitoreo de transacciones con scoring event-driven, procesamiento asíncrono via RabbitMQ y manejo idempotente de datos.",
         date: "Ene 2026",
         bullets: [
           "Diseñé una arquitectura event‑driven para scoring, notificaciones y reportes",
@@ -621,7 +637,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "FinFlow — Wallet API",
         tech: profile.projects[1].tech,
         impact:
-          "Wallet API seguro con autenticación JWT y flujos verificados.",
+          "Wallet API seguro con autenticación JWT, endpoints protegidos y gestión de sesiones stateless.",
         date: "Ene 2026",
         bullets: [
           "Implementé autenticación y autorización JWT sin estado",
@@ -635,7 +651,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Redis Redesign",
         tech: profile.projects[2].tech,
         impact:
-          "Rediseñé el caché Redis distribuido con un modelo de dos capas y TTL, eliminando inconsistencias por datos obsoletos sin perder baja latencia.",
+          "Caché de dos capas con TTL que elimina inconsistencias de datos obsoletos preservando acceso de baja latencia.",
         date: "Dic 2025",
         bullets: [
           "Reemplacé el caché monolítico con dos capas: key-subkey to id e id to value",
@@ -648,7 +664,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Portafolio minimalista",
         tech: profile.projects[3].tech,
         impact:
-          "Portafolio premium y responsive con jerarquía clara y animación accesible.",
+          "Portafolio responsive con jerarquía tipográfica fuerte, animaciones suaves y diseño accesible.",
         date: "Ene 2026",
         bullets: [
           "Diseñé un layout minimalista con jerarquía tipográfica fuerte",
@@ -661,7 +677,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Algoritmo de consenso Raft",
         tech: profile.projects[4].tech,
         impact:
-          "Implementación profunda de Raft: elección de líder, replicación de logs y tolerancia a fallos para mantener consistencia.",
+          "Consenso Raft preservando consistencia bajo fallos de nodos via elección de líder y replicación de logs.",
         date: "May 2024",
         bullets: [
           "Implementé Raft con elección de líder, replicación de logs y tolerancia a fallos",
@@ -672,7 +688,7 @@ export const profiles: Record<string, I18nProfile> = {
         name: "Tabla hash distribuida (Kademlia)",
         tech: profile.projects[5].tech,
         impact:
-          "Implementé una DHT Kademlia para descubrimiento de nodos y búsquedas O(log n) en redes dinámicas.",
+          "DHT Kademlia para descubrimiento resiliente de peers y búsquedas O(log n) en redes dinámicas.",
         date: "Feb 2024",
         bullets: [
           "Implementé almacenamiento P2P con enrutamiento Kademlia",
@@ -735,11 +751,10 @@ export const profiles: Record<string, I18nProfile> = {
       description:
         "He leído a los autores de abajo durante 3–4 años; su estructura narrativa y ambigüedad son útiles para modelar problemas reales.",
       items: [
-        { author: "Erich Maria Remarque *", quote: "No llegamos a ser como queremos, sino como somos." },
-        { author: "Mijaíl Bulgákov", quote: "Los manuscritos no arden." },
-        { author: "Charlotte Brontë", quote: "No soy un pájaro; ninguna red me atrapa." },
-        { author: "Chuck Palahniuk", quote: "El futuro será mejor mañana." },
-        { author: "Émile Zola", quote: "La verdad está en marcha y nada la detendrá." },
+        { author: "Erich Maria Remarque", quote: "La vida no pretendía hacernos perfectos. Quien es perfecto pertenece a un museo." },
+        { author: "Mijaíl Bulgákov", quote: "Todo saldrá bien, el mundo está construido sobre eso." },
+        { author: "Chuck Palahniuk", quote: "Todos morimos. La meta no es vivir para siempre, sino crear algo que perdure." },
+        { author: "Émile Zola", quote: "El artista no es nada sin el don, pero el don no es nada sin el trabajo." },
       ],
     },
     labels: {
@@ -749,6 +764,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Docencia",
         education: "Educación",
         skills: "Habilidades",
+        recommendations: "Recomendaciones",
         reading: "Lectura",
         connect: "Contacto",
       },
@@ -763,12 +779,14 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: "Docencia",
         education: "Educación",
         skills: "Habilidades técnicas",
+        recommendations: "Recomendaciones",
         reading: "Lectura",
         connect: "Contacto",
       },
       introLead: "Quién es",
       introTail: "",
       connectTemplate: "Contáctame en {email}",
+      currentlyLabel: "Actualmente:",
     },
     education: {
       title: "State University of New York at Buffalo — Ciencias de la Computación",
