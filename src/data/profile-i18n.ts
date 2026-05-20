@@ -86,21 +86,21 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Риад Мухтаров",
-      tagline: "AI/Software-инженер с основой в распределённых системах и опытом преподавания компьютерных наук.",
+      tagline: "",
     },
-    about: "Разрабатываю ПО и AI-системы, в основном на Rust и Python. До этого два года преподавал информатику в State University of New York at Buffalo. Это сформировало мой подход к системам и объяснениям. Мне нравятся сложные инфраструктурные задачи и чистые абстракции.",
-    currently: "Разрабатываю AI-системы в ABB и руковожу разработкой в EYP.",
+    about: "Разрабатываю ПО и AI-системы на Rust и Python, с акцентом на распределённые системы и сложную инфраструктуру. До этого два года преподавал Компьютерные науки в State University of New York at Buffalo. Это сформировало мой подход к системам и объяснениям. Мне нравятся сложные задачи и чистые абстракции.",
+    currently: "Разрабатываю AI-системы в International Bank of Azerbaijan.<br>Руковожу разработкой в European Youth Parliament Azerbaijan.",
     experience: [
       {
         role: "Инженер по искусственному интеллекту",
-        org: "ABB",
+        org: "ABB - International Bank of Azerbaijan",
         location: "Баку, Азербайджан",
         period: "Апр 2026 – Настоящее время",
         bullets: [],
       },
       {
         role: "Руководитель команды IT‑разработки",
-        org: "EYP Azerbaijan",
+        org: "European Youth Parliament Azerbaijan",
         location: "Баку, Азербайджан",
         period: "Фев 2026 – Настоящее время",
         bullets: [
@@ -324,21 +324,21 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Riad Muxtarov",
-      tagline: "Paylanmış sistemlər üzrə baza biliklərinə və kompüter elmləri tədrisi üzrə təcrübəsi olan Süni İntellekt/Proqram mühəndisi.",
+      tagline: "",
     },
-    about: "Proqram təminatı və AI sistemləri qururam, əsasən Rust və Python ilə. Bundan əvvəl State University of New York at Buffalo-da iki il informatika tədris etmişəm. Bu, sistemlərə və izahlara yanaşmamı formalaşdırıb. Mürəkkəb infrastruktur problemləri və təmiz abstraksiyalar xoşuma gəlir.",
-    currently: "ABB-də AI sistemləri qurur və EYP-də inkişaf komandasına rəhbərlik edirəm.",
+    about: "Rust və Python ilə proqram təminatı və AI sistemləri hazırlayıram, paylanmış sistemlər və mürəkkəb infrastruktura fokuslanmaqla. Bundan əvvəl State University of New York at Buffalo-da iki il Kompüter Elmləri tədris etmişəm. Bu, sistemlərə və izahlara yanaşmamı formalaşdırıb. Mürəkkəb problemlər və təmiz abstraksiyalar xoşuma gəlir.",
+    currently: "International Bank of Azerbaijan-da AI sistemləri qururam.<br>European Youth Parliament Azerbaijan-da inkişaf komandasına rəhbərlik edirəm.",
     experience: [
       {
         role: "Süni İntellekt Mühəndisi",
-        org: "ABB",
+        org: "ABB - International Bank of Azerbaijan",
         location: "Bakı, Azərbaycan",
         period: "Apr 2026 – indiyə kimi",
         bullets: [],
       },
       {
         role: "İT İnkişaf Komandasının Rəhbəri",
-        org: "EYP Azerbaijan",
+        org: "European Youth Parliament Azerbaijan",
         location: "Bakı, Azərbaycan",
         period: "Fev 2026 – indiyə kimi",
         bullets: [
@@ -491,7 +491,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        title: "İnformatikaya giriş",
+        title: "Kompüter Elmlərinə giriş",
         skills: profile.teaching[3].skills,
         bullets: [
           "Python və alqoritmik düşüncə üzrə təməl dərslər keçdim",
@@ -552,246 +552,9 @@ export const profiles: Record<string, I18nProfile> = {
       currentlyLabel: "Hazırda:",
     },
     education: {
-      title: "State University of New York at Buffalo — Kompüter elmləri üzrə Bakalavr",
+      title: "State University of New York at Buffalo — Kompüter Elmləri üzrə Bakalavr",
       meta: "Avq 2020 – May 2024 · Buffalo, NY",
       bullets: ["Mükafatlar: Baş Tədris Assistenti Mükafatı, bir neçə dəfə Dekan siyahısına daxil edilmə"],
-    },
-  },
-  es: {
-    ...profile,
-    hero: {
-      ...profile.hero,
-      tagline: "Ingeniero de AI/Software con base en sistemas distribuidos y experiencia enseñando informática.",
-    },
-    about: "Construyo software y sistemas de IA, principalmente en Rust y Python. Antes enseñé informática en State University of New York at Buffalo durante dos años. Eso formó mi manera de pensar sobre sistemas y explicarlos. Me gustan los problemas de infraestructura complejos y las abstracciones limpias.",
-    currently: "Construyendo sistemas de IA en ABB y liderando desarrollo en EYP.",
-    experience: [
-      {
-        role: "Ingeniero de Inteligencia Artificial",
-        org: "ABB",
-        location: "Bakú, Azerbaiyán",
-        period: "Abr 2026 – Presente",
-        bullets: [],
-      },
-      {
-        role: "Jefe del Equipo de Desarrollo IT",
-        org: "EYP Azerbaijan",
-        location: "Bakú, Azerbaiyán",
-        period: "Feb 2026 – Presente",
-        bullets: [
-          "Coordinación de la renovación del sitio web, mejoras de plataformas internas e implementación de nuevas soluciones tecnológicas",
-        ],
-      },
-      {
-        role: "Especialista en TI",
-        org: "COP29 United Nations Climate Change Conference",
-        location: "Bakú, Azerbaiyán",
-        period: "Oct 2024 – Nov 2024",
-        bullets: [
-          "Garanticé el funcionamiento ininterrumpido de infraestructura crítica de TI para 500+ delegados internacionales, con 99.9% de uptime en sesiones híbridas bajo SLA estrictos y tiempo real",
-          "Resolví incidentes de infraestructura y sesiones híbridas en tiempo real bajo alta disponibilidad",
-          "Apoyé control de acceso, hardening de dispositivos y manejo seguro de sistemas",
-          "Colaboré con proveedores y equipos técnicos para asegurar operaciones continuas",
-        ],
-      },
-      {
-        role: "Asistente principal — Estructuras de datos",
-        org: "State University of New York at Buffalo",
-        location: "Buffalo, NY",
-        period: "Ago 2022 – May 2024",
-        bullets: [
-          "Enseñé estructuras de datos y algoritmos en Scala y Java a ~1000 estudiantes",
-          "Coordiné 20 asistentes y la logística del curso",
-          "Supervisé evaluaciones con enfoque en integridad académica",
-          "Realicé revisiones semanales y soporte de debugging para ~200 estudiantes",
-        ],
-      },
-      {
-        role: "Ingeniero de software",
-        org: "EZ Pro Billing and Collection Inc.",
-        location: "New York, NY",
-        period: "Sep 2021 – May 2023",
-        bullets: [
-          "Construí sistemas backend con Python y MongoDB y componentes frontend ADA",
-          "Desarrollé autenticación y asignación de puntos por tareas",
-          "Optimicé la arquitectura de mensajería con WebSockets, reduje la carga del servidor en 90% y aseguré sincronización instantánea de datos en un sistema distribuido",
-        ],
-      },
-    ],
-    projects: [
-      {
-        name: "MatchSentinel — Plataforma de monitoreo de transacciones",
-        tech: profile.projects[0].tech,
-        impact:
-          "Pipeline end-to-end de monitoreo de transacciones con scoring event-driven, procesamiento asíncrono via RabbitMQ y manejo idempotente de datos.",
-        date: "Ene 2026",
-        bullets: [
-          "Diseñé una arquitectura event‑driven para scoring, notificaciones y reportes",
-          "Construí procesamiento asíncrono con RabbitMQ y re‑procesamiento seguro",
-          "Implementé BD por servicio con migraciones Liquibase y configuración por entorno",
-          "Desplegué en AWS EC2 con Docker Compose, redes Linux y endpoints públicos",
-        ],
-        links: profile.projects[0].links,
-      },
-      {
-        name: "FinFlow — Wallet API",
-        tech: profile.projects[1].tech,
-        impact:
-          "Wallet API seguro con autenticación JWT, endpoints protegidos y gestión de sesiones stateless.",
-        date: "Ene 2026",
-        bullets: [
-          "Implementé autenticación y autorización JWT sin estado",
-          "Diseñé modelos relacionales con JPA/Hibernate y consultas optimizadas",
-          "Apliqué buenas prácticas: hashing de contraseñas, TTL de tokens y filtros",
-          "Desarrollé pruebas de integración para endpoints protegidos",
-        ],
-        links: profile.projects[1].links,
-      },
-      {
-        name: "Redis Redesign",
-        tech: profile.projects[2].tech,
-        impact:
-          "Caché de dos capas con TTL que elimina inconsistencias de datos obsoletos preservando acceso de baja latencia.",
-        date: "Dic 2025",
-        bullets: [
-          "Reemplacé el caché monolítico con dos capas: key-subkey to id e id to value",
-          "Apliqué control de ciclo de vida con TTL para expiración predecible",
-          "Implementé garbage collection para limpiar expirados y referencias colgantes",
-          "Mantuve acceso de baja latencia con mejor consistencia en cargas distribuidas",
-        ],
-      },
-      {
-        name: "Portafolio minimalista",
-        tech: profile.projects[3].tech,
-        impact:
-          "Portafolio responsive con jerarquía tipográfica fuerte, animaciones suaves y diseño accesible.",
-        date: "Ene 2026",
-        bullets: [
-          "Diseñé un layout minimalista con jerarquía tipográfica fuerte",
-          "Implementé navegación responsive para desktop y móvil",
-          "Añadí micro‑animaciones respetando prefers-reduced-motion",
-        ],
-        links: profile.projects[3].links,
-      },
-      {
-        name: "Algoritmo de consenso Raft",
-        tech: profile.projects[4].tech,
-        impact:
-          "Consenso Raft preservando consistencia bajo fallos de nodos via elección de líder y replicación de logs.",
-        date: "May 2024",
-        bullets: [
-          "Implementé Raft con elección de líder, replicación de logs y tolerancia a fallos",
-          "Construí componentes concurrentes para consistencia entre nodos",
-        ],
-      },
-      {
-        name: "Tabla hash distribuida (Kademlia)",
-        tech: profile.projects[5].tech,
-        impact:
-          "DHT Kademlia para descubrimiento resiliente de peers y búsquedas O(log n) en redes dinámicas.",
-        date: "Feb 2024",
-        bullets: [
-          "Implementé almacenamiento P2P con enrutamiento Kademlia",
-          "Logré búsquedas O(log n) y ruteo resiliente de datos",
-        ],
-      },
-    ],
-    teaching: [
-      {
-        title: "Estructuras de datos",
-        skills: profile.teaching[0].skills,
-        bullets: [
-          "Apoyé a 900+ estudiantes con office hours y sesiones de repaso",
-          "Enseñé estructuras y algoritmos clave para problemas reales",
-          "Guié análisis de complejidad y selección de estructuras",
-          "Apoyé implementaciones en Java y Scala",
-          "Expliqué la relación entre estructuras y algoritmos en diseño de sistemas",
-        ],
-      },
-      {
-        title: "Aplicaciones web",
-        skills: profile.teaching[1].skills,
-        bullets: [
-          "Ayudé a 240 estudiantes a construir apps full‑stack",
-          "Expliqué HTTP/REST, routing y arquitectura backend",
-          "Revisé proyectos para mejorar calidad y pruebas",
-          "Asistí con deployment y debugging",
-        ],
-      },
-      {
-        title: "Estructuras discretas",
-        skills: profile.teaching[2].skills,
-        bullets: [
-          "Impartí lógica, pruebas y matemáticas discretas",
-          "Corregí tareas y apoyé con pruebas formales",
-          "Guié la comprensión de conceptos clave",
-        ],
-      },
-      {
-        title: "Introducción a la informática",
-        skills: profile.teaching[3].skills,
-        bullets: [
-          "Enseñé fundamentos de Python y pensamiento algorítmico",
-          "Dirigí laboratorios y reforcé conceptos base",
-          "Ayudé a superar barreras de aprendizaje",
-        ],
-      },
-      {
-        title: "Organización de computadores",
-        skills: profile.teaching[4].skills,
-        bullets: [
-          "Apoyé temas de arquitectura de CPU y organización de memoria",
-          "Revisé ALU, pipeline y control units",
-          "Califiqué tareas y conduje sesiones de repaso",
-        ],
-      },
-    ],
-    reading: {
-      title: "Lectura",
-      description:
-        "He leído a los autores de abajo durante 3–4 años; su estructura narrativa y ambigüedad son útiles para modelar problemas reales.",
-      items: [
-        { author: "Erich Maria Remarque", quote: "La vida no pretendía hacernos perfectos. Quien es perfecto pertenece a un museo." },
-        { author: "Mijaíl Bulgákov", quote: "Todo saldrá bien, el mundo está construido sobre eso." },
-        { author: "Chuck Palahniuk", quote: "Todos morimos. La meta no es vivir para siempre, sino crear algo que perdure." },
-        { author: "Émile Zola", quote: "El artista no es nada sin el don, pero el don no es nada sin el trabajo." },
-      ],
-    },
-    labels: {
-      nav: {
-        experience: "Experiencia",
-        projects: "Proyectos",
-        teaching: "Docencia",
-        education: "Educación",
-        skills: "Habilidades",
-        recommendations: "Recomendaciones",
-        reading: "Lectura",
-        connect: "Contacto",
-      },
-      links: {
-        resume: "CV",
-        linkedin: "LinkedIn",
-        github: "GitHub",
-      },
-      headings: {
-        experience: "Experiencia",
-        projects: "Proyectos",
-        teaching: "Docencia",
-        education: "Educación",
-        skills: "Habilidades técnicas",
-        recommendations: "Recomendaciones",
-        reading: "Lectura",
-        connect: "Contacto",
-      },
-      introLead: "Quién es",
-      introTail: "",
-      connectTemplate: "Contáctame en {email}",
-      currentlyLabel: "Actualmente:",
-    },
-    education: {
-      title: "State University of New York at Buffalo — Ciencias de la Computación",
-      meta: "Ago 2020 – May 2024 · Buffalo, NY",
-      bullets: ["Premios: Undergraduate Teaching Assistant Award, múltiples menciones en la Dean's List"],
     },
   },
 };

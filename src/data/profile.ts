@@ -64,12 +64,12 @@ export type Profile = {
 export const profile: Profile = {
   hero: {
     name: "Riad Mukhtarov",
-    tagline: "AI/Software Engineer with a foundation in distributed systems and experience teaching computer science.",
+    tagline: "",
   },
 
-  about: "I build software and AI systems, mostly in Rust and Python. Before that, I taught computer science at State University of New York at Buffalo for two years. It shaped how I think about systems and how I explain them. I like complex infrastructure problems and clean abstractions.",
+  about: "I develop software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, I taught computer science at State University of New York at Buffalo for two years. It shaped how I think about systems and how I explain them. I like hard problems and clean abstractions.",
 
-  currently: "Building AI systems at ABB and leading dev at EYP.",
+  currently: "Building AI systems at International Bank of Azerbaijan.<br>Leading dev at European Youth Parliament Azerbaijan.",
 
   links: {
     resume: "/resume.pdf",
@@ -80,14 +80,14 @@ export const profile: Profile = {
   experience: [
     {
       role: "Artificial Intelligence Engineer",
-      org: "ABB",
+      org: "ABB - International Bank of Azerbaijan",
       location: "Baku, Azerbaijan",
       period: "Apr 2026 – Present",
       bullets: [],
     },
     {
       role: "Head of IT Development Team",
-      org: "EYP Azerbaijan",
+      org: "European Youth Parliament Azerbaijan",
       location: "Baku, Azerbaijan",
       period: "Feb 2026 – Present",
       bullets: [
@@ -365,7 +365,7 @@ export const profile: Profile = {
       quote: "I was impressed by his strong work ethic, positive attitude, professionalism, and dedication. He proved himself to be an organized, efficient, and hardworking TA.",
     },
     {
-      name: "Sean Mackay, PhD",
+      name: "Sean Mackay",
       title: "Assistant Professor of Computer Science, University of Oklahoma",
       course: "Introduction to Computer Science",
       quote: "Riad is one of the best individuals I have ever had the opportunity to work with. His ability to communicate complex concepts to a range of skill levels continually impressed me.",
