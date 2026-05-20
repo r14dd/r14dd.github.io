@@ -29,12 +29,12 @@ const skillIcons: Record<string, string> = {
 
 const stripParens = (item: string): string => item.replace(/\s*\([^)]*\)/g, '').trim();
 const metaTitle = `${profile.hero.name} — Portfolio`;
-const metaDescription = profile.hero.tagline;
+const metaDescription = profile.about;
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.hero.name,
-  jobTitle: profile.hero.tagline,
+  jobTitle: "AI/Software Engineer",
   url: "https://r14dd.github.io",
   sameAs: [profile.links.linkedin, profile.links.github],
   email: "mailto:riadmukh@gmail.com",
@@ -57,7 +57,9 @@ const structuredData = JSON.stringify({
   />
 
   <div class="lang-switcher" aria-label="Controls">
-    <button class="cmd-trigger" id="cmd-trigger" type="button" aria-label="Open command palette (⌘K)">⌘K</button>
+    <button class="cmd-trigger" id="cmd-trigger" type="button" aria-label="Search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
+    </button>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light mode">
       <span class="theme-icon" aria-hidden="true">☀️</span>
     </button>
@@ -87,30 +89,12 @@ const structuredData = JSON.stringify({
       <button type="button" data-lang="en">English</button>
       <button type="button" data-lang="ru">Русский</button>
       <button type="button" data-lang="az">Azərbaycanca</button>
-      <button type="button" data-lang="es">Español</button>
     </div>
   </div>
 
   <div class="pull-indicator" id="pull-indicator" aria-hidden="true">
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 2v12M5 5l3-3 3 3"/></svg>
   </div>
-
-  <nav class="mobile-dock" aria-label="Page navigation">
-    <div class="dock-track">
-      <span class="dock-indicator" aria-hidden="true"></span>
-      <button class="dock-search" id="dock-search" type="button" aria-label="Search">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
-      </button>
-      <a href="#experience" class="dock-item">{profile.labels.nav.experience}</a>
-      <a href="#projects" class="dock-item">{profile.labels.nav.projects}</a>
-      <a href="#skills" class="dock-item">{profile.labels.nav.skills}</a>
-      <a href="#teaching" class="dock-item">{profile.labels.nav.teaching}</a>
-      <a href="#education" class="dock-item">{profile.labels.nav.education}</a>
-      <a href="#recommendations" class="dock-item">{profile.labels.nav.recommendations}</a>
-      <a href="#reading" class="dock-item">{profile.labels.nav.reading}</a>
-      <a href="#connect" class="dock-item">{profile.labels.nav.connect}</a>
-    </div>
-  </nav>
 
   <aside class="side-nav">
     <span class="nav-pill" aria-hidden="true"></span>
@@ -138,12 +122,9 @@ const structuredData = JSON.stringify({
   <main class="content" id="main-content">
     <section>
       <h1>{profile.hero.name}</h1>
-      <p class="hero-tagline">
-        {profile.hero.tagline}
-      </p>
       <p class="hero-about" id="hero-about">{profile.about}</p>
       <p class="hero-currently" id="hero-currently">
-        <span class="currently-label">{profile.labels.currentlyLabel}</span> {profile.currently}
+        <span class="currently-label">{profile.labels.currentlyLabel}</span> <span set:html={profile.currently} />
       </p>
       <div class="hero-links">
         <a href={profile.links.linkedin} target="_blank" rel="noopener"
@@ -500,10 +481,7 @@ const structuredData = JSON.stringify({
     >
       <h2>{profile.labels.headings.connect}<svg class="section-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg></h2>
       <div class="section-body"><div class="section-body-inner">
-      <p class="connect-text">
-        Reach me at <a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>
-      </p>
-      <div class="hero-cta">
+<div class="hero-cta">
         <a class="cta-btn" href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
         <a class="cta-btn" href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
         <a class="cta-btn" href="mailto:riadmukh@gmail.com">Email</a>
@@ -541,16 +519,22 @@ const structuredData = JSON.stringify({
     <div class="kbd-grid">
       <div class="kbd-row"><span class="kbd-desc">Command palette</span><span class="kbd-keys"><kbd>⌘</kbd><kbd>K</kbd></span></div>
       <div class="kbd-row"><span class="kbd-desc">This menu</span><span class="kbd-keys"><kbd>?</kbd></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Jump to section</span><span class="kbd-keys"><kbd>g</kbd><span class="kbd-then">then</span><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd>t</kbd><kbd>d</kbd><kbd>r</kbd><kbd>c</kbd></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Find in page</span><span class="kbd-keys"><kbd>⌘</kbd><kbd>F</kbd></span></div>
+      <div class="kbd-row"><span class="kbd-desc">Jump to section</span><span class="kbd-keys"><kbd>g</kbd><span class="kbd-then">then</span><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd>t</kbd><kbd>d</kbd><kbd>r</kbd><kbd>m</kbd><kbd>c</kbd></span></div>
       <div class="kbd-row"><span class="kbd-desc">Toggle theme</span><span class="kbd-keys"><kbd>\</kbd></span></div>
       <div class="kbd-row"><span class="kbd-desc">Close overlays</span><span class="kbd-keys"><kbd>esc</kbd></span></div>
     </div>
   </div>
 
   <div class="easter-overlay" id="easter-overlay" aria-hidden="true"></div>
-  <div class="gyro-toast" id="gyro-toast"></div>
-
   <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
+  <div class="find-nav-bar" id="find-nav-bar" aria-hidden="true">
+    <button class="find-nav-btn" id="find-nav-prev" type="button" aria-label="Previous match"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 11L6 7l4-4"/></svg></button>
+    <span class="find-nav-count" id="find-nav-count"></span>
+    <button class="find-nav-btn" id="find-nav-next" type="button" aria-label="Next match"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 11l4-4-4-4"/></svg></button>
+    <button class="find-nav-close" id="find-nav-close" type="button" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+  </div>
+
   <div class="proj-modal" id="proj-modal" role="dialog" aria-modal="true" aria-label="Project detail" aria-hidden="true">
     <button class="proj-close" id="proj-close" type="button" aria-label="Close project detail">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
@@ -624,7 +608,6 @@ const structuredData = JSON.stringify({
       en: "English",
       ru: "Русский",
       az: "Azərbaycanca",
-      es: "Español",
     };
 
     const openFromHash = () => {
@@ -641,21 +624,6 @@ const structuredData = JSON.stringify({
 
     const sections = Array.from(document.querySelectorAll("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
-    const dockItems = Array.from(document.querySelectorAll(".dock-item"));
-    const dockTrack = document.querySelector(".dock-track");
-    const dockIndicator = document.querySelector(".dock-indicator");
-
-    const setDockActive = (id) => {
-      const activeItem = dockItems.find(item => item.getAttribute("href") === `#${id}`);
-      dockItems.forEach(item => item.classList.remove("active"));
-      if (!activeItem || !dockTrack || !dockIndicator) return;
-      activeItem.classList.add("active");
-      dockIndicator.style.width = activeItem.offsetWidth + "px";
-      dockIndicator.style.left = activeItem.offsetLeft + "px";
-      const itemCenter = activeItem.offsetLeft + activeItem.offsetWidth / 2;
-      dockTrack.scrollTo({ left: itemCenter - dockTrack.offsetWidth / 2, behavior: "smooth" });
-    };
-
     const setActiveLink = () => {
       const scrollPos = window.scrollY + 120;
       let current = sections[0];
@@ -676,7 +644,6 @@ const structuredData = JSON.stringify({
         pill.style.top = (linkRect.top - navRect.top + (linkRect.height - 26) / 2) + "px";
         pill.style.opacity = "1";
       }
-      setDockActive(current.id);
     };
 
     const updateNavBlur = () => {
@@ -701,7 +668,7 @@ const structuredData = JSON.stringify({
       requestAnimationFrame(step);
     };
 
-    document.querySelectorAll(".side-nav a, .dock-item").forEach((link) => {
+    document.querySelectorAll(".side-nav a").forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         const id = link.getAttribute("href")?.replace("#", "");
@@ -715,8 +682,14 @@ const structuredData = JSON.stringify({
     });
 
     const heroEl = document.querySelector("main > section:first-of-type");
+    const isTouch = window.matchMedia('(hover: none)').matches;
+    if (isTouch && heroEl) {
+      const h1 = heroEl.querySelector("h1");
+      heroEl.querySelectorAll(".hero-tagline").forEach((t) => { t.style.transform = ""; });
+      if (h1) h1.style.transform = "";
+    }
     const updateParallax = () => {
-      if (!heroEl) return;
+      if (!heroEl || isTouch) return;
       const scrolled = window.scrollY;
       const h1 = heroEl.querySelector("h1");
       const taglines = heroEl.querySelectorAll(".hero-tagline");
@@ -725,8 +698,6 @@ const structuredData = JSON.stringify({
     };
 
     let scrollTicking = false;
-    let lastScrollY = 0;
-    const mobileDock = document.querySelector('.mobile-dock');
     window.addEventListener("scroll", () => {
       if (scrollTicking) return;
       scrollTicking = true;
@@ -734,17 +705,6 @@ const structuredData = JSON.stringify({
         setActiveLink();
         updateNavBlur();
         updateParallax();
-        if (mobileDock) {
-          const dy = window.scrollY - lastScrollY;
-          if (dy > 8 && window.scrollY > 100) {
-            mobileDock.style.transform = 'translateX(-50%) translateY(calc(100% + 2rem))';
-            mobileDock.style.opacity = '0';
-          } else if (dy < -4) {
-            mobileDock.style.transform = 'translateX(-50%) translateY(0)';
-            mobileDock.style.opacity = '1';
-          }
-          lastScrollY = window.scrollY;
-        }
         scrollTicking = false;
       });
     }, { passive: true });
@@ -1094,15 +1054,8 @@ const structuredData = JSON.stringify({
     };
 
     const buildConnect = (data) => {
-      const template =
-        data.labels.connectTemplate || "Reach me at {email}";
-      const html = template.replace(
-        "{email}",
-        `<a href="mailto:riadmukh@gmail.com" target="_blank" rel="noopener">riadmukh@gmail.com</a>`,
-      );
       return `
         <h2>${data.labels.headings.connect}</h2>
-        <p class="connect-text">${html}</p>
         <div class="hero-cta">
           <a class="cta-btn" href="${data.links.linkedin}" target="_blank" rel="noopener">LinkedIn</a>
           <a class="cta-btn" href="${data.links.github}" target="_blank" rel="noopener">GitHub</a>
@@ -1122,6 +1075,24 @@ const structuredData = JSON.stringify({
         span.style.animationDelay = `${(0.03 + idx * 0.04).toFixed(2)}s`;
         introName.appendChild(span);
       });
+    };
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const typed = new WeakSet();
+    const typeH2 = (h2) => {
+      if (prefersReduced) return;
+      const textNode = Array.from(h2.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
+      if (!textNode) return;
+      const text = textNode.textContent;
+      const len = text.length;
+      const perChar = 400 / len;
+      let i = 0;
+      textNode.textContent = "";
+      const step = () => {
+        textNode.textContent = text.slice(0, ++i);
+        if (i < len) setTimeout(step, perChar);
+      };
+      step();
     };
 
     const applyLanguage = (lang) => {
@@ -1215,7 +1186,6 @@ const structuredData = JSON.stringify({
       }
 
       const sideNav = document.querySelectorAll(".side-nav a");
-      const dockNav = document.querySelectorAll(".dock-item");
       const labels = [
         data.labels.nav.experience,
         data.labels.nav.projects,
@@ -1227,9 +1197,6 @@ const structuredData = JSON.stringify({
         data.labels.nav.connect,
       ];
       sideNav.forEach((link, idx) => {
-        if (labels[idx]) link.textContent = labels[idx];
-      });
-      dockNav.forEach((link, idx) => {
         if (labels[idx]) link.textContent = labels[idx];
       });
 
@@ -1387,6 +1354,7 @@ const structuredData = JSON.stringify({
       link: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-3M10 2h4v4M14 2L8 8"/></svg>',
       action: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5.5"/><path d="M8 5.5V8l1.5 1.5"/></svg>',
       project: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg>',
+      find: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="3.5"/><path d="M9.5 9.5l3 3"/></svg>',
     };
 
     const getCommands = () => {
@@ -1401,8 +1369,9 @@ const structuredData = JSON.stringify({
         { group: 'Navigate', label: nav.projects,   icon: 'nav',    action: () => scrollCmd('projects')   },
         { group: 'Navigate', label: nav.teaching,   icon: 'nav',    action: () => scrollCmd('teaching')   },
         { group: 'Navigate', label: nav.skills,     icon: 'nav',    action: () => scrollCmd('skills')     },
-        { group: 'Navigate', label: nav.reading,    icon: 'nav',    action: () => scrollCmd('reading')    },
-        { group: 'Navigate', label: nav.connect,    icon: 'nav',    action: () => scrollCmd('connect')    },
+        { group: 'Navigate', label: nav.reading,         icon: 'nav', action: () => scrollCmd('reading')         },
+        { group: 'Navigate', label: nav.recommendations, icon: 'nav', action: () => scrollCmd('recommendations') },
+        { group: 'Navigate', label: nav.connect,         icon: 'nav', action: () => scrollCmd('connect')         },
         ...projects,
         { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open('https://linkedin.com/in/riadmukhtarov', '_blank'); closeCmd(); } },
         { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open('https://github.com/r14dd', '_blank'); closeCmd(); } },
@@ -1467,6 +1436,8 @@ const structuredData = JSON.stringify({
       cmdPalette?.classList.remove('open');
       cmdPalette?.setAttribute('aria-hidden', 'true');
       if (cmdInput) cmdInput.value = '';
+      if (!findCommitting) clearPageMarks();
+      findCommitting = false;
     };
 
     const setHighlight = (idx) => {
@@ -1483,6 +1454,7 @@ const structuredData = JSON.stringify({
       const all = getCommands();
       const q = query.trim();
       let grouped = true;
+      const matchCount = q.length >= 2 ? highlightPage(q) : (clearPageMarks(), 0);
       if (q) {
         grouped = false;
         cmdFiltered = all
@@ -1490,6 +1462,12 @@ const structuredData = JSON.stringify({
           .filter((x) => x.s >= 0)
           .sort((a, b) => b.s - a.s)
           .map((x) => x.c);
+        if (matchCount > 0) {
+          cmdFiltered = [
+            { label: `${matchCount} match${matchCount === 1 ? '' : 'es'} on page`, group: 'Find', icon: 'find', action: commitFind },
+            ...cmdFiltered,
+          ];
+        }
       } else {
         cmdFiltered = all;
       }
@@ -1520,7 +1498,7 @@ const structuredData = JSON.stringify({
     document.getElementById('cmd-trigger')?.addEventListener('click', () => cmdOpen ? closeCmd() : openCmd());
 
     document.addEventListener('keydown', e => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key.toLowerCase() === 'f')) {
         e.preventDefault();
         if (projOpen || kbdOpen) return;
         cmdOpen ? closeCmd() : openCmd();
@@ -1552,9 +1530,101 @@ const structuredData = JSON.stringify({
     };
     kbdBackdrop?.addEventListener('click', closeKbd);
 
+    // Unified find — page marks shared between palette and find-nav
+    let pageMarks = [];
+    let findIdx = 0;
+    let findNavOpen = false;
+    let findCommitting = false;
+
+    const clearPageMarks = () => {
+      pageMarks.forEach(m => {
+        const p = m.parentNode;
+        if (p) { p.replaceChild(document.createTextNode(m.textContent), m); p.normalize(); }
+      });
+      pageMarks = [];
+    };
+
+    const highlightPage = (q) => {
+      clearPageMarks();
+      if (!q || q.length < 2) return 0;
+      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(escaped, 'gi');
+      const walker = document.createTreeWalker(
+        document.getElementById('main-content') || document.body,
+        NodeFilter.SHOW_TEXT,
+        { acceptNode: n => {
+          const p = n.parentElement;
+          if (!p || ['SCRIPT','STYLE','MARK'].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
+          if (p.closest('.find-nav-bar,.cmd-palette,.kbd-overlay,.proj-modal')) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }}
+      );
+      const nodes = [];
+      let node;
+      while ((node = walker.nextNode())) nodes.push(node);
+      nodes.forEach(tn => {
+        const text = tn.textContent;
+        if (!re.test(text)) { re.lastIndex = 0; return; }
+        re.lastIndex = 0;
+        const frag = document.createDocumentFragment();
+        let last = 0, m;
+        while ((m = re.exec(text)) !== null) {
+          if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          const mark = document.createElement('mark');
+          mark.className = 'search-highlight';
+          mark.textContent = m[0];
+          frag.appendChild(mark);
+          pageMarks.push(mark);
+          last = re.lastIndex;
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        tn.parentNode.replaceChild(frag, tn);
+      });
+      return pageMarks.length;
+    };
+
+    const updateFindActive = () => {
+      pageMarks.forEach((m, i) => m.classList.toggle('search-highlight-active', i === findIdx));
+      const cur = pageMarks[findIdx];
+      if (cur) {
+        cur.closest('.section-block')?.classList.add('section-open');
+        cur.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      const el = document.getElementById('find-nav-count');
+      if (el) el.textContent = pageMarks.length ? `${findIdx + 1} / ${pageMarks.length}` : '';
+    };
+
+    const findNavBar = document.getElementById('find-nav-bar');
+    const showFindNav = () => {
+      findNavOpen = true;
+      findNavBar?.classList.add('open');
+      findNavBar?.setAttribute('aria-hidden', 'false');
+    };
+    const hideFindNav = () => {
+      findNavOpen = false;
+      findNavBar?.classList.remove('open');
+      findNavBar?.setAttribute('aria-hidden', 'true');
+      clearPageMarks();
+      const el = document.getElementById('find-nav-count');
+      if (el) el.textContent = '';
+    };
+    const commitFind = () => {
+      findCommitting = true;
+      closeCmd();
+      if (pageMarks.length) { findIdx = 0; updateFindActive(); showFindNav(); }
+    };
+
+    document.getElementById('find-nav-prev')?.addEventListener('click', () => {
+      if (pageMarks.length) { findIdx = (findIdx - 1 + pageMarks.length) % pageMarks.length; updateFindActive(); }
+    });
+    document.getElementById('find-nav-next')?.addEventListener('click', () => {
+      if (pageMarks.length) { findIdx = (findIdx + 1) % pageMarks.length; updateFindActive(); }
+    });
+    document.getElementById('find-nav-close')?.addEventListener('click', hideFindNav);
+
     const SECTION_KEYS = {
       e: 'experience', p: 'projects', s: 'skills',
-      t: 'teaching', d: 'education', r: 'reading', c: 'connect',
+      t: 'teaching', d: 'education', r: 'reading', c: 'connect', m: 'recommendations',
     };
     const isTypingTarget = (el) =>
       !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
@@ -1569,6 +1639,10 @@ const structuredData = JSON.stringify({
       }
       if (kbdOpen) {
         if (e.key === 'Escape' || e.key === '?') { e.preventDefault(); closeKbd(); }
+        return;
+      }
+      if (findNavOpen) {
+        if (e.key === 'Escape') { e.preventDefault(); hideFindNav(); }
         return;
       }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -1685,23 +1759,6 @@ const structuredData = JSON.stringify({
     projBackdrop?.addEventListener('click', closeProject);
     projClose?.addEventListener('click', closeProject);
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const typed = new WeakSet();
-    const typeH2 = (h2) => {
-      if (prefersReduced) return;
-      const textNode = Array.from(h2.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
-      if (!textNode) return;
-      const text = textNode.textContent;
-      const len = text.length;
-      const perChar = 400 / len;
-      let i = 0;
-      textNode.textContent = "";
-      const step = () => {
-        textNode.textContent = text.slice(0, ++i);
-        if (i < len) setTimeout(step, perChar);
-      };
-      step();
-    };
     if (!prefersReduced) {
       const simObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -1738,47 +1795,6 @@ const structuredData = JSON.stringify({
           }
         }).observe(sec, { attributes: true, attributeFilter: ["class"] });
       });
-
-      // Mobile: dock search opens command palette
-      document.getElementById('dock-search')?.addEventListener('click', () => {
-        cmdOpen ? closeCmd() : openCmd();
-      });
-
-      // Mobile: swipe left/right on dock to cycle sections
-      {
-        const dock = document.querySelector('.mobile-dock');
-        const sectionIds = ['experience','projects','skills','teaching','education','reading','connect'];
-        if (dock) {
-          let swStartX = 0, swStartY = 0, swSwiping = false;
-          dock.addEventListener('touchstart', (e) => {
-            swStartX = e.touches[0].clientX;
-            swStartY = e.touches[0].clientY;
-            swSwiping = true;
-          }, { passive: true });
-          dock.addEventListener('touchmove', (e) => {
-            if (!swSwiping) return;
-            if (Math.abs(e.touches[0].clientY - swStartY) > 30) { swSwiping = false; }
-          }, { passive: true });
-          dock.addEventListener('touchend', (e) => {
-            if (!swSwiping) return;
-            swSwiping = false;
-            const dx = e.changedTouches[0].clientX - swStartX;
-            if (Math.abs(dx) < 50) return;
-            const currentActive = document.querySelector('.dock-item.active');
-            const currentIdx = currentActive ? sectionIds.indexOf(currentActive.getAttribute('href')?.replace('#','')) : 0;
-            const nextIdx = dx < 0
-              ? Math.min(currentIdx + 1, sectionIds.length - 1)
-              : Math.max(currentIdx - 1, 0);
-            if (nextIdx !== currentIdx) {
-              const target = document.getElementById(sectionIds[nextIdx]);
-              if (target) {
-                smoothScrollTo(target);
-                history.pushState(null, '', `#${sectionIds[nextIdx]}`);
-              }
-            }
-          }, { passive: true });
-        }
-      }
 
       // Mobile: pull-to-refresh animation (visual only)
       {
@@ -1849,102 +1865,6 @@ const structuredData = JSON.stringify({
         }
       }
 
-      // Gyroscope parallax + shake-to-random
-      {
-        const isMobile = 'ontouchstart' in window;
-        const hero = document.querySelector('main > section:first-of-type');
-        const h1El = hero?.querySelector('h1');
-        const taglines = hero?.querySelectorAll('.hero-tagline');
-        const gyroToast = document.getElementById('gyro-toast');
-        let gyroEnabled = false;
-        let baseGamma = null, baseBeta = null;
-        let lastShake = 0;
-        let shakeCount = 0;
-        let lastAccel = { x: 0, y: 0, z: 0 };
-        const SHAKE_THRESHOLD = 25;
-        const SHAKE_COUNT_NEEDED = 3;
-        const SHAKE_WINDOW = 800;
-
-        const showGyroToast = (msg) => {
-          if (!gyroToast) return;
-          gyroToast.textContent = msg;
-          gyroToast.classList.add('show');
-          setTimeout(() => gyroToast.classList.remove('show'), 2000);
-        };
-
-        const handleOrientation = (e) => {
-          if (!gyroEnabled) return;
-          const gamma = e.gamma || 0;
-          const beta = e.beta || 0;
-          if (baseGamma === null) { baseGamma = gamma; baseBeta = beta; }
-          const dx = (gamma - baseGamma) * 0.4;
-          const dy = (beta - baseBeta) * 0.3;
-          const clampDx = Math.max(-20, Math.min(20, dx));
-          const clampDy = Math.max(-15, Math.min(15, dy));
-          document.body.style.backgroundPosition = `${12 + clampDx}px ${12 + clampDy}px`;
-          if (h1El) h1El.style.transform = `translate(${clampDx * 0.5}px, ${clampDy * 0.3}px)`;
-          if (taglines) taglines.forEach(t => {
-            t.style.transform = `translate(${clampDx * 0.3}px, ${clampDy * 0.2}px)`;
-          });
-          document.querySelectorAll('.project-card').forEach((card, i) => {
-            const factor = 0.15 + (i % 3) * 0.05;
-            card.style.transform = `translate(${clampDx * factor}px, ${clampDy * factor}px)`;
-          });
-        };
-
-        const handleMotion = (e) => {
-          const acc = e.accelerationIncludingGravity;
-          if (!acc) return;
-          const dx = Math.abs(acc.x - lastAccel.x);
-          const dy = Math.abs(acc.y - lastAccel.y);
-          const dz = Math.abs(acc.z - lastAccel.z);
-          lastAccel = { x: acc.x, y: acc.y, z: acc.z };
-          if (dx + dy + dz > SHAKE_THRESHOLD) {
-            const now = Date.now();
-            if (now - lastShake > SHAKE_WINDOW) shakeCount = 0;
-            shakeCount++;
-            lastShake = now;
-            if (shakeCount >= SHAKE_COUNT_NEEDED) {
-              shakeCount = 0;
-              triggerRandomProject();
-            }
-          }
-        };
-
-        const triggerRandomProject = () => {
-          const projects = currentProfile?.projects || I18N.en.projects || [];
-          if (!projects.length) return;
-          const p = projects[Math.floor(Math.random() * projects.length)];
-          const card = Array.from(document.querySelectorAll('#projects .project-card'))
-            .find(c => c.querySelector('h3')?.textContent?.trim() === p.name);
-          showGyroToast(`Shake → ${p.name}`);
-          if (card) {
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => openProject(p, card), 500);
-          }
-        };
-
-        const enableGyro = () => {
-          gyroEnabled = true;
-          window.addEventListener('deviceorientation', handleOrientation, { passive: true });
-          window.addEventListener('devicemotion', handleMotion, { passive: true });
-          showGyroToast('Tilt to explore · Shake for random');
-        };
-
-        if (isMobile) {
-          if (typeof DeviceOrientationEvent !== 'undefined' &&
-              typeof DeviceOrientationEvent.requestPermission === 'function') {
-            document.addEventListener('touchend', function reqGyro() {
-              DeviceOrientationEvent.requestPermission().then(state => {
-                if (state === 'granted') enableGyro();
-              }).catch(() => {});
-              document.removeEventListener('touchend', reqGyro);
-            }, { once: true });
-          } else if ('DeviceOrientationEvent' in window) {
-            enableGyro();
-          }
-        }
-      }
 
 
       // Pinch-to-zoom on sim visuals (inside project modal)
