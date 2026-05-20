@@ -35,9 +35,12 @@ const {
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta id="theme-color-meta" name="theme-color" content="#050505" />
     <script is:inline>
-      if (localStorage.getItem('portfolio-theme') === 'light') {
+      const _isLight = localStorage.getItem('portfolio-theme') === 'light';
+      if (_isLight) {
         document.documentElement.classList.add('light');
+        document.getElementById('theme-color-meta')?.setAttribute('content', '#faf9f6');
       }
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     </script>
@@ -107,6 +110,13 @@ const {
 
       * {
         box-sizing: border-box;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      input, textarea {
+        user-select: text;
+        -webkit-user-select: text;
       }
 
       :focus-visible {
@@ -1342,6 +1352,45 @@ const {
 
       }
 
+      .scroll-line {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 2px;
+        height: 100vh;
+        z-index: 500;
+        pointer-events: none;
+        background: rgba(255, 255, 255, 0.04);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .scroll-line-fill {
+        width: 100%;
+        height: 0%;
+        background: linear-gradient(
+          to bottom,
+          #5a3e10 0%,
+          #7a5520 40%,
+          #6b4918 100%
+        );
+        position: relative;
+      }
+      .scroll-line-fill::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #a07030;
+        box-shadow: 0 0 6px 2px rgba(120, 80, 20, 0.7), 0 0 12px 4px rgba(100, 65, 15, 0.4);
+      }
+      @media (max-width: 1169px) {
+        .scroll-line { display: none; }
+      }
+
       body::after {
         content: '';
         position: fixed;
@@ -1846,25 +1895,32 @@ const {
         gap: 0.3rem;
       }
       .cmd-trigger {
-        display: none;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid rgba(var(--accent-rgb), 0.12);
+        background: var(--surface);
+        backdrop-filter: blur(10px);
+        color: var(--accent);
+        font-size: 0.65rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: box-shadow 0.25s ease, border-color 0.25s ease;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: -0.03em;
+        line-height: 1;
       }
-      .cmd-trigger svg { width: 15px; height: 15px; }
+      .cmd-trigger:hover {
+        border-color: rgba(var(--accent-rgb), 0.3);
+        box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.15);
+      }
+      .cmd-trigger-icon { display: none; width: 15px; height: 15px; }
 
       @media (max-width: 1169px) {
-        .cmd-trigger {
-          width: 38px;
-          height: 38px;
-          border-radius: 50%;
-          border: 1px solid rgba(var(--accent-rgb), 0.12);
-          background: var(--surface);
-          backdrop-filter: blur(10px);
-          color: var(--accent);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0;
-          transition: box-shadow 0.25s ease, border-color 0.25s ease;
-        }
+        .cmd-trigger-label { display: none; }
+        .cmd-trigger-icon { display: block; }
         .cmd-palette {
           top: auto;
           bottom: calc(1.5rem + env(safe-area-inset-bottom));
@@ -2351,8 +2407,28 @@ const {
     </div>
     <div class="intro-bricks" aria-hidden="true"></div>
     <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="scroll-line" aria-hidden="true"><div class="scroll-line-fill"></div></div>
     <slot />
     <script>
+      document.addEventListener('copy', (e) => e.preventDefault());
+      document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      const scrollFill = document.querySelector('.scroll-line-fill');
+      if (scrollFill) {
+        const scrollLine = document.querySelector('.scroll-line');
+        let current = 0, target = 0;
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const updateScroll = () => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          target = max > 0 ? (window.scrollY / max) * 100 : 0;
+          current = lerp(current, target, 0.1);
+          scrollFill.style.height = current.toFixed(2) + '%';
+          if (scrollLine) scrollLine.style.opacity = current < 1 ? '0' : '1';
+          requestAnimationFrame(updateScroll);
+        };
+        requestAnimationFrame(updateScroll);
+      }
+
       document.addEventListener('click', (e) => {
         if (e.target.closest('.section-block h2')) {
           const hint = document.querySelector('.section-hint');
