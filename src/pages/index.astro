@@ -77,6 +77,12 @@ const skillBadgeMap: Record<string, string> = {
   "Protobuf": "google",
   "UDP": "wireshark",
   "TCP": "wireshark",
+  "Scala": "scala",
+  "Git": "git",
+  "Django": "django",
+  "Linux": "linux",
+  "Trello": "trello",
+  "REST APIs": "swagger",
 };
 
 const skillLocalLogoMap: Record<string, string> = {
@@ -490,11 +496,40 @@ const structuredData = JSON.stringify({
         profile.teaching.map((t) => (
           <div class="project-card">
             <h3>{t.title}</h3>
-            <div class="skills-pills" style="margin-top:0.5rem">
-              {t.skills.split("·").map(s => (
-                <span class="skill-pill">{s.trim()}</span>
-              ))}
-            </div>
+            {(() => {
+              const all = t.skills.split("·").map(s => s.trim());
+              const tools = all.filter(s => getLocalLogo(s) || getBadgeUrl(s));
+              const topics = all.filter(s => !getLocalLogo(s) && !getBadgeUrl(s));
+              const renderBadge = (skill: string) => {
+                const localLogo = getLocalLogo(skill);
+                if (localLogo) return (
+                  <span class="skill-badge-local">
+                    <img src={localLogo} alt="" aria-hidden="true" />
+                    {stripParens(skill)}
+                  </span>
+                );
+                return <img class="skill-badge" src={getBadgeUrl(skill)!} alt={stripParens(skill)} loading="lazy" decoding="async" />;
+              };
+              if (topics.length > 0) return (
+                <div class="teaching-skills">
+                  {tools.length > 0 && (
+                    <div class="teaching-skill-row">
+                      <span class="teaching-skill-label">tools</span>
+                      <div class="skills-pills">{tools.map(renderBadge)}</div>
+                    </div>
+                  )}
+                  <div class="teaching-skill-row">
+                    <span class="teaching-skill-label">topics</span>
+                    <div class="skills-pills">{topics.map(skill => <span class="skill-pill">{stripParens(skill)}</span>)}</div>
+                  </div>
+                </div>
+              );
+              return (
+                <div class="skills-pills" style="margin-top:0.5rem">
+                  {tools.map(renderBadge)}
+                </div>
+              );
+            })()}
           </div>
         ))
       }
@@ -1048,9 +1083,29 @@ const structuredData = JSON.stringify({
             (t) => `
               <div class="project-card">
                 <h3>${t.title}</h3>
-                <div class="skills-pills" style="margin-top:0.5rem">
-                  ${t.skills.split("·").map(s => `<span class="skill-pill">${s.trim()}</span>`).join("")}
-                </div>
+                ${(() => {
+                    const all = t.skills.split("·").map(s => s.trim());
+                    const tools = all.filter(s => skillLocalLogoMapJS[s] || getBadgeUrlJS(s));
+                    const topics = all.filter(s => !skillLocalLogoMapJS[s] && !getBadgeUrlJS(s));
+                    const renderBadge = (skill) => {
+                      const localSrc = skillLocalLogoMapJS[skill];
+                      if (localSrc) return `<span class="skill-badge-local"><img src="${localSrc}" alt="" aria-hidden="true" />${skill}</span>`;
+                      return `<img class="skill-badge" src="${getBadgeUrlJS(skill)}" alt="${skill}" loading="lazy" decoding="async" />`;
+                    };
+                    if (topics.length > 0) return `
+                      <div class="teaching-skills">
+                        ${tools.length > 0 ? `
+                        <div class="teaching-skill-row">
+                          <span class="teaching-skill-label">tools</span>
+                          <div class="skills-pills">${tools.map(renderBadge).join("")}</div>
+                        </div>` : ""}
+                        <div class="teaching-skill-row">
+                          <span class="teaching-skill-label">topics</span>
+                          <div class="skills-pills">${topics.map(skill => `<span class="skill-pill">${skill}</span>`).join("")}</div>
+                        </div>
+                      </div>`;
+                    return `<div class="skills-pills" style="margin-top:0.5rem">${tools.map(renderBadge).join("")}</div>`;
+                  })()}
               </div>
             `,
           )
@@ -1112,6 +1167,8 @@ const structuredData = JSON.stringify({
       "JWT": "jsonwebtokens", "Liquibase": "liquibase", "AWS EC2": "amazonec2",
       "TypeScript": "typescript", "CSS": "css", "Astro": "astro",
       "Protobuf": "google", "UDP": "wireshark", "TCP": "wireshark",
+      "Scala": "scala", "Git": "git", "Django": "django",
+      "Linux": "linux", "Trello": "trello", "REST APIs": "swagger",
     };
     const getBadgeUrlJS = (skill) => {
       const name = stripParens(skill);

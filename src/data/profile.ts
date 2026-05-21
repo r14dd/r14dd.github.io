@@ -235,7 +235,7 @@ export const profile: Profile = {
   },
   {
     title: "Web Applications",
-    skills: "Python · Django · REST APIs · HTTP(S) · Back-End Web Development",
+    skills: "Python · Flask · FastAPI · REST APIs · HTTP(S) · Back-End Web Development",
     bullets: [
       "Assisted 240 students in building full-stack web applications without pre-built frameworks",
       "Emphasized server-side architecture, request handling, and backend logic",
@@ -286,7 +286,7 @@ export const profile: Profile = {
     {
       category: "Programming Languages",
       groups: [
-        { label: "Core", tier: "core", items: ["Rust", "Python", "Go", "C"] },
+        { label: "", items: ["Rust", "Python", "Go", "C"] },
       ],
     },
     {
