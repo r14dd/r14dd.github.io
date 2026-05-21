@@ -1635,13 +1635,15 @@ const {
         border-radius: 4px;
         display: inline-block;
         opacity: 0.82;
-        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+        border: 1px solid transparent;
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, border-color 0.2s ease;
         vertical-align: middle;
       }
 
       .skill-badge:hover {
         transform: translateY(-2px);
         opacity: 1;
+        border-color: rgba(var(--accent-rgb), 0.5);
       }
 
       html.light .skill-badge {
@@ -1663,12 +1665,14 @@ const {
         white-space: nowrap;
         vertical-align: middle;
         opacity: 0.82;
-        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+        border: 1px solid transparent;
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, border-color 0.2s ease;
       }
 
       .skill-badge-local:hover {
         transform: translateY(-2px);
         opacity: 1;
+        border-color: rgba(var(--accent-rgb), 0.5);
       }
 
       .skill-badge-local img {
