@@ -158,7 +158,7 @@ export const profile: Profile = {
     },
     {
       name: "FinFlow — Wallet API",
-      tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL", "JPA"],
+      tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL"],
       impact: "Secured wallet API with JWT auth, guarded endpoints, and stateless session management.",
       date: "Jan 2026",
       bullets: [
@@ -173,13 +173,7 @@ export const profile: Profile = {
     },
     {
       name: "Redis Redesign",
-      tech: [
-        "Redis",
-        "Distributed Caching",
-        "TTL",
-        "Garbage Collection",
-        "Low Latency",
-      ],
+      tech: ["Rust", "Redis"],
       impact:
         "Two-layer TTL-aware cache eliminating stale-data inconsistency while preserving low-latency access.",
       date: "Dec 2025",
@@ -304,13 +298,13 @@ export const profile: Profile = {
     {
       category: "AI, ML & Agentic Systems",
       groups: [
-        { label: "", items: ["LangGraph", "LangChain", "Ollama", "LangSmith", "RAG"] },
+        { label: "", items: ["LangGraph", "LangChain", "Ollama", "LangSmith", "NVIDIA OpenShell"] },
       ],
     },
     {
       category: "Communication Protocols & APIs",
       groups: [
-        { label: "", items: ["gRPC", "RESTful APIs", "GraphQL", "WebSockets", "WebRTC", "Webhooks"] },
+        { label: "", items: ["gRPC", "RESTful APIs", "GraphQL", "WebSockets", "WebRTC"] },
       ],
     },
     {
@@ -328,13 +322,13 @@ export const profile: Profile = {
     {
       category: "Cloud, Infrastructure & DevOps",
       groups: [
-        { label: "", items: ["AWS", "Supabase", "Docker", "Kubernetes", "GitHub Actions", "GitLab CI/CD"] },
+        { label: "", items: ["AWS", "Supabase", "Docker", "Kubernetes", "GitHub Actions", "GitLab CI/CD", "Linux Sandboxing"] },
       ],
     },
     {
       category: "Testing & Quality Assurance",
       groups: [
-        { label: "", items: ["Pytest", "rstest", "Selenium", "Postman", "Integration Testing"] },
+        { label: "", items: ["Pytest", "rstest", "Selenium", "Postman"] },
       ],
     },
   ],

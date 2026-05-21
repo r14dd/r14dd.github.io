@@ -28,6 +28,74 @@ const skillIcons: Record<string, string> = {
 };
 
 const stripParens = (item: string): string => item.replace(/\s*\([^)]*\)/g, '').trim();
+
+const skillBadgeMap: Record<string, string> = {
+  "Rust": "rust",
+  "Python": "python",
+  "Go": "go",
+  "C": "c",
+  "Axum": "rust",
+  "Actix-web": "rust",
+  "FastAPI": "fastapi",
+  "Flask": "flask",
+  "LangGraph": "langchain",
+  "LangChain": "langchain",
+  "Ollama": "ollama",
+  "LangSmith": "langchain",
+  "NVIDIA OpenShell": "nvidia",
+  "RESTful APIs": "swagger",
+  "GraphQL": "graphql",
+  "WebSockets": "socketdotio",
+  "WebRTC": "webrtc",
+  "Apache Kafka": "apachekafka",
+  "RabbitMQ": "rabbitmq",
+  "PostgreSQL": "postgresql",
+  "MySQL": "mysql",
+  "SQLite": "sqlite",
+  "MongoDB": "mongodb",
+  "Redis": "redis",
+  "pgvector": "postgresql",
+  "Linux Sandboxing": "linux",
+  "Supabase": "supabase",
+  "Docker": "docker",
+  "Kubernetes": "kubernetes",
+  "GitHub Actions": "githubactions",
+  "GitLab CI/CD": "gitlab",
+  "Pytest": "pytest",
+  "rstest": "rust",
+  "Selenium": "selenium",
+  "Postman": "postman",
+  "Java": "openjdk",
+  "Spring Boot": "springboot",
+  "Spring Security": "springsecurity",
+  "JWT": "jsonwebtokens",
+  "Liquibase": "liquibase",
+  "AWS EC2": "amazonec2",
+  "TypeScript": "typescript",
+  "CSS": "css",
+  "Astro": "astro",
+  "Protobuf": "google",
+  "UDP": "wireshark",
+  "TCP": "wireshark",
+};
+
+const skillLocalLogoMap: Record<string, string> = {
+  "AWS": "/logos/aws.svg",
+  "AWS EC2": "/logos/aws.svg",
+  "gRPC": "/logos/grpc.png",
+};
+
+const getBadgeUrl = (skill: string): string | null => {
+  const name = stripParens(skill);
+  const logo = skillBadgeMap[name];
+  if (!logo) return null;
+  const encoded = name.replace(/-/g, '--').replace(/\//g, '--').replace(/ /g, '_');
+  return `https://img.shields.io/badge/${encoded}-1e1e1e?style=flat-square&logo=${logo}&logoColor=white`;
+};
+
+const getLocalLogo = (skill: string): string | null => {
+  return skillLocalLogoMap[stripParens(skill)] ?? null;
+};
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.about;
 const structuredData = JSON.stringify({
@@ -195,7 +263,14 @@ const structuredData = JSON.stringify({
               <div>
                 <h3>{p.name}</h3>
                 <div class="project-tech-pills">
-                    {p.tech.map((t) => <span class="project-tech-pill">{t}</span>)}
+                    {p.tech.map((t) => {
+                      const localLogo = getLocalLogo(t);
+                      if (localLogo) return <span class="skill-badge-local"><img src={localLogo} alt="" aria-hidden="true" />{t}</span>;
+                      const badgeUrl = getBadgeUrl(t);
+                      return badgeUrl
+                        ? <img class="skill-badge" src={badgeUrl} alt={t} loading="lazy" decoding="async" />
+                        : <span class="project-tech-pill">{t}</span>;
+                    })}
                   </div>
               </div>
               <div class="project-actions">
@@ -382,9 +457,19 @@ const structuredData = JSON.stringify({
               <div class={`skill-group${g.tier ? ` tier-${g.tier}` : ''}${!g.label ? ' no-label' : ''}`}>
                 {g.label && <div class={`skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}`}>{g.label}</div>}
                 <div class="skills-pills">
-                  {g.items.map((item) => (
-                    <span class="skill-pill">{stripParens(item)}</span>
-                  ))}
+                  {g.items.map((item) => {
+                    const localLogo = getLocalLogo(item);
+                    if (localLogo) return (
+                      <span class="skill-badge-local">
+                        <img src={localLogo} alt="" aria-hidden="true" />
+                        {stripParens(item)}
+                      </span>
+                    );
+                    const badgeUrl = getBadgeUrl(item);
+                    return badgeUrl
+                      ? <img class="skill-badge" src={badgeUrl} alt={stripParens(item)} loading="lazy" decoding="async" />
+                      : <span class="skill-pill">{stripParens(item)}</span>;
+                  })}
                 </div>
               </div>
             ))}
@@ -930,7 +1015,14 @@ const structuredData = JSON.stringify({
                 <div class="project-header">
                   <div>
                     <h3>${p.name}</h3>
-                    <div class="project-tech-pills">${p.tech.map(t => `<span class="project-tech-pill">${t}</span>`).join('')}</div>
+                    <div class="project-tech-pills">${p.tech.map(t => {
+                      const local = skillLocalLogoMapJS[t];
+                      if (local) return `<span class="skill-badge-local"><img src="${local}" alt="" aria-hidden="true" />${t}</span>`;
+                      const url = getBadgeUrlJS(t);
+                      return url
+                        ? `<img class="skill-badge" src="${url}" alt="${t}" loading="lazy" decoding="async" />`
+                        : `<span class="project-tech-pill">${t}</span>`;
+                    }).join('')}</div>
                   </div>
                   <div class="project-actions">
                     ${buildProjectActions(p)}
@@ -997,6 +1089,38 @@ const structuredData = JSON.stringify({
 
     const stripParens = (s) => s.replace(/\s*\([^)]*\)/g, '').trim();
 
+    const skillLocalLogoMapJS = {
+      "AWS": "/logos/aws.svg",
+      "AWS EC2": "/logos/aws.svg",
+      "gRPC": "/logos/grpc.png",
+    };
+    const skillBadgeMapJS = {
+      "Rust": "rust", "Python": "python", "Go": "go", "C": "c",
+      "Axum": "rust", "Actix-web": "rust",
+      "FastAPI": "fastapi", "Flask": "flask",
+      "LangGraph": "langchain", "LangChain": "langchain", "Ollama": "ollama", "LangSmith": "langchain",
+      "NVIDIA OpenShell": "nvidia",
+      "RESTful APIs": "swagger", "Linux Sandboxing": "linux", "GraphQL": "graphql", "WebSockets": "socketdotio", "WebRTC": "webrtc",
+      "Apache Kafka": "apachekafka", "RabbitMQ": "rabbitmq",
+      "PostgreSQL": "postgresql", "MySQL": "mysql", "SQLite": "sqlite",
+      "MongoDB": "mongodb", "Redis": "redis", "pgvector": "postgresql",
+      "Supabase": "supabase", "Docker": "docker",
+      "Kubernetes": "kubernetes", "GitHub Actions": "githubactions",
+      "GitLab CI/CD": "gitlab", "Pytest": "pytest", "rstest": "rust",
+      "Selenium": "selenium", "Postman": "postman",
+      "Java": "openjdk", "Spring Boot": "springboot", "Spring Security": "springsecurity",
+      "JWT": "jsonwebtokens", "Liquibase": "liquibase", "AWS EC2": "amazonec2",
+      "TypeScript": "typescript", "CSS": "css", "Astro": "astro",
+      "Protobuf": "google", "UDP": "wireshark", "TCP": "wireshark",
+    };
+    const getBadgeUrlJS = (skill) => {
+      const name = stripParens(skill);
+      const logo = skillBadgeMapJS[name];
+      if (!logo) return null;
+      const encoded = name.replace(/-/g, '--').replace(/\//g, '--').replace(/ /g, '_');
+      return `https://img.shields.io/badge/${encoded}-1e1e1e?style=flat-square&logo=${logo}&logoColor=white`;
+    };
+
     const buildSkills = (data) => {
       return `
         <h2>${data.labels.headings.skills}</h2>
@@ -1010,7 +1134,15 @@ const structuredData = JSON.stringify({
               <div class="skill-group${g.tier ? ` tier-${g.tier}` : ''}${!g.label ? ' no-label' : ''}">
                 ${g.label ? `<div class="skill-tier-label${g.tier ? ` tier-${g.tier}` : ''}">${g.label}</div>` : ''}
                 <div class="skills-pills">
-                  ${g.items.map((item) => `<span class="skill-pill">${stripParens(item)}</span>`).join('')}
+                  ${g.items.map((item) => {
+                    const name = stripParens(item);
+                    const localSrc = skillLocalLogoMapJS[name];
+                    if (localSrc) return `<span class="skill-badge-local"><img src="${localSrc}" alt="" aria-hidden="true" />${name}</span>`;
+                    const url = getBadgeUrlJS(item);
+                    return url
+                      ? `<img class="skill-badge" src="${url}" alt="${name}" loading="lazy" decoding="async" />`
+                      : `<span class="skill-pill">${name}</span>`;
+                  }).join('')}
                 </div>
               </div>
             `).join('')}
@@ -1686,7 +1818,14 @@ const structuredData = JSON.stringify({
 
     const populateProject = (p) => {
       if (!projModalCard) return;
-      const tech = (p.tech || []).map((t) => `<span class="project-tech-pill">${t}</span>`).join('');
+      const tech = (p.tech || []).map((t) => {
+        const local = skillLocalLogoMapJS[t];
+        if (local) return `<span class="skill-badge-local"><img src="${local}" alt="" aria-hidden="true" />${t}</span>`;
+        const url = getBadgeUrlJS(t);
+        return url
+          ? `<img class="skill-badge" src="${url}" alt="${t}" loading="lazy" decoding="async" />`
+          : `<span class="project-tech-pill">${t}</span>`;
+      }).join('');
       const bullets = (p.bullets || []).map((b) => `<li>${b}</li>`).join('');
       const sim = buildProjectSim(p);
       const gh = p.links?.github
