@@ -474,6 +474,47 @@
       noise.start(audioCtx.currentTime);
     }
 
+    // ===== Victory chime =====
+    function playChime() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const t = audioCtx.currentTime;
+      const notes = [523, 659, 784, 1047];
+      notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, t + i * 0.12);
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.setValueAtTime(0.25, t + i * 0.12);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.4);
+        osc.start(t + i * 0.12);
+        osc.stop(t + i * 0.12 + 0.5);
+      });
+    }
+
+    function playFanfare() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const t = audioCtx.currentTime;
+      const notes = [523, 523, 659, 784, 659, 784, 1047];
+      const times = [0, 0.15, 0.3, 0.45, 0.65, 0.8, 0.95];
+      const durs =  [0.12, 0.12, 0.12, 0.15, 0.12, 0.12, 0.6];
+      notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, t + times[i]);
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.setValueAtTime(0.3, t + times[i]);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + times[i] + durs[i] + 0.3);
+        osc.start(t + times[i]);
+        osc.stop(t + times[i] + durs[i] + 0.4);
+      });
+    }
+
     // ===== Data =====
     const messages = [
       "Тебе 11! Ты растёшь так быстро! 🌟",
@@ -555,6 +596,7 @@
         overlay.appendChild(textEl);
 
         document.body.appendChild(overlay);
+        playChime();
 
         // Start typewriter after photo animation
         setTimeout(() => {
@@ -661,6 +703,7 @@
             hide('game');
             show('final');
             launchConfetti(5000);
+            playFanfare();
           } else {
             spawnBalloon(poppedCount);
           }
