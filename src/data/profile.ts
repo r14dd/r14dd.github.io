@@ -342,7 +342,7 @@ export const profile: Profile = {
     },
     {
       name: "Jesse Hartloff",
-      title: "State University of New York at Buffalo",
+      title: "Associate Professor of Teaching, State University of New York at Buffalo",
       course: "Web Applications",
       quote: "He not only demonstrated a great technical understanding of the content but was able to explain these concepts in a simple manner to students who were struggling to apply the material.",
     },
