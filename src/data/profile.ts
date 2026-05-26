@@ -133,6 +133,36 @@ export const profile: Profile = {
 
   projects: [
     {
+      name: "QuorumRAG.rs — Consensus-Based RAG",
+      tech: ["Rust", "Ollama", "Tokio"],
+      impact: "Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Achieved 95% recall vs 70% baseline.",
+      date: "May 2026",
+      bullets: [
+        "Built multi-retriever ensemble with Reciprocal Rank Fusion scoring and quorum filtering",
+        "Implemented overlapping chunk processing with 50% stride to prevent boundary-split answers",
+        "Added parallel embedding with caching to optimize cold-start performance",
+        "Produced single binary with no Python runtime dependency",
+      ],
+      links: {
+        github: "https://github.com/r14dd/quorumRAG.rs",
+      },
+    },
+    {
+      name: "FinFlow — Wallet API",
+      tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL"],
+      impact: "Secured wallet API with JWT auth, guarded endpoints, and stateless session management.",
+      date: "Jan 2026",
+      bullets: [
+        "Implemented secure authentication and authorization using JWT-based stateless sessions",
+        "Designed relational data models using JPA/Hibernate with optimized repository queries",
+        "Applied security best practices including password hashing, token TTL, and request filtering",
+        "Developed integration tests to validate authentication flows and protected endpoints",
+      ],
+      links: {
+        github: "https://github.com/r14dd/finflow",
+      },
+    },
+    {
       name: "MatchSentinel — Transaction Monitoring Platform",
       tech: [
         "Java",
@@ -157,19 +187,26 @@ export const profile: Profile = {
       },
     },
     {
-      name: "FinFlow — Wallet API",
-      tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL"],
-      impact: "Secured wallet API with JWT auth, guarded endpoints, and stateless session management.",
-      date: "Jan 2026",
+      name: "Raft-Based Consensus Algorithm",
+      tech: ["Go", "UDP", "Protobuf"],
+      impact:
+        "Raft consensus preserving consistency under node failures via leader election and log replication.",
+      date: "May 2024",
       bullets: [
-        "Implemented secure authentication and authorization using JWT-based stateless sessions",
-        "Designed relational data models using JPA/Hibernate with optimized repository queries",
-        "Applied security best practices including password hashing, token TTL, and request filtering",
-        "Developed integration tests to validate authentication flows and protected endpoints",
+        "Implemented Raft consensus with leader election, log replication, and fault tolerance",
+        "Built concurrent server components to maintain consistency across distributed nodes",
       ],
-      links: {
-        github: "https://github.com/r14dd/finflow",
-      },
+    },
+    {
+      name: "Distributed Hash Table (Kademlia)",
+      tech: ["Go", "TCP", "Protobuf"],
+      impact:
+        "Kademlia DHT for resilient peer discovery and O(log n) lookups in dynamic networks.",
+      date: "Feb 2024",
+      bullets: [
+        "Implemented a peer-to-peer distributed storage system using Kademlia routing",
+        "Achieved efficient O(log n) lookups and resilient data routing across nodes",
+      ],
     },
     {
       name: "Redis Redesign",
@@ -197,28 +234,6 @@ export const profile: Profile = {
       links: {
         github: "https://github.com/r14dd/r14dd.github.io",
       },
-    },
-    {
-      name: "Raft-Based Consensus Algorithm",
-      tech: ["Go", "UDP", "Protobuf"],
-      impact:
-        "Raft consensus preserving consistency under node failures via leader election and log replication.",
-      date: "May 2024",
-      bullets: [
-        "Implemented Raft consensus with leader election, log replication, and fault tolerance",
-        "Built concurrent server components to maintain consistency across distributed nodes",
-      ],
-    },
-    {
-      name: "Distributed Hash Table (Kademlia)",
-      tech: ["Go", "TCP", "Protobuf"],
-      impact:
-        "Kademlia DHT for resilient peer discovery and O(log n) lookups in dynamic networks.",
-      date: "Feb 2024",
-      bullets: [
-        "Implemented a peer-to-peer distributed storage system using Kademlia routing",
-        "Achieved efficient O(log n) lookups and resilient data routing across nodes",
-      ],
     },
   ],
   teaching: [
@@ -292,7 +307,7 @@ export const profile: Profile = {
     {
       category: "Backend & Runtimes",
       groups: [
-        { label: "", items: ["Axum", "Actix-web", "FastAPI", "Flask"] },
+        { label: "", items: ["Axum", "Actix-web", "Tokio", "FastAPI", "Flask"] },
       ],
     },
     {

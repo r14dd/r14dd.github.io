@@ -27,6 +27,19 @@ type Labels = {
     reading: string;
     connect: string;
   };
+  eyebrows: {
+    experience: string;
+    projects: string;
+    skills: string;
+    teaching: string;
+    education: string;
+    recommendations: string;
+  };
+  heroEyebrow: string;
+  connectTagline: string;
+  taRole: string;
+  headTARole: string;
+  skillCategories: Record<string, string>;
   introLead: string;
   introTail: string;
   connectTemplate: string;
@@ -72,6 +85,28 @@ export const profiles: Record<string, I18nProfile> = {
       },
       introLead: "Who is",
       introTail: "",
+      eyebrows: {
+        experience: "Work history",
+        projects: "Selected work",
+        skills: "Toolbox",
+        teaching: "2+ years · 2,000+ students · SUNY Buffalo",
+        education: "Academic background",
+        recommendations: "What colleagues say",
+      },
+      heroEyebrow: "AI & Software Engineer · Baku, Azerbaijan",
+      connectTagline: "Let's talk.",
+      taRole: "Teaching Assistant",
+      headTARole: "Head Teaching Assistant",
+      skillCategories: {
+        "Programming Languages": "Programming Languages",
+        "Backend & Runtimes": "Backend & Runtimes",
+        "AI, ML & Agentic Systems": "AI, ML & Agentic Systems",
+        "Communication Protocols & APIs": "Communication Protocols & APIs",
+        "Messaging & Integration": "Messaging & Integration",
+        "Databases & Persistence": "Databases & Persistence",
+        "Cloud, Infrastructure & DevOps": "Cloud, Infrastructure & DevOps",
+        "Testing & Quality Assurance": "Testing & Quality Assurance",
+      },
       connectTemplate: "Reach me at {email}",
       currentlyLabel: "Currently:",
     },
@@ -282,6 +317,45 @@ export const profiles: Record<string, I18nProfile> = {
         { author: "Эмиль Золя", quote: "Художник — ничто без дара, но дар — ничто без труда." },
       ],
     },
+    testimonials: [
+      {
+        name: "Oliver Kennedy",
+        title: "Доцент, State University of New York at Buffalo",
+        course: "Структуры данных",
+        headTA: true,
+        quote: "Поставьте его на позицию Project Manager или Team Lead — я гарантирую, он проявит себя блестяще.",
+      },
+      {
+        name: "Jesse Hartloff",
+        title: "Доцент кафедры преподавания, State University of New York at Buffalo",
+        course: "Веб‑приложения",
+        quote: "Он не только продемонстрировал глубокое техническое понимание материала, но и умел объяснять эти концепции просто и доступно студентам, которым было трудно применить их на практике.",
+      },
+      {
+        name: "Carl Alphonce",
+        title: "Профессор кафедры преподавания, State University of New York at Buffalo",
+        course: "Качество ПО на практике",
+        quote: "Он оперативно реагировал на запросы, профессионально взаимодействовал со студентами и сотрудниками курса и был технически компетентен во всех инструментах и процессах курса.",
+      },
+      {
+        name: "Nasrin Akhter",
+        title: "Ассистент-профессор кафедры преподавания, State University of New York at Buffalo",
+        course: "Дискретные структуры",
+        quote: "Меня впечатлили его сильная трудовая этика, позитивный настрой, профессионализм и преданность делу. Он проявил себя как организованный, эффективный и трудолюбивый ассистент.",
+      },
+      {
+        name: "Sean Mackay",
+        title: "Ассистент-профессор кафедры компьютерных наук, University of Oklahoma",
+        course: "Основы компьютерных наук",
+        quote: "Риад — один из лучших людей, с которыми мне доводилось работать. Его способность объяснять сложные концепции людям с разным уровнем подготовки неизменно меня впечатляла.",
+      },
+      {
+        name: "Farshad Ghanei",
+        title: "Доцент кафедры преподавания, Illinois Institute of Technology",
+        course: "Организация компьютера",
+        quote: "Я подтверждаю трудовую этику, навыки, результативность и коммуникабельность Риада. Я без колебаний рекомендую его любому работодателю.",
+      },
+    ],
     labels: {
       nav: {
         experience: "Опыт",
@@ -310,6 +384,28 @@ export const profiles: Record<string, I18nProfile> = {
       },
       introLead: "Кто такой",
       introTail: "",
+      eyebrows: {
+        experience: "История работы",
+        projects: "Избранные проекты",
+        skills: "Инструменты",
+        teaching: "2+ года · 2000+ студентов · SUNY Buffalo",
+        education: "Академическое образование",
+        recommendations: "Отзывы коллег",
+      },
+      heroEyebrow: "AI & Software инженер · Баку, Азербайджан",
+      connectTagline: "Давайте поговорим.",
+      taRole: "Ассистент преподавателя",
+      headTARole: "Старший ассистент преподавателя",
+      skillCategories: {
+        "Programming Languages": "Языки программирования",
+        "Backend & Runtimes": "Backend и среды выполнения",
+        "AI, ML & Agentic Systems": "ИИ, ML и агентные системы",
+        "Communication Protocols & APIs": "Протоколы и API",
+        "Messaging & Integration": "Очереди сообщений и интеграция",
+        "Databases & Persistence": "Базы данных и хранилища",
+        "Cloud, Infrastructure & DevOps": "Облако, инфраструктура и DevOps",
+        "Testing & Quality Assurance": "Тестирование и QA",
+      },
       connectTemplate: "Свяжитесь со мной: {email}",
       currentlyLabel: "Сейчас:",
     },
@@ -520,6 +616,45 @@ export const profiles: Record<string, I18nProfile> = {
         { author: "Émile Zola", quote: "Sənətçi istedadsız heç nədir, amma istedad da zəhmətsiz heç nədir." },
       ],
     },
+    testimonials: [
+      {
+        name: "Oliver Kennedy",
+        title: "Dosent, State University of New York at Buffalo",
+        course: "Məlumat strukturları",
+        headTA: true,
+        quote: "Onu Project Manager və ya Team Lead vəzifəsinə qoyun — zəmanət verirəm ki, parlayacaq.",
+      },
+      {
+        name: "Jesse Hartloff",
+        title: "Tədris üzrə dosent, State University of New York at Buffalo",
+        course: "Veb tətbiqləri",
+        quote: "O, təkcə materialın texniki tərəfini dərindən başa düşməklə kifayətlənmədi, həm də bu anlayışları çətinlik çəkən tələbələrə sadə şəkildə izah edə bildi.",
+      },
+      {
+        name: "Carl Alphonce",
+        title: "Tədris üzrə professor, State University of New York at Buffalo",
+        course: "Proqram keyfiyyəti praktikada",
+        quote: "O, sorğulara operativ cavab verirdi, tələbələr və kurs heyəti ilə peşəkar davranırdı və kursdakı bütün alətlər və proseslərdə texniki bacarıq nümayiş etdirirdi.",
+      },
+      {
+        name: "Nasrin Akhter",
+        title: "Tədris üzrə assistent professor, State University of New York at Buffalo",
+        course: "Diskret strukturlar",
+        quote: "Onun güclü iş etikası, müsbət münasibəti, peşəkarlığı və fədakarlığı məni heyran etdi. O, mütəşəkkil, səmərəli və zəhmətkeş bir assistent olduğunu sübut etdi.",
+      },
+      {
+        name: "Sean Mackay",
+        title: "Kompüter elmləri üzrə assistent professor, University of Oklahoma",
+        course: "Kompüter Elmlərinə giriş",
+        quote: "Riad əməkdaşlıq etdiyim ən yaxşı insanlardan biridir. Mürəkkəb anlayışları müxtəlif bacarıq səviyyələrinə sadə şəkildə çatdırmaq qabiliyyəti məni daima heyran edirdi.",
+      },
+      {
+        name: "Farshad Ghanei",
+        title: "Tədris üzrə dosent, Illinois Institute of Technology",
+        course: "Kompüter təşkilatı",
+        quote: "Riadın iş etikasını, bacarıqlarını, nəticələrini və ünsiyyət qabiliyyətini təsdiq edirəm. Onu istənilən işəgötürənə tövsiyə etməkdə tərəddüd etmirəm.",
+      },
+    ],
     labels: {
       nav: {
         experience: "Təcrübə",
@@ -548,6 +683,28 @@ export const profiles: Record<string, I18nProfile> = {
       },
       introLead: "",
       introTail: "kimdir",
+      eyebrows: {
+        experience: "İş təcrübəsi",
+        projects: "Seçilmiş işlər",
+        skills: "Alətlər",
+        teaching: "2+ il · 2000+ tələbə · SUNY Buffalo",
+        education: "Akademik təhsil",
+        recommendations: "Həmkarların rəyləri",
+      },
+      heroEyebrow: "AI və Proqram Mühəndisi · Bakı, Azərbaycan",
+      connectTagline: "Əlaqə saxlayaq.",
+      taRole: "Tədris assistenti",
+      headTARole: "Baş tədris assistenti",
+      skillCategories: {
+        "Programming Languages": "Proqramlaşdırma dilləri",
+        "Backend & Runtimes": "Backend və Runtime",
+        "AI, ML & Agentic Systems": "AI, ML və Agent sistemləri",
+        "Communication Protocols & APIs": "Protokollar və API",
+        "Messaging & Integration": "Mesajlaşma və İnteqrasiya",
+        "Databases & Persistence": "Verilənlər bazaları",
+        "Cloud, Infrastructure & DevOps": "Bulud, İnfrastruktur və DevOps",
+        "Testing & Quality Assurance": "Test və Keyfiyyət Təminatı",
+      },
       connectTemplate: "Əlaqə: {email}",
       currentlyLabel: "Hazırda:",
     },
