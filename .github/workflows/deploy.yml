@@ -22,12 +22,13 @@ jobs:
 
       - name: Deploy to gh-pages
         run: |
+          cp -r dist /tmp/gh-pages-dist
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git checkout --orphan gh-pages-deploy
           git rm -rf . --quiet
-          cp -r dist/. .
-          rm -rf dist
+          git clean -fdx --quiet
+          cp -r /tmp/gh-pages-dist/. .
           git add .
           git commit -m "deploy: ${{ github.sha }}"
           git push --force origin HEAD:gh-pages
