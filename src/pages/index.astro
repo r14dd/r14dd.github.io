@@ -109,9 +109,6 @@ const structuredData = JSON.stringify({
 ---
 
 <BaseLayout
-  introLead={profile.labels.introLead}
-  introTail={profile.labels.introTail}
-  introName={profile.hero.name}
   metaTitle={metaTitle}
   metaDescription={metaDescription}
   structuredData={structuredData}
@@ -489,12 +486,12 @@ const structuredData = JSON.stringify({
       <div class="sec-eyebrow">{profile.labels.eyebrows.recommendations}</div>
       <h2 class="sec-title">{profile.labels.headings.recommendations}</h2>
 
-      <div class="testi-wrap">
-        <div class="testi-scroll" id="testi-scroll">
-          {profile.testimonials.map((t) => {
+      <div class="testi-wrap" role="group" aria-roledescription="carousel" aria-label="Student recommendations">
+        <div class="testi-scroll" id="testi-scroll" aria-live="off">
+          {profile.testimonials.map((t, i) => {
             const initials = t.name.split(' ').map((w: string) => w[0]).join('');
             return (
-              <div class="testi-card">
+              <div class="testi-card" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${profile.testimonials.length}`}>
                 <span class="testi-mark">&ldquo;</span>
                 <p class="testi-quote">{t.quote}</p>
                 <div class="testi-author">
@@ -530,6 +527,22 @@ const structuredData = JSON.stringify({
       </div>
     </section>
   </main>
+
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Section navigation">
+    <button class="mobile-nav-pill" id="mobile-nav-pill" type="button">
+      <span class="mobile-nav-label" id="mobile-nav-label"></span>
+      <span class="mobile-nav-caret">&#9662;</span>
+    </button>
+    <div class="mobile-nav-menu" id="mobile-nav-menu">
+      <a href="#experience">{profile.labels.nav.experience}</a>
+      <a href="#projects">{profile.labels.nav.projects}</a>
+      <a href="#skills">{profile.labels.nav.skills}</a>
+      <a href="#teaching">{profile.labels.nav.teaching}</a>
+      <a href="#education">{profile.labels.nav.education}</a>
+      <a href="#recommendations">recs</a>
+      <a href="#connect">{profile.labels.nav.connect}</a>
+    </div>
+  </nav>
 
   <div class="toast" id="toast" aria-live="polite"></div>
 
@@ -741,6 +754,11 @@ const structuredData = JSON.stringify({
 
     const sections = Array.from(document.querySelectorAll("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
+    const mobileNav = document.getElementById("mobile-nav");
+    const mobileLabel = document.getElementById("mobile-nav-label");
+    const mobileMenu = document.getElementById("mobile-nav-menu");
+    const mobileMenuLinks = mobileMenu ? Array.from(mobileMenu.querySelectorAll("a")) : [];
+
     const setActiveLink = () => {
       const scrollPos = window.scrollY + 120;
       let current = sections[0];
@@ -753,6 +771,12 @@ const structuredData = JSON.stringify({
       navLinks.forEach((link) => link.classList.remove("active"));
       const active = navLinks.find(link => link.getAttribute("href") === `#${current.id}`);
       active?.classList.add("active");
+
+      if (mobileLabel && current?.id) {
+        const mobileActive = mobileMenuLinks.find(a => a.getAttribute("href") === `#${current.id}`);
+        mobileLabel.textContent = mobileActive ? mobileActive.textContent : current.id;
+        mobileMenuLinks.forEach(a => a.classList.toggle("active", a === mobileActive));
+      }
     };
 
     const smoothScrollTo = (el, duration = 480) => {
@@ -779,6 +803,54 @@ const structuredData = JSON.stringify({
         history.pushState(null, "", `#${id}`);
       });
     });
+
+    if (mobileNav) {
+      const pill = document.getElementById("mobile-nav-pill");
+      let hideTimer;
+      const showNav = () => {
+        if (window.scrollY > 200) mobileNav.classList.add("visible");
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+          if (!mobileNav.classList.contains("open")) mobileNav.classList.remove("visible");
+        }, 2500);
+      };
+      let scrollTick = false;
+      window.addEventListener("scroll", () => {
+        if (!scrollTick) {
+          scrollTick = true;
+          requestAnimationFrame(() => {
+            scrollTick = false;
+            if (window.scrollY <= 200) {
+              mobileNav.classList.remove("visible");
+              return;
+            }
+            showNav();
+          });
+        }
+      }, { passive: true });
+
+      pill?.addEventListener("click", () => {
+        mobileNav.classList.toggle("open");
+        if (mobileNav.classList.contains("open")) {
+          mobileNav.classList.add("visible");
+          clearTimeout(hideTimer);
+        }
+      });
+      mobileMenuLinks.forEach(a => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          mobileNav.classList.remove("open");
+          const id = a.getAttribute("href")?.replace("#", "");
+          if (!id) return;
+          const target = document.getElementById(id);
+          if (target) smoothScrollTo(target);
+          history.pushState(null, "", `#${id}`);
+        });
+      });
+      document.addEventListener("click", (e) => {
+        if (!mobileNav.contains(e.target)) mobileNav.classList.remove("open");
+      });
+    }
 
     const heroEl = document.querySelector("main > section:first-of-type");
     const isTouch = window.matchMedia('(hover: none)').matches;
@@ -1235,13 +1307,13 @@ const structuredData = JSON.stringify({
       return `
         <div class="sec-eyebrow">${data.labels.eyebrows.recommendations}</div>
         <h2 class="sec-title">${data.labels.headings.recommendations}</h2>
-        <div class="testi-wrap">
-          <div class="testi-scroll" id="testi-scroll">
-            ${data.testimonials.map((t) => {
+        <div class="testi-wrap" role="group" aria-roledescription="carousel" aria-label="Student recommendations">
+          <div class="testi-scroll" id="testi-scroll" aria-live="off">
+            ${data.testimonials.map((t, i) => {
               const initials = getInitials(t.name);
               const role = t.headTA ? (data.labels.headTARole || 'Head Teaching Assistant') : (data.labels.taRole || 'Teaching Assistant');
               return `
-                <div class="testi-card">
+                <div class="testi-card" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${data.testimonials.length}">
                   <span class="testi-mark">&ldquo;</span>
                   <p class="testi-quote">${t.quote}</p>
                   <div class="testi-author">
@@ -1277,19 +1349,6 @@ const structuredData = JSON.stringify({
           <a class="cta-btn" href="mailto:riadmukh@gmail.com">Email</a>
         </div>
       `;
-    };
-
-    const setIntroName = (name) => {
-      const introName = document.querySelector(".intro-name");
-      if (!introName) return;
-      introName.setAttribute("aria-label", name);
-      introName.innerHTML = "";
-      Array.from(name).forEach((char, idx) => {
-        const span = document.createElement("span");
-        span.textContent = char === " " ? " " : char;
-        span.style.animationDelay = `${(0.03 + idx * 0.04).toFixed(2)}s`;
-        introName.appendChild(span);
-      });
     };
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1392,57 +1451,6 @@ const structuredData = JSON.stringify({
         }
       }
 
-      const introPhrase = document.querySelector(".intro-phrase");
-      if (introPhrase) {
-        const leads = introPhrase.querySelectorAll(".lead");
-        const hasLead = !!(data.labels.introLead);
-        const hasTail = !!(data.labels.introTail);
-
-        if (leads.length === 0 && (hasLead || hasTail)) {
-          if (hasLead) {
-            const el = document.createElement("span");
-            el.className = "lead";
-            el.textContent = data.labels.introLead;
-            introPhrase.insertBefore(el, introPhrase.firstChild);
-          }
-          if (hasTail) {
-            const el = document.createElement("span");
-            el.className = "lead";
-            el.textContent = data.labels.introTail;
-            introPhrase.appendChild(el);
-          }
-        } else if (leads.length === 1) {
-          if (hasLead && !hasTail) {
-            introPhrase.insertBefore(leads[0], introPhrase.querySelector(".intro-name"));
-            leads[0].textContent = data.labels.introLead;
-          } else if (!hasLead && hasTail) {
-            introPhrase.appendChild(leads[0]);
-            leads[0].textContent = data.labels.introTail;
-          } else if (hasLead && hasTail) {
-            leads[0].textContent = data.labels.introLead;
-            introPhrase.insertBefore(leads[0], introPhrase.querySelector(".intro-name"));
-            const tail = document.createElement("span");
-            tail.className = "lead";
-            tail.textContent = data.labels.introTail;
-            introPhrase.appendChild(tail);
-          }
-        } else if (leads.length >= 2) {
-          if (hasLead) {
-            leads[0].textContent = data.labels.introLead;
-            leads[0].style.display = "";
-          } else {
-            leads[0].style.display = "none";
-          }
-          if (hasTail) {
-            leads[leads.length - 1].textContent = data.labels.introTail;
-            leads[leads.length - 1].style.display = "";
-          } else {
-            leads[leads.length - 1].style.display = "none";
-          }
-        }
-      }
-      setIntroName(data.hero.name);
-
       const sideLinks = document.querySelector(".side-links");
       if (sideLinks) {
         const links = sideLinks.querySelectorAll("a");
@@ -1463,6 +1471,11 @@ const structuredData = JSON.stringify({
       sideNav.forEach((link, idx) => {
         if (labels[idx]) link.textContent = labels[idx];
       });
+      const mobileLinks = document.querySelectorAll("#mobile-nav-menu a");
+      mobileLinks.forEach((link, idx) => {
+        if (labels[idx]) link.textContent = labels[idx];
+      });
+      setActiveLink();
 
       const expSection = document.getElementById("experience");
       const projSection = document.getElementById("projects");
