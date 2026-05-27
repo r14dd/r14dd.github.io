@@ -9,7 +9,6 @@ type Labels = {
     education: string;
     skills: string;
     recommendations: string;
-    reading: string;
     connect: string;
   };
   links: {
@@ -24,7 +23,6 @@ type Labels = {
     education: string;
     skills: string;
     recommendations: string;
-    reading: string;
     connect: string;
   };
   eyebrows: {
@@ -65,7 +63,6 @@ export const profiles: Record<string, I18nProfile> = {
         education: "Education",
         skills: "Skills",
         recommendations: "Recommendations",
-        reading: "Reading",
         connect: "Connect",
       },
       links: {
@@ -80,7 +77,6 @@ export const profiles: Record<string, I18nProfile> = {
         education: "Education",
         skills: "Technical Skills",
         recommendations: "Recommendations",
-        reading: "Reading",
         connect: "Connect",
       },
       introLead: "Who is",
@@ -194,16 +190,16 @@ export const profiles: Record<string, I18nProfile> = {
         links: profile.projects[0].links,
       },
       {
-        name: "FinFlow — Wallet API",
+        name: "almostAykhan — RAG чат-бот ABB Bank",
         tech: profile.projects[1].tech,
         impact:
-          "Безопасный wallet API с JWT‑аутентификацией, защищёнными эндпоинтами и stateless-сессиями.",
-        date: "Янв 2026",
+          "RAG чат-бот, отвечающий исключительно на основе публичного контента ABB Bank с мультиязычной поддержкой и строгими ограничениями контекста.",
+        date: "Май 2026",
         bullets: [
-          "Реализовал безопасную аутентификацию и авторизацию на JWT (stateless)",
-          "Спроектировал реляционные модели данных через JPA/Hibernate с оптимизированными запросами",
-          "Применил практики безопасности: хэширование паролей, время жизни токенов (TTL), фильтрация запросов",
-          "Написал интеграционные тесты для проверки аутентификации и защищенных эндпоинтов",
+          "Построил двухсервисный RAG-пайплайн (API-шлюз + QA-сервис) со скрейпингом, чанкингом и индексацией через FAISS",
+          "Реализовал мультиязычную поддержку (азербайджанский, английский, русский) с блокировкой prompt-инъекций",
+          "Применил distance-gate для обнаружения внеконтекстных запросов — возвращает «Bunu bilmirəm» при выходе за рамки",
+          "Добавил наблюдаемость через SQLite и дашборд аналитики запросов на Chart.js",
         ],
         links: profile.projects[1].links,
       },
@@ -306,17 +302,6 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
     ],
-    reading: {
-      title: "Чтение",
-      description:
-        "Я читаю этих авторов последние 3–4 года; их структура повествования, поведение людей под ограничениями и неоднозначность помогают моделировать реальные системы.",
-      items: [
-        { author: "Эрих Мария Ремарк", quote: "Жизнь не стремилась сделать нас совершенными. Кто совершенен — тому место в музее." },
-        { author: "Михаил Булгаков", quote: "Всё будет правильно, на этом построен мир." },
-        { author: "Чак Паланик", quote: "Все мы умрём. Цель не в том, чтобы жить вечно, а в том, чтобы создать нечто вечное." },
-        { author: "Эмиль Золя", quote: "Художник — ничто без дара, но дар — ничто без труда." },
-      ],
-    },
     testimonials: [
       {
         name: "Oliver Kennedy",
@@ -364,7 +349,6 @@ export const profiles: Record<string, I18nProfile> = {
         education: "Образование",
         skills: "Навыки",
         recommendations: "Рекомендации",
-        reading: "Чтение",
         connect: "Связь",
       },
       links: {
@@ -379,7 +363,6 @@ export const profiles: Record<string, I18nProfile> = {
         education: "Образование",
         skills: "Технические навыки",
         recommendations: "Рекомендации",
-        reading: "Чтение",
         connect: "Связь",
       },
       introLead: "Кто такой",
@@ -493,16 +476,16 @@ export const profiles: Record<string, I18nProfile> = {
         links: profile.projects[0].links,
       },
       {
-        name: "FinFlow — Wallet API",
+        name: "almostAykhan — ABB Bank RAG Chatbotu",
         tech: profile.projects[1].tech,
         impact:
-          "JWT autentifikasiya, qorunan endpoint-lər və stateless sessiya idarəetməsi ilə təhlükəsiz wallet API.",
-        date: "Yan 2026",
+          "ABB Bank-ın ictimai məzmunundan eksklüziv cavab verən çoxdilli dəstək və ciddi kontekst məhdudiyyətləri olan RAG chatbotu.",
+        date: "May 2026",
         bullets: [
-          "JWT əsasında stateless autentifikasiya və avtorizasiya qurdum",
-          "JPA/Hibernate ilə optimallaşdırılmış sorğular və relasiya modeli dizayn etdim",
-          "Parol hash‑ləmə, token TTL və request filtering kimi təhlükəsizlik praktikalı tətbiq etdim",
-          "Auth axınları və qorunan endpoint‑lər üçün inteqrasiya testləri yazdım",
+          "FAISS vasitəsilə scraping, chunking və indeksləmə ilə iki xidmətli RAG pipeline qurdum (API gateway + QA xidməti)",
+          "Prompt injection bloklama ilə Azərbaycan, İngilis və Rus dillərini dəstəklədim",
+          "Kontekst xaricindəki sorğuları aşkar etmək üçün distance-gate tətbiq etdim — 'Bunu bilmirəm' qaytarır",
+          "SQLite müşahidə imkanı və Chart.js sorğu analitika dashboardu əlavə etdim",
         ],
         links: profile.projects[1].links,
       },
@@ -605,17 +588,6 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
     ],
-    reading: {
-      title: "Oxu",
-      description:
-        "Aşağıdakı müəllifləri 3–4 ildir oxuyuram; onların narrativ strukturu və məhdudiyyətlər altında davranışları real sistemləri modelləşdirmək üçün faydalıdır.",
-      items: [
-        { author: "Erich Maria Remarque", quote: "Həyat bizi mükəmməl etmək niyyətində deyildi. Mükəmməl olan muzeyə aiddir." },
-        { author: "Mikhail Bulgakov", quote: "Hər şey düzələcək, dünya bunun üzərində qurulub." },
-        { author: "Chuck Palahniuk", quote: "Hamımız öləcəyik. Məqsəd əbədi yaşamaq deyil, əbədi qalacaq bir şey yaratmaqdır." },
-        { author: "Émile Zola", quote: "Sənətçi istedadsız heç nədir, amma istedad da zəhmətsiz heç nədir." },
-      ],
-    },
     testimonials: [
       {
         name: "Oliver Kennedy",
@@ -663,7 +635,6 @@ export const profiles: Record<string, I18nProfile> = {
         education: "Təhsil",
         skills: "Bacarıqlar",
         recommendations: "Tövsiyələr",
-        reading: "Ədəbiyyat",
         connect: "Əlaqə",
       },
       links: {
@@ -678,7 +649,6 @@ export const profiles: Record<string, I18nProfile> = {
         education: "Təhsil",
         skills: "Texniki bacarıqlar",
         recommendations: "Tövsiyələr",
-        reading: "Ədəbiyyat",
         connect: "Əlaqə",
       },
       introLead: "",

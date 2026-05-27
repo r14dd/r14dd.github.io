@@ -33,6 +33,7 @@ const skillBadgeMap: Record<string, string> = {
   "LangGraph": "langchain",
   "LangChain": "langchain",
   "Ollama": "ollama",
+  "FAISS": "meta",
   "LangSmith": "langchain",
   "NVIDIA OpenShell": "nvidia",
   "RESTful APIs": "swagger",
@@ -47,7 +48,7 @@ const skillBadgeMap: Record<string, string> = {
   "MongoDB": "mongodb",
   "Redis": "redis",
   "pgvector": "postgresql",
-  "Linux Sandboxing": "linux",
+  "Linux": "linux",
   "Supabase": "supabase",
   "Docker": "docker",
   "Kubernetes": "kubernetes",
@@ -81,19 +82,17 @@ const skillBadgeMap: Record<string, string> = {
 const skillLocalLogoMap: Record<string, string> = {
   "AWS": "/logos/aws.svg",
   "AWS EC2": "/logos/aws.svg",
-  "gRPC": "/logos/grpc.png",
+  "OpenAI": "/logos/openai.svg",
+  "gRPC": "/logos/grpc.svg",
 };
 
-const getBadgeUrl = (skill: string): string | null => {
+const getLogoUrl = (skill: string): string | null => {
   const name = stripParens(skill);
-  const logo = skillBadgeMap[name];
-  if (!logo) return null;
-  const encoded = name.replace(/-/g, '--').replace(/\//g, '--').replace(/ /g, '_');
-  return `https://img.shields.io/badge/${encoded}-1e1e1e?style=flat-square&logo=${logo}&logoColor=white`;
-};
-
-const getLocalLogo = (skill: string): string | null => {
-  return skillLocalLogoMap[stripParens(skill)] ?? null;
+  const local = skillLocalLogoMap[name];
+  if (local) return local;
+  const slug = skillBadgeMap[name];
+  if (slug) return `https://cdn.simpleicons.org/${slug}`;
+  return null;
 };
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.about;
@@ -288,12 +287,10 @@ const structuredData = JSON.stringify({
             <div class="proj-card-text">
               <div class="feat-pills">
                 {p.tech.map((t) => {
-                  const local = getLocalLogo(t);
-                  if (local) return <span class="skill-badge-local"><img src={local} alt="" aria-hidden="true" />{stripParens(t)}</span>;
-                  const badge = getBadgeUrl(t);
-                  return badge
-                    ? <img class="skill-badge" src={badge} alt={stripParens(t)} loading="lazy" decoding="async" />
-                    : <span class="feat-pill">{t}</span>;
+                  const logo = getLogoUrl(t);
+                  return logo
+                    ? <span class="skill-badge-local"><img src={logo} alt="" aria-hidden="true" />{stripParens(t)}</span>
+                    : <span class="feat-pill">{stripParens(t)}</span>;
                 })}
               </div>
               {p.impact && <p class="proj-impact">{p.impact.replace(/^(?:Impact:\s*)+/i, "")}</p>}
@@ -383,16 +380,9 @@ const structuredData = JSON.stringify({
               {s.groups.map((g) => (
                 <div class="feat-pills" style={s.groups.length > 1 ? "margin-bottom: 0.3rem;" : ""}>
                   {g.items.map((item) => {
-                    const localLogo = getLocalLogo(item);
-                    if (localLogo) return (
-                      <span class="skill-badge-local">
-                        <img src={localLogo} alt="" aria-hidden="true" />
-                        {stripParens(item)}
-                      </span>
-                    );
-                    const badgeUrl = getBadgeUrl(item);
-                    return badgeUrl
-                      ? <img class="skill-badge" src={badgeUrl} alt={stripParens(item)} loading="lazy" decoding="async" />
+                    const logo = getLogoUrl(item);
+                    return logo
+                      ? <span class="skill-badge-local"><img src={logo} alt="" aria-hidden="true" />{stripParens(item)}</span>
                       : <span class="feat-pill">{stripParens(item)}</span>;
                   })}
                 </div>
@@ -420,17 +410,11 @@ const structuredData = JSON.stringify({
             <div class="proj-card-text">
               {(() => {
                 const all = t.skills.split("·").map(s => s.trim());
-                const tools = all.filter(s => getLocalLogo(s) || getBadgeUrl(s));
-                const topics = all.filter(s => !getLocalLogo(s) && !getBadgeUrl(s));
+                const tools = all.filter(s => getLogoUrl(s));
+                const topics = all.filter(s => !getLogoUrl(s));
                 const renderBadge = (skill: string) => {
-                  const localLogo = getLocalLogo(skill);
-                  if (localLogo) return (
-                    <span class="skill-badge-local">
-                      <img src={localLogo} alt="" aria-hidden="true" />
-                      {stripParens(skill)}
-                    </span>
-                  );
-                  return <img class="skill-badge" src={getBadgeUrl(skill)!} alt={stripParens(skill)} loading="lazy" decoding="async" />;
+                  const logo = getLogoUrl(skill)!;
+                  return <span class="skill-badge-local"><img src={logo} alt="" aria-hidden="true" />{stripParens(skill)}</span>;
                 };
                 return (
                   <div class="teaching-skills">
@@ -920,7 +904,7 @@ const structuredData = JSON.stringify({
     };
     attachSimButtons();
 
-    // Reading section effects removed
+
 
     const langToggle = document.getElementById("lang-toggle");
     const langMenu = document.getElementById("lang-menu");
@@ -1123,12 +1107,11 @@ const structuredData = JSON.stringify({
       currentProfile = data;
       const buildCard = (p) => {
         const pills = p.tech.map(t => {
-          const local = skillLocalLogoMapJS[stripParens(t)];
-          if (local) return `<span class="skill-badge-local"><img src="${local}" alt="" aria-hidden="true" />${stripParens(t)}</span>`;
-          const badge = getBadgeUrlJS(t);
-          return badge
-            ? `<img class="skill-badge" src="${badge}" alt="${stripParens(t)}" loading="lazy" decoding="async" />`
-            : `<span class="feat-pill">${t}</span>`;
+          const name = stripParens(t);
+          const logo = getLogoUrlJS(t);
+          return logo
+            ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" />${name}</span>`
+            : `<span class="feat-pill">${name}</span>`;
         }).join('');
         const impact = p.impact ? `<p class="proj-impact">${p.impact.replace(/^(?:Impact:\s*)+/i, "")}</p>` : '';
         const bullets = p.bullets.length ? `<ul class="feat-bullets">${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
@@ -1167,12 +1150,11 @@ const structuredData = JSON.stringify({
         <div class="proj-grid">
           ${data.teaching.map((t) => {
             const all = t.skills.split("·").map(s => s.trim());
-            const tools = all.filter(s => skillLocalLogoMapJS[s] || getBadgeUrlJS(s));
-            const topics = all.filter(s => !skillLocalLogoMapJS[s] && !getBadgeUrlJS(s));
+            const tools = all.filter(s => getLogoUrlJS(s));
+            const topics = all.filter(s => !getLogoUrlJS(s));
             const renderBadge = (skill) => {
-              const localSrc = skillLocalLogoMapJS[skill];
-              if (localSrc) return `<span class="skill-badge-local"><img src="${localSrc}" alt="" aria-hidden="true" />${skill}</span>`;
-              return `<img class="skill-badge" src="${getBadgeUrlJS(skill)}" alt="${skill}" loading="lazy" decoding="async" />`;
+              const logo = getLogoUrlJS(skill);
+              return `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" />${skill}</span>`;
             };
             return `
             <div class="proj-card">
@@ -1240,15 +1222,17 @@ const structuredData = JSON.stringify({
     const skillLocalLogoMapJS = {
       "AWS": "/logos/aws.svg",
       "AWS EC2": "/logos/aws.svg",
-      "gRPC": "/logos/grpc.png",
+      "OpenAI": "/logos/openai.svg",
+      "gRPC": "/logos/grpc.svg",
     };
     const skillBadgeMapJS = {
       "Rust": "rust", "Python": "python", "Go": "go", "C": "c",
       "Axum": "rust", "Actix-web": "rust",
       "FastAPI": "fastapi", "Flask": "flask",
       "LangGraph": "langchain", "LangChain": "langchain", "Ollama": "ollama", "LangSmith": "langchain",
+      "FAISS": "meta",
       "NVIDIA OpenShell": "nvidia",
-      "RESTful APIs": "swagger", "Linux Sandboxing": "linux", "GraphQL": "graphql", "WebSockets": "socketdotio", "WebRTC": "webrtc",
+      "RESTful APIs": "swagger", "Linux": "linux", "GraphQL": "graphql", "WebSockets": "socketdotio", "WebRTC": "webrtc",
       "Apache Kafka": "apachekafka", "RabbitMQ": "rabbitmq",
       "PostgreSQL": "postgresql", "MySQL": "mysql", "SQLite": "sqlite",
       "MongoDB": "mongodb", "Redis": "redis", "pgvector": "postgresql",
@@ -1264,12 +1248,13 @@ const structuredData = JSON.stringify({
       "Linux": "linux", "Trello": "trello", "REST APIs": "swagger",
       "Tokio": "rust",
     };
-    const getBadgeUrlJS = (skill) => {
+    const getLogoUrlJS = (skill) => {
       const name = stripParens(skill);
-      const logo = skillBadgeMapJS[name];
-      if (!logo) return null;
-      const encoded = name.replace(/-/g, '--').replace(/\//g, '--').replace(/ /g, '_');
-      return `https://img.shields.io/badge/${encoded}-1e1e1e?style=flat-square&logo=${logo}&logoColor=white`;
+      const local = skillLocalLogoMapJS[name];
+      if (local) return local;
+      const slug = skillBadgeMapJS[name];
+      if (slug) return `https://cdn.simpleicons.org/${slug}`;
+      return null;
     };
 
     const buildSkills = (data) => {
@@ -1287,11 +1272,9 @@ const structuredData = JSON.stringify({
                   <div class="feat-pills"${s.groups.length > 1 ? ' style="margin-bottom: 0.3rem;"' : ''}>
                     ${g.items.map((item) => {
                       const name = stripParens(item);
-                      const localSrc = skillLocalLogoMapJS[name];
-                      if (localSrc) return `<span class="skill-badge-local"><img src="${localSrc}" alt="" aria-hidden="true" />${name}</span>`;
-                      const url = getBadgeUrlJS(item);
-                      return url
-                        ? `<img class="skill-badge" src="${url}" alt="${name}" loading="lazy" decoding="async" />`
+                      const logo = getLogoUrlJS(item);
+                      return logo
+                        ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" />${name}</span>`
                         : `<span class="feat-pill">${name}</span>`;
                     }).join('')}
                   </div>
@@ -1372,6 +1355,7 @@ const structuredData = JSON.stringify({
     const getInitials = (name) => name.split(' ').map(w => w[0]).join('');
 
     let carouselTimer = null;
+    const DOT_COUNT = 5;
     const initCarousel = () => {
       clearInterval(carouselTimer);
       const scroll = document.getElementById('testi-scroll');
@@ -1383,12 +1367,15 @@ const structuredData = JSON.stringify({
       const cards = scroll.querySelectorAll('.testi-card');
       const count = cards.length;
       dotsEl.innerHTML = '';
-      cards.forEach((_, i) => {
+      for (let i = 0; i < DOT_COUNT; i++) {
         const d = document.createElement('div');
         d.className = 'car-dot' + (i === 0 ? ' on' : '');
-        d.addEventListener('click', () => scrollTo(i));
+        d.addEventListener('click', () => {
+          const cardIdx = Math.round(i / (DOT_COUNT - 1) * (count - 1));
+          scrollTo(cardIdx);
+        });
         dotsEl.appendChild(d);
-      });
+      }
 
       const scrollTo = (i) => {
         const card = cards[i];
@@ -1396,12 +1383,15 @@ const structuredData = JSON.stringify({
         scroll.scrollTo({ left: card.offsetLeft - scroll.offsetLeft, behavior: 'smooth' });
       };
 
+      const cardToDot = (cardIdx) => Math.round(cardIdx / (count - 1) * (DOT_COUNT - 1));
+
       const syncDots = () => {
         const sl = scroll.scrollLeft;
         const cw = cards[0]?.offsetWidth || 1;
         const gap = parseFloat(getComputedStyle(scroll).gap) || 0;
         const active = Math.round(sl / (cw + gap));
-        dotsEl.querySelectorAll('.car-dot').forEach((d, j) => d.classList.toggle('on', j === active));
+        const dotIdx = cardToDot(active);
+        dotsEl.querySelectorAll('.car-dot').forEach((d, j) => d.classList.toggle('on', j === dotIdx));
         return active;
       };
 
@@ -1950,17 +1940,15 @@ const structuredData = JSON.stringify({
     const populateProject = (p) => {
       if (!projModalCard) return;
       const tech = (p.tech || []).map((t) => {
-        const local = skillLocalLogoMapJS[t];
-        if (local) return `<span class="skill-badge-local"><img src="${local}" alt="" aria-hidden="true" />${t}</span>`;
-        const url = getBadgeUrlJS(t);
-        return url
-          ? `<img class="skill-badge" src="${url}" alt="${t}" loading="lazy" decoding="async" />`
+        const logo = getLogoUrlJS(t);
+        return logo
+          ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" />${t}</span>`
           : `<span class="project-tech-pill">${t}</span>`;
       }).join('');
       const bullets = (p.bullets || []).map((b) => `<li>${b}</li>`).join('');
       const sim = buildProjectSim(p);
       const gh = p.links?.github
-        ? `<div class="hero-cta" style="margin-top:1rem"><a class="cta-btn" href="${p.links.github}" target="_blank" rel="noopener">GitHub</a></div>`
+        ? `<div class="hero-cta" style="margin-top:1rem"><a class="cta-btn" href="${p.links.github}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a></div>`
         : '';
       projModalCard.innerHTML = `
         <div class="proj-modal-head">

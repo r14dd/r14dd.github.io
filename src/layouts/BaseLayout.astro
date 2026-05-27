@@ -57,7 +57,7 @@ const isDev = import.meta.env.DEV;
       crossorigin
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
@@ -566,7 +566,6 @@ const isDev = import.meta.env.DEV;
         .section-revealed .project-card,
         .section-revealed .meta-card,
         .section-revealed .tl-item,
-        .section-revealed .reading-row,
         #connect.section-revealed .connect-links .cta-btn {
           opacity: 1 !important;
           transform: none !important;
@@ -760,13 +759,6 @@ const isDev = import.meta.env.DEV;
         letter-spacing: 0.01em;
         color: var(--muted);
       }
-      .reading-quote {
-        color: var(--muted);
-        font-size: 0.85rem;
-        font-style: italic;
-        text-align: left;
-      }
-
       .project-meta {
         display: flex;
         flex-wrap: wrap;
@@ -1235,10 +1227,6 @@ const isDev = import.meta.env.DEV;
           grid-template-columns: 1fr;
         }
 
-        .reading-row {
-          grid-template-columns: 1fr;
-          gap: 0.35rem;
-        }
       }
 
       .meta-block {
@@ -1517,41 +1505,7 @@ const isDev = import.meta.env.DEV;
         white-space: normal;
       }
 
-      .reading-inline {
-        margin-top: 0.3rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .reading-row {
-        display: grid;
-        grid-template-columns: minmax(200px, 1fr) minmax(280px, 2fr);
-        gap: 1rem 1.5rem;
-        align-items: baseline;
-        position: relative;
-        padding: 0.4rem 0 0.4rem 1rem;
-        border-left: 2px solid rgba(var(--accent-rgb), 0.4);
-        transition: border-left-color 0.2s var(--ease-out);
-      }
-
-      .reading-row:hover {
-        border-left-color: rgba(var(--accent-rgb), 0.8);
-      }
-
-      .reading-row:nth-child(2) { border-left-color: rgba(var(--accent-rgb), 0.28); }
-      .reading-row:nth-child(3) { border-left-color: rgba(var(--accent-rgb), 0.50); }
-      .reading-row:nth-child(4) { border-left-color: rgba(var(--accent-rgb), 0.34); }
-      .reading-row:nth-child(2):hover { border-left-color: rgba(var(--accent-rgb), 0.70); }
-      .reading-row:nth-child(3):hover { border-left-color: rgba(var(--accent-rgb), 0.85); }
-      .reading-row:nth-child(4):hover { border-left-color: rgba(var(--accent-rgb), 0.75); }
-
-      .author {
-        color: var(--text);
-        font-weight: 500;
-      }
-
-      .testi-wrap { position: relative; }
+      .testi-wrap { position: relative; overflow: hidden; }
       .testi-scroll {
         display: flex;
         gap: 1rem;
@@ -1560,11 +1514,10 @@ const isDev = import.meta.env.DEV;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         padding-bottom: 0.25rem;
-        padding-right: 1.5rem;
       }
       .testi-scroll::-webkit-scrollbar { display: none; }
       .testi-card {
-        flex: 0 0 calc(100% - 1.5rem);
+        flex: 0 0 100%;
         min-height: 260px;
         box-sizing: border-box;
         display: flex;
@@ -1650,22 +1603,28 @@ const isDev = import.meta.env.DEV;
       }
       .car-dots {
         display: flex;
-        gap: .4rem;
+        align-items: center;
+        gap: 5px;
       }
       .car-dot {
-        width: 5px;
-        height: 5px;
+        width: 4px;
+        height: 4px;
+        min-width: 4px;
+        min-height: 4px;
+        flex-shrink: 0;
         border-radius: 50%;
-        background: rgba(var(--accent-rgb), .15);
+        background: rgba(var(--accent-rgb), .18);
         cursor: pointer;
-        transition: background .2s, transform .2s;
-        padding: 10px;
-        margin: -10px;
-        background-clip: content-box;
+        transition: background .2s;
+        position: relative;
+      }
+      .car-dot::before {
+        content: '';
+        position: absolute;
+        inset: -8px;
       }
       .car-dot.on {
-        background: var(--accent);
-        transform: scale(1.3);
+        background: var(--text);
       }
 
       .project-actions {
@@ -2012,24 +1971,6 @@ const isDev = import.meta.env.DEV;
           opacity: 0.7;
         }
 
-        .reading-quote {
-          max-width: 100%;
-          text-align: left;
-        }
-
-        .reading-row {
-          grid-template-columns: 1fr;
-          gap: 0.35rem;
-        }
-
-        .author {
-          color: var(--text);
-        }
-
-        .reading-quote {
-          color: var(--muted);
-        }
-
         .company-name,
         .exp-meta {
           color: var(--muted);
@@ -2222,16 +2163,6 @@ const isDev = import.meta.env.DEV;
       .section-revealed .meta-card:nth-child(7) { animation-delay: 0.36s; }
       .section-revealed .meta-card:nth-child(8) { animation-delay: 0.42s; }
 
-      .section-revealed .reading-row {
-        opacity: 0;
-        transform: translateX(-10px);
-        animation: read-in 0.4s var(--ease-spring) forwards;
-      }
-      .section-revealed .reading-row:nth-child(1) { animation-delay: 0.04s; }
-      .section-revealed .reading-row:nth-child(2) { animation-delay: 0.10s; }
-      .section-revealed .reading-row:nth-child(3) { animation-delay: 0.16s; }
-      .section-revealed .reading-row:nth-child(4) { animation-delay: 0.22s; }
-
       #education.section-revealed .meta-card {
         animation: card-stagger 0.5s var(--ease-spring) forwards, edu-glow 1.6s var(--ease-out) 0.2s forwards;
       }
@@ -2247,11 +2178,6 @@ const isDev = import.meta.env.DEV;
 
       @keyframes card-stagger {
         to { opacity: 1; transform: translateY(0) scale(1); }
-      }
-
-      @keyframes read-in {
-        from { opacity: 0; transform: translateX(-10px); }
-        to   { opacity: 1; transform: translateX(0); }
       }
 
       @keyframes edu-glow {
@@ -2371,33 +2297,34 @@ const isDev = import.meta.env.DEV;
         align-items: center;
         gap: 4px;
         height: 20px;
-        background: #1e1e1e;
-        border-radius: 4px;
-        padding: 0 6px 0 5px;
+        background: transparent;
+        border-radius: var(--radius-sm);
+        padding: 0.1rem 0.45rem 0.1rem 0.35rem;
         font-size: 0.62rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
-        color: #fff;
+        color: var(--text-soft);
         white-space: nowrap;
         vertical-align: middle;
-        opacity: 0.82;
-        border: 1px solid transparent;
-        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, border-color 0.2s ease;
+        border: 1px solid rgba(var(--accent-rgb), 0.18);
+        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease, color 0.2s ease;
       }
 
       .skill-badge-local:hover {
         transform: translateY(-2px);
-        opacity: 1;
         border-color: rgba(var(--accent-rgb), 0.5);
+        color: var(--text);
       }
 
       .skill-badge-local img {
-        height: 13px;
+        height: 11px;
         width: auto;
+        opacity: 0.75;
         filter: brightness(0) invert(1);
       }
 
-      html.light .skill-badge-local {
-        background: #555;
+      html.light .skill-badge-local img {
+        filter: brightness(0);
+        opacity: 0.6;
       }
 
       .teaching-skills {

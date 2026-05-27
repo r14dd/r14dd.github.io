@@ -50,14 +50,6 @@ export type Profile = {
     groups: { label: string; tier?: string; items: string[] }[];
   }[];
   testimonials: Testimonial[];
-  reading: {
-    title: string;
-    description: string;
-    items: {
-      author: string;
-      quote: string;
-    }[];
-  };
 };
 
 
@@ -148,18 +140,18 @@ export const profile: Profile = {
       },
     },
     {
-      name: "FinFlow — Wallet API",
-      tech: ["Java", "Spring Boot", "Spring Security", "JWT", "MySQL"],
-      impact: "Secured wallet API with JWT auth, guarded endpoints, and stateless session management.",
-      date: "Jan 2026",
+      name: "almostAykhan — ABB Bank RAG Chatbot",
+      tech: ["Python", "FastAPI", "OpenAI", "FAISS", "Docker"],
+      impact: "RAG chatbot answering questions exclusively from ABB Bank's public content with multilingual support and strict context-only guardrails.",
+      date: "May 2026",
       bullets: [
-        "Implemented secure authentication and authorization using JWT-based stateless sessions",
-        "Designed relational data models using JPA/Hibernate with optimized repository queries",
-        "Applied security best practices including password hashing, token TTL, and request filtering",
-        "Developed integration tests to validate authentication flows and protected endpoints",
+        "Built a two-service RAG pipeline (API gateway + QA service) scraping, chunking, and indexing ABB Bank pages via FAISS",
+        "Implemented multilingual support across Azerbaijani, English, and Russian with prompt injection blocking",
+        "Applied distance-gated out-of-scope detection to prevent hallucination — returns 'Bunu bilmirəm' for off-topic queries",
+        "Added SQLite observability and Chart.js query analytics dashboard for monitoring chatbot usage",
       ],
       links: {
-        github: "https://github.com/r14dd/finflow",
+        github: "https://github.com/r14dd/almostAykhan",
       },
     },
     {
@@ -337,7 +329,7 @@ export const profile: Profile = {
     {
       category: "Cloud, Infrastructure & DevOps",
       groups: [
-        { label: "", items: ["AWS", "Supabase", "Docker", "Kubernetes", "GitHub Actions", "GitLab CI/CD", "Linux Sandboxing"] },
+        { label: "", items: ["AWS", "Supabase", "Docker", "Kubernetes", "GitHub Actions", "GitLab CI/CD", "Linux"] },
       ],
     },
     {
@@ -386,27 +378,4 @@ export const profile: Profile = {
       quote: "I attest to Riad's work ethics, skill, performance, and communication. I do not hesitate to recommend Riad to any employer.",
     },
   ],
-  reading: {
-    title: "Reading",
-    description:
-      "I’ve been reading the writers below for the past 3–4 years; their narrative structure, human behavior under constraints, and ambiguity are useful lenses for modeling real‑world problems.",
-    items: [
-      {
-        author: "Erich Maria Remarque",
-        quote: "Life did not intend to make us perfect. Whoever is perfect belongs in a museum.",
-      },
-      {
-        author: "Mikhail Bulgakov",
-        quote: "Everything will turn out right, the world is built on that.",
-      },
-      {
-        author: "Chuck Palahniuk",
-        quote: "We all die. The goal isn't to live forever, the goal is to create something that will.",
-      },
-      {
-        author: "Émile Zola",
-        quote: "The artist is nothing without the gift, but the gift is nothing without work.",
-      },
-    ],
-  },
 };
