@@ -176,16 +176,15 @@ export const profiles: Record<string, I18nProfile> = {
     ],
     projects: [
       {
-        name: "MatchSentinel — Платформа мониторинга транзакций",
+        name: "QuorumRAG.rs — RAG на основе консенсуса",
         tech: profile.projects[0].tech,
-        impact:
-          "End-to-end pipeline мониторинга транзакций с event-driven скорингом, асинхронной обработкой через RabbitMQ и идемпотентной обработкой данных.",
-        date: "Янв 2026",
+        impact: "Мульти-ретриверный RAG с кворумной фильтрацией, требующей согласия между ретриверами перед выдачей результатов. Достигнут recall 95% против 70% baseline.",
+        date: "Май 2026",
         bullets: [
-          "Спроектировал event‑driven архитектуру для скоринга, уведомлений и отчетности",
-          "Построил асинхронность через RabbitMQ и безопасные повторные чтения",
-          "Реализовал per‑service БД с миграциями Liquibase и конфигурацией по окружениям",
-          "Развернул на AWS EC2 через Docker Compose, Linux‑сети и публичные сервисные endpoints",
+          "Построил мульти-ретриверный ансамбль с Reciprocal Rank Fusion и кворумной фильтрацией",
+          "Реализовал обработку перекрывающихся чанков с 50% шагом для предотвращения потери ответов на границах",
+          "Добавил параллельное создание эмбеддингов с кэшированием для оптимизации холодного старта",
+          "Собрал единый бинарный файл без зависимости от Python runtime",
         ],
         links: profile.projects[0].links,
       },
@@ -204,8 +203,44 @@ export const profiles: Record<string, I18nProfile> = {
         links: profile.projects[1].links,
       },
       {
-        name: "Redis Redesign",
+        name: "MatchSentinel — Платформа мониторинга транзакций",
         tech: profile.projects[2].tech,
+        impact:
+          "End-to-end pipeline мониторинга транзакций с event-driven скорингом, асинхронной обработкой через RabbitMQ и идемпотентной обработкой данных.",
+        date: "Янв 2026",
+        bullets: [
+          "Спроектировал event‑driven архитектуру для скоринга, уведомлений и отчетности",
+          "Построил асинхронность через RabbitMQ и безопасные повторные чтения",
+          "Реализовал per‑service БД с миграциями Liquibase и конфигурацией по окружениям",
+          "Развернул на AWS EC2 через Docker Compose, Linux‑сети и публичные сервисные endpoints",
+        ],
+        links: profile.projects[2].links,
+      },
+      {
+        name: "Алгоритм консенсуса Raft",
+        tech: profile.projects[3].tech,
+        impact:
+          "Консенсус Raft, сохраняющий согласованность при отказах узлов через лидер-элекцию и репликацию логов.",
+        date: "Май 2024",
+        bullets: [
+          "Реализовал Raft с выбором лидера, репликацией логов и отказоустойчивостью",
+          "Построил конкурентные серверные компоненты для согласованности между узлами",
+        ],
+      },
+      {
+        name: "Распределенная хеш‑таблица (Kademlia)",
+        tech: profile.projects[4].tech,
+        impact:
+          "Kademlia DHT для устойчивого peer-discovery и O(log n) поиска в динамических сетях.",
+        date: "Фев 2024",
+        bullets: [
+          "Реализовал peer‑to‑peer хранилище с маршрутизацией Kademlia",
+          "Достиг эффективных O(log n) запросов и устойчивой маршрутизации данных",
+        ],
+      },
+      {
+        name: "Redis Redesign",
+        tech: profile.projects[5].tech,
         impact:
           "Двухслойный TTL-кэш, устраняющий несогласованность устаревших данных при сохранении низкой задержки.",
         date: "Дек 2025",
@@ -218,7 +253,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         name: "Минималистичное портфолио",
-        tech: profile.projects[3].tech,
+        tech: profile.projects[6].tech,
         impact:
           "Адаптивное портфолио с сильной типографической иерархией, плавной анимацией и доступностью.",
         date: "Янв 2026",
@@ -227,29 +262,7 @@ export const profiles: Record<string, I18nProfile> = {
           "Реализовал адаптивную навигацию для десктопа и мобильных",
           "Добавил микро‑анимации с учетом prefers-reduced-motion",
         ],
-        links: profile.projects[3].links,
-      },
-      {
-        name: "Алгоритм консенсуса Raft",
-        tech: profile.projects[4].tech,
-        impact:
-          "Консенсус Raft, сохраняющий согласованность при отказах узлов через лидер-элекцию и репликацию логов.",
-        date: "Май 2024",
-        bullets: [
-          "Реализовал Raft с выбором лидера, репликацией логов и отказоустойчивостью",
-          "Построил конкурентные серверные компоненты для согласованности между узлами",
-        ],
-      },
-      {
-        name: "Распределенная хеш‑таблица (Kademlia)",
-        tech: profile.projects[5].tech,
-        impact:
-          "Kademlia DHT для устойчивого peer-discovery и O(log n) поиска в динамических сетях.",
-        date: "Фев 2024",
-        bullets: [
-          "Реализовал peer‑to‑peer хранилище с маршрутизацией Kademlia",
-          "Достиг эффективных O(log n) запросов и устойчивой маршрутизации данных",
-        ],
+        links: profile.projects[6].links,
       },
     ],
     teaching: [
@@ -275,8 +288,18 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        title: "Дискретные структуры",
+        title: "Качество ПО на практике",
         skills: profile.teaching[2].skills,
+        bullets: [
+          "Оценивал командную работу и качество ПО для 120 студентов",
+          "Проверял способность проектировать, реализовывать и оценивать решения",
+          "Фокусировался на корректности, тестировании, отладке и профессиональных стандартах",
+          "Проводил ревью кода на предмет поддерживаемости и надежности",
+        ],
+      },
+      {
+        title: "Дискретные структуры",
+        skills: profile.teaching[3].skills,
         bullets: [
           "Проводил занятия по логике, доказательствам и дискретной математике",
           "Проверял задания и помогал студентам с формальными доказательствами",
@@ -285,7 +308,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         title: "Основы компьютерных наук",
-        skills: profile.teaching[3].skills,
+        skills: profile.teaching[4].skills,
         bullets: [
           "Обучал основам Python и алгоритмическому мышлению",
           "Проводил лабораторные и объяснял фундаментальные концепции",
@@ -294,7 +317,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         title: "Организация компьютера",
-        skills: profile.teaching[4].skills,
+        skills: profile.teaching[5].skills,
         bullets: [
           "Поддерживал студентов по архитектуре процессора и организации памяти",
           "Разбирал темы ALU, конвейеров и иерархий памяти",
@@ -462,16 +485,15 @@ export const profiles: Record<string, I18nProfile> = {
     ],
     projects: [
       {
-        name: "MatchSentinel — Tranzaksiya monitorinq platforması",
+        name: "QuorumRAG.rs — Konsensus əsaslı RAG",
         tech: profile.projects[0].tech,
-        impact:
-          "Event-driven skorinq, RabbitMQ ilə asinxron emal və idempotent məlumat emalı ilə end-to-end tranzaksiya monitorinqi pipeline-ı.",
-        date: "Yan 2026",
+        impact: "Nəticələri təqdim etməzdən əvvəl retriverlər arası konsensus tələb edən kvorum filtrasiyalı multi-retriver RAG. Baseline 70%-ə qarşı 95% recall əldə edilib.",
+        date: "May 2026",
         bullets: [
-          "Skorinq, bildiriş və reportinq üçün event‑driven arxitektura qurdum",
-          "RabbitMQ ilə asinxron emal və təhlükəsiz təkrar emalı təmin etdim",
-          "Liquibase ilə per‑service DB və mühit‑əsaslı konfiqurasiyanı tətbiq etdim",
-          "Docker Compose, Linux şəbəkəsi və public endpoint‑lərlə AWS EC2‑yə yerləşdirdim",
+          "Reciprocal Rank Fusion skorinqi və kvorum filtrasiyası ilə multi-retriver ansambl qurdum",
+          "Sərhəd bölünmə cavablarının qarşısını almaq üçün 50% addımlı üst-üstə düşən chunk emalı tətbiq etdim",
+          "Soyuq başlanğıc performansını optimallaşdırmaq üçün keşləmə ilə paralel embedding əlavə etdim",
+          "Python runtime asılılığı olmadan vahid binar fayl istehsal etdim",
         ],
         links: profile.projects[0].links,
       },
@@ -490,8 +512,44 @@ export const profiles: Record<string, I18nProfile> = {
         links: profile.projects[1].links,
       },
       {
-        name: "Redis Redesign",
+        name: "MatchSentinel — Tranzaksiya monitorinq platforması",
         tech: profile.projects[2].tech,
+        impact:
+          "Event-driven skorinq, RabbitMQ ilə asinxron emal və idempotent məlumat emalı ilə end-to-end tranzaksiya monitorinqi pipeline-ı.",
+        date: "Yan 2026",
+        bullets: [
+          "Skorinq, bildiriş və reportinq üçün event‑driven arxitektura qurdum",
+          "RabbitMQ ilə asinxron emal və təhlükəsiz təkrar emalı təmin etdim",
+          "Liquibase ilə per‑service DB və mühit‑əsaslı konfiqurasiyanı tətbiq etdim",
+          "Docker Compose, Linux şəbəkəsi və public endpoint‑lərlə AWS EC2‑yə yerləşdirdim",
+        ],
+        links: profile.projects[2].links,
+      },
+      {
+        name: "Raft əsaslı konsensus alqoritmi",
+        tech: profile.projects[3].tech,
+        impact:
+          "Lider seçimi və log replikasiyası vasitəsilə node nasazlıqlarında konsistensiyanı qoruyan Raft konsensusu.",
+        date: "May 2024",
+        bullets: [
+          "Raft lider seçimi, log repliksiyası və fault tolerance tətbiq etdim",
+          "Node‑lar arasında konsistensiya üçün paralel server komponentləri qurdum",
+        ],
+      },
+      {
+        name: "Paylanmış Hash Table (Kademlia)",
+        tech: profile.projects[4].tech,
+        impact:
+          "Dinamik şəbəkələrdə dayanıqlı peer-discovery və O(log n) axtarış üçün Kademlia DHT.",
+        date: "Fev 2024",
+        bullets: [
+          "Kademlia marşrutlaması ilə P2P paylanmış storage sistemi qurdum",
+          "O(log n) axtarış və dayanıqlı data yönləndirmə əldə etdim",
+        ],
+      },
+      {
+        name: "Redis Redesign",
+        tech: profile.projects[5].tech,
         impact:
           "Aşağı gecikmə ilə köhnəlmiş məlumat uyğunsuzluğunu aradan qaldıran ikiqat TTL-ə əsaslanan cache.",
         date: "Dek 2025",
@@ -504,7 +562,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         name: "Minimalist Portfel",
-        tech: profile.projects[3].tech,
+        tech: profile.projects[6].tech,
         impact:
           "Güclü tipoqrafik iyerarxiya, hamar animasiya və əlçatanlıq-birinci dizaynlı adaptiv portfel.",
         date: "Yan 2026",
@@ -513,29 +571,7 @@ export const profiles: Record<string, I18nProfile> = {
           "Desktop və mobil üçün adaptiv naviqasiya reallaşdırdım",
           "prefers-reduced-motion dəstəkli mikro‑animasiya əlavə etdim",
         ],
-        links: profile.projects[3].links,
-      },
-      {
-        name: "Raft əsaslı konsensus alqoritmi",
-        tech: profile.projects[4].tech,
-        impact:
-          "Lider seçimi və log replikasiyası vasitəsilə node nasazlıqlarında konsistensiyanı qoruyan Raft konsensusu.",
-        date: "May 2024",
-        bullets: [
-          "Raft lider seçimi, log repliksiyası və fault tolerance tətbiq etdim",
-          "Node‑lar arasında konsistensiya üçün paralel server komponentləri qurdum",
-        ],
-      },
-      {
-        name: "Paylanmış Hash Table (Kademlia)",
-        tech: profile.projects[5].tech,
-        impact:
-          "Dinamik şəbəkələrdə dayanıqlı peer-discovery və O(log n) axtarış üçün Kademlia DHT.",
-        date: "Fev 2024",
-        bullets: [
-          "Kademlia marşrutlaması ilə P2P paylanmış storage sistemi qurdum",
-          "O(log n) axtarış və dayanıqlı data yönləndirmə əldə etdim",
-        ],
+        links: profile.projects[6].links,
       },
     ],
     teaching: [
@@ -561,8 +597,18 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        title: "Diskret strukturlar",
+        title: "Proqram keyfiyyəti praktikada",
         skills: profile.teaching[2].skills,
+        bullets: [
+          "120 tələbənin komanda işini və proqram keyfiyyətini qiymətləndirdim",
+          "Həlləri layihələndirmək, həyata keçirmək və qiymətləndirmək bacarığını yoxladım",
+          "Düzgünlük, test, debugging və peşəkar standartlara fokuslandım",
+          "Kodu dəstəklənə bilən və etibarlı olmaq üçün review etdim",
+        ],
+      },
+      {
+        title: "Diskret strukturlar",
+        skills: profile.teaching[3].skills,
         bullets: [
           "Məntiq, sübutlar və diskret riyaziyyat üzrə dərslər keçdim",
           "Tapşırıqları yoxladım və formal sübutlarda kömək etdim",
@@ -571,7 +617,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         title: "Kompüter Elmlərinə giriş",
-        skills: profile.teaching[3].skills,
+        skills: profile.teaching[4].skills,
         bullets: [
           "Python və alqoritmik düşüncə üzrə təməl dərslər keçdim",
           "Lab sessiyalarında əsas konseptləri izah etdim",
@@ -580,7 +626,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         title: "Kompüter təşkilatı",
-        skills: profile.teaching[4].skills,
+        skills: profile.teaching[5].skills,
         bullets: [
           "Prosessor arxitekturası və yaddaş iyerarxiyası üzrə dəstək verdim",
           "ALU, pipeline və control unit mövzularını izah etdim",

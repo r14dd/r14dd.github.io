@@ -21,78 +21,68 @@ const skillIcons: Record<string, string> = {
 
 const stripParens = (item: string): string => item.replace(/\s*\([^)]*\)/g, '').trim();
 
-const skillBadgeMap: Record<string, string> = {
-  "Rust": "rust",
-  "Python": "python",
-  "Go": "go",
-  "C": "c",
-  "Axum": "rust",
-  "Actix-web": "rust",
-  "FastAPI": "fastapi",
-  "Flask": "flask",
-  "LangGraph": "langchain",
-  "LangChain": "langchain",
-  "Ollama": "ollama",
-  "FAISS": "meta",
-  "LangSmith": "langchain",
-  "NVIDIA OpenShell": "nvidia",
-  "RESTful APIs": "swagger",
-  "GraphQL": "graphql",
-  "WebSockets": "socketdotio",
-  "WebRTC": "webrtc",
-  "Apache Kafka": "apachekafka",
-  "RabbitMQ": "rabbitmq",
-  "PostgreSQL": "postgresql",
-  "MySQL": "mysql",
-  "SQLite": "sqlite",
-  "MongoDB": "mongodb",
-  "Redis": "redis",
-  "pgvector": "postgresql",
-  "Linux": "linux",
-  "Supabase": "supabase",
-  "Docker": "docker",
-  "Kubernetes": "kubernetes",
-  "GitHub Actions": "githubactions",
-  "GitLab CI/CD": "gitlab",
-  "Pytest": "pytest",
-  "rstest": "rust",
-  "Selenium": "selenium",
-  "Postman": "postman",
-  "Java": "openjdk",
-  "Spring Boot": "springboot",
-  "Spring Security": "springsecurity",
-  "JWT": "jsonwebtokens",
-  "Liquibase": "liquibase",
-  "AWS EC2": "amazonec2",
-  "TypeScript": "typescript",
-  "CSS": "css",
-  "Astro": "astro",
-  "Protobuf": "google",
-  "UDP": "wireshark",
-  "TCP": "wireshark",
-  "Scala": "scala",
-  "Git": "git",
-  "Django": "django",
-  "Linux": "linux",
-  "Trello": "trello",
-  "REST APIs": "swagger",
-  "Tokio": "rust",
-};
-
-const skillLocalLogoMap: Record<string, string> = {
+const skillLogoMap: Record<string, string> = {
+  "Rust": "/logos/si-rust.svg",
+  "Python": "/logos/si-python.svg",
+  "Go": "/logos/si-go.svg",
+  "C": "/logos/si-c.svg",
+  "Axum": "/logos/si-rust.svg",
+  "Actix-web": "/logos/si-rust.svg",
+  "Tokio": "/logos/si-rust.svg",
+  "FastAPI": "/logos/si-fastapi.svg",
+  "Flask": "/logos/si-flask.svg",
+  "LangGraph": "/logos/si-langchain.svg",
+  "LangChain": "/logos/si-langchain.svg",
+  "LangSmith": "/logos/si-langchain.svg",
+  "Ollama": "/logos/si-ollama.svg",
+  "FAISS": "/logos/faiss.svg",
+  "NVIDIA OpenShell": "/logos/si-nvidia.svg",
+  "OpenAI": "/logos/openai.svg",
+  "RESTful APIs": "/logos/si-swagger.svg",
+  "REST APIs": "/logos/si-swagger.svg",
+  "GraphQL": "/logos/si-graphql.svg",
+  "WebSockets": "/logos/si-socketdotio.svg",
+  "WebRTC": "/logos/si-webrtc.svg",
+  "gRPC": "/logos/grpc.svg",
+  "Apache Kafka": "/logos/si-apachekafka.svg",
+  "RabbitMQ": "/logos/si-rabbitmq.svg",
+  "PostgreSQL": "/logos/si-postgresql.svg",
+  "pgvector": "/logos/si-postgresql.svg",
+  "MySQL": "/logos/si-mysql.svg",
+  "SQLite": "/logos/si-sqlite.svg",
+  "MongoDB": "/logos/si-mongodb.svg",
+  "Redis": "/logos/si-redis.svg",
+  "Linux": "/logos/si-linux.svg",
+  "Supabase": "/logos/si-supabase.svg",
+  "Docker": "/logos/si-docker.svg",
+  "Kubernetes": "/logos/si-kubernetes.svg",
+  "GitHub Actions": "/logos/si-githubactions.svg",
+  "GitLab CI/CD": "/logos/si-gitlab.svg",
   "AWS": "/logos/aws.svg",
   "AWS EC2": "/logos/aws.svg",
-  "OpenAI": "/logos/openai.svg",
-  "gRPC": "/logos/grpc.svg",
+  "Pytest": "/logos/si-pytest.svg",
+  "rstest": "/logos/si-rust.svg",
+  "Selenium": "/logos/si-selenium.svg",
+  "Postman": "/logos/si-postman.svg",
+  "Java": "/logos/si-openjdk.svg",
+  "Spring Boot": "/logos/si-springboot.svg",
+  "Spring Security": "/logos/si-springsecurity.svg",
+  "JWT": "/logos/si-jsonwebtokens.svg",
+  "Liquibase": "/logos/si-liquibase.svg",
+  "TypeScript": "/logos/si-typescript.svg",
+  "CSS": "/logos/si-css.svg",
+  "Astro": "/logos/si-astro.svg",
+  "Protobuf": "/logos/si-google.svg",
+  "UDP": "/logos/si-wireshark.svg",
+  "TCP": "/logos/si-wireshark.svg",
+  "Scala": "/logos/si-scala.svg",
+  "Git": "/logos/si-git.svg",
+  "Django": "/logos/si-django.svg",
+  "Trello": "/logos/si-trello.svg",
 };
 
 const getLogoUrl = (skill: string): string | null => {
-  const name = stripParens(skill);
-  const local = skillLocalLogoMap[name];
-  if (local) return local;
-  const slug = skillBadgeMap[name];
-  if (slug) return `https://cdn.simpleicons.org/${slug}`;
-  return null;
+  return skillLogoMap[stripParens(skill)] || null;
 };
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.about;
@@ -103,7 +93,7 @@ const structuredData = JSON.stringify({
   jobTitle: "AI/Software Engineer",
   url: "https://r14dd.github.io",
   sameAs: [profile.links.linkedin, profile.links.github],
-  email: "mailto:riadmukh@gmail.com",
+  email: `mailto:${profile.email}`,
 });
 ---
 
@@ -118,14 +108,19 @@ const structuredData = JSON.stringify({
     id="i18n-data"
     set:html={JSON.stringify(profiles)}
   />
+  <script
+    type="application/json"
+    id="skill-maps-data"
+    set:html={JSON.stringify({ logos: skillLogoMap, icons: skillIcons })}
+  />
 
   <div class="lang-switcher" aria-label="Controls">
     <button class="cmd-trigger" id="cmd-trigger" type="button" aria-label="Open command palette (⌘K)">
       <span class="cmd-trigger-label">⌘K</span>
       <svg class="cmd-trigger-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
     </button>
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light mode">
-      <span class="theme-icon" aria-hidden="true">☀️</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+      <span class="theme-icon" aria-hidden="true">🌙</span>
     </button>
     <button
       class="lang-toggle"
@@ -178,7 +173,7 @@ const structuredData = JSON.stringify({
     <a href={profile.links.github} target="_blank" rel="noopener"
       >{profile.labels.links.github}</a
     >
-    <a href="mailto:riadmukh@gmail.com">Email</a>
+    <a href={`mailto:${profile.email}`}>Email</a>
   </aside>
 
   <main class="content" id="main-content">
@@ -229,7 +224,7 @@ const structuredData = JSON.stringify({
         <a href={profile.links.github} target="_blank" rel="noopener"
           >{profile.labels.links.github}</a
         >
-        <a href="mailto:riadmukh@gmail.com">Email</a>
+        <a href={`mailto:${profile.email}`}>Email</a>
       </div>
     </section>
 
@@ -277,7 +272,7 @@ const structuredData = JSON.stringify({
               <h3 class="proj-name">{p.name}</h3>
               <div class="proj-card-actions">
                 {hasSim(p.name) && (
-                  <button class="sim-toggle" type="button"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>
+                  <button class="sim-toggle" type="button" aria-label={`Simulate ${p.name.split('—')[0].trim()} visualization`}><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>
                 )}
                 {p.links?.github && (
                   <a class="feat-gh" href={p.links.github} target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
@@ -568,7 +563,7 @@ const structuredData = JSON.stringify({
   <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
   <div class="find-nav-bar" id="find-nav-bar" aria-hidden="true">
     <button class="find-nav-btn" id="find-nav-prev" type="button" aria-label="Previous match"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 11L6 7l4-4"/></svg></button>
-    <span class="find-nav-count" id="find-nav-count"></span>
+    <span class="find-nav-count" id="find-nav-count" aria-live="polite"></span>
     <button class="find-nav-btn" id="find-nav-next" type="button" aria-label="Next match"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 11l4-4-4-4"/></svg></button>
     <button class="find-nav-close" id="find-nav-close" type="button" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
   </div>
@@ -581,7 +576,6 @@ const structuredData = JSON.stringify({
   </div>
 
   <script>
-    // @ts-nocheck
     const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%';
     const scrambleText = (el, finalText, duration = 550) => {
       const len = finalText.length;
@@ -1118,7 +1112,8 @@ const structuredData = JSON.stringify({
         const gh = p.links?.github ? `<a class="feat-gh" href="${p.links.github}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>` : '';
         const hasSim = hasSimulationFor(p.name);
         const isWide = p.name.includes('MatchSentinel');
-        const simBtn = hasSim ? `<button class="sim-toggle" type="button"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>` : '';
+        const simLabel = p.name.split('—')[0].trim();
+        const simBtn = hasSim ? `<button class="sim-toggle" type="button" aria-label="Simulate ${simLabel} visualization"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>` : '';
         const simSvg = hasSim ? buildProjectSim(p) : '';
         return `<div class="proj-card${hasSim ? ' has-sim' : ''}${isWide ? ' proj-card-wide' : ''}">
           <div class="proj-card-head">
@@ -1201,60 +1196,19 @@ const structuredData = JSON.stringify({
       `;
     };
 
-    const skillIconMap = {
-      "Programming Languages": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5L2 8l3 4.5M11 3.5L14 8l-3 4.5M9 2.5l-2 11"/></svg>',
-      "Backend & Runtimes": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="3" rx="1"/><rect x="2" y="9.5" width="12" height="3" rx="1"/><circle cx="4.5" cy="5" r="0.6" fill="currentColor" stroke="none"/><circle cx="4.5" cy="11" r="0.6" fill="currentColor" stroke="none"/></svg>',
-      "AI, ML & Agentic Systems": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14"/><path d="M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M4.1 11.9l1.1-1.1M10.8 5.2l1.1-1.1"/></svg>',
-      "Communication Protocols & APIs": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h9M9 3.5l2 2-2 2"/><path d="M14 10.5H5M7 8.5l-2 2 2 2"/></svg>',
-      "Messaging & Integration": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="12" height="8" rx="1.5"/><path d="M2 7l6 4 6-4"/></svg>',
-      "Databases & Persistence": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="4" rx="5" ry="1.8"/><path d="M3 4v8c0 1 2.24 1.8 5 1.8s5-.8 5-1.8V4"/><path d="M3 8c0 1 2.24 1.8 5 1.8S13 9 13 8"/></svg>',
-      "Cloud, Infrastructure & DevOps": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4.5 11a3 3 0 01.4-5.9A3.5 3.5 0 0112.5 6.5a2.5 2.5 0 01-.5 4.5H4.5z"/></svg>',
-      "Testing & Quality Assurance": '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="5.5"/><path d="M5.5 8l2 2 3-3"/></svg>',
-    };
+    const _smEl = document.getElementById('skill-maps-data');
+    const _sm = _smEl ? JSON.parse(_smEl.textContent || '{}') : {};
+    const skillIconMap = _sm.icons || {};
+    const skillLogoMapJS = _sm.logos || {};
     const getSkillIcon = (category) => {
       const svg = skillIconMap[category] || '';
       return svg ? `<span class="skill-icon">${svg}</span>` : '';
     };
 
-
     const stripParens = (s) => s.replace(/\s*\([^)]*\)/g, '').trim();
 
-    const skillLocalLogoMapJS = {
-      "AWS": "/logos/aws.svg",
-      "AWS EC2": "/logos/aws.svg",
-      "OpenAI": "/logos/openai.svg",
-      "gRPC": "/logos/grpc.svg",
-    };
-    const skillBadgeMapJS = {
-      "Rust": "rust", "Python": "python", "Go": "go", "C": "c",
-      "Axum": "rust", "Actix-web": "rust",
-      "FastAPI": "fastapi", "Flask": "flask",
-      "LangGraph": "langchain", "LangChain": "langchain", "Ollama": "ollama", "LangSmith": "langchain",
-      "FAISS": "meta",
-      "NVIDIA OpenShell": "nvidia",
-      "RESTful APIs": "swagger", "Linux": "linux", "GraphQL": "graphql", "WebSockets": "socketdotio", "WebRTC": "webrtc",
-      "Apache Kafka": "apachekafka", "RabbitMQ": "rabbitmq",
-      "PostgreSQL": "postgresql", "MySQL": "mysql", "SQLite": "sqlite",
-      "MongoDB": "mongodb", "Redis": "redis", "pgvector": "postgresql",
-      "Supabase": "supabase", "Docker": "docker",
-      "Kubernetes": "kubernetes", "GitHub Actions": "githubactions",
-      "GitLab CI/CD": "gitlab", "Pytest": "pytest", "rstest": "rust",
-      "Selenium": "selenium", "Postman": "postman",
-      "Java": "openjdk", "Spring Boot": "springboot", "Spring Security": "springsecurity",
-      "JWT": "jsonwebtokens", "Liquibase": "liquibase", "AWS EC2": "amazonec2",
-      "TypeScript": "typescript", "CSS": "css", "Astro": "astro",
-      "Protobuf": "google", "UDP": "wireshark", "TCP": "wireshark",
-      "Scala": "scala", "Git": "git", "Django": "django",
-      "Linux": "linux", "Trello": "trello", "REST APIs": "swagger",
-      "Tokio": "rust",
-    };
     const getLogoUrlJS = (skill) => {
-      const name = stripParens(skill);
-      const local = skillLocalLogoMapJS[name];
-      if (local) return local;
-      const slug = skillBadgeMapJS[name];
-      if (slug) return `https://cdn.simpleicons.org/${slug}`;
-      return null;
+      return skillLogoMapJS[stripParens(skill)] || null;
     };
 
     const buildSkills = (data) => {
@@ -1329,7 +1283,7 @@ const structuredData = JSON.stringify({
         <div class="connect-links">
           <a class="cta-btn" href="${data.links.linkedin}" target="_blank" rel="noopener">LinkedIn</a>
           <a class="cta-btn" href="${data.links.github}" target="_blank" rel="noopener">GitHub</a>
-          <a class="cta-btn" href="mailto:riadmukh@gmail.com">Email</a>
+          <a class="cta-btn" href="mailto:${data.email}">Email</a>
         </div>
       `;
     };
@@ -1355,9 +1309,13 @@ const structuredData = JSON.stringify({
     const getInitials = (name) => name.split(' ').map(w => w[0]).join('');
 
     let carouselTimer = null;
+    let carouselAbort = null;
     const DOT_COUNT = 5;
     const initCarousel = () => {
       clearInterval(carouselTimer);
+      if (carouselAbort) carouselAbort.abort();
+      carouselAbort = new AbortController();
+      const signal = carouselAbort.signal;
       const scroll = document.getElementById('testi-scroll');
       const dotsEl = document.getElementById('car-dots');
       const prevBtn = document.getElementById('prev-btn');
@@ -1373,7 +1331,7 @@ const structuredData = JSON.stringify({
         d.addEventListener('click', () => {
           const cardIdx = Math.round(i / (DOT_COUNT - 1) * (count - 1));
           scrollTo(cardIdx);
-        });
+        }, { signal });
         dotsEl.appendChild(d);
       }
 
@@ -1400,10 +1358,19 @@ const structuredData = JSON.stringify({
         if (scrollTick) return;
         scrollTick = true;
         requestAnimationFrame(() => { syncDots(); scrollTick = false; });
-      }, { passive: true });
+      }, { passive: true, signal });
 
-      prevBtn?.addEventListener('click', () => { const cur = syncDots(); scrollTo((cur - 1 + count) % count); });
-      nextBtn?.addEventListener('click', () => { const cur = syncDots(); scrollTo((cur + 1) % count); });
+      prevBtn?.addEventListener('click', () => { const cur = syncDots(); scrollTo((cur - 1 + count) % count); }, { signal });
+      nextBtn?.addEventListener('click', () => { const cur = syncDots(); scrollTo((cur + 1) % count); }, { signal });
+
+      const wrap = scroll.closest('[aria-roledescription="carousel"]');
+      if (wrap) {
+        wrap.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') { e.preventDefault(); const cur = syncDots(); scrollTo((cur - 1 + count) % count); }
+          else if (e.key === 'ArrowRight') { e.preventDefault(); const cur = syncDots(); scrollTo((cur + 1) % count); }
+        }, { signal });
+      }
+
       carouselTimer = setInterval(() => { const cur = syncDots(); scrollTo((cur + 1) % count); }, 7000);
     };
 
@@ -1512,6 +1479,7 @@ const structuredData = JSON.stringify({
       langToggle?.setAttribute("aria-expanded", String(!isOpen));
     });
 
+    let langSwitchTimer = null;
     langMenu?.querySelectorAll("button").forEach((btn) => {
       btn.addEventListener("click", () => {
         const lang = btn.getAttribute("data-lang") || "en";
@@ -1526,10 +1494,12 @@ const structuredData = JSON.stringify({
         langMenu.classList.remove("open");
         langWrapper?.classList.remove("open");
         langToggle?.setAttribute("aria-expanded", "false");
+        clearTimeout(langSwitchTimer);
         document.body.classList.add('lang-switching');
-        setTimeout(() => {
+        langSwitchTimer = setTimeout(() => {
           applyLanguage(lang);
           document.body.classList.remove('lang-switching');
+          langSwitchTimer = null;
         }, 200);
       });
     });
@@ -1639,7 +1609,7 @@ const structuredData = JSON.stringify({
         { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open('https://linkedin.com/in/riadmukhtarov', '_blank'); closeCmd(); } },
         { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open('https://github.com/r14dd', '_blank'); closeCmd(); } },
         { group: 'Actions',  label: 'Toggle theme',  icon: 'action', action: () => { document.getElementById('theme-toggle')?.click(); closeCmd(); } },
-        { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText('riadmukh@gmail.com').then(() => showToast('Email copied')); closeCmd(); } },
+        { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText(currentProfile?.email || '').then(() => showToast('Email copied')); closeCmd(); } },
         { group: 'Actions',  label: 'Keyboard shortcuts', icon: 'action', action: () => { closeCmd(); openKbd(); } },
       ];
     };
