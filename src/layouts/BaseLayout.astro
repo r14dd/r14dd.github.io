@@ -2,7 +2,7 @@
 const {
   metaTitle = "Riad Mukhtarov — Portfolio",
   metaDescription = "Backend & Distributed Systems engineer building reliable, production‑ready, event‑driven systems.",
-  metaImage = "https://r14dd.github.io/arch.webp",
+  metaImage = "https://r14dd.github.io/og-preview.png",
   structuredData = "",
   lang = "en",
 } = Astro.props;
@@ -31,37 +31,47 @@ const isDev = import.meta.env.DEV;
     <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={metaImage} />
     <link rel="canonical" href="https://r14dd.github.io" />
+    <link rel="alternate" hreflang="en" href="https://r14dd.github.io" />
+    <link rel="alternate" hreflang="ru" href="https://r14dd.github.io" />
+    <link rel="alternate" hreflang="az" href="https://r14dd.github.io" />
+    <link rel="alternate" hreflang="x-default" href="https://r14dd.github.io" />
     {structuredData && <script type="application/ld+json" set:html={structuredData} />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta id="theme-color-meta" name="theme-color" content="#050505" />
+    <meta id="theme-color-meta" name="theme-color" content="#faf9f6" />
     <script is:inline>
-      const _isLight = localStorage.getItem('portfolio-theme') === 'light';
-      if (_isLight) {
+      const _isDark = localStorage.getItem('portfolio-theme') === 'dark';
+      if (!_isDark) {
         document.documentElement.classList.add('light');
-        document.getElementById('theme-color-meta')?.setAttribute('content', '#faf9f6');
+      } else {
+        document.getElementById('theme-color-meta')?.setAttribute('content', '#050505');
       }
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     </script>
 
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="/fonts/font-8.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/font-5.woff2" as="font" type="font/woff2" crossorigin />
 
     <style is:global>
+      @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 400; font-display: swap; src: url(/fonts/font-0.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+      @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 400; font-display: swap; src: url(/fonts/font-1.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Cormorant Garamond'; font-style: italic; font-weight: 400; font-display: swap; src: url(/fonts/font-2.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/font-3.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+      @font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/font-4.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/font-5.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(/fonts/font-6.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+      @font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(/fonts/font-7.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(/fonts/font-8.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/font-9.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+      @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/font-10.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/font-11.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/font-9.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+      @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/font-10.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+      @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/font-11.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
       :root {
         --bg: #050505;
         --bg-rgb: 5, 5, 5;
@@ -152,24 +162,6 @@ const isDev = import.meta.env.DEV;
         border-radius: 4px;
       }
 
-      .skip-link {
-        position: fixed;
-        top: -100%;
-        left: 1rem;
-        z-index: 9999;
-        padding: 0.6rem 1.2rem;
-        background: var(--bg);
-        color: var(--accent);
-        border: 1px solid rgba(var(--accent-rgb), 0.3);
-        border-radius: 8px;
-        font-size: 0.9rem;
-        text-decoration: none;
-        transition: top 0.2s ease;
-      }
-
-      .skip-link:focus {
-        top: 1rem;
-      }
 
       html {
         background: var(--bg);
@@ -391,7 +383,7 @@ const isDev = import.meta.env.DEV;
         right: 0;
         display: flex;
         flex-direction: column;
-        min-width: 180px;
+        min-width: min(180px, calc(100vw - 2rem));
         padding: 0.5rem;
         border-radius: var(--radius-lg);
         background: var(--surface-panel);
@@ -873,7 +865,7 @@ const isDev = import.meta.env.DEV;
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        transform: translateX(-3px);
+        transform: translateX(-4px);
         background: rgba(var(--accent-rgb), 0.25);
         border: 1px solid rgba(var(--accent-rgb), 0.45);
         transition: background 0.3s, box-shadow 0.3s;
@@ -1227,6 +1219,18 @@ const isDev = import.meta.env.DEV;
           grid-template-columns: 1fr;
         }
 
+        .timeline {
+          padding-left: 1.1rem;
+        }
+
+        .tl-item::before {
+          left: -1.1rem;
+        }
+
+        .testi-card {
+          padding: 1.5rem;
+          min-height: 220px;
+        }
       }
 
       .meta-block {
@@ -1649,7 +1653,7 @@ const isDev = import.meta.env.DEV;
       .hero-links a {
         display: inline-flex;
         align-items: center;
-        padding: 0.35rem 0.85rem;
+        padding: 0.45rem 0.95rem;
         border-radius: var(--radius-full);
         border: 1px solid var(--accent-muted);
         background: var(--surface);
@@ -1713,6 +1717,8 @@ const isDev = import.meta.env.DEV;
         font-size: 0.72rem;
         font-weight: 400;
         line-height: 1.8;
+        overflow-x: auto;
+        word-break: break-word;
       }
 
       html.light .terminal-window {
@@ -1746,15 +1752,13 @@ const isDev = import.meta.env.DEV;
 
       .terminal-line.term-hidden {
         opacity: 0;
-        height: 0;
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
+        transform: translateY(4px);
       }
 
       .terminal-line.term-visible {
         opacity: 1;
-        height: auto;
+        transform: translateY(0);
+        transition: opacity 0.25s var(--ease-out), transform 0.3s var(--ease-spring);
       }
 
       .terminal-line {
@@ -1868,7 +1872,7 @@ const isDev = import.meta.env.DEV;
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        padding: 0.4rem 0.95rem;
+        padding: 0.45rem 0.95rem;
         border-radius: var(--radius-full);
         border: 1px solid var(--accent-muted);
         background: var(--surface);
@@ -1927,11 +1931,11 @@ const isDev = import.meta.env.DEV;
         }
 
         section {
-          margin: var(--space-12) 0 0;
+          margin: var(--space-8) 0 0;
         }
 
         section:first-of-type {
-          margin-top: var(--space-8);
+          margin-top: var(--space-6);
         }
 
         .experience-header,
@@ -1979,7 +1983,7 @@ const isDev = import.meta.env.DEV;
 
       @media (max-width: 480px) {
         body {
-          padding: 2rem 1rem 3rem;
+          padding: 1.5rem 0.85rem 3rem;
         }
 
         .lang-switcher {
@@ -1998,8 +2002,16 @@ const isDev = import.meta.env.DEV;
           border-radius: 50%;
         }
 
+        h1 {
+          font-size: clamp(2.2rem, 8vw, 2.8rem);
+        }
+
         h2 {
           font-size: 1.25rem;
+        }
+
+        section {
+          margin: var(--space-6) 0 0;
         }
 
         .project-card,
@@ -2010,9 +2022,77 @@ const isDev = import.meta.env.DEV;
         }
 
         .testi-card {
-          padding: 1.3rem;
+          padding: 1rem;
+          min-height: unset;
         }
 
+        .tl-item {
+          padding-bottom: 1.8rem;
+        }
+
+        .terminal-window {
+          padding: 0.7rem 0.85rem;
+          font-size: 0.68rem;
+        }
+
+
+        .connect-tagline {
+          font-size: 1.5rem;
+        }
+
+        .connect-footer {
+          padding: 2rem 0 1.5rem;
+        }
+
+        .connect-links {
+          gap: 0.6rem;
+        }
+      }
+
+      @media (max-width: 360px) {
+        body {
+          padding: 1.25rem 0.65rem 3rem;
+        }
+
+        h1 {
+          font-size: clamp(1.8rem, 7vw, 2.2rem);
+        }
+
+        .hero-about {
+          font-size: 0.88rem;
+        }
+
+        .terminal-window {
+          padding: 0.6rem 0.7rem;
+          font-size: 0.68rem;
+        }
+
+        .project-card,
+        .meta-card {
+          padding: 0.5rem;
+          margin-left: -0.5rem;
+          margin-right: -0.5rem;
+        }
+
+        .mobile-nav-pill {
+          padding: 0.45rem 0.8rem;
+          font-size: 0.65rem;
+        }
+      }
+
+      @media (max-height: 500px) and (orientation: landscape) {
+        body {
+          padding-top: 1rem;
+          padding-bottom: 1.5rem;
+        }
+
+        section {
+          margin: var(--space-6) 0 0;
+        }
+
+        .connect-footer {
+          padding: 1.5rem 0 1rem;
+        }
       }
 
       .scroll-line {
@@ -2649,7 +2729,7 @@ const isDev = import.meta.env.DEV;
           top: auto;
           bottom: calc(1.5rem + env(safe-area-inset-bottom));
           transform: translateX(-50%) translateY(10px);
-          width: min(560px, calc(100vw - 1.5rem));
+          width: min(560px, calc(100vw - 1rem));
           border-radius: 14px;
         }
         .cmd-palette.open {
@@ -3076,7 +3156,7 @@ const isDev = import.meta.env.DEV;
       }
       .mobile-nav-menu a {
         display: block;
-        padding: 0.5rem 0.75rem;
+        padding: 0.6rem 0.85rem;
         font-family: 'JetBrains Mono', monospace;
         font-size: var(--text-xs);
         color: var(--text-soft);
@@ -3106,7 +3186,6 @@ const isDev = import.meta.env.DEV;
   </head>
 
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
         <div class="page-loader" aria-hidden="true">
       <svg class="loader-mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <rect width="512" height="512" rx="96" fill="currentColor" opacity="0.08"/>

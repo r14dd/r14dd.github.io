@@ -31,6 +31,7 @@ export type Profile = {
   };
   about: string;
   currently: string;
+  email: string;
   links: {
     resume: string;
     linkedin: string;
@@ -62,6 +63,8 @@ export const profile: Profile = {
   about: "I develop software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, I taught computer science at State University of New York at Buffalo for two years. It shaped how I think about systems and how I explain them. I like hard problems and clean abstractions.",
 
   currently: "Building AI systems at International Bank of Azerbaijan.<br>Leading dev at European Youth Parliament Azerbaijan.",
+
+  email: "riadmukh@gmail.com",
 
   links: {
     resume: "/resume.pdf",
@@ -305,7 +308,7 @@ export const profile: Profile = {
     {
       category: "AI, ML & Agentic Systems",
       groups: [
-        { label: "", items: ["LangGraph", "LangChain", "Ollama", "LangSmith", "NVIDIA OpenShell"] },
+        { label: "", items: ["LangGraph", "LangChain", "FAISS", "Ollama", "LangSmith", "NVIDIA OpenShell"] },
       ],
     },
     {
