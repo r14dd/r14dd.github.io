@@ -1,0 +1,232 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{accent}{HTML}{A8863D} % site gold accent
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, urlcolor=accent, linkcolor=accent]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+\usepackage[T1]{fontenc}
+\usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\color{accent}
+}{}{0em}{}[\color{accent}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+% \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+%   \textbf{\href{http://sourabhbajaj.com/}{\Large Sourabh Bajaj}} & Email : \href{mailto:sourabh@sourabhbajaj.com}{sourabh@sourabhbajaj.com}\\
+%   \href{http://sourabhbajaj.com/}{http://www.sourabhbajaj.com} & Mobile : +1-123-456-7890 \\
+% \end{tabular*}
+
+\begin{center}
+    \textbf{\Huge \scshape \textcolor{accent}{Riad Mukhtarov}} \\ \vspace{1pt}
+    \small \href{tel:+994508998676}{\underline{+994(50)-899-8676}} $|$
+    \href{mailto:riadmukh@gmail.com}{\underline{riadmukh@gmail.com}} $|$
+    \href{https://linkedin.com/in/riadmukhtarov}{\underline{LinkedIn}} $|$
+    \href{https://github.com/r14dd}{\underline{GitHub}} $|$
+    \href{https://r14dd.github.io/}{\underline{Portfolio}}
+\end{center}
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Artificial Intelligence Engineer}{Apr 2026 -- Present}
+      {ABB - International Bank of Azerbaijan}{Baku, Azerbaijan}
+
+    \resumeSubheading
+      {Head of IT Development Team}{Feb 2026 -- Present}
+      {European Youth Parliament Azerbaijan}{Baku, Azerbaijan}
+      \resumeItemListStart
+        \resumeItem{Leading the development team on a full website renewal, internal platform improvements, and new technology solutions supporting organizational operations}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Information and Communication Technology (ICT) Assistant}{Oct 2024 -- Nov 2024}
+      {COP29 United Nations Climate Change Conference}{Baku, Azerbaijan}
+      \resumeItemListStart
+        \resumeItem{Supported ICT operations for 500+ international delegates in a mission-critical environment}
+        \resumeItem{Resolved real-time infrastructure and hybrid session incidents under strict availability requirements}
+        \resumeItem{Assisted with access control, device hardening, and secure system handling}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Head Teaching Assistant - Data Structures}{Aug 2022 -- May 2024}
+      {State University of New York at Buffalo}{Buffalo, New York}
+      \resumeItemListStart
+        \resumeItem{Led data structures instruction (asymptotics, graphs, trees, hashing) in Scala/Java for $\sim$1,000 students}
+        \resumeItem{Managed 20 TAs, coordinated labs/exams, and served as the primary liaison between students and faculty}
+        \resumeItem{Built and graded assignments, quizzes, and exams while enforcing academic integrity standards}
+        \resumeItem{Ran weekly reviews and debugging sessions, supporting 200+ students with hands-on help}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University at Buffalo, New York - \textit{BS in Computer Science}}{Aug 2020 -- May 2024}
+      {Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors}
+      {Buffalo, New York}
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+        {\textbf{QuorumRAG.rs }{\href{https://github.com/r14dd/quorumRAG.rs}{\textit{GitHub}}} $|$ \emph{Rust, Ollama, Tokio}}{May 2026}
+          \resumeItemListStart
+            \resumeItem{Built a multi-retriever RAG ensemble with rank fusion and quorum filtering, raising recall from 70\% to 95\%}
+            \resumeItem{Applied 50\% overlapping chunk strides to prevent boundary-split answers, with parallel cached embeddings}
+            \resumeItem{Shipped as a single binary with no Python runtime dependency}
+          \resumeItemListEnd
+      \resumeProjectHeading
+        {\textbf{almostAykhan -- RAG Chatbot }{\href{https://github.com/r14dd/almostAykhan}{\textit{GitHub}}} $|$ \emph{Python, FastAPI, OpenAI, FAISS, Docker}}{May 2026}
+          \resumeItemListStart
+            \resumeItem{Built a two-service RAG pipeline (gateway + QA) that scrapes, chunks, and indexes content via FAISS}
+            \resumeItem{Added trilingual support (AZ/EN/RU) with prompt-injection blocking and distance-gated out-of-scope detection}
+            \resumeItem{Instrumented SQLite observability and a Chart.js analytics dashboard for usage monitoring}
+          \resumeItemListEnd
+      \resumeProjectHeading
+        {\textbf{Redis Redesign} $|$ \emph{Rust, Redis}}{Dec 2025}
+          \resumeItemListStart
+            \resumeItem{Replaced a monolithic cache with two layers: a key/subkey-to-id map and an id-to-value store}
+            \resumeItem{Added TTL lifecycle control to expire stale entries predictably and preserve low-latency access}
+            \resumeItem{Implemented garbage collection for expired entries and dangling cross-layer references}
+          \resumeItemListEnd
+      \resumeProjectHeading
+        {\textbf{Raft-Based Consensus Algorithm} $|$ \emph{Go, UDP, Protobuf}}{May 2024}
+          \resumeItemListStart
+            \resumeItem{Implemented Raft consensus with leader election, log replication, and fault tolerance}
+            \resumeItem{Built concurrent server components to maintain consistency across distributed nodes}
+          \resumeItemListEnd
+      % ---- Uncomment Kademlia only if you drop something else; with Education here it spills to page 2 ----
+      % \resumeProjectHeading
+      %   {\textbf{Distributed Hash Table (Kademlia)} $|$ \emph{Go, TCP, Protobuf}}{Feb 2024}
+      %     \resumeItemListStart
+      %       \resumeItem{Implemented a peer-to-peer distributed storage system using Kademlia routing}
+      %       \resumeItem{Achieved efficient $O(\log n)$ lookups and resilient data routing across nodes}
+      %     \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+
+
+%
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+        \textbf{Programming Languages}{: Rust, Python, Go, C} \\
+        \textbf{Backend \& Runtimes}{: Axum, Actix-web, Tokio, FastAPI, Flask} \\
+        \textbf{AI, ML \& Agentic Systems}{: LangGraph, LangChain, FAISS, Ollama, LangSmith, NVIDIA OpenShell} \\
+        \textbf{Communication Protocols \& APIs}{: gRPC, RESTful APIs, GraphQL, WebSockets, WebRTC} \\
+        \textbf{Messaging \& Integration}{: Apache Kafka, RabbitMQ} \\
+        \textbf{Databases \& Persistence}{: PostgreSQL, MySQL, SQLite, MongoDB, Redis, pgvector} \\
+        \textbf{Cloud, Infrastructure \& DevOps}{: AWS, Supabase, Docker, Kubernetes, GitHub Actions, GitLab CI/CD, Linux} \\
+        \textbf{Testing \& Quality Assurance}{: Pytest, rstest, Selenium, Postman} \\
+    }}
+ \end{itemize}
+
+
+%-------------------------------------------
+\end{document}
