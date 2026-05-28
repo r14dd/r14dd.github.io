@@ -174,6 +174,9 @@ const structuredData = JSON.stringify({
       >{profile.labels.links.github}</a
     >
     <a href={`mailto:${profile.email}`}>Email</a>
+    <a href={profile.links.resume} target="_blank" rel="noopener"
+      >{profile.labels.links.resume}</a
+    >
   </aside>
 
   <main class="content" id="main-content">
@@ -225,6 +228,9 @@ const structuredData = JSON.stringify({
           >{profile.labels.links.github}</a
         >
         <a href={`mailto:${profile.email}`}>Email</a>
+        <a href={profile.links.resume} target="_blank" rel="noopener"
+          >{profile.labels.links.resume}</a
+        >
       </div>
     </section>
 
@@ -1406,6 +1412,10 @@ const structuredData = JSON.stringify({
           links[1].textContent = data.labels.links.github;
           links[1].setAttribute("href", data.links.github);
         }
+        if (links[3]) {
+          links[3].textContent = data.labels.links.resume;
+          links[3].setAttribute("href", data.links.resume);
+        }
       }
 
       const sideLinks = document.querySelector(".side-links");
@@ -1413,6 +1423,10 @@ const structuredData = JSON.stringify({
         const links = sideLinks.querySelectorAll("a");
         if (links[0]) links[0].textContent = data.labels.links.linkedin;
         if (links[1]) links[1].textContent = data.labels.links.github;
+        if (links[3]) {
+          links[3].textContent = data.labels.links.resume;
+          links[3].setAttribute("href", data.links.resume);
+        }
       }
 
       const sideNav = document.querySelectorAll(".side-nav a");
@@ -2195,33 +2209,6 @@ const structuredData = JSON.stringify({
         }
       }
 
-      const magneticEls = document.querySelectorAll(
-        ".side-nav a, .side-links a, .theme-toggle, .lang-toggle, .cta-btn"
-      );
-      let magTicking = false;
-      document.addEventListener("mousemove", (e) => {
-        if (magTicking) return;
-        magTicking = true;
-        const mx = e.clientX;
-        const my = e.clientY;
-        requestAnimationFrame(() => {
-          magneticEls.forEach((el) => {
-            const rect = el.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-            const dx = mx - cx;
-            const dy = my - cy;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 50) {
-              const pull = (1 - dist / 50) * 0.5;
-              el.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
-            } else if (el.style.transform) {
-              el.style.transform = "";
-            }
-          });
-          magTicking = false;
-        });
-      }, { passive: true });
     }
 
   </script>

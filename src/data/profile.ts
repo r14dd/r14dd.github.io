@@ -67,7 +67,7 @@ export const profile: Profile = {
   email: "riadmukh@gmail.com",
 
   links: {
-    resume: "/resume.pdf",
+    resume: "/riad_s_resume.pdf",
     linkedin: "https://linkedin.com/in/riadmukhtarov",
     github: "https://github.com/r14dd",
   },
