@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://r14dd.github.io/sitemap.xml
+Sitemap: https://riad.cc/sitemap.xml
