@@ -90,9 +90,14 @@ const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.hero.name,
+  alternateName: ["Riad Muxtarov", "r14dd"],
   jobTitle: "AI/Software Engineer",
   url: "https://riad.cc",
-  sameAs: [profile.links.linkedin, profile.links.github],
+  sameAs: [
+    profile.links.linkedin,
+    profile.links.github,
+    "https://crates.io/crates/quorumrag",
+  ],
   email: `mailto:${profile.email}`,
 });
 ---
