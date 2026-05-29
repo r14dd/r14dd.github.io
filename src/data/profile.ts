@@ -66,7 +66,7 @@ export const profile: Profile = {
 
   currently: "Building AI systems at International Bank of Azerbaijan.<br>Leading dev at European Youth Parliament Azerbaijan.",
 
-  email: "riadmukh@gmail.com",
+  email: "riad@riad.cc",
 
   links: {
     resume: "/riad_s_resume.pdf",
