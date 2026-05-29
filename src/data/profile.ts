@@ -7,6 +7,8 @@ export type Project = {
   links?: {
     github?: string;
     demo?: string;
+    crates?: string;
+    docs?: string;
   };
 };
 
@@ -133,13 +135,14 @@ export const profile: Profile = {
       impact: "Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Achieved 95% recall vs 70% baseline.",
       date: "May 2026",
       bullets: [
+        "Published to crates.io as an installable Rust crate (cargo add quorumrag)",
         "Built multi-retriever ensemble with Reciprocal Rank Fusion scoring and quorum filtering",
         "Implemented overlapping chunk processing with 50% stride to prevent boundary-split answers",
         "Added parallel embedding with caching to optimize cold-start performance",
-        "Produced single binary with no Python runtime dependency",
       ],
       links: {
-        github: "https://github.com/r14dd/quorumRAG.rs",
+        crates: "https://crates.io/crates/quorumrag",
+        docs: "https://docs.rs/quorumrag",
       },
     },
     {
