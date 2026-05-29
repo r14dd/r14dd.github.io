@@ -69,7 +69,7 @@ export const profile: Profile = {
   email: "riad@riad.cc",
 
   links: {
-    resume: "/riad_s_resume.pdf",
+    resume: "/resume.pdf",
     linkedin: "https://linkedin.com/in/riadmukhtarov",
     github: "https://github.com/r14dd",
   },
