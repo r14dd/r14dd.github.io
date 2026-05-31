@@ -24,6 +24,7 @@ export type Testimonial = {
   course: string;
   headTA?: boolean;
   quote: string;
+  linkedin?: string;
 };
 
 export type Profile = {
@@ -352,36 +353,42 @@ export const profile: Profile = {
       course: "Data Structures",
       headTA: true,
       quote: "Put him into a Project Manager/Team Lead role, and I guarantee to you that he will shine.",
+      linkedin: "https://www.linkedin.com/in/oliver-kennedy-04602217/",
     },
     {
       name: "Jesse Hartloff",
       title: "Associate Professor of Teaching, State University of New York at Buffalo",
       course: "Web Applications",
       quote: "He not only demonstrated a great technical understanding of the content but was able to explain these concepts in a simple manner to students who were struggling to apply the material.",
+      linkedin: "https://www.linkedin.com/in/jesse-hartloff-a8309212/",
     },
     {
       name: "Carl Alphonce",
       title: "Professor of Teaching, State University of New York at Buffalo",
       course: "Software Quality in Practice",
       quote: "He was very responsive to requests, professional in all his interactions with students and course staff, and technically competent in all the tools and processes covered in the course.",
+      linkedin: "https://www.linkedin.com/in/carl-alphonce-9b7b323/",
     },
     {
       name: "Nasrin Akhter",
       title: "Assistant Professor of Teaching, State University of New York at Buffalo",
       course: "Discrete Structures",
       quote: "I was impressed by his strong work ethic, positive attitude, professionalism, and dedication. He proved himself to be an organized, efficient, and hardworking TA.",
+      linkedin: "https://www.linkedin.com/in/nasrinakhter/",
     },
     {
       name: "Sean Mackay",
       title: "Assistant Professor of Computer Science, University of Oklahoma",
       course: "Introduction to Computer Science",
       quote: "Riad is one of the best individuals I have ever had the opportunity to work with. His ability to communicate complex concepts to a range of skill levels continually impressed me.",
+      linkedin: "https://www.linkedin.com/in/sean-mackay-phd-784905140/",
     },
     {
       name: "Farshad Ghanei",
       title: "Associate Teaching Professor, Illinois Institute of Technology",
       course: "Computer Organization",
       quote: "I attest to Riad's work ethics, skill, performance, and communication. I do not hesitate to recommend Riad to any employer.",
+      linkedin: "https://www.linkedin.com/in/farshad-ghanei/",
     },
   ],
 };
