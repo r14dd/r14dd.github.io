@@ -6,7 +6,6 @@ const {
   structuredData = "",
   lang = "en",
 } = Astro.props;
-const isDev = import.meta.env.DEV;
 ---
 <!DOCTYPE html>
 <html lang={lang} translate="no">
@@ -52,6 +51,7 @@ const isDev = import.meta.env.DEV;
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     </script>
 
+    <link rel="dns-prefetch" href="//gc.zgo.at" />
     <link rel="preload" href="/fonts/font-8.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/font-5.woff2" as="font" type="font/woff2" crossorigin />
 
@@ -99,6 +99,7 @@ const isDev = import.meta.env.DEV;
         --text-xs: 0.72rem;
         --text-sm: 0.82rem;
         --text-base: 1rem;
+        --text-md: 1.2rem;
         --text-lg: 1.15rem;
         --text-xl: 1.55rem;
 
@@ -127,9 +128,9 @@ const isDev = import.meta.env.DEV;
       html.light {
         --bg: #faf9f6;
         --bg-rgb: 250, 249, 246;
-        --text: #1a1a1a;
-        --text-soft: #4a4a4a;
-        --muted: #777777;
+        --text: #1c1917;
+        --text-soft: #3b3835;
+        --muted: #6b6560;
         --accent: #a8863d;
         --accent-rgb: 168, 134, 61;
         --border: rgba(0, 0, 0, 0.06);
@@ -1060,6 +1061,12 @@ const isDev = import.meta.env.DEV;
         gap: 0.85rem;
       }
 
+      @media (hover: hover) {
+        .proj-grid .proj-card {
+          transition: border-color 0.25s var(--ease-out), background 0.25s var(--ease-out), transform 0.2s var(--ease-spring);
+        }
+      }
+
       .proj-card-wide {
         grid-column: 1 / -1;
       }
@@ -1568,9 +1575,29 @@ const isDev = import.meta.env.DEV;
         color: var(--accent);
       }
       .testi-name {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
         font-weight: 600;
         color: var(--text);
         font-size: .88rem;
+      }
+      .testi-linkedin {
+        display: inline-flex;
+        align-items: center;
+        color: var(--muted);
+        opacity: 0.5;
+        transition: opacity 0.2s ease, color 0.2s ease;
+        background-image: none;
+      }
+      .testi-linkedin:hover {
+        opacity: 1;
+        color: var(--accent);
+        background-size: 0% 1px;
+      }
+      .testi-linkedin svg {
+        width: 13px;
+        height: 13px;
       }
       .testi-role {
         font-size: .76rem;
@@ -1719,6 +1746,23 @@ const isDev = import.meta.env.DEV;
         line-height: 1.8;
         overflow-x: auto;
         word-break: break-word;
+      }
+
+
+      .hero-about .word-gen {
+        display: inline;
+        opacity: 0;
+        filter: blur(4px);
+        transition: opacity 0.4s ease, filter 0.4s ease;
+      }
+
+      .hero-about .word-gen.revealed {
+        opacity: 1;
+        filter: blur(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hero-about .word-gen { opacity: 1; filter: none; transition: none; }
       }
 
       html.light .terminal-window {
@@ -2299,6 +2343,7 @@ const isDev = import.meta.env.DEV;
 
       @media (hover: none) {
         .cursor-dot { display: none; }
+        .cta-btn:not(:hover) { animation: none; }
       }
 
       .section-revealed ul li {
@@ -3250,6 +3295,18 @@ const isDev = import.meta.env.DEV;
         });
         document.querySelectorAll('section').forEach((s) => revealObs.observe(s));
       });
+
+
+      // Text generate — split hero about into words and reveal
+      const heroAboutEl = document.getElementById('hero-about');
+      if (heroAboutEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const text = heroAboutEl.textContent.trim();
+        heroAboutEl.innerHTML = text.split(' ').map(w => `<span class="word-gen">${w}</span>`).join(' ');
+        const words = heroAboutEl.querySelectorAll('.word-gen');
+        words.forEach((w, i) => {
+          setTimeout(() => w.classList.add('revealed'), 100 + i * 40);
+        });
+      }
 
       const cursorDot = document.querySelector('.cursor-dot');
       const cursorReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
