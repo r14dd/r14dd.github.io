@@ -40,13 +40,13 @@ const {
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta id="theme-color-meta" name="theme-color" content="#faf9f6" />
+    <meta id="theme-color-meta" name="theme-color" content="#050505" />
     <script is:inline>
-      const _isDark = localStorage.getItem('portfolio-theme') === 'dark';
-      if (!_isDark) {
+      // Dark is the default theme; switch to light only when explicitly chosen.
+      const _theme = localStorage.getItem('portfolio-theme');
+      if (_theme === 'light') {
         document.documentElement.classList.add('light');
-      } else {
-        document.getElementById('theme-color-meta')?.setAttribute('content', '#050505');
+        document.getElementById('theme-color-meta')?.setAttribute('content', '#faf9f6');
       }
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     </script>
@@ -161,6 +161,28 @@ const {
         outline: 2px solid rgba(var(--accent-rgb), 0.6);
         outline-offset: 3px;
         border-radius: 4px;
+      }
+
+      /* Keyboard skip link — hidden off-screen until focused (WCAG 2.4.1). */
+      .skip-link {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        margin: 0.6rem;
+        padding: 0.6rem 1rem;
+        background: var(--surface-panel);
+        color: var(--accent);
+        border: 1px solid var(--accent-muted);
+        border-radius: var(--radius-md);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        text-decoration: none;
+        transform: translateY(-150%);
+        transition: transform 0.18s var(--ease-out);
+      }
+      .skip-link:focus {
+        transform: translateY(0);
       }
 
 
@@ -3231,6 +3253,7 @@ const {
   </head>
 
   <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
         <div class="page-loader" aria-hidden="true">
       <svg class="loader-mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <rect width="512" height="512" rx="96" fill="currentColor" opacity="0.08"/>
