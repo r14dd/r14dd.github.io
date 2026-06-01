@@ -1,79 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { profiles } from "../data/profile-i18n";
+import {
+  buildExperience,
+  buildProjects,
+  buildTeaching,
+  buildEducation,
+  buildSkills,
+  buildRecommendations,
+  buildConnect,
+} from "../lib/builders";
 
 const profile = profiles.en;
-const hasSim = (name: string) =>
-  name.includes("Raft") || name.includes("Kademlia") || name.includes("Hash Table") || name.includes("Distributed") || name.includes("Redis");
-const isRaft = (name: string) => name.includes("Raft");
-const isKademlia = (name: string) => name.includes("Hash Table") || name.includes("Distributed") || name.includes("Kademlia");
-const isRedis = (name: string) => name.includes("Redis");
-
-const stripParens = (item: string): string => item.replace(/\s*\([^)]*\)/g, '').trim();
-
-const skillLogoMap: Record<string, string> = {
-  "Rust": "/logos/si-rust.svg",
-  "Python": "/logos/si-python.svg",
-  "Go": "/logos/si-go.svg",
-  "C": "/logos/si-c.svg",
-  "Axum": "/logos/si-rust.svg",
-  "Actix-web": "/logos/si-rust.svg",
-  "Tokio": "/logos/si-rust.svg",
-  "FastAPI": "/logos/si-fastapi.svg",
-  "Flask": "/logos/si-flask.svg",
-  "LangGraph": "/logos/si-langchain.svg",
-  "LangChain": "/logos/si-langchain.svg",
-  "LangSmith": "/logos/si-langchain.svg",
-  "Ollama": "/logos/si-ollama.svg",
-  "FAISS": "/logos/faiss.svg",
-  "NVIDIA OpenShell": "/logos/si-nvidia.svg",
-  "OpenAI": "/logos/openai.svg",
-  "RESTful APIs": "/logos/si-swagger.svg",
-  "REST APIs": "/logos/si-swagger.svg",
-  "GraphQL": "/logos/si-graphql.svg",
-  "WebSockets": "/logos/si-socketdotio.svg",
-  "WebRTC": "/logos/si-webrtc.svg",
-  "gRPC": "/logos/grpc.svg",
-  "Apache Kafka": "/logos/si-apachekafka.svg",
-  "RabbitMQ": "/logos/si-rabbitmq.svg",
-  "PostgreSQL": "/logos/si-postgresql.svg",
-  "pgvector": "/logos/si-postgresql.svg",
-  "MySQL": "/logos/si-mysql.svg",
-  "SQLite": "/logos/si-sqlite.svg",
-  "MongoDB": "/logos/si-mongodb.svg",
-  "Redis": "/logos/si-redis.svg",
-  "Linux": "/logos/si-linux.svg",
-  "Supabase": "/logos/si-supabase.svg",
-  "Docker": "/logos/si-docker.svg",
-  "Kubernetes": "/logos/si-kubernetes.svg",
-  "GitHub Actions": "/logos/si-githubactions.svg",
-  "GitLab CI/CD": "/logos/si-gitlab.svg",
-  "AWS": "/logos/aws.svg",
-  "AWS EC2": "/logos/aws.svg",
-  "Pytest": "/logos/si-pytest.svg",
-  "rstest": "/logos/si-rust.svg",
-  "Selenium": "/logos/si-selenium.svg",
-  "Postman": "/logos/si-postman.svg",
-  "Java": "/logos/si-openjdk.svg",
-  "Spring Boot": "/logos/si-springboot.svg",
-  "Spring Security": "/logos/si-springsecurity.svg",
-  "JWT": "/logos/si-jsonwebtokens.svg",
-  "Liquibase": "/logos/si-liquibase.svg",
-  "TypeScript": "/logos/si-typescript.svg",
-  "CSS": "/logos/si-css.svg",
-  "Astro": "/logos/si-astro.svg",
-  "Protobuf": "/logos/si-google.svg",
-  "UDP": "/logos/si-wireshark.svg",
-  "TCP": "/logos/si-wireshark.svg",
-  "Scala": "/logos/si-scala.svg",
-  "Git": "/logos/si-git.svg",
-  "Django": "/logos/si-django.svg",
-  "Trello": "/logos/si-trello.svg",
-};
-
-const getLogoUrl = (skill: string): string | null => {
-  return skillLogoMap[stripParens(skill)] || null;
-};
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = profile.about;
 const structuredData = JSON.stringify({
@@ -103,19 +41,14 @@ const structuredData = JSON.stringify({
     id="i18n-data"
     set:html={JSON.stringify(profiles)}
   />
-  <script
-    type="application/json"
-    id="skill-maps-data"
-    set:html={JSON.stringify({ logos: skillLogoMap })}
-  />
 
   <div class="lang-switcher" aria-label="Controls">
     <button class="cmd-trigger" id="cmd-trigger" type="button" aria-label="Open command palette (⌘K)">
       <span class="cmd-trigger-label">⌘K</span>
       <svg class="cmd-trigger-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
     </button>
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
-      <span class="theme-icon" aria-hidden="true">🌙</span>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode">
+      <span class="theme-icon" aria-hidden="true">☀️</span>
     </button>
     <button
       class="lang-toggle"
@@ -234,28 +167,7 @@ const structuredData = JSON.stringify({
       class="section-block exp-section"
       data-label={profile.labels.headings.experience}
     >
-      <div class="sec-eyebrow">{profile.labels.eyebrows.experience}</div>
-      <h2 class="sec-title">{profile.labels.headings.experience}</h2>
-
-      <div class="timeline">
-      {
-        profile.experience.map((exp) => (
-          <div class={`tl-item${/Present|Настоящее время|indiyə kimi/.test(exp.period) ? ' now' : ''}`}>
-            <div class="tl-period">{exp.period}</div>
-            <div class="tl-role">{exp.role}</div>
-            <div class="tl-org">{exp.org}</div>
-            <div class="tl-loc">{exp.location}</div>
-            {exp.bullets.length > 0 && (
-              <ul>
-                {exp.bullets.map((b) => (
-                  <li>{b}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))
-      }
-      </div>
+      <Fragment set:html={buildExperience(profile)} />
     </section>
 
     <section
@@ -263,105 +175,7 @@ const structuredData = JSON.stringify({
       class="section-block proj-section"
       data-label={profile.labels.headings.projects}
     >
-      <div class="sec-eyebrow">{profile.labels.eyebrows.projects}</div>
-      <h2 class="sec-title">{profile.labels.headings.projects}</h2>
-
-      <div class="proj-grid">
-        {profile.projects.map((p) => (
-          <div class={`proj-card${hasSim(p.name) ? ' has-sim' : ''}${p.name.includes('MatchSentinel') ? ' proj-card-wide' : ''}`}>
-            <div class="proj-card-head">
-              <h3 class="proj-name">{p.name}</h3>
-              <div class="proj-card-actions">
-                {hasSim(p.name) && (
-                  <button class="sim-toggle" type="button" aria-label={`Simulate ${p.name.split('—')[0].trim()} visualization`}><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>
-                )}
-                {p.links?.github && (
-                  <a class="feat-gh" href={p.links.github} target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
-                )}
-                {p.links?.crates && (
-                  <a class="feat-gh" href={p.links.crates} target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .5 1 4v8l7 3.5L15 12V4L8 .5zm0 1.62 4.9 2.45L8 6.95 3.1 4.57 8 2.12zM2.5 5.6l4.8 2.4v5.9L2.5 11.5V5.6zm6.2 8.3V8l4.8-2.4v5.9l-4.8 2.4z"/></svg>crates.io</a>
-                )}
-                {p.links?.docs && (
-                  <a class="feat-gh" href={p.links.docs} target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 1A1.5 1.5 0 0 0 2 2.5v11A1.5 1.5 0 0 0 3.5 15H13a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3.5zM3 2.5a.5.5 0 0 1 .5-.5H13v9H3.5a1.5 1.5 0 0 0-.5.085V2.5zM3.5 12H13v2H3.5a.5.5 0 0 1 0-1zM5 4h6v1H5V4zm0 2.5h6v1H5v-1z"/></svg>docs.rs</a>
-                )}
-              </div>
-            </div>
-            <div class="proj-card-text">
-              <div class="feat-pills">
-                {p.tech.map((t) => {
-                  const logo = getLogoUrl(t);
-                  return logo
-                    ? <span class="skill-badge-local"><img src={logo} alt="" aria-hidden="true" loading="lazy" />{stripParens(t)}</span>
-                    : <span class="feat-pill">{stripParens(t)}</span>;
-                })}
-              </div>
-              {p.impact && <p class="proj-impact">{p.impact.replace(/^(?:Impact:\s*)+/i, "")}</p>}
-              <ul class="feat-bullets">
-                {p.bullets.map((b) => <li>{b}</li>)}
-              </ul>
-            </div>
-            {isRaft(p.name) && (
-              <div class="sim-visual" data-sim="raft">
-                <svg width="320" height="130" viewBox="0 0 320 130" role="img" aria-label="Raft consensus visualization">
-                  <defs><filter id="raft-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-                  <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="28"/><line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="65"/><line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="102"/>
-                  <circle class="sim-leader-node" cx="55" cy="65" r="22" filter="url(#raft-glow)"/><text class="sim-label mono" x="55" y="69">L</text><text class="sim-desc mono" x="55" y="98">leader</text>
-                  <circle class="sim-node" cx="198" cy="28" r="14"/><text class="sim-label mono" x="198" y="32">F</text>
-                  <circle class="sim-node" cx="198" cy="65" r="14"/><text class="sim-label mono" x="198" y="69">F</text>
-                  <circle class="sim-node" cx="198" cy="102" r="14"/><text class="sim-label mono" x="198" y="106">F</text>
-                  <rect class="sim-log" x="228" y="19" width="24" height="7" rx="1.5"/><rect class="sim-log" x="228" y="29" width="24" height="7" rx="1.5"/>
-                  <rect class="sim-log-new" x="228" y="39" width="16" height="7" rx="1.5"><animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" repeatCount="indefinite"/></rect>
-                  <rect class="sim-log" x="228" y="56" width="24" height="7" rx="1.5"/><rect class="sim-log" x="228" y="66" width="24" height="7" rx="1.5"/>
-                  <rect class="sim-log-new" x="228" y="76" width="16" height="7" rx="1.5"><animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.3s" repeatCount="indefinite"/></rect>
-                  <rect class="sim-log" x="228" y="93" width="24" height="7" rx="1.5"/><rect class="sim-log" x="228" y="103" width="24" height="7" rx="1.5"/>
-                  <rect class="sim-log-new" x="228" y="113" width="16" height="7" rx="1.5"><animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.6s" repeatCount="indefinite"/></rect>
-                  <circle class="sim-pulse" r="3.5"><animate attributeName="cx" values="78;198" dur="1.6s" repeatCount="indefinite"/><animate attributeName="cy" values="65;28" dur="1.6s" repeatCount="indefinite"/></circle>
-                  <circle class="sim-pulse" r="3.5"><animate attributeName="cx" values="78;198" dur="1.6s" begin="0.2s" repeatCount="indefinite"/><animate attributeName="cy" values="65;65" dur="1.6s" begin="0.2s" repeatCount="indefinite"/></circle>
-                  <circle class="sim-pulse" r="3.5"><animate attributeName="cx" values="78;198" dur="1.6s" begin="0.4s" repeatCount="indefinite"/><animate attributeName="cy" values="65;102" dur="1.6s" begin="0.4s" repeatCount="indefinite"/></circle>
-                  <text class="sim-desc mono" x="290" y="68">term 3</text>
-                </svg>
-                <div class="sim-legend">Leader replicates log entries via AppendEntries RPC</div>
-              </div>
-            )}
-            {isKademlia(p.name) && (
-              <div class="sim-visual" data-sim="kademlia">
-                <svg width="320" height="130" viewBox="0 0 320 130" role="img" aria-label="Kademlia DHT lookup visualization">
-                  <defs><filter id="kad-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-                  <line class="sim-link sim-ghost" x1="42" y1="60" x2="72" y2="98"/><line class="sim-link sim-ghost" x1="122" y1="46" x2="148" y2="98"/><line class="sim-link sim-ghost" x1="206" y1="56" x2="228" y2="98"/>
-                  <circle class="sim-node sim-ghost" cx="78" cy="104" r="8"/><circle class="sim-node sim-ghost" cx="155" cy="104" r="8"/><circle class="sim-node sim-ghost" cx="235" cy="104" r="8"/>
-                  <line class="sim-heartbeat" x1="48" y1="50" x2="108" y2="36"/><line class="sim-heartbeat" x1="132" y1="36" x2="192" y2="50"/><line class="sim-heartbeat" x1="218" y1="50" x2="272" y2="36"/>
-                  <circle class="sim-node" cx="35" cy="50" r="14"/><text class="sim-label mono" x="35" y="54">S</text><text class="sim-desc mono" x="35" y="74">source</text>
-                  <circle class="sim-node" cx="120" cy="36" r="14"/><text class="sim-label mono" x="120" y="40">N</text><text class="sim-desc mono" x="120" y="60">d = 8</text>
-                  <circle class="sim-node" cx="205" cy="50" r="14"/><text class="sim-label mono" x="205" y="54">N</text><text class="sim-desc mono" x="205" y="74">d = 3</text>
-                  <circle class="sim-target-node" cx="285" cy="36" r="16" filter="url(#kad-glow)"/><text class="sim-label mono" x="285" y="40">T</text><text class="sim-desc mono" x="285" y="60">d = 0</text>
-                  <circle class="sim-pulse" r="4"><animate attributeName="cx" values="48;120;205;285" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/><animate attributeName="cy" values="50;36;50;36" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/></circle>
-                </svg>
-                <div class="sim-legend">Iterative FIND_NODE lookup converges via XOR distance</div>
-              </div>
-            )}
-            {isRedis(p.name) && (
-              <div class="sim-visual" data-sim="redis">
-                <svg width="320" height="140" viewBox="0 0 320 140" role="img" aria-label="Redis two-layer cache visualization">
-                  <rect class="sim-layer-bg" x="8" y="10" width="135" height="120" rx="8"/><text class="sim-layer-title mono" x="75" y="26">KEY → ID</text>
-                  <rect class="sim-entry" x="20" y="36" width="110" height="18" rx="3"/><text class="sim-entry-text mono" x="75" y="47">user:1 → id:7</text>
-                  <rect class="sim-entry" x="20" y="60" width="110" height="18" rx="3"/><text class="sim-entry-text mono" x="75" y="71">sess:3 → id:12</text>
-                  <rect class="sim-entry" x="20" y="84" width="110" height="18" rx="3" style="opacity:0.4"/><text class="sim-entry-text mono" x="75" y="95" style="opacity:0.4">tok:5 → id:9</text>
-                  <rect class="sim-ttl-track" x="20" y="106" width="110" height="3" rx="1.5"/><rect class="sim-ttl-fill" x="20" y="106" width="110" height="3" rx="1.5"><animate attributeName="width" values="110;0" dur="3.5s" repeatCount="indefinite"/></rect>
-                  <text class="sim-desc mono" x="75" y="120">ttl</text>
-                  <line class="sim-link" x1="148" y1="60" x2="172" y2="60" style="stroke-width:1.5"/><polygon class="sim-arrow" points="172,55 182,60 172,65"/>
-                  <rect class="sim-layer-bg" x="178" y="10" width="135" height="120" rx="8"/><text class="sim-layer-title mono" x="245" y="26">ID → VALUE</text>
-                  <rect class="sim-entry" x="190" y="36" width="110" height="18" rx="3"/><text class="sim-entry-text mono" x="245" y="47">id:7 → val</text>
-                  <rect class="sim-entry" x="190" y="60" width="110" height="18" rx="3"/><text class="sim-entry-text mono" x="245" y="71">id:12 → val</text>
-                  <rect class="sim-entry" x="190" y="84" width="110" height="18" rx="3" style="opacity:0.4"/><text class="sim-entry-text mono" x="245" y="95" style="opacity:0.4">id:9 → expired</text>
-                  <line class="sim-link" x1="190" y1="100" x2="300" y2="100" style="stroke-dasharray:3 3;stroke-width:1"><animate attributeName="y1" values="94;104;94" dur="2.5s" repeatCount="indefinite"/><animate attributeName="y2" values="94;104;94" dur="2.5s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.6;0" dur="2.5s" repeatCount="indefinite"/></line>
-                  <text class="sim-desc mono" x="245" y="120">gc sweep</text>
-                </svg>
-                <div class="sim-legend">Two-layer TTL-aware cache with garbage collection</div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <Fragment set:html={buildProjects(profile)} />
     </section>
 
     <section
@@ -369,30 +183,7 @@ const structuredData = JSON.stringify({
       class="section-block skill-section"
       data-label={profile.labels.headings.skills}
     >
-      <div class="sec-eyebrow">{profile.labels.eyebrows.skills}</div>
-      <h2 class="sec-title">{profile.labels.headings.skills}</h2>
-
-      <div class="proj-grid">
-        {profile.skills.map((s) => (
-          <div class="proj-card skill-card">
-            <div class="proj-card-head">
-              <h3 class="proj-name">{profile.labels.skillCategories[s.category] || s.category}</h3>
-            </div>
-            <div class="proj-card-text">
-              {s.groups.map((g) => (
-                <div class="feat-pills" style={s.groups.length > 1 ? "margin-bottom: 0.3rem;" : ""}>
-                  {g.items.map((item) => {
-                    const logo = getLogoUrl(item);
-                    return logo
-                      ? <span class="skill-badge-local"><img src={logo} alt="" aria-hidden="true" loading="lazy" />{stripParens(item)}</span>
-                      : <span class="feat-pill">{stripParens(item)}</span>;
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+      <Fragment set:html={buildSkills(profile)} />
     </section>
 
     <section
@@ -400,45 +191,7 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.teaching}
     >
-      <div class="sec-eyebrow">{profile.labels.eyebrows.teaching}</div>
-      <h2 class="sec-title">{profile.labels.headings.teaching}</h2>
-
-      <div class="proj-grid">
-        {profile.teaching.map((t) => (
-          <div class="proj-card">
-            <div class="proj-card-head">
-              <h3 class="proj-name">{t.title}</h3>
-            </div>
-            <div class="proj-card-text">
-              {(() => {
-                const all = t.skills.split("·").map(s => s.trim());
-                const tools = all.filter(s => getLogoUrl(s));
-                const topics = all.filter(s => !getLogoUrl(s));
-                const renderBadge = (skill: string) => {
-                  const logo = getLogoUrl(skill)!;
-                  return <span class="skill-badge-local"><img src={logo} alt="" aria-hidden="true" loading="lazy" />{stripParens(skill)}</span>;
-                };
-                return (
-                  <div class="teaching-skills">
-                    {tools.length > 0 && (
-                      <div class="teaching-skill-row">
-                        <span class="teaching-skill-label">tools</span>
-                        <div class="feat-pills">{tools.map(renderBadge)}</div>
-                      </div>
-                    )}
-                    {topics.length > 0 && (
-                      <div class="teaching-skill-row">
-                        <span class="teaching-skill-label">topics</span>
-                        <div class="feat-pills">{topics.map(skill => <span class="feat-pill">{stripParens(skill)}</span>)}</div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
-            </div>
-          </div>
-        ))}
-      </div>
+      <Fragment set:html={buildTeaching(profile)} />
     </section>
 
     <section
@@ -446,22 +199,7 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.education}
     >
-      <div class="sec-eyebrow">{profile.labels.eyebrows.education}</div>
-      <h2 class="sec-title">{profile.labels.headings.education}</h2>
-
-      <div class="proj-grid">
-        <div class="proj-card proj-card-wide">
-          <div class="proj-card-head">
-            <h3 class="proj-name">{profile.education.title}</h3>
-          </div>
-          <div class="proj-card-text">
-            <div class="tl-period">{profile.education.meta}</div>
-            <ul class="feat-bullets">
-              {profile.education.bullets.map((b) => <li>{b}</li>)}
-            </ul>
-          </div>
-        </div>
-      </div>
+      <Fragment set:html={buildEducation(profile)} />
     </section>
 
     <section
@@ -469,55 +207,11 @@ const structuredData = JSON.stringify({
       class="section-block"
       data-label={profile.labels.headings.recommendations}
     >
-      <div class="sec-eyebrow">{profile.labels.eyebrows.recommendations}</div>
-      <h2 class="sec-title">{profile.labels.headings.recommendations}</h2>
-
-      <div class="testi-wrap" role="group" aria-roledescription="carousel" aria-label="Student recommendations">
-        <div class="testi-scroll" id="testi-scroll" aria-live="off">
-          {profile.testimonials.map((t, i) => {
-            const initials = t.name.split(' ').map((w: string) => w[0]).join('');
-            return (
-              <div class="testi-card" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${profile.testimonials.length}`}>
-                <span class="testi-mark">&ldquo;</span>
-                <p class="testi-quote">{t.quote}</p>
-                <div class="testi-author">
-                  <div class="testi-avatar">{initials}</div>
-                  <div>
-                    <div class="testi-name">
-                      {t.name}
-                      {t.linkedin && (
-                        <a class="testi-linkedin" href={t.linkedin} target="_blank" rel="noopener" aria-label={`${t.name} on LinkedIn`}>
-                          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                        </a>
-                      )}
-                    </div>
-                    <div class="testi-role">{t.title}</div>
-                    <div class="testi-course">{t.course} &mdash; {t.headTA ? profile.labels.headTARole : profile.labels.taRole}</div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div class="carousel-nav">
-          <button class="car-btn" id="prev-btn" type="button" aria-label="Previous">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 3L6 8l4 5"/></svg>
-          </button>
-          <div class="car-dots" id="car-dots"></div>
-          <button class="car-btn" id="next-btn" type="button" aria-label="Next">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3l4 5-4 5"/></svg>
-          </button>
-        </div>
-      </div>
+      <Fragment set:html={buildRecommendations(profile)} />
     </section>
 
     <section id="connect" class="connect-footer">
-      <p class="connect-tagline">{profile.labels.connectTagline}</p>
-      <div class="connect-links">
-        <a class="cta-btn" href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-        <a class="cta-btn" href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
-        <a class="cta-btn" href={`mailto:${profile.email}`}>Email</a>
-      </div>
+      <Fragment set:html={buildConnect(profile)} />
     </section>
   </main>
 
@@ -558,7 +252,7 @@ const structuredData = JSON.stringify({
   </div>
 
   <div class="kbd-backdrop" id="kbd-backdrop" aria-hidden="true"></div>
-  <div class="kbd-overlay" id="kbd-overlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" aria-hidden="true">
+  <div class="kbd-overlay" id="kbd-overlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" aria-hidden="true" tabindex="-1">
     <div class="kbd-head">
       <span>Keyboard shortcuts</span>
       <span class="cmd-kbd">ESC</span>
@@ -590,6 +284,18 @@ const structuredData = JSON.stringify({
   </div>
 
   <script>
+    import {
+      buildExperience,
+      buildProjects,
+      buildTeaching,
+      buildEducation,
+      buildSkills,
+      buildRecommendations,
+      buildConnect,
+      buildProjectSim,
+      getLogoUrl as getLogoUrlJS,
+    } from "../lib/builders";
+
     let heroFirstLoad = true;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -833,16 +539,13 @@ const structuredData = JSON.stringify({
     const isTouch = window.matchMedia('(hover: none)').matches;
     if (isTouch && heroEl) {
       const h1 = heroEl.querySelector("h1");
-      heroEl.querySelectorAll(".hero-tagline").forEach((t) => { t.style.transform = ""; });
       if (h1) h1.style.transform = "";
     }
     const updateParallax = () => {
       if (!heroEl || isTouch) return;
       const scrolled = window.scrollY;
       const h1 = heroEl.querySelector("h1");
-      const taglines = heroEl.querySelectorAll(".hero-tagline");
       if (h1) h1.style.transform = `translateY(${scrolled * 0.12}px)`;
-      taglines.forEach((t) => { t.style.transform = `translateY(${scrolled * 0.08}px)`; });
     };
 
     let scrollTicking = false;
@@ -887,15 +590,9 @@ const structuredData = JSON.stringify({
 
     simOverlay.addEventListener("click", closeSimOverlay);
 
-    const attachSimButtons = () => {
-      document.querySelectorAll(".sim-toggle").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const card = btn.closest(".proj-card");
-          if (card) openSimOverlay(card);
-        });
-      });
-    };
-    attachSimButtons();
+    // "Simulate" buttons are handled by a single delegated listener on the
+    // #projects section (further down) so they survive every language
+    // re-render without per-button re-binding.
 
 
 
@@ -903,368 +600,7 @@ const structuredData = JSON.stringify({
     const langMenu = document.getElementById("lang-menu");
     const langCurrent = document.getElementById("lang-current");
 
-    const isCurrent = (period) => /Present|Настоящее время|indiyə kimi/.test(period);
-
-    const buildExperience = (data) => {
-      return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.experience}</div>
-        <h2 class="sec-title">${data.labels.headings.experience}</h2>
-        <div class="timeline">
-        ${data.experience
-          .map(
-            (exp) => `
-              <div class="tl-item${isCurrent(exp.period) ? ' now' : ''}">
-                <div class="tl-period">${exp.period}</div>
-                <div class="tl-role">${exp.role}</div>
-                <div class="tl-org">${exp.org}</div>
-                <div class="tl-loc">${exp.location}</div>
-                ${exp.bullets.length ? `<ul>${exp.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
-              </div>
-            `,
-          )
-          .join("")}
-        </div>
-      `;
-    };
-
-    const hasSimulationFor = (name) =>
-      name.includes("RAFT") ||
-      name.includes("Raft") ||
-      name.includes("Hash Table") ||
-      name.includes("Distributed") ||
-      name.includes("Kademlia") ||
-      name.includes("Redis");
-    const isRaftProject = (name) =>
-      name.includes("RAFT") || name.includes("Raft");
-    const isKademliaProject = (name) =>
-      name.includes("Hash Table") ||
-      name.includes("Distributed") ||
-      name.includes("Kademlia");
-    const isRedisProject = (name) => name.includes("Redis");
-
-    const buildProjectSim = (p) => {
-      if (isRaftProject(p.name)) {
-        return `
-          <div class="sim-visual" data-sim="raft">
-            <svg width="320" height="130" viewBox="0 0 320 130">
-              <defs>
-                <filter id="raft-glow-js" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="4" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="28"/>
-              <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="65"/>
-              <line class="sim-heartbeat" x1="78" y1="65" x2="182" y2="102"/>
-              <circle class="sim-leader-node" cx="55" cy="65" r="22" filter="url(#raft-glow-js)"/>
-              <text class="sim-label mono" x="55" y="69">L</text>
-              <text class="sim-desc mono" x="55" y="98">leader</text>
-              <circle class="sim-node" cx="198" cy="28" r="14"/>
-              <text class="sim-label mono" x="198" y="32">F</text>
-              <circle class="sim-node" cx="198" cy="65" r="14"/>
-              <text class="sim-label mono" x="198" y="69">F</text>
-              <circle class="sim-node" cx="198" cy="102" r="14"/>
-              <text class="sim-label mono" x="198" y="106">F</text>
-              <rect class="sim-log" x="228" y="19" width="24" height="7" rx="1.5"/>
-              <rect class="sim-log" x="228" y="29" width="24" height="7" rx="1.5"/>
-              <rect class="sim-log-new" x="228" y="39" width="16" height="7" rx="1.5">
-                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" repeatCount="indefinite"/>
-              </rect>
-              <rect class="sim-log" x="228" y="56" width="24" height="7" rx="1.5"/>
-              <rect class="sim-log" x="228" y="66" width="24" height="7" rx="1.5"/>
-              <rect class="sim-log-new" x="228" y="76" width="16" height="7" rx="1.5">
-                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.3s" repeatCount="indefinite"/>
-              </rect>
-              <rect class="sim-log" x="228" y="93" width="24" height="7" rx="1.5"/>
-              <rect class="sim-log" x="228" y="103" width="24" height="7" rx="1.5"/>
-              <rect class="sim-log-new" x="228" y="113" width="16" height="7" rx="1.5">
-                <animate attributeName="opacity" values="0;0.9;0.9;0" dur="2.4s" begin="0.6s" repeatCount="indefinite"/>
-              </rect>
-              <circle class="sim-pulse" r="3.5">
-                <animate attributeName="cx" values="78;198" dur="1.6s" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="65;28" dur="1.6s" repeatCount="indefinite"/>
-              </circle>
-              <circle class="sim-pulse" r="3.5">
-                <animate attributeName="cx" values="78;198" dur="1.6s" begin="0.2s" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="65;65" dur="1.6s" begin="0.2s" repeatCount="indefinite"/>
-              </circle>
-              <circle class="sim-pulse" r="3.5">
-                <animate attributeName="cx" values="78;198" dur="1.6s" begin="0.4s" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="65;102" dur="1.6s" begin="0.4s" repeatCount="indefinite"/>
-              </circle>
-              <text class="sim-desc mono" x="290" y="68">term 3</text>
-            </svg>
-            <div class="sim-legend">Leader replicates log entries via AppendEntries RPC</div>
-          </div>
-        `;
-      }
-      if (isKademliaProject(p.name)) {
-        return `
-          <div class="sim-visual" data-sim="kademlia">
-            <svg width="320" height="130" viewBox="0 0 320 130">
-              <defs>
-                <filter id="kad-glow-js" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="4" result="blur"/>
-                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                </filter>
-              </defs>
-              <line class="sim-link sim-ghost" x1="42" y1="60" x2="72" y2="98"/>
-              <line class="sim-link sim-ghost" x1="122" y1="46" x2="148" y2="98"/>
-              <line class="sim-link sim-ghost" x1="206" y1="56" x2="228" y2="98"/>
-              <circle class="sim-node sim-ghost" cx="78" cy="104" r="8"/>
-              <circle class="sim-node sim-ghost" cx="155" cy="104" r="8"/>
-              <circle class="sim-node sim-ghost" cx="235" cy="104" r="8"/>
-              <line class="sim-heartbeat" x1="48" y1="50" x2="108" y2="36"/>
-              <line class="sim-heartbeat" x1="132" y1="36" x2="192" y2="50"/>
-              <line class="sim-heartbeat" x1="218" y1="50" x2="272" y2="36"/>
-              <circle class="sim-node" cx="35" cy="50" r="14"/>
-              <text class="sim-label mono" x="35" y="54">S</text>
-              <text class="sim-desc mono" x="35" y="74">source</text>
-              <circle class="sim-node" cx="120" cy="36" r="14"/>
-              <text class="sim-label mono" x="120" y="40">N</text>
-              <text class="sim-desc mono" x="120" y="60">d = 8</text>
-              <circle class="sim-node" cx="205" cy="50" r="14"/>
-              <text class="sim-label mono" x="205" y="54">N</text>
-              <text class="sim-desc mono" x="205" y="74">d = 3</text>
-              <circle class="sim-target-node" cx="285" cy="36" r="16" filter="url(#kad-glow-js)"/>
-              <text class="sim-label mono" x="285" y="40">T</text>
-              <text class="sim-desc mono" x="285" y="60">d = 0</text>
-              <circle class="sim-pulse" r="4">
-                <animate attributeName="cx" values="48;120;205;285" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
-                <animate attributeName="cy" values="50;36;50;36" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
-              </circle>
-            </svg>
-            <div class="sim-legend">Iterative FIND_NODE lookup converges via XOR distance</div>
-          </div>
-        `;
-      }
-      if (isRedisProject(p.name)) {
-        return `
-          <div class="sim-visual" data-sim="redis">
-            <svg width="320" height="140" viewBox="0 0 320 140">
-              <rect class="sim-layer-bg" x="8" y="10" width="135" height="120" rx="8"/>
-              <text class="sim-layer-title mono" x="75" y="26">KEY → ID</text>
-              <rect class="sim-entry" x="20" y="36" width="110" height="18" rx="3"/>
-              <text class="sim-entry-text mono" x="75" y="47">user:1 → id:7</text>
-              <rect class="sim-entry" x="20" y="60" width="110" height="18" rx="3"/>
-              <text class="sim-entry-text mono" x="75" y="71">sess:3 → id:12</text>
-              <rect class="sim-entry" x="20" y="84" width="110" height="18" rx="3" style="opacity:0.4"/>
-              <text class="sim-entry-text mono" x="75" y="95" style="opacity:0.4">tok:5 → id:9</text>
-              <rect class="sim-ttl-track" x="20" y="106" width="110" height="3" rx="1.5"/>
-              <rect class="sim-ttl-fill" x="20" y="106" width="110" height="3" rx="1.5">
-                <animate attributeName="width" values="110;0" dur="3.5s" repeatCount="indefinite"/>
-              </rect>
-              <text class="sim-desc mono" x="75" y="120">ttl</text>
-              <line class="sim-link" x1="148" y1="60" x2="172" y2="60" style="stroke-width:1.5"/>
-              <polygon class="sim-arrow" points="172,55 182,60 172,65"/>
-              <rect class="sim-layer-bg" x="178" y="10" width="135" height="120" rx="8"/>
-              <text class="sim-layer-title mono" x="245" y="26">ID → VALUE</text>
-              <rect class="sim-entry" x="190" y="36" width="110" height="18" rx="3"/>
-              <text class="sim-entry-text mono" x="245" y="47">id:7 → val</text>
-              <rect class="sim-entry" x="190" y="60" width="110" height="18" rx="3"/>
-              <text class="sim-entry-text mono" x="245" y="71">id:12 → val</text>
-              <rect class="sim-entry" x="190" y="84" width="110" height="18" rx="3" style="opacity:0.4"/>
-              <text class="sim-entry-text mono" x="245" y="95" style="opacity:0.4">id:9 → expired</text>
-              <line class="sim-link" x1="190" y1="100" x2="300" y2="100" style="stroke-dasharray:3 3;stroke-width:1">
-                <animate attributeName="y1" values="94;104;94" dur="2.5s" repeatCount="indefinite"/>
-                <animate attributeName="y2" values="94;104;94" dur="2.5s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0;0.6;0" dur="2.5s" repeatCount="indefinite"/>
-              </line>
-              <text class="sim-desc mono" x="245" y="120">gc sweep</text>
-            </svg>
-            <div class="sim-legend">Two-layer TTL-aware cache with garbage collection</div>
-          </div>
-        `;
-      }
-      return "";
-    };
-
     let currentProfile = I18N.en;
-
-    const buildProjects = (data) => {
-      currentProfile = data;
-      const buildCard = (p) => {
-        const pills = p.tech.map(t => {
-          const name = stripParens(t);
-          const logo = getLogoUrlJS(t);
-          return logo
-            ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${name}</span>`
-            : `<span class="feat-pill">${name}</span>`;
-        }).join('');
-        const impact = p.impact ? `<p class="proj-impact">${p.impact.replace(/^(?:Impact:\s*)+/i, "")}</p>` : '';
-        const bullets = p.bullets.length ? `<ul class="feat-bullets">${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : '';
-        const gh = p.links?.github ? `<a class="feat-gh" href="${p.links.github}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>` : '';
-        const crates = p.links?.crates ? `<a class="feat-gh" href="${p.links.crates}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .5 1 4v8l7 3.5L15 12V4L8 .5zm0 1.62 4.9 2.45L8 6.95 3.1 4.57 8 2.12zM2.5 5.6l4.8 2.4v5.9L2.5 11.5V5.6zm6.2 8.3V8l4.8-2.4v5.9l-4.8 2.4z"/></svg>crates.io</a>` : '';
-        const docs = p.links?.docs ? `<a class="feat-gh" href="${p.links.docs}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 1A1.5 1.5 0 0 0 2 2.5v11A1.5 1.5 0 0 0 3.5 15H13a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3.5zM3 2.5a.5.5 0 0 1 .5-.5H13v9H3.5a1.5 1.5 0 0 0-.5.085V2.5zM3.5 12H13v2H3.5a.5.5 0 0 1 0-1zM5 4h6v1H5V4zm0 2.5h6v1H5v-1z"/></svg>docs.rs</a>` : '';
-        const hasSim = hasSimulationFor(p.name);
-        const isWide = p.name.includes('MatchSentinel');
-        const simLabel = p.name.split('—')[0].trim();
-        const simBtn = hasSim ? `<button class="sim-toggle" type="button" aria-label="Simulate ${simLabel} visualization"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>` : '';
-        const simSvg = hasSim ? buildProjectSim(p) : '';
-        return `<div class="proj-card${hasSim ? ' has-sim' : ''}${isWide ? ' proj-card-wide' : ''}">
-          <div class="proj-card-head">
-            <h3 class="proj-name">${p.name}</h3>
-            <div class="proj-card-actions">
-              ${simBtn}${gh}${crates}${docs}
-            </div>
-          </div>
-          <div class="proj-card-text">
-            <div class="feat-pills">${pills}</div>
-            ${impact}${bullets}
-          </div>
-          ${simSvg}
-        </div>`;
-      };
-      return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.projects}</div>
-        <h2 class="sec-title">${data.labels.headings.projects}</h2>
-        <div class="proj-grid">
-          ${data.projects.map(p => buildCard(p)).join('')}
-        </div>
-      `;
-    };
-
-    const buildTeaching = (data) => {
-      return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.teaching}</div>
-        <h2 class="sec-title">${data.labels.headings.teaching}</h2>
-        <div class="proj-grid">
-          ${data.teaching.map((t) => {
-            const all = t.skills.split("·").map(s => s.trim());
-            const tools = all.filter(s => getLogoUrlJS(s));
-            const topics = all.filter(s => !getLogoUrlJS(s));
-            const renderBadge = (skill) => {
-              const logo = getLogoUrlJS(skill);
-              return `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${skill}</span>`;
-            };
-            return `
-            <div class="proj-card">
-              <div class="proj-card-head">
-                <h3 class="proj-name">${t.title}</h3>
-              </div>
-              <div class="proj-card-text">
-                <div class="teaching-skills">
-                  ${tools.length > 0 ? `
-                  <div class="teaching-skill-row">
-                    <span class="teaching-skill-label">tools</span>
-                    <div class="feat-pills">${tools.map(renderBadge).join('')}</div>
-                  </div>` : ''}
-                  ${topics.length > 0 ? `
-                  <div class="teaching-skill-row">
-                    <span class="teaching-skill-label">topics</span>
-                    <div class="feat-pills">${topics.map(s => `<span class="feat-pill">${s}</span>`).join('')}</div>
-                  </div>` : ''}
-                </div>
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
-      `;
-    };
-
-    const buildEducation = (data) => {
-      return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.education}</div>
-        <h2 class="sec-title">${data.labels.headings.education}</h2>
-        <div class="proj-grid">
-          <div class="proj-card proj-card-wide">
-            <div class="proj-card-head">
-              <h3 class="proj-name">${data.education.title}</h3>
-            </div>
-            <div class="proj-card-text">
-              <div class="tl-period">${data.education.meta}</div>
-              <ul class="feat-bullets">
-                ${data.education.bullets.map((b) => `<li>${b}</li>`).join("")}
-              </ul>
-            </div>
-          </div>
-        </div>
-      `;
-    };
-
-    const _smEl = document.getElementById('skill-maps-data');
-    const skillLogoMapJS = _smEl ? JSON.parse(_smEl.textContent || '{}').logos || {} : {};
-
-    const stripParens = (s) => s.replace(/\s*\([^)]*\)/g, '').trim();
-
-    const getLogoUrlJS = (skill) => skillLogoMapJS[stripParens(skill)] || null;
-
-    const buildSkills = (data) => {
-      return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.skills}</div>
-        <h2 class="sec-title">${data.labels.headings.skills}</h2>
-        <div class="proj-grid">
-          ${data.skills.map((s) => `
-            <div class="proj-card skill-card">
-              <div class="proj-card-head">
-                <h3 class="proj-name">${data.labels.skillCategories[s.category] || s.category}</h3>
-              </div>
-              <div class="proj-card-text">
-                ${s.groups.map((g) => `
-                  <div class="feat-pills"${s.groups.length > 1 ? ' style="margin-bottom: 0.3rem;"' : ''}>
-                    ${g.items.map((item) => {
-                      const name = stripParens(item);
-                      const logo = getLogoUrlJS(item);
-                      return logo
-                        ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${name}</span>`
-                        : `<span class="feat-pill">${name}</span>`;
-                    }).join('')}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    };
-
-    const buildRecommendations = (data) => {
-      return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.recommendations}</div>
-        <h2 class="sec-title">${data.labels.headings.recommendations}</h2>
-        <div class="testi-wrap" role="group" aria-roledescription="carousel" aria-label="Student recommendations">
-          <div class="testi-scroll" id="testi-scroll" aria-live="off">
-            ${data.testimonials.map((t, i) => {
-              const initials = getInitials(t.name);
-              const role = t.headTA ? (data.labels.headTARole || 'Head Teaching Assistant') : (data.labels.taRole || 'Teaching Assistant');
-              return `
-                <div class="testi-card" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${data.testimonials.length}">
-                  <span class="testi-mark">&ldquo;</span>
-                  <p class="testi-quote">${t.quote}</p>
-                  <div class="testi-author">
-                    <div class="testi-avatar">${initials}</div>
-                    <div>
-                      <div class="testi-name">${t.name}${t.linkedin ? `<a class="testi-linkedin" href="${t.linkedin}" target="_blank" rel="noopener" aria-label="${t.name} on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>` : ''}</div>
-                      <div class="testi-role">${t.title}</div>
-                      <div class="testi-course">${t.course} &mdash; ${role}</div>
-                    </div>
-                  </div>
-                </div>`;
-            }).join('')}
-          </div>
-          <div class="carousel-nav">
-            <button class="car-btn" id="prev-btn" type="button" aria-label="Previous">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 3L6 8l4 5"/></svg>
-            </button>
-            <div class="car-dots" id="car-dots"></div>
-            <button class="car-btn" id="next-btn" type="button" aria-label="Next">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3l4 5-4 5"/></svg>
-            </button>
-          </div>
-        </div>
-      `;
-    };
-
-    const buildConnect = (data) => {
-      return `
-        <p class="connect-tagline">${data.labels.connectTagline}</p>
-        <div class="connect-links">
-          <a class="cta-btn" href="${data.links.linkedin}" target="_blank" rel="noopener">LinkedIn</a>
-          <a class="cta-btn" href="${data.links.github}" target="_blank" rel="noopener">GitHub</a>
-          <a class="cta-btn" href="mailto:${data.email}">Email</a>
-        </div>
-      `;
-    };
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const typed = new WeakSet();
@@ -1284,13 +620,13 @@ const structuredData = JSON.stringify({
       step();
     };
 
-    const getInitials = (name) => name.split(' ').map(w => w[0]).join('');
-
     let carouselTimer = null;
     let carouselAbort = null;
+    let scrollEndTimer = null;
     const DOT_COUNT = 5;
     const initCarousel = () => {
       clearInterval(carouselTimer);
+      clearTimeout(scrollEndTimer);
       if (carouselAbort) carouselAbort.abort();
       carouselAbort = new AbortController();
       const signal = carouselAbort.signal;
@@ -1387,7 +723,6 @@ const structuredData = JSON.stringify({
       };
 
       let scrollTick = false;
-      let scrollEndTimer = null;
       scroll.addEventListener('scroll', () => {
         if (teleporting) return;
         if (!scrollTick) {
@@ -1437,11 +772,7 @@ const structuredData = JSON.stringify({
 
       const heroTitle = document.querySelector("main section h1");
       const heroLinks = document.querySelector(".hero-links");
-      const heroTaglines = document.querySelectorAll(".hero-tagline");
       if (heroTitle) weightReveal(heroTitle, data.hero.name);
-      if (heroTaglines.length) {
-        heroTaglines[0].textContent = data.hero.tagline;
-      }
       const heroEyebrow = document.getElementById("hero-eyebrow");
       if (heroEyebrow) heroEyebrow.textContent = data.labels.heroEyebrow;
       const heroAbout = document.getElementById("hero-about");
@@ -1536,7 +867,6 @@ const structuredData = JSON.stringify({
       recsSection?.setAttribute("data-label", data.labels.headings.recommendations);
       connectSection?.setAttribute("data-label", data.labels.headings.connect);
 
-      attachSimButtons();
       initCarousel();
 
       setActiveLink();
@@ -1635,6 +965,40 @@ const structuredData = JSON.stringify({
     });
     updateThemeIcon();
 
+    // Shared focus trap + restoration for modal dialogs (command palette,
+    // keyboard-shortcuts overlay, project detail). Keeps Tab inside the open
+    // dialog and returns focus to whatever opened it (WCAG 2.4.3 / 2.1.2).
+    const focusTrap = (() => {
+      const SEL = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      let container = null, opener = null, onKey = null;
+      const visible = (el) => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement;
+      const api = {
+        activate(el) {
+          api.release();
+          container = el;
+          opener = document.activeElement;
+          onKey = (e) => {
+            if (e.key !== 'Tab' || !container) return;
+            const f = Array.from(container.querySelectorAll(SEL)).filter(visible);
+            if (!f.length) return;
+            const first = f[0], last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          };
+          container.addEventListener('keydown', onKey);
+        },
+        release() {
+          if (container && onKey) container.removeEventListener('keydown', onKey);
+          const back = opener;
+          container = null; opener = null; onKey = null;
+          if (back && typeof back.focus === 'function' && document.contains(back)) {
+            try { back.focus({ preventScroll: true }); } catch { /* opener gone */ }
+          }
+        },
+      };
+      return api;
+    })();
+
     // Toast
     const showToast = (msg) => {
       const toast = document.getElementById('toast');
@@ -1727,6 +1091,7 @@ const structuredData = JSON.stringify({
       cmdBackdrop?.classList.add('open');
       cmdPalette?.classList.add('open');
       cmdPalette?.setAttribute('aria-hidden', 'false');
+      if (cmdPalette) focusTrap.activate(cmdPalette);
       cmdInput?.focus();
       renderCmd('');
     };
@@ -1739,6 +1104,7 @@ const structuredData = JSON.stringify({
       if (cmdInput) cmdInput.value = '';
       if (!findCommitting) clearPageMarks();
       findCommitting = false;
+      focusTrap.release();
     };
 
     const setHighlight = (idx) => {
@@ -1822,12 +1188,14 @@ const structuredData = JSON.stringify({
       kbdBackdrop?.classList.add('open');
       kbdOverlay?.classList.add('open');
       kbdOverlay?.setAttribute('aria-hidden', 'false');
+      if (kbdOverlay) { focusTrap.activate(kbdOverlay); kbdOverlay.focus(); }
     };
     const closeKbd = () => {
       kbdOpen = false;
       kbdBackdrop?.classList.remove('open');
       kbdOverlay?.classList.remove('open');
       kbdOverlay?.setAttribute('aria-hidden', 'true');
+      focusTrap.release();
     };
     kbdBackdrop?.addEventListener('click', closeKbd);
 
@@ -2020,6 +1388,7 @@ const structuredData = JSON.stringify({
       projBackdrop?.setAttribute('aria-hidden', 'false');
       document.body.classList.add('proj-lock');
       projOpen = true;
+      if (projModal) focusTrap.activate(projModal);
       projClose?.focus();
     };
 
@@ -2030,6 +1399,7 @@ const structuredData = JSON.stringify({
       projBackdrop?.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('proj-lock');
       projOpen = false;
+      focusTrap.release();
     };
 
     const openProject = (p, card) => {
@@ -2062,6 +1432,8 @@ const structuredData = JSON.stringify({
     projectsSection?.addEventListener('click', (e) => {
       const card = e.target.closest?.('.proj-card');
       if (!card || !projectsSection.contains(card)) return;
+      const simBtn = e.target.closest?.('.sim-toggle');
+      if (simBtn) { openSimOverlay(card); return; }
       if (e.target.closest('a, button')) return;
       const sel = window.getSelection?.();
       if (sel && sel.toString().length > 0) return;
