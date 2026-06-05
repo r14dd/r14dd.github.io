@@ -63,7 +63,7 @@ export const profile: Profile = {
     tagline: "",
   },
 
-  about: "I develop software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, I taught computer science at State University of New York at Buffalo for two years. It shaped how I think about systems and how I explain them. I like hard problems and clean abstractions.",
+  about: "Riad develops software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, he taught computer science at State University of New York at Buffalo. It shaped how he thinks about systems and how he explains them. Riad likes complicated challenges and clean abstractions.",
 
   currently: "Building AI systems at International Bank of Azerbaijan.<br>Leading dev at European Youth Parliament Azerbaijan.",
 
