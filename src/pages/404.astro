@@ -98,7 +98,18 @@
   </head>
   <body>
     <div class="code">404</div>
-    <p class="msg">This page doesn't exist.</p>
-    <a class="back" href="/">Back to portfolio</a>
+    <p class="msg" id="msg">My site has only one page, how in the world did you end up here?</p>
+    <a class="back" href="/" id="back-link">Back to portfolio</a>
+    <script>
+      const lang = localStorage.getItem('portfolio-lang') || navigator.language?.slice(0, 2) || 'en';
+      const msgs = {
+        ru: { msg: 'На моем сайте всего одна страница, как ты умудрился оказаться тут?', back: 'Назад к портфолио' },
+        az: { msg: 'Saytımda cəmi bir səhifə var, bura necə gəlib çıxdın?', back: 'Portfolioya qayıt' },
+      };
+      if (msgs[lang]) {
+        document.getElementById('msg').textContent = msgs[lang].msg;
+        document.getElementById('back-link').textContent = msgs[lang].back;
+      }
+    </script>
   </body>
 </html>

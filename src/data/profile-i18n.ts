@@ -119,7 +119,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: "Риад Мухтаров",
       tagline: "",
     },
-    about: "Riad разрабатывает ПО и AI-системы на Rust и Python, с акцентом на распределённые системы и сложную инфраструктуру. До этого он преподавал информатику в State University of New York at Buffalo. Это сформировало его подход к системам и умение их объяснять. Riad любит сложные задачи и чистые абстракции.",
+    about: "разрабатывает ПО и AI-системы на Rust и Python, с акцентом на распределённые системы и сложную инфраструктуру. До этого он преподавал информатику в State University of New York at Buffalo. Это сформировало его подход к системам и умение их объяснять. Любит сложные задачи и чистые абстракции.",
     currently: "Разрабатываю AI-системы в International Bank of Azerbaijan.<br>Руковожу разработкой в European Youth Parliament Azerbaijan.",
     experience: [
       {
@@ -428,7 +428,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: "Riad Muxtarov",
       tagline: "",
     },
-    about: "Riad Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlər və mürəkkəb infrastruktura fokuslanmaqla. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Bu, onun sistemlər haqqında düşüncə tərzini və onları izah etmə qabiliyyətini formalaşdırıb. Riad mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.",
+    about: "Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlər və mürəkkəb infrastruktura fokuslanmaqla. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Bu, onun sistemlər haqqında düşüncə tərzini və onları izah etmə qabiliyyətini formalaşdırıb. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.",
     currently: "International Bank of Azerbaijan-da AI sistemləri qururam.<br>European Youth Parliament Azerbaijan-da inkişaf komandasına rəhbərlik edirəm.",
     experience: [
       {
