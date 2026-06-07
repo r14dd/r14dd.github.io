@@ -89,7 +89,7 @@ const structuredData = JSON.stringify({
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#teaching">{profile.labels.nav.teaching}</a>
     <a href="#education">{profile.labels.nav.education}</a>
-    <a href="#recommendations">recs</a>
+    <a href="#recommendations">{profile.labels.nav.recommendations}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
   </nav>
 
@@ -125,23 +125,23 @@ const structuredData = JSON.stringify({
             <span class="terminal-cmd">whoami</span>
           </div>
           <div class="terminal-line">
-            <span class="terminal-text">AI Engineer @ ABB · International Bank of Azerbaijan</span>
+            <span class="terminal-text" id="term-role1">AI Engineer @ ABB · International Bank of Azerbaijan</span>
           </div>
           <div class="terminal-line">
-            <span class="terminal-text">Head of IT @ European Youth Parliament AZ</span>
+            <span class="terminal-text" id="term-role2">Head of IT @ European Youth Parliament AZ</span>
           </div>
           <div class="terminal-line">
             <span class="terminal-prompt">→</span>
             <span class="terminal-cmd">stats</span>
           </div>
           <div class="terminal-line terminal-stats">
-            <span class="term-stat"><span class="term-stat-num">2K+</span> students taught</span>
+            <span class="term-stat" id="term-stat1"><span class="term-stat-num">2K+</span> students taught</span>
             <span class="term-stat-sep">·</span>
-            <span class="term-stat"><span class="term-stat-num">5+</span> teams led</span>
+            <span class="term-stat" id="term-stat2"><span class="term-stat-num">5+</span> teams led</span>
             <span class="term-stat-sep">·</span>
-            <span class="term-stat"><span class="term-stat-num">4+</span> yrs shipping</span>
+            <span class="term-stat" id="term-stat3"><span class="term-stat-num">4+</span> yrs shipping</span>
           </div>
-          <div class="terminal-line">
+          <div class="terminal-line" id="term-input-line">
             <span class="terminal-prompt">→</span>
             <span class="terminal-cursor" aria-hidden="true"></span>
           </div>
@@ -161,6 +161,8 @@ const structuredData = JSON.stringify({
         >
       </div>
     </section>
+
+    <p class="spotify-line" id="spotify-line" style="display:none"></p>
 
     <section
       id="experience"
@@ -226,7 +228,7 @@ const structuredData = JSON.stringify({
       <a href="#skills">{profile.labels.nav.skills}</a>
       <a href="#teaching">{profile.labels.nav.teaching}</a>
       <a href="#education">{profile.labels.nav.education}</a>
-      <a href="#recommendations">recs</a>
+      <a href="#recommendations">{profile.labels.nav.recommendations}</a>
       <a href="#connect">{profile.labels.nav.connect}</a>
     </div>
   </nav>
@@ -413,7 +415,174 @@ const structuredData = JSON.stringify({
             await wait(60);
           }
         }
+        window.dispatchEvent(new Event('term-ready'));
       })();
+    })();
+
+    // Interactive terminal — desktop only, after animation
+    (() => {
+      const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (!isDesktop) return;
+
+      const FORTUNES = [
+        "There are only two hard things in CS: cache invalidation and naming things.",
+        "It works on my machine. Ship the machine.",
+        "// TODO: fix this later (written 3 years ago)",
+        "A good programmer looks both ways before crossing a one-way street.",
+        "Rust: where the compiler is your therapist.",
+        "First, solve the problem. Then, write the code.",
+        "Deleted code is debugged code.",
+        "The best code is no code at all.",
+      ];
+
+      const termBody = document.querySelector('.terminal-body');
+      const inputLine = document.getElementById('term-input-line');
+      if (!termBody || !inputLine) return;
+
+      let history = [];
+      let histIdx = -1;
+
+      const getCommands = () => {
+        const p = window._termProfile || {};
+        const email = p.email || 'riad@riad.cc';
+        const github = p.links?.github || 'https://github.com/r14dd';
+        const resume = p.links?.resume || '/resume.pdf';
+        const projectNames = (p.projects || []).map(x => x.name);
+        return {
+          help: () => { return { lines: [
+            '<span class="terminal-text">whoami</span>  <span class="terminal-comment">current roles</span>',
+            '<span class="terminal-text">stats</span>   <span class="terminal-comment">quick numbers</span>',
+            '<span class="terminal-text">projects</span><span class="terminal-comment"> list projects</span>',
+            '<span class="terminal-text">skills</span>  <span class="terminal-comment">top skills</span>',
+            '<span class="terminal-text">contact</span> <span class="terminal-comment">get in touch</span>',
+            '<span class="terminal-text">resume</span>  <span class="terminal-comment">open resume</span>',
+            '<span class="terminal-text">github</span>  <span class="terminal-comment">open GitHub</span>',
+            '<span class="terminal-text">fortune</span> <span class="terminal-comment">random wisdom</span>',
+            '<span class="terminal-text">clear</span>   <span class="terminal-comment">clear terminal</span>',
+          ] }; },
+          whoami: () => {
+            const t = p.labels?.terminal || {};
+            return { lines: [
+              '<span class="terminal-text">' + (t.role1 || 'AI Engineer @ ABB') + '</span>',
+              '<span class="terminal-text">' + (t.role2 || 'Head of IT @ EYP AZ') + '</span>',
+            ] };
+          },
+          stats: () => {
+            const t = p.labels?.terminal || {};
+            const wrapNum = (s) => s.replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
+            return { html: '<span class="terminal-stats" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.25rem 0.45rem"><span class="term-stat">' + wrapNum(t.stat1 || '2K+ students taught') + '</span><span class="term-stat-sep">·</span><span class="term-stat">' + wrapNum(t.stat2 || '5+ teams led') + '</span><span class="term-stat-sep">·</span><span class="term-stat">' + wrapNum(t.stat3 || '4+ yrs shipping') + '</span></span>' };
+          },
+          projects: () => {
+            setTimeout(() => {
+              document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+            return { lines: projectNames.length ? projectNames.map(n => '<span class="terminal-text">· ' + n + '</span>') : ['<span class="terminal-text">No projects loaded.</span>'] };
+          },
+          skills: () => { return { lines: [
+            '<span class="terminal-text">Rust · Python · Go · Tokio · FastAPI</span>',
+            '<span class="terminal-text">Kafka · PostgreSQL · Docker · AWS</span>',
+          ] }; },
+          contact: () => { return { html: '<span class="terminal-text">' + email + '</span>' }; },
+          resume: () => { window.open(resume, '_blank'); return { html: '<span class="terminal-text">Opening resume...</span>' }; },
+          github: () => { window.open(github, '_blank'); return { html: '<span class="terminal-text">Opening github.com/r14dd...</span>' }; },
+          fortune: () => { return { html: '<span class="terminal-text">' + FORTUNES[Math.floor(Math.random() * FORTUNES.length)] + '</span>' }; },
+          clear: () => null,
+        };
+      };
+
+      const activate = () => {
+        const cursorEl = inputLine.querySelector('.terminal-cursor');
+        if (cursorEl) cursorEl.remove();
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'term-input';
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('spellcheck', 'false');
+        input.setAttribute('placeholder', 'type help');
+        input.setAttribute('aria-label', 'Terminal command input');
+        inputLine.appendChild(input);
+
+        const exec = (raw) => {
+          const cmd = raw.trim().toLowerCase();
+          if (!cmd) return;
+
+          history.unshift(raw.trim());
+          histIdx = -1;
+
+          const echoLine = document.createElement('div');
+          echoLine.className = 'terminal-line term-visible';
+          echoLine.innerHTML = '<span class="terminal-prompt">→</span> <span class="terminal-cmd">' + cmd.replace(/</g, '&lt;') + '</span>';
+          termBody.insertBefore(echoLine, inputLine);
+
+          const commands = getCommands();
+          if (cmd === 'clear') {
+            const keep = [inputLine];
+            Array.from(termBody.children).forEach(el => {
+              if (!keep.includes(el)) el.remove();
+            });
+            return;
+          }
+
+          const fn = commands[cmd];
+          const result = fn ? fn() : { html: '<span class="terminal-text">command not found: ' + cmd.replace(/</g, '&lt;') + '. Type \'help\' for available commands.</span>' };
+
+          if (result != null) {
+            if (result && typeof result === 'object' && result.lines) {
+              result.lines.forEach(l => {
+                const row = document.createElement('div');
+                row.className = 'terminal-line term-visible';
+                row.innerHTML = l;
+                termBody.insertBefore(row, inputLine);
+              });
+            } else {
+              const outLine = document.createElement('div');
+              outLine.className = 'terminal-line term-visible';
+              if (result && typeof result === 'object' && result.html) {
+                outLine.innerHTML = result.html;
+              } else {
+                outLine.innerHTML = '<span class="terminal-text">' + result + '</span>';
+              }
+              termBody.insertBefore(outLine, inputLine);
+            }
+          }
+
+          termBody.scrollTop = termBody.scrollHeight;
+        };
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            exec(input.value);
+            input.value = '';
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (history.length && histIdx < history.length - 1) {
+              histIdx++;
+              input.value = history[histIdx];
+            }
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (histIdx > 0) {
+              histIdx--;
+              input.value = history[histIdx];
+            } else {
+              histIdx = -1;
+              input.value = '';
+            }
+          }
+        });
+
+        const termWindow = termBody.closest('.terminal-window');
+        termWindow?.addEventListener('click', (e) => {
+          if (e.target.tagName !== 'A') input.focus();
+        });
+      };
+
+      if (prefersReducedMotion) {
+        activate();
+      } else {
+        window.addEventListener('term-ready', activate, { once: true });
+      }
     })();
 
     const i18nEl = document.getElementById("i18n-data");
@@ -766,6 +935,7 @@ const structuredData = JSON.stringify({
     const applyLanguage = (lang) => {
       const data = I18N[lang] || I18N.en;
       currentProfile = data;
+      window._termProfile = data;
       document.documentElement.lang = lang;
       if (langCurrent)
         langCurrent.textContent = languageLabels[lang] || "English";
@@ -776,7 +946,6 @@ const structuredData = JSON.stringify({
       const heroEyebrow = document.getElementById("hero-eyebrow");
       if (heroEyebrow) heroEyebrow.textContent = data.labels.heroEyebrow;
       const heroAbout = document.getElementById("hero-about");
-      const heroCurrently = document.getElementById("hero-currently");
       if (heroAbout) {
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           heroAbout.innerHTML = data.about.split(' ').map(w => `<span class="word-gen">${w}</span>`).join(' ');
@@ -787,9 +956,18 @@ const structuredData = JSON.stringify({
           heroAbout.textContent = data.about;
         }
       }
-      if (heroCurrently) {
-        heroCurrently.innerHTML = `<span class="currently-label">${data.labels.currentlyLabel}</span> ${data.currently}`;
-      }
+      const t = data.labels.terminal;
+      const tr1 = document.getElementById('term-role1');
+      const tr2 = document.getElementById('term-role2');
+      const ts1 = document.getElementById('term-stat1');
+      const ts2 = document.getElementById('term-stat2');
+      const ts3 = document.getElementById('term-stat3');
+      if (tr1) tr1.textContent = t.role1;
+      if (tr2) tr2.textContent = t.role2;
+      const wrapNum = (s) => s.replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
+      if (ts1) ts1.innerHTML = wrapNum(t.stat1);
+      if (ts2) ts2.innerHTML = wrapNum(t.stat2);
+      if (ts3) ts3.innerHTML = wrapNum(t.stat3);
       if (heroLinks) {
         const links = heroLinks.querySelectorAll("a");
         if (links[0]) {
@@ -816,6 +994,8 @@ const structuredData = JSON.stringify({
           links[3].setAttribute("href", data.links.resume);
         }
       }
+
+      if (window._spotifyData) renderSpotify(window._spotifyData);
 
       const sideNav = document.querySelectorAll(".side-nav a");
       const labels = [
@@ -845,7 +1025,7 @@ const structuredData = JSON.stringify({
       const connectSection = document.getElementById("connect");
 
       if (expSection) expSection.innerHTML = buildExperience(data);
-      if (projSection) projSection.innerHTML = buildProjects(data);
+      if (projSection) { projSection.innerHTML = buildProjects(data); fetchBadges(projSection); }
       if (teachSection) teachSection.innerHTML = buildTeaching(data);
       if (eduSection) eduSection.innerHTML = buildEducation(data);
       if (skillsSection) skillsSection.innerHTML = buildSkills(data);
@@ -1364,8 +1544,12 @@ const structuredData = JSON.stringify({
       const docsLink = p.links?.docs
         ? `<a class="cta-btn" href="${p.links.docs}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 1A1.5 1.5 0 0 0 2 2.5v11A1.5 1.5 0 0 0 3.5 15H13a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3.5zM3 2.5a.5.5 0 0 1 .5-.5H13v9H3.5a1.5 1.5 0 0 0-.5.085V2.5zM3.5 12H13v2H3.5a.5.5 0 0 1 0-1zM5 4h6v1H5V4zm0 2.5h6v1H5v-1z"/></svg>docs.rs</a>`
         : '';
+      const badgesHtml = (p.badges || []).map((b) =>
+        `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ''}"><a class="cta-btn" href="${b.link || '#'}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${b.pillLabel}</a> ${b.platform}</span>`
+      ).join(' ');
+      const badgeBullet = badgesHtml ? `<li class="badge-bullet">${badgesHtml}</li>` : '';
       const gh = (ghLink || cratesLink || docsLink)
-        ? `<div class="hero-cta" style="margin-top:1rem;display:flex;gap:0.6rem;flex-wrap:wrap">${ghLink}${cratesLink}${docsLink}</div>`
+        ? `<div class="hero-cta" style="margin-top:1rem;display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center">${ghLink}${cratesLink}${docsLink}</div>`
         : '';
       projModalCard.innerHTML = `
         <div class="proj-modal-head">
@@ -1373,12 +1557,13 @@ const structuredData = JSON.stringify({
         </div>
         <div class="project-tech-pills">${tech}</div>
         ${p.impact ? `<div class="project-impact"><strong>Impact:</strong> ${stripImpact(p.impact)}</div>` : ''}
-        ${bullets ? `<ul class="project-bullets">${bullets}</ul>` : ''}
+        ${(bullets || badgeBullet) ? `<ul class="project-bullets">${badgeBullet}${bullets}</ul>` : ''}
         ${sim}
         ${gh}
       `;
       const sv = projModalCard.querySelector('.sim-visual');
       if (sv) sv.classList.add('active');
+      fetchBadges(projModalCard);
     };
 
     const showProjModal = () => {
@@ -1647,6 +1832,91 @@ const structuredData = JSON.stringify({
       }
 
     }
+
+    // Spotify Now Playing
+    const SPOTIFY_API = 'https://spotify-now-playing.riad-mrv.workers.dev';
+    const spotifyLabels = {
+      en: 'is currently listening to',
+      ru: 'сейчас слушает',
+      az: 'hazırda dinləyir',
+    };
+    function renderSpotify(data) {
+      const el = document.getElementById('spotify-line');
+      if (!el) return;
+      if (!data || !data.track) { el.style.display = 'none'; return; }
+      const lang = document.documentElement.lang || 'en';
+      const label = spotifyLabels[lang] || spotifyLabels.en;
+      el.innerHTML = `<svg class="spotify-logo" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> Riad ${label} <a href="${data.url}" target="_blank" rel="noopener">${data.track} — ${data.artist}</a>`;
+      el.style.display = '';
+    }
+    window._spotifyData = null;
+    async function fetchSpotify() {
+      try {
+        const res = await fetch(SPOTIFY_API);
+        if (res.ok) { window._spotifyData = await res.json(); renderSpotify(window._spotifyData); }
+      } catch {}
+    }
+    fetchSpotify();
+    setInterval(fetchSpotify, 30000);
+
+    var badgeCache = {};
+
+    function fmtCount(count) {
+      return count >= 1000 ? (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(count);
+    }
+
+    function animateCount(el, target, duration = 2500) {
+      const start = performance.now();
+      const isK = target >= 1000;
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        const current = Math.round(ease * target);
+        el.textContent = isK
+          ? (current / 1000).toFixed(1).replace(/\.0$/, '') + 'k'
+          : String(current);
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    var badgeObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const raw = parseInt(el.dataset.badgeRaw, 10);
+        if (!raw) return;
+        badgeObserver.unobserve(el);
+        animateCount(el, raw);
+      });
+    }, { threshold: 0.5 });
+
+    function fetchBadges(root) {
+      (root || document).querySelectorAll('.proj-badge-live').forEach(async (el) => {
+        const api = el.dataset.badgeApi;
+        if (!api) return;
+        const countEl = el.querySelector('.badge-count');
+        if (badgeCache && badgeCache[api] != null) {
+          countEl.dataset.badgeRaw = badgeCache[api];
+          countEl.textContent = '0';
+          if (badgeObserver) badgeObserver.observe(countEl);
+          return;
+        }
+        try {
+          const res = await fetch(api);
+          if (!res.ok) return;
+          const data = await res.json();
+          const count = api.includes('github.com') ? data.stargazers_count : data.crate?.downloads;
+          if (count != null) {
+            if (badgeCache) badgeCache[api] = count;
+            countEl.dataset.badgeRaw = count;
+            countEl.textContent = '0';
+            if (badgeObserver) badgeObserver.observe(countEl);
+          }
+        } catch {}
+      });
+    }
+    fetchBadges();
 
   </script>
 </BaseLayout>
