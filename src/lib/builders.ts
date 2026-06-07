@@ -482,5 +482,13 @@ export const buildConnect = (data: I18nProfile): string => {
           <a class="cta-btn" href="${data.links.github}" target="_blank" rel="noopener">GitHub</a>
           <a class="cta-btn" href="mailto:${data.email}">Email</a>
         </div>
+        <div class="mini-map" aria-label="Location: Baku, Azerbaijan">
+          <div class="mini-map-container">
+            <img class="mini-map-img mini-map-dark" src="/map-baku-dark.png" alt="Map of Baku, Azerbaijan" width="500" height="220" loading="lazy"/>
+            <img class="mini-map-img mini-map-light" src="/map-baku-light.png" alt="Map of Baku, Azerbaijan" width="500" height="220" loading="lazy"/>
+            <div class="mini-map-dot"></div>
+            <div class="mini-map-label">Baku, Azerbaijan <span id="local-time"></span></div>
+          </div>
+        </div>
       `;
 };

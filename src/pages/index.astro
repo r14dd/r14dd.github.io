@@ -162,7 +162,7 @@ const structuredData = JSON.stringify({
       </div>
     </section>
 
-    <p class="spotify-line" id="spotify-line" style="display:none"></p>
+    <div class="spotify-line" id="spotify-line" style="display:none"></div>
 
     <section
       id="experience"
@@ -1836,18 +1836,105 @@ const structuredData = JSON.stringify({
     // Spotify Now Playing
     const SPOTIFY_API = 'https://spotify-now-playing.riad-mrv.workers.dev';
     const spotifyLabels = {
-      en: 'is currently listening to',
-      ru: 'сейчас слушает',
-      az: 'hazırda dinləyir',
+      en: { playing: 'Currently listening to', last: 'Last listened to' },
+      ru: { playing: 'Сейчас слушает', last: 'Последний раз слушал' },
+      az: { playing: 'Hazırda dinləyir', last: 'Son dinlədiyi' },
     };
+    var _spotifyProgress = null;
+    var _spotifyTimer = null;
+    var _lastTrackName = null;
+    function fmtTime(ms) {
+      var s = Math.floor(ms / 1000);
+      var m = Math.floor(s / 60);
+      s = s % 60;
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
     function renderSpotify(data) {
       const el = document.getElementById('spotify-line');
       if (!el) return;
       if (!data || !data.track) { el.style.display = 'none'; return; }
+      var songChanged = _lastTrackName !== null && _lastTrackName !== data.track;
+      _lastTrackName = data.track;
+      if (songChanged) {
+        el.classList.add('spotify-fade-out');
+        setTimeout(function() {
+          _applySpotify(el, data);
+          el.classList.remove('spotify-fade-out');
+        }, 300);
+        return;
+      }
+      _applySpotify(el, data);
+    }
+    function _applySpotify(el, data) {
       const lang = document.documentElement.lang || 'en';
-      const label = spotifyLabels[lang] || spotifyLabels.en;
-      el.innerHTML = `<svg class="spotify-logo" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg> Riad ${label} <a href="${data.url}" target="_blank" rel="noopener">${data.track} — ${data.artist}</a>`;
+      const labels = spotifyLabels[lang] || spotifyLabels.en;
+      const label = data.playing ? labels.playing : labels.last;
+      el.className = 'spotify-line' + (data.playing ? ' playing' : ' not-playing');
+      const coverUrl = data.cover || '';
+      const vinylHtml = coverUrl
+        ? '<span class="spotify-vinyl-wrap"><img class="spotify-vinyl" src="' + coverUrl + '" alt="" width="32" height="32"><img class="spotify-vinyl-reflection" src="' + coverUrl + '" alt="" width="32" height="32" aria-hidden="true"></span>'
+        : '';
+      const trackText = data.track + ' \u2014 ' + data.artist;
+      const needsMarquee = trackText.length > 40;
+      const trackHtml = needsMarquee
+        ? '<span class="spotify-marquee-wrap"><span class="spotify-marquee">' + trackText + ' \u00a0\u00a0\u2022\u00a0\u00a0 ' + trackText + ' \u00a0\u00a0\u2022\u00a0\u00a0 </span></span>'
+        : trackText;
+      const progress = data.playing && data.duration
+        ? ' <span class="spotify-time" id="spotify-elapsed"></span><span class="spotify-progress"><span class="spotify-progress-bar" id="spotify-bar"></span></span><span class="spotify-time" id="spotify-remaining"></span>'
+        : '';
+      const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + coverUrl + '" alt="">' : '';
+      var recentHtml = '';
+      if (data.recent && data.recent.length > 0) {
+        recentHtml = '<div class="spotify-history" id="spotify-history">';
+        for (var i = 0; i < data.recent.length; i++) {
+          var r = data.recent[i];
+          var rCover = r.cover ? '<img class="spotify-history-cover" src="' + r.cover + '" alt="">' : '';
+          recentHtml += '<a href="' + r.url + '" target="_blank" rel="noopener" class="spotify-history-item">' + rCover + '<span class="spotify-history-info"><span class="spotify-history-track">' + r.track + '</span><span class="spotify-history-artist">' + r.artist + '</span></span></a>';
+        }
+        recentHtml += '</div>';
+      }
+      el.innerHTML = '<div class="spotify-inline" id="spotify-toggle">' + vinylHtml + label + ' <a href="' + data.url + '" target="_blank" rel="noopener">' + trackHtml + '</a>' + progress + '</div>' +
+        '<div class="spotify-mini-player"><a href="' + data.url + '" target="_blank" rel="noopener" class="spotify-mini-link">' + miniCover + '<div class="spotify-mini-info"><span class="spotify-mini-track">' + data.track + '</span><span class="spotify-mini-artist">' + data.artist + '</span></div></a></div>' + recentHtml;
       el.style.display = '';
+      var toggle = document.getElementById('spotify-toggle');
+      if (toggle) {
+        toggle.style.cursor = 'pointer';
+        toggle.addEventListener('click', function(e) {
+          if (e.target.closest('a')) return;
+          el.classList.toggle('history-open');
+        });
+        var songLink = toggle.querySelector('a');
+        if (songLink) {
+          songLink.addEventListener('mouseenter', function() { el.classList.add('mini-hover'); });
+          songLink.addEventListener('mouseleave', function() {
+            setTimeout(function() {
+              if (!el.querySelector('.spotify-mini-player:hover')) el.classList.remove('mini-hover');
+            }, 50);
+          });
+          var mini = el.querySelector('.spotify-mini-player');
+          if (mini) {
+            mini.addEventListener('mouseleave', function() { el.classList.remove('mini-hover'); });
+          }
+        }
+      }
+
+      if (_spotifyTimer) clearInterval(_spotifyTimer);
+      if (data.playing && data.duration) {
+        _spotifyProgress = { start: Date.now(), offset: data.progress || 0, duration: data.duration };
+        function tickProgress() {
+          var bar = document.getElementById('spotify-bar');
+          var elapsedEl = document.getElementById('spotify-elapsed');
+          var remainEl = document.getElementById('spotify-remaining');
+          if (!_spotifyProgress) return;
+          var elapsed = Math.min(_spotifyProgress.offset + (Date.now() - _spotifyProgress.start), _spotifyProgress.duration);
+          var pct = (elapsed / _spotifyProgress.duration) * 100;
+          if (bar) bar.style.width = pct + '%';
+          if (elapsedEl) elapsedEl.textContent = fmtTime(elapsed);
+          if (remainEl) remainEl.textContent = '-' + fmtTime(_spotifyProgress.duration - elapsed);
+        }
+        tickProgress();
+        _spotifyTimer = setInterval(tickProgress, 1000);
+      }
     }
     window._spotifyData = null;
     async function fetchSpotify() {
@@ -1858,6 +1945,16 @@ const structuredData = JSON.stringify({
     }
     fetchSpotify();
     setInterval(fetchSpotify, 30000);
+
+    // Baku local time
+    function updateBakuTime() {
+      var el = document.getElementById('local-time');
+      if (!el) return;
+      var now = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Baku', hour: 'numeric', minute: '2-digit', hour12: true });
+      el.textContent = now;
+    }
+    updateBakuTime();
+    setInterval(updateBakuTime, 30000);
 
     var badgeCache = {};
 
