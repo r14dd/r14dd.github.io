@@ -1,5 +1,6 @@
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const NOW_PLAYING_URL = 'https://api.spotify.com/v1/me/player/currently-playing';
+const RECENTLY_PLAYED_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=5';
 const ALLOWED_ORIGIN = 'https://riad.cc';
 
 let cachedToken = null;
@@ -48,30 +49,60 @@ export default {
       const headers = { Authorization: `Bearer ${token}` };
       const noCache = { headers, cf: { cacheTtl: 0 } };
 
-      const nowRes = await fetch(NOW_PLAYING_URL, noCache);
+      function parseTrack(item) {
+        const images = item.album?.images || [];
+        return {
+          track: item.name,
+          artist: item.artists.map(a => a.name).join(', '),
+          url: item.external_urls.spotify,
+          cover: (images.find(i => i.width === 300) || images[0])?.url || null,
+        };
+      }
 
+      let result = null;
+      const nowRes = await fetch(NOW_PLAYING_URL, noCache);
       if (nowRes.status === 200) {
         const data = await nowRes.json();
         if (data.is_playing && data.item) {
-          lastPlaying = {
-            track: data.item.name,
-            artist: data.item.artists.map(a => a.name).join(', '),
-            url: data.item.external_urls.spotify,
+          lastPlaying = parseTrack(data.item);
+          result = {
+            playing: true,
+            ...lastPlaying,
+            progress: data.progress_ms || 0,
+            duration: data.item.duration_ms || 0,
           };
-          return Response.json({ playing: true, ...lastPlaying }, { headers: cors(origin) });
         }
       }
 
-      if (lastPlaying) {
-        return Response.json({ playing: false, ...lastPlaying }, { headers: cors(origin) });
+      let recent = [];
+      const recentRes = await fetch(RECENTLY_PLAYED_URL, noCache);
+      if (recentRes.status === 200) {
+        const recentData = await recentRes.json();
+        if (recentData.items) {
+          recent = recentData.items.map(i => parseTrack(i.track));
+        }
       }
 
-      return Response.json({ playing: false, track: null }, { headers: cors(origin) });
+      if (!result && lastPlaying) {
+        result = { playing: false, ...lastPlaying };
+      }
+
+      if (!result && recent.length > 0) {
+        lastPlaying = recent[0];
+        result = { playing: false, ...lastPlaying };
+      }
+
+      if (!result) {
+        return Response.json({ playing: false, track: null, recent: [] }, { headers: cors(origin) });
+      }
+
+      result.recent = recent;
+      return Response.json(result, { headers: cors(origin) });
     } catch {
       if (lastPlaying) {
-        return Response.json({ playing: false, ...lastPlaying }, { headers: cors(origin) });
+        return Response.json({ playing: false, ...lastPlaying, recent: [] }, { headers: cors(origin) });
       }
-      return Response.json({ playing: false, track: null }, { headers: cors(origin), status: 500 });
+      return Response.json({ playing: false, track: null, recent: [] }, { headers: cors(origin), status: 500 });
     }
   },
 };
