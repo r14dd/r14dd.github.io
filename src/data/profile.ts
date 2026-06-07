@@ -10,12 +10,12 @@ export type Project = {
     crates?: string;
     docs?: string;
   };
+  badges?: { api: string; pillLabel: string; platform: string; link?: string }[];
 };
 
 export type Teaching = {
   title: string;
   skills: string;
-  bullets: string[];
 };
 
 export type Testimonial = {
@@ -33,7 +33,6 @@ export type Profile = {
     tagline: string;
   };
   about: string;
-  currently: string;
   email: string;
   links: {
     resume: string;
@@ -65,8 +64,6 @@ export const profile: Profile = {
 
   about: "develops software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, he taught computer science at State University of New York at Buffalo. It shaped how he thinks about systems and how he explains them. He likes complicated challenges and clean abstractions.",
 
-  currently: "Building AI systems at International Bank of Azerbaijan.<br>Leading dev at European Youth Parliament Azerbaijan.",
-
   email: "riad@riad.cc",
 
   links: {
@@ -84,7 +81,7 @@ export const profile: Profile = {
       bullets: [],
     },
     {
-      role: "Head of IT Development Team",
+      role: "Head of IT",
       org: "European Youth Parliament Azerbaijan",
       location: "Baku, Azerbaijan",
       period: "Feb 2026 – Present",
@@ -131,6 +128,26 @@ export const profile: Profile = {
 
   projects: [
     {
+      name: "patent",
+      tech: ["Rust", "Tokio", "Ollama", "ratatui", "fastembed"],
+      impact: "CLI that takes a plain-English dev-tool idea, searches open-source registries for existing implementations, ranks matches with local embeddings, and writes a scoped verdict via LLM.",
+      date: "Jun 2026",
+      bullets: [
+        "Built concurrent source adapters for crates.io, npm, PyPI, GitHub, Go, Maven, NuGet, RubyGems, Docker Hub, VS Code Marketplace, and Hacker News",
+        "Designed integrity-scoped verdict system that never asserts absence — only reports what was found in sources checked",
+        "Added interactive ratatui TUI with detail view, browser open, and structured JSON output for CI pipelines",
+      ],
+      links: {
+        crates: "https://crates.io/crates/patent",
+        docs: "https://docs.rs/patent",
+        github: "https://github.com/r14dd/patent",
+      },
+      badges: [
+        { api: "https://api.github.com/repos/r14dd/patent", pillLabel: "stars", platform: "on GitHub", link: "https://github.com/r14dd/patent" },
+        { api: "https://crates.io/api/v1/crates/patent", pillLabel: "downloads", platform: "on crates.io", link: "https://crates.io/crates/patent" },
+      ],
+    },
+    {
       name: "QuorumRAG.rs — Consensus-Based RAG",
       tech: ["Rust", "Ollama", "Tokio"],
       impact: "Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Achieved 95% recall vs 70% baseline.",
@@ -168,9 +185,7 @@ export const profile: Profile = {
         "Spring Boot",
         "RabbitMQ",
         "PostgreSQL",
-        "Liquibase",
         "Docker",
-        "AWS EC2",
       ],
       impact:
         "End-to-end transaction monitoring pipeline with event-driven scoring, async processing via RabbitMQ, and idempotent data handling.",
@@ -192,8 +207,10 @@ export const profile: Profile = {
         "Raft consensus preserving consistency under node failures via leader election and log replication.",
       date: "May 2024",
       bullets: [
-        "Implemented Raft consensus with leader election, log replication, and fault tolerance",
-        "Built concurrent server components to maintain consistency across distributed nodes",
+        "Implemented leader election with randomized timeouts and term-based logical clocks to prevent split votes",
+        "Built log replication via AppendEntries RPC with consistency checks and quorum-based commitment",
+        "Handled node failures and network partitions while tolerating up to ⌊n/2⌋ server failures",
+        "Enforced safety guarantees ensuring elected leaders always contain all previously committed entries",
       ],
     },
     {
@@ -203,13 +220,15 @@ export const profile: Profile = {
         "Kademlia DHT for resilient peer discovery and O(log n) lookups in dynamic networks.",
       date: "Feb 2024",
       bullets: [
-        "Implemented a peer-to-peer distributed storage system using Kademlia routing",
-        "Achieved efficient O(log n) lookups and resilient data routing across nodes",
+        "Implemented XOR-based distance metric with k-bucket routing tables for peer organization",
+        "Built iterative node lookup with α concurrent queries refining toward target keys in O(log n) hops",
+        "Designed join and bootstrap protocol for routing table population from seed nodes",
+        "Added key-value republishing and redundant storage across k closest nodes for fault tolerance",
       ],
     },
     {
       name: "Redis Redesign",
-      tech: ["Rust", "Redis"],
+      tech: ["Rust", "Tokio", "Redis"],
       impact:
         "Two-layer TTL-aware cache eliminating stale-data inconsistency while preserving low-latency access.",
       date: "Dec 2025",
@@ -220,80 +239,31 @@ export const profile: Profile = {
         "Preserved low-latency access while improving consistency in distributed workloads",
       ],
     },
-    {
-      name: "Minimalist Portfolio",
-      tech: ["Astro", "TypeScript", "CSS"],
-      impact: "Responsive portfolio with strong typographic hierarchy, smooth animations, and accessibility-first design.",
-      date: "Jan 2026",
-      bullets: [
-        "Designed a minimalist layout with strong typographic hierarchy and readable spacing",
-        "Implemented responsive navigation for desktop and mobile with smooth interactions",
-        "Added polished micro-animations while honoring prefers-reduced-motion",
-      ],
-      links: {
-        github: "https://github.com/r14dd/r14dd.github.io",
-      },
-    },
   ],
   teaching: [
   {
     title: "Data Structures",
     skills: "Java · Algorithms & Complexity · Scala · Git · Data Structures",
-    bullets: [
-      "Supported 900+ students through office hours, recitations, review sessions, and Q&A sessions",
-      "Taught core data structures and algorithms used to solve real-world computational problems",
-      "Guided students in understanding complexity analysis, trade-offs, and data structure selection",
-      "Helped students analyze and implement data structures in Java and Scala programs",
-      "Explained the relationship between data structures and algorithms in practical system design",
-    ],
   },
   {
     title: "Web Applications",
     skills: "Python · Flask · FastAPI · REST APIs · HTTP(S) · Back-End Web Development",
-    bullets: [
-      "Assisted 240 students in building full-stack web applications without pre-built frameworks",
-      "Emphasized server-side architecture, request handling, and backend logic",
-      "Taught HTTP(S), REST APIs, AJAX, authentication, encryption, and socket-based communication",
-      "Guided students in designing and deploying database-backed applications using MySQL and MongoDB",
-    ],
   },
   {
     title: "Software Quality in Practice",
     skills: "Git · Linux · GDB · QA Engineering · Code Coverage · Trello · Make",
-    bullets: [
-      "Evaluated teamwork and software quality for 120 students across multiple assignments",
-      "Assessed students’ ability to design, implement, and evaluate computing-based solutions",
-      "Focused on correctness, testing practices, debugging, and professional software standards",
-      "Reviewed code for maintainability, reliability, and adherence to project requirements",
-    ],
   },
   {
     title: "Discrete Structures",
     skills: "Logic · Proofs · Discrete Mathematics",
-    bullets: [
-      "Taught discrete structures concepts to 200+ students through office hours and recitations",
-      "Managed recitation sections and addressed student questions on formal reasoning and proofs",
-      "Graded homework on propositions, proofs, and foundational discrete mathematics topics",
-    ],
   },
   {
     title: "Introduction to Computer Science",
     skills: "Python",
-    bullets: [
-      "Taught introductory Python programming to 50+ students through twice-weekly lab sessions",
-      "Held office hours to support students outside the classroom and reinforce core concepts",
-      "Helped remove barriers between students and instructors to improve learning outcomes",
-    ],
   },
   {
     title: "Computer Organization",
     skills: "MIPS Assembly · SystemVerilog · Computer Architecture",
-    bullets: [
-      "Assisted 400+ students with coursework on instruction set architecture and computer organization",
-      "Supported topics including ALU design, pipelining, memory hierarchy, and control units",
-      "Held office hours, graded assignments and exams, and conducted review sessions",
-      "Created instructional materials and supported students with special accommodations",
-    ],
   },
 ],
   skills: [
@@ -306,7 +276,7 @@ export const profile: Profile = {
     {
       category: "Backend & Runtimes",
       groups: [
-        { label: "", items: ["Axum", "Actix-web", "Tokio", "FastAPI", "Flask"] },
+        { label: "", items: ["Axum", "Actix-web", "Tokio", "ratatui", "FastAPI", "Flask"] },
       ],
     },
     {
