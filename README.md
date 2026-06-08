@@ -7,9 +7,7 @@
 
 # Riad Mukhtarov — Portfolio
 
-Minimalist, high‑end personal portfolio built to present backend engineering work with clarity, focus, and production‑grade polish.
-
-
+Minimalist personal portfolio built to present backend engineering work with clarity and focus.
 
 ## Live
 
@@ -17,17 +15,27 @@ Minimalist, high‑end personal portfolio built to present backend engineering w
 
 ## Why this site exists
 
-This portfolio is meant to read like a calm, confident system: clear sections, sharp typography, and purposeful interactions. The design keeps attention on the work itself—experience, projects, and results—while still feeling premium.
+Clear sections, sharp typography, and small interactions that make the site feel good to use. The design keeps attention on the work itself.
 
 ## Highlights
 
-- **Minimalist dark UI** with strong hierarchy and readable spacing
-- **Desktop + mobile navigation** (sidebar + bottom pill)
-- **Intro animation** and staged section reveals
-- **Project cards** with impact lines and GitHub links
-- **Resume preview** on hover (desktop)
-- **Responsive layout** across modern devices
-- **Reduced‑motion friendly** for accessibility
+- Dark + light theme toggle
+- Accent colors shift by time of day (morning, afternoon, evening, night)
+- Hero greeting changes based on local time
+- Three languages: English, Russian, Azerbaijani
+- Command palette (⌘K) with search, section jumps, and actions
+- Keyboard shortcuts overlay
+- In-page find (⌘F) with match highlighting
+- Spotify now-playing widget with vinyl art, progress bar, and history drawer
+- UI sound effects with mute toggle
+- Baku location map card (dark/light variants)
+- Project detail modals (swipe-to-dismiss on mobile, pinch-to-zoom on visuals)
+- Animated badge counters
+- Intro animation and staged section reveals
+- Desktop sidebar + mobile bottom pill navigation
+- Resume preview on hover (desktop)
+- Custom 404 page
+- Reduced-motion support
 
 ## Tech Stack
 
@@ -35,17 +43,25 @@ This portfolio is meant to read like a calm, confident system: clear sections, s
 - **Language:** TypeScript
 - **Styling:** Custom CSS (no framework)
 - **Fonts:** Inter + mono accents
+- **Spotify API:** Cloudflare Worker proxy
 
 ## Project Structure
 
 ```
 src/
-  layouts/BaseLayout.astro   # Global layout + CSS
-  pages/index.astro          # Page markup + interactions
-  data/profile.ts            # Profile content + links
+  layouts/BaseLayout.astro     # Global layout + CSS variables
+  pages/index.astro            # Single-page app: markup, styles, interactions
+  pages/404.astro              # Custom 404 page
+  data/profile.ts              # Profile content + links
+  data/profile-i18n.ts         # Translations (en / ru / az)
+  lib/builders.ts              # HTML builder utilities
 public/
-  resume.pdf                 # Resume file served directly
-  assets/                    # Images / media
+  resume.pdf                   # Resume file served directly
+  logos/                       # Tech + company logos
+  fonts/                       # Self‑hosted web fonts
+  map-baku-dark.png            # Location map (dark)
+  map-baku-light.png           # Location map (light)
+  og-preview.png               # Open Graph preview image
 ```
 
 ## Local Development
@@ -64,29 +80,28 @@ npm run preview
 
 ## Content Updates
 
-Update the content in one place:
-
 - **Profile content + links:** `src/data/profile.ts`
+- **Translations:** `src/data/profile-i18n.ts`
 - **Resume file:** `public/resume.pdf`
 
 ## Deployment
 
-Use any static host (GitHub Pages / Vercel / Netlify).
+GitHub Pages — push to `gh-pages` branch.
 
-Example build:
 ```bash
 npm run build
 ```
 
 ## Credits
 
-Design inspiration: **paco.me**
+Design inspiration: **Emil Kowalski** / **paco.me**
 
-## ➤ Authors
+## Authors
 
 - [Riad Mukhtarov](https://www.linkedin.com/in/riadmukhtarov/)
 
 ---
-## ➤ License
+
+## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
