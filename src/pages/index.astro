@@ -395,11 +395,11 @@ const structuredData = JSON.stringify({
 
     const timeAware = (() => {
       const periods = [
-        { key: 'night',     from: 0,  to: 6,  accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0' },
-        { key: 'morning',   from: 6,  to: 12, accent: '210, 170, 90',  accentHex: '#d2aa5a', lightAccent: '175, 140, 60', lightHex: '#af8c3c' },
-        { key: 'afternoon', from: 12, to: 17, accent: '201, 165, 90',  accentHex: '#c9a55a', lightAccent: '168, 134, 61', lightHex: '#a8863d' },
-        { key: 'evening',   from: 17, to: 21, accent: '210, 140, 80',  accentHex: '#d28c50', lightAccent: '175, 110, 55', lightHex: '#af6e37' },
-        { key: 'night',     from: 21, to: 24, accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0' },
+        { key: 'night',     from: 0,  to: 6,  accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'invert(1) brightness(0.65) contrast(1.4) saturate(1.2)' },
+        { key: 'morning',   from: 6,  to: 12, accent: '210, 170, 90',  accentHex: '#d2aa5a', lightAccent: '175, 140, 60', lightHex: '#af8c3c', mapFilter: 'none', mapFilterLight: 'invert(1) hue-rotate(180deg)' },
+        { key: 'afternoon', from: 12, to: 17, accent: '201, 165, 90',  accentHex: '#c9a55a', lightAccent: '168, 134, 61', lightHex: '#a8863d', mapFilter: 'none', mapFilterLight: 'invert(1) hue-rotate(180deg)' },
+        { key: 'evening',   from: 17, to: 21, accent: '210, 140, 80',  accentHex: '#d28c50', lightAccent: '175, 110, 55', lightHex: '#af6e37', mapFilter: 'hue-rotate(345deg)', mapFilterLight: 'invert(1) hue-rotate(160deg)' },
+        { key: 'night',     from: 21, to: 24, accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'invert(1) brightness(0.65) contrast(1.4) saturate(1.2)' },
       ];
 
       const getPeriod = () => {
@@ -419,6 +419,8 @@ const structuredData = JSON.stringify({
         r.style.setProperty('--accent-rgb', p.accent);
         r.style.setProperty('--accent-light', p.lightHex);
         r.style.setProperty('--accent-light-rgb', p.lightAccent);
+        r.style.setProperty('--map-filter', p.mapFilter);
+        r.style.setProperty('--map-filter-light', p.mapFilterLight);
       };
 
       return { apply, getPeriod };
@@ -1967,9 +1969,9 @@ const structuredData = JSON.stringify({
     // Spotify Now Playing
     const SPOTIFY_API = 'https://spotify-now-playing.riad-mrv.workers.dev';
     const spotifyLabels = {
-      en: { playing: 'Currently listening to', last: 'Last listened to' },
-      ru: { playing: 'Сейчас слушает', last: 'Последний раз слушал' },
-      az: { playing: 'Hazırda dinləyir', last: 'Son dinlədiyi' },
+      en: { playing: 'Currently listening to', last: 'Last listened to', history: 'Recently played' },
+      ru: { playing: 'Сейчас слушает', last: 'Последний раз слушал', history: 'Недавно играло' },
+      az: { playing: 'Hazırda dinləyir', last: 'Son dinlədiyi', history: 'Son dinlənilənlər' },
     };
     var _spotifyProgress = null;
     var _spotifyTimer = null;
@@ -2003,7 +2005,7 @@ const structuredData = JSON.stringify({
       el.className = 'spotify-line' + (data.playing ? ' playing' : ' not-playing');
       const coverUrl = data.cover || '';
       const vinylHtml = coverUrl
-        ? '<span class="spotify-vinyl-wrap"><img class="spotify-vinyl" src="' + coverUrl + '" alt="" width="32" height="32"><img class="spotify-vinyl-reflection" src="' + coverUrl + '" alt="" width="32" height="32" aria-hidden="true"></span>'
+        ? '<span class="spotify-vinyl-wrap"><img class="spotify-vinyl" src="' + coverUrl + '" alt="" width="32" height="32"></span>'
         : '';
       const trackText = data.track + ' \u2014 ' + data.artist;
       const needsMarquee = trackText.length > 40;
@@ -2016,15 +2018,20 @@ const structuredData = JSON.stringify({
       const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + coverUrl + '" alt="" width="24" height="24">' : '';
       var recentHtml = '';
       if (data.recent && data.recent.length > 0) {
-        recentHtml = '<div class="spotify-history" id="spotify-history">';
+        var historyLabel = labels.history || 'Recently played';
+        recentHtml = '<div class="spotify-history" id="spotify-history"><span class="spotify-history-label">' + historyLabel + '</span>';
         for (var i = 0; i < data.recent.length; i++) {
           var r = data.recent[i];
           var rCover = r.cover ? '<img class="spotify-history-cover" src="' + r.cover + '" alt="" width="40" height="40">' : '';
-          recentHtml += '<a href="' + r.url + '" target="_blank" rel="noopener" class="spotify-history-item">' + rCover + '<span class="spotify-history-info"><span class="spotify-history-track">' + r.track + '</span><span class="spotify-history-artist">' + r.artist + '</span></span></a>';
+          recentHtml += '<a href="' + r.url + '" target="_blank" rel="noopener" class="spotify-history-item" style="--i:' + i + '">' +
+            '<span class="spotify-history-idx">' + (i + 1) + '</span>' +
+            rCover +
+            '<span class="spotify-history-info"><span class="spotify-history-track">' + r.track + '</span><span class="spotify-history-artist">' + r.artist + '</span></span></a>';
         }
         recentHtml += '</div>';
       }
-      el.innerHTML = '<div class="spotify-inline" id="spotify-toggle">' + vinylHtml + label + ' <a href="' + data.url + '" target="_blank" rel="noopener">' + trackHtml + '</a>' + progress + '</div>' +
+      var chevron = recentHtml ? '<span class="spotify-chevron" aria-hidden="true"></span>' : '';
+      el.innerHTML = '<div class="spotify-inline" id="spotify-toggle">' + vinylHtml + label + ' <a href="' + data.url + '" target="_blank" rel="noopener">' + trackHtml + '</a>' + progress + chevron + '</div>' +
         '<div class="spotify-mini-player"><a href="' + data.url + '" target="_blank" rel="noopener" class="spotify-mini-link">' + miniCover + '<div class="spotify-mini-info"><span class="spotify-mini-track">' + data.track + '</span><span class="spotify-mini-artist">' + data.artist + '</span></div></a></div>' + recentHtml;
       el.style.display = '';
       var toggle = document.getElementById('spotify-toggle');
