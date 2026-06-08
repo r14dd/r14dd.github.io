@@ -83,17 +83,22 @@ export default {
         }
       }
 
-      if (!result && lastPlaying) {
-        result = { playing: false, ...lastPlaying };
-      }
-
       if (!result && recent.length > 0) {
         lastPlaying = recent[0];
+        result = { playing: false, ...recent[0] };
+      }
+
+      if (!result && lastPlaying) {
         result = { playing: false, ...lastPlaying };
       }
 
       if (!result) {
         return Response.json({ playing: false, track: null, recent: [] }, { headers: cors(origin) });
+      }
+
+      // Don't repeat the main track as the first history item
+      if (recent.length > 0 && recent[0].url === result.url) {
+        recent = recent.slice(1);
       }
 
       result.recent = recent;
