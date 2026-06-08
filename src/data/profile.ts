@@ -157,6 +157,7 @@ export const profile: Profile = {
         "Built multi-retriever ensemble with Reciprocal Rank Fusion scoring and quorum filtering",
         "Implemented overlapping chunk processing with 50% stride to prevent boundary-split answers",
         "Added parallel embedding with caching to optimize cold-start performance",
+        "Clustered evidence via cosine-similarity centroids so the quorum vote operates on deduplicated semantic groups",
       ],
       links: {
         crates: "https://crates.io/crates/quorumrag",
