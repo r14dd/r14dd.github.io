@@ -248,6 +248,7 @@ export const profiles: Record<string, I18nProfile> = {
           "Построил репликацию логов через AppendEntries RPC с проверками консистентности и кворумным подтверждением",
           "Обработал отказы узлов и сетевые разделения с толерантностью до ⌊n/2⌋ серверных сбоев",
           "Обеспечил гарантии безопасности — избранные лидеры всегда содержат все ранее зафиксированные записи",
+          "Спроектировал кастомный RPC-фреймворк поверх UDP с Protobuf-сериализацией, ретрансмиссией и дедупликацией сообщений",
         ],
       },
       {
@@ -538,6 +539,7 @@ export const profiles: Record<string, I18nProfile> = {
           "AppendEntries RPC ilə konsistensiya yoxlamaları və kvorum təsdiqli log replikasiyası qurdum",
           "Node nasazlıqlarını və şəbəkə bölünmələrini ⌊n/2⌋ server nasazlığına tolerantlıqla idarə etdim",
           "Seçilmiş liderlərin həmişə bütün əvvəlcədən təsdiqlənmiş qeydləri ehtiva etməsini təmin etdim",
+          "UDP üzərindən Protobuf serializasiyası, retransmissiya və mesaj deduplikasiyası ilə xüsusi RPC framework-u qurdum",
         ],
       },
       {

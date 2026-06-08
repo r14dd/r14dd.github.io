@@ -211,6 +211,7 @@ export const profile: Profile = {
         "Built log replication via AppendEntries RPC with consistency checks and quorum-based commitment",
         "Handled node failures and network partitions while tolerating up to ⌊n/2⌋ server failures",
         "Enforced safety guarantees ensuring elected leaders always contain all previously committed entries",
+        "Designed custom RPC framework over UDP with Protobuf serialization, retransmission, and message deduplication",
       ],
     },
     {
