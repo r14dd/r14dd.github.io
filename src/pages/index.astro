@@ -47,6 +47,11 @@ const structuredData = JSON.stringify({
       <span class="cmd-trigger-label">⌘K</span>
       <svg class="cmd-trigger-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
     </button>
+    <button class="sound-toggle" id="sound-toggle" type="button" aria-label="Mute sounds">
+      <span class="sound-icon" id="sound-icon" aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6,3 2,6 2,10 6,13 6,3"/><path class="sound-wave-1" d="M9 5.5c.8.8 1.2 1.8 1.2 2.5s-.4 1.7-1.2 2.5"/><path class="sound-wave-2" d="M11 3.5c1.3 1.3 2 3 2 4.5s-.7 3.2-2 4.5"/></svg>
+      </span>
+    </button>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode">
       <span class="theme-icon" aria-hidden="true">☀️</span>
     </button>
@@ -297,6 +302,127 @@ const structuredData = JSON.stringify({
       buildProjectSim,
       getLogoUrl as getLogoUrlJS,
     } from "../lib/builders";
+
+    const sfx = (() => {
+      let ctx = null;
+      let muted = localStorage.getItem('portfolio-muted') === '1';
+      const el = () => document.getElementById('sound-toggle');
+
+      const init = () => {
+        if (muted) document.body.classList.add('sound-muted');
+        el()?.addEventListener('click', () => {
+          muted = !muted;
+          localStorage.setItem('portfolio-muted', muted ? '1' : '0');
+          document.body.classList.toggle('sound-muted', muted);
+          if (!muted) sfx.click();
+        });
+      };
+
+      const getCtx = () => {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+        return ctx;
+      };
+
+      const tap = () => {
+        if (muted) return;
+        const c = getCtx();
+        const dur = 0.04;
+        const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
+        const d = buf.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1);
+        const src = c.createBufferSource();
+        src.buffer = buf;
+        const f = c.createBiquadFilter();
+        f.type = 'bandpass';
+        f.frequency.value = 300 + Math.random() * 100;
+        f.Q.value = 2.5;
+        const g = c.createGain();
+        g.gain.setValueAtTime(0.07, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+        src.connect(f).connect(g).connect(c.destination);
+        src.start(c.currentTime);
+        src.stop(c.currentTime + dur);
+      };
+
+      const click = () => {
+        if (muted) return;
+        const c = getCtx();
+        const o = c.createOscillator();
+        const g = c.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(180, c.currentTime);
+        o.frequency.exponentialRampToValueAtTime(60, c.currentTime + 0.06);
+        g.gain.setValueAtTime(0.1, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.06);
+        o.connect(g).connect(c.destination);
+        o.start(c.currentTime);
+        o.stop(c.currentTime + 0.06);
+      };
+
+      const whoosh = (rising = true) => {
+        if (muted) return;
+        const c = getCtx();
+        const dur = 0.18;
+        const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.15;
+        const src = c.createBufferSource();
+        src.buffer = buf;
+        const f = c.createBiquadFilter();
+        f.type = 'bandpass';
+        f.Q.value = 0.8;
+        const g = c.createGain();
+        if (rising) {
+          f.frequency.setValueAtTime(300, c.currentTime);
+          f.frequency.exponentialRampToValueAtTime(2000, c.currentTime + dur);
+          g.gain.setValueAtTime(0.001, c.currentTime);
+          g.gain.linearRampToValueAtTime(0.08, c.currentTime + dur * 0.4);
+          g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+        } else {
+          f.frequency.setValueAtTime(2000, c.currentTime);
+          f.frequency.exponentialRampToValueAtTime(300, c.currentTime + dur);
+          g.gain.setValueAtTime(0.08, c.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+        }
+        src.connect(f).connect(g).connect(c.destination);
+        src.start(c.currentTime);
+        src.stop(c.currentTime + dur);
+      };
+
+      return { init, tap, click, whoosh };
+    })();
+
+    const timeAware = (() => {
+      const periods = [
+        { key: 'night',     from: 0,  to: 6,  accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0' },
+        { key: 'morning',   from: 6,  to: 12, accent: '210, 170, 90',  accentHex: '#d2aa5a', lightAccent: '175, 140, 60', lightHex: '#af8c3c' },
+        { key: 'afternoon', from: 12, to: 17, accent: '201, 165, 90',  accentHex: '#c9a55a', lightAccent: '168, 134, 61', lightHex: '#a8863d' },
+        { key: 'evening',   from: 17, to: 21, accent: '210, 140, 80',  accentHex: '#d28c50', lightAccent: '175, 110, 55', lightHex: '#af6e37' },
+        { key: 'night',     from: 21, to: 24, accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0' },
+      ];
+
+      const getPeriod = () => {
+        const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Baku' })).getHours();
+        return periods.find(p => h >= p.from && h < p.to) || periods[2];
+      };
+
+      const apply = (data) => {
+        const p = getPeriod();
+        const greetings = data?.labels?.timeGreetings;
+        const eyebrow = document.getElementById('hero-eyebrow');
+        if (eyebrow && greetings?.[p.key]) {
+          eyebrow.textContent = greetings[p.key];
+        }
+        const r = document.documentElement;
+        r.style.setProperty('--accent', p.accentHex);
+        r.style.setProperty('--accent-rgb', p.accent);
+        r.style.setProperty('--accent-light', p.lightHex);
+        r.style.setProperty('--accent-light-rgb', p.lightAccent);
+      };
+
+      return { apply, getPeriod };
+    })();
 
     let heroFirstLoad = true;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -551,6 +677,7 @@ const structuredData = JSON.stringify({
         };
 
         input.addEventListener('keydown', (e) => {
+          sfx.tap();
           if (e.key === 'Enter') {
             exec(input.value);
             input.value = '';
@@ -943,8 +1070,7 @@ const structuredData = JSON.stringify({
       const heroTitle = document.querySelector("main section h1");
       const heroLinks = document.querySelector(".hero-links");
       if (heroTitle) weightReveal(heroTitle, data.hero.name);
-      const heroEyebrow = document.getElementById("hero-eyebrow");
-      if (heroEyebrow) heroEyebrow.textContent = data.labels.heroEyebrow;
+      timeAware.apply(data);
       const heroAbout = document.getElementById("hero-about");
       if (heroAbout) {
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -1100,6 +1226,7 @@ const structuredData = JSON.stringify({
 
     const savedLang = localStorage.getItem("portfolio-lang") || "en";
     applyLanguage(savedLang);
+    sfx.init();
 
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle?.querySelector('.theme-icon');
@@ -1109,6 +1236,7 @@ const structuredData = JSON.stringify({
       themeToggle?.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
     };
     themeToggle?.addEventListener('click', () => {
+      sfx.click();
       const willBeLight = !document.documentElement.classList.contains('light');
       const themeColorMeta = document.getElementById('theme-color-meta');
       const newBg = willBeLight ? '#faf9f6' : '#050505';
@@ -1223,6 +1351,7 @@ const structuredData = JSON.stringify({
         { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open('https://linkedin.com/in/riadmukhtarov', '_blank'); closeCmd(); } },
         { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open('https://github.com/r14dd', '_blank'); closeCmd(); } },
         { group: 'Actions',  label: 'Toggle theme',  icon: 'action', action: () => { document.getElementById('theme-toggle')?.click(); closeCmd(); } },
+        { group: 'Actions',  label: 'Toggle sound',  icon: 'action', action: () => { document.getElementById('sound-toggle')?.click(); closeCmd(); } },
         { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText(currentProfile?.email || '').then(() => showToast('Email copied')); closeCmd(); } },
         { group: 'Actions',  label: 'Keyboard shortcuts', icon: 'action', action: () => { closeCmd(); openKbd(); } },
       ];
@@ -1267,6 +1396,7 @@ const structuredData = JSON.stringify({
     };
 
     const openCmd = () => {
+      sfx.whoosh(true);
       cmdOpen = true;
       cmdBackdrop?.classList.add('open');
       cmdPalette?.classList.add('open');
@@ -1277,6 +1407,7 @@ const structuredData = JSON.stringify({
     };
 
     const closeCmd = () => {
+      sfx.whoosh(false);
       cmdOpen = false;
       cmdBackdrop?.classList.remove('open');
       cmdPalette?.classList.remove('open');
@@ -1567,6 +1698,7 @@ const structuredData = JSON.stringify({
     };
 
     const showProjModal = () => {
+      sfx.whoosh(true);
       projBackdrop?.classList.add('open');
       projModal?.classList.add('open');
       projModal?.setAttribute('aria-hidden', 'false');
@@ -1578,6 +1710,7 @@ const structuredData = JSON.stringify({
     };
 
     const hideProjModal = () => {
+      sfx.whoosh(false);
       projBackdrop?.classList.remove('open');
       projModal?.classList.remove('open');
       projModal?.setAttribute('aria-hidden', 'true');

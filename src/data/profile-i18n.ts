@@ -34,6 +34,7 @@ type Labels = {
     recommendations: string;
   };
   heroEyebrow: string;
+  timeGreetings: { morning: string; afternoon: string; evening: string; night: string };
   connectTagline: string;
   taRole: string;
   headTARole: string;
@@ -91,6 +92,7 @@ export const profiles: Record<string, I18nProfile> = {
         recommendations: "What colleagues say",
       },
       heroEyebrow: "AI & Software Engineer · Baku, Azerbaijan",
+      timeGreetings: { morning: "Good morning from Baku", afternoon: "Good afternoon from Baku", evening: "Good evening from Baku", night: "Burning the midnight oil in Baku" },
       connectTagline: "Let's talk.",
       taRole: "Teaching Assistant",
       headTARole: "Head Teaching Assistant",
@@ -383,6 +385,7 @@ export const profiles: Record<string, I18nProfile> = {
         recommendations: "Отзывы коллег",
       },
       heroEyebrow: "AI & Software инженер · Баку, Азербайджан",
+      timeGreetings: { morning: "Доброе утро из Баку", afternoon: "Добрый день из Баку", evening: "Добрый вечер из Баку", night: "Ночной код из Баку" },
       connectTagline: "Давайте поговорим.",
       taRole: "Ассистент преподавателя",
       headTARole: "Старший ассистент преподавателя",
@@ -675,6 +678,7 @@ export const profiles: Record<string, I18nProfile> = {
         recommendations: "Həmkarların rəyləri",
       },
       heroEyebrow: "AI və Proqram Mühəndisi · Bakı, Azərbaycan",
+      timeGreetings: { morning: "Bakıdan sabahınız xeyir", afternoon: "Bakıdan günortanız xeyir", evening: "Bakıdan axşamınız xeyir", night: "Bakıda gecə kodlaşma" },
       connectTagline: "Əlaqə saxlayaq.",
       taRole: "Tədris assistenti",
       headTARole: "Baş tədris assistenti",
