@@ -8,10 +8,10 @@
     <title>404 — Page Not Found</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
-      rel="stylesheet"
-    />
+    <style>
+      @font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(/fonts/font-8.woff2) format('woff2'); }
+      @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/font-11.woff2) format('woff2'); }
+    </style>
     <script>
       if (localStorage.getItem('portfolio-theme') === 'light') {
         document.documentElement.classList.add('light');

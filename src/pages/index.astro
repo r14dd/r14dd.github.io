@@ -771,7 +771,7 @@ const structuredData = JSON.stringify({
       requestAnimationFrame(step);
     };
 
-    document.querySelectorAll(".side-nav a").forEach((link) => {
+    navLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         const id = link.getAttribute("href")?.replace("#", "");
@@ -1123,7 +1123,6 @@ const structuredData = JSON.stringify({
 
       if (window._spotifyData) renderSpotify(window._spotifyData);
 
-      const sideNav = document.querySelectorAll(".side-nav a");
       const labels = [
         data.labels.nav.experience,
         data.labels.nav.projects,
@@ -1133,11 +1132,10 @@ const structuredData = JSON.stringify({
         data.labels.nav.recommendations,
         data.labels.nav.connect,
       ];
-      sideNav.forEach((link, idx) => {
+      navLinks.forEach((link, idx) => {
         if (labels[idx]) link.textContent = labels[idx];
       });
-      const mobileLinks = document.querySelectorAll("#mobile-nav-menu a");
-      mobileLinks.forEach((link, idx) => {
+      mobileMenuLinks.forEach((link, idx) => {
         if (labels[idx]) link.textContent = labels[idx];
       });
       setActiveLink();
@@ -2015,13 +2013,13 @@ const structuredData = JSON.stringify({
       const progress = data.playing && data.duration
         ? ' <span class="spotify-time" id="spotify-elapsed"></span><span class="spotify-progress"><span class="spotify-progress-bar" id="spotify-bar"></span></span><span class="spotify-time" id="spotify-remaining"></span>'
         : '';
-      const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + coverUrl + '" alt="">' : '';
+      const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + coverUrl + '" alt="" width="24" height="24">' : '';
       var recentHtml = '';
       if (data.recent && data.recent.length > 0) {
         recentHtml = '<div class="spotify-history" id="spotify-history">';
         for (var i = 0; i < data.recent.length; i++) {
           var r = data.recent[i];
-          var rCover = r.cover ? '<img class="spotify-history-cover" src="' + r.cover + '" alt="">' : '';
+          var rCover = r.cover ? '<img class="spotify-history-cover" src="' + r.cover + '" alt="" width="40" height="40">' : '';
           recentHtml += '<a href="' + r.url + '" target="_blank" rel="noopener" class="spotify-history-item">' + rCover + '<span class="spotify-history-info"><span class="spotify-history-track">' + r.track + '</span><span class="spotify-history-artist">' + r.artist + '</span></span></a>';
         }
         recentHtml += '</div>';
@@ -2070,14 +2068,17 @@ const structuredData = JSON.stringify({
       }
     }
     window._spotifyData = null;
+    var _spotifyFails = 0;
     async function fetchSpotify() {
       try {
-        const res = await fetch(SPOTIFY_API);
-        if (res.ok) { window._spotifyData = await res.json(); renderSpotify(window._spotifyData); }
-      } catch {}
+        const res = await fetch(SPOTIFY_API, { signal: AbortSignal.timeout(5000) });
+        if (res.ok) { window._spotifyData = await res.json(); renderSpotify(window._spotifyData); _spotifyFails = 0; }
+      } catch {
+        _spotifyFails++;
+      }
     }
     fetchSpotify();
-    setInterval(fetchSpotify, 30000);
+    setInterval(() => { if (_spotifyFails < 5) fetchSpotify(); }, 30000);
 
     // Baku local time
     function updateBakuTime() {
@@ -2133,7 +2134,7 @@ const structuredData = JSON.stringify({
           return;
         }
         try {
-          const res = await fetch(api);
+          const res = await fetch(api, { signal: AbortSignal.timeout(5000) });
           if (!res.ok) return;
           const data = await res.json();
           const count = api.includes('github.com') ? data.stargazers_count : data.crate?.downloads;
@@ -2143,7 +2144,7 @@ const structuredData = JSON.stringify({
             countEl.textContent = '0';
             if (badgeObserver) badgeObserver.observe(countEl);
           }
-        } catch {}
+        } catch { /* timeout or network error */ }
       });
     }
     fetchBadges();
