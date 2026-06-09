@@ -1053,12 +1053,52 @@ const structuredData = JSON.stringify({
         }, { signal });
       }
 
-      carouselTimer = setInterval(() => {
+      const startAutoplay = () => {
+        clearInterval(carouselTimer);
+        carouselTimer = setInterval(() => {
+          const sw = getSlideWidth();
+          scroll.scrollBy({ left: sw, behavior: 'smooth' });
+          clearTimeout(scrollEndTimer);
+          scrollEndTimer = setTimeout(checkTeleport, 400);
+        }, 13000);
+      };
+
+      let hintDone = false;
+      const runHint = () => {
+        if (hintDone) return;
+        hintDone = true;
         const sw = getSlideWidth();
-        scroll.scrollBy({ left: sw, behavior: 'smooth' });
-        clearTimeout(scrollEndTimer);
-        scrollEndTimer = setTimeout(checkTeleport, 400);
-      }, 7000);
+        let step = 0;
+        const hintNext = () => {
+          step++;
+          if (step < count) {
+            scroll.scrollBy({ left: sw, behavior: 'smooth' });
+            clearTimeout(scrollEndTimer);
+            scrollEndTimer = setTimeout(() => { checkTeleport(); hintNext(); }, 320);
+          } else {
+            // snap back to first card
+            scroll.style.scrollBehavior = 'auto';
+            scroll.scrollLeft = sw;
+            scroll.style.scrollBehavior = '';
+            syncDots();
+            startAutoplay();
+          }
+        };
+        hintNext();
+      };
+
+      const recsSection = document.getElementById('recommendations');
+      if (recsSection) {
+        const hintObs = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+            hintObs.disconnect();
+            setTimeout(runHint, 400);
+          }
+        }, { threshold: 0.3 });
+        hintObs.observe(recsSection);
+      } else {
+        startAutoplay();
+      }
     };
 
     const applyLanguage = (lang) => {
