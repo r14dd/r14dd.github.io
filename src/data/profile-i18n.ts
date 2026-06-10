@@ -127,7 +127,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: "Риад Мухтаров",
       tagline: "",
     },
-    about: "разрабатывает ПО и AI-системы на Rust и Python, с акцентом на распределённые системы и сложную инфраструктуру. До этого он преподавал информатику в State University of New York at Buffalo. Это сформировало его подход к системам и умение их объяснять. Любит сложные задачи и чистые абстракции.",
+    about: "разрабатывает ПО и AI-системы на Rust и Python, с акцентом на распределённые системы и сложную инфраструктуру. До этого он преподавал информатику в State University of New York at Buffalo. Любит сложные задачи и чистые абстракции.",
     experience: [
       {
         role: "Инженер по искусственному интеллекту",
@@ -420,7 +420,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: "Riad Muxtarov",
       tagline: "",
     },
-    about: "Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlər və mürəkkəb infrastruktura fokuslanmaqla. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Bu, onun sistemlər haqqında düşüncə tərzini və onları izah etmə qabiliyyətini formalaşdırıb. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.",
+    about: "Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlər və mürəkkəb infrastruktura fokuslanmaqla. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.",
     experience: [
       {
         role: "Süni İntellekt üzrə Mühəndis",
