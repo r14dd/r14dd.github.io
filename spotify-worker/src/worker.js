@@ -1,6 +1,7 @@
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const NOW_PLAYING_URL = 'https://api.spotify.com/v1/me/player/currently-playing';
 const RECENTLY_PLAYED_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=5';
+const TOP_TRACKS_URL = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5';
 const ALLOWED_ORIGIN = 'https://riad.cc';
 
 let cachedToken = null;
@@ -83,6 +84,15 @@ export default {
         }
       }
 
+      let topTracks = [];
+      const topRes = await fetch(TOP_TRACKS_URL, noCache);
+      if (topRes.status === 200) {
+        const topData = await topRes.json();
+        if (topData.items) {
+          topTracks = topData.items.map(i => parseTrack(i));
+        }
+      }
+
       if (!result && recent.length > 0) {
         lastPlaying = recent[0];
         result = { playing: false, ...recent[0] };
@@ -93,21 +103,16 @@ export default {
       }
 
       if (!result) {
-        return Response.json({ playing: false, track: null, recent: [] }, { headers: cors(origin) });
+        return Response.json({ playing: false, track: null, topTracks: [] }, { headers: cors(origin) });
       }
 
-      // Don't repeat the main track as the first history item
-      if (recent.length > 0 && recent[0].url === result.url) {
-        recent = recent.slice(1);
-      }
-
-      result.recent = recent;
+      result.topTracks = topTracks.filter(t => t.url !== result.url);
       return Response.json(result, { headers: cors(origin) });
     } catch {
       if (lastPlaying) {
-        return Response.json({ playing: false, ...lastPlaying, recent: [] }, { headers: cors(origin) });
+        return Response.json({ playing: false, ...lastPlaying, topTracks: [] }, { headers: cors(origin) });
       }
-      return Response.json({ playing: false, track: null, recent: [] }, { headers: cors(origin), status: 500 });
+      return Response.json({ playing: false, track: null, topTracks: [] }, { headers: cors(origin), status: 500 });
     }
   },
 };

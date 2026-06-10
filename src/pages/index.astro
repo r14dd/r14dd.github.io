@@ -2009,9 +2009,9 @@ const structuredData = JSON.stringify({
     // Spotify Now Playing
     const SPOTIFY_API = 'https://spotify-now-playing.riad-mrv.workers.dev';
     const spotifyLabels = {
-      en: { playing: 'Currently listening to', last: 'Last listened to', history: 'Recently played' },
-      ru: { playing: 'Сейчас слушает', last: 'Последний раз слушал', history: 'Недавно играло' },
-      az: { playing: 'Hazırda dinləyir', last: 'Son dinlədiyi', history: 'Son dinlənilənlər' },
+      en: { playing: 'Currently listening to', last: 'Last listened to', history: 'Top this month' },
+      ru: { playing: 'Сейчас слушает', last: 'Последний раз слушал', history: 'Топ за месяц' },
+      az: { playing: 'Hazırda dinləyir', last: 'Son dinlədiyi', history: 'Bu ayın ən çox dinlənilənləri' },
     };
     var _spotifyProgress = null;
     var _spotifyTimer = null;
@@ -2044,24 +2044,23 @@ const structuredData = JSON.stringify({
       const label = data.playing ? labels.playing : labels.last;
       el.className = 'spotify-line' + (data.playing ? ' playing' : ' not-playing');
       const coverUrl = data.cover || '';
-      const vinylHtml = coverUrl
-        ? '<span class="spotify-vinyl-wrap"><img class="spotify-vinyl" src="' + coverUrl + '" alt="" width="32" height="32"></span>'
-        : '';
+      const vinylHtml = '<span class="spotify-logo-wrap"><svg class="spotify-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg><span class="spotify-expand-hint">click to expand</span></span>';
       const trackText = data.track + ' \u2014 ' + data.artist;
       const needsMarquee = trackText.length > 40;
       const trackHtml = needsMarquee
         ? '<span class="spotify-marquee-wrap"><span class="spotify-marquee">' + trackText + ' \u00a0\u00a0\u2022\u00a0\u00a0 ' + trackText + ' \u00a0\u00a0\u2022\u00a0\u00a0 </span></span>'
         : trackText;
       const progress = data.playing && data.duration
-        ? ' <span class="spotify-time" id="spotify-elapsed"></span><span class="spotify-progress"><span class="spotify-progress-bar" id="spotify-bar"></span></span><span class="spotify-time" id="spotify-remaining"></span>'
+        ? '<span class="spotify-progress-row"><span class="spotify-time" id="spotify-elapsed"></span><span class="spotify-progress"><span class="spotify-progress-bar" id="spotify-bar"></span></span><span class="spotify-time" id="spotify-remaining"></span></span>'
         : '';
       const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + coverUrl + '" alt="" width="24" height="24">' : '';
       var recentHtml = '';
-      if (data.recent && data.recent.length > 0) {
-        var historyLabel = labels.history || 'Recently played';
+      var topTracks = data.topTracks || [];
+      if (topTracks.length > 0) {
+        var historyLabel = labels.history || 'Top this month';
         recentHtml = '<div class="spotify-history" id="spotify-history"><span class="spotify-history-label">' + historyLabel + '</span>';
-        for (var i = 0; i < data.recent.length; i++) {
-          var r = data.recent[i];
+        for (var i = 0; i < topTracks.length; i++) {
+          var r = topTracks[i];
           var rCover = r.cover ? '<img class="spotify-history-cover" src="' + r.cover + '" alt="" width="40" height="40">' : '';
           recentHtml += '<a href="' + r.url + '" target="_blank" rel="noopener" class="spotify-history-item" style="--i:' + i + '">' +
             '<span class="spotify-history-idx">' + (i + 1) + '</span>' +
@@ -2071,9 +2070,22 @@ const structuredData = JSON.stringify({
         recentHtml += '</div>';
       }
       var chevron = recentHtml ? '<span class="spotify-chevron" aria-hidden="true"></span>' : '';
-      el.innerHTML = '<div class="spotify-inline" id="spotify-toggle">' + vinylHtml + label + ' <a href="' + data.url + '" target="_blank" rel="noopener">' + trackHtml + '</a>' + progress + chevron + '</div>' +
+      el.innerHTML = '<div class="spotify-inline" id="spotify-toggle">' + vinylHtml + label + ' <a href="' + data.url + '" target="_blank" rel="noopener">' + trackHtml + '</a>' + chevron + '</div>' +
+        progress +
         '<div class="spotify-mini-player"><a href="' + data.url + '" target="_blank" rel="noopener" class="spotify-mini-link">' + miniCover + '<div class="spotify-mini-info"><span class="spotify-mini-track">' + data.track + '</span><span class="spotify-mini-artist">' + data.artist + '</span></div></a></div>' + recentHtml;
       el.style.display = '';
+      var progRow = el.querySelector('.spotify-progress-row');
+      if (progRow && window.innerWidth <= 480) {
+        var link = el.querySelector('.spotify-inline > a');
+        var logo = el.querySelector('.spotify-logo-wrap');
+        if (link && logo) {
+          var containerLeft = el.getBoundingClientRect().left;
+          var textStart = logo.getBoundingClientRect().right + 6;
+          var linkRight = link.getBoundingClientRect().right;
+          progRow.style.width = (linkRight - textStart) + 'px';
+          progRow.style.marginLeft = (textStart - containerLeft) + 'px';
+        }
+      }
       var toggle = document.getElementById('spotify-toggle');
       if (toggle) {
         toggle.style.cursor = 'pointer';
@@ -2093,6 +2105,14 @@ const structuredData = JSON.stringify({
           if (mini) {
             mini.addEventListener('mouseleave', function() { el.classList.remove('mini-hover'); });
           }
+        }
+        var hint = el.querySelector('.spotify-expand-hint');
+        if (hint && window.innerWidth > 480) {
+          setTimeout(function() { hint.classList.add('visible'); }, 800);
+          setTimeout(function() { hint.classList.add('fade-out'); }, 10800);
+          toggle.addEventListener('click', function() {
+            hint.classList.add('fade-out');
+          }, { once: true });
         }
       }
 
