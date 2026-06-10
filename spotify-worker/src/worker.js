@@ -1,7 +1,5 @@
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const NOW_PLAYING_URL = 'https://api.spotify.com/v1/me/player/currently-playing';
-const RECENTLY_PLAYED_URL = 'https://api.spotify.com/v1/me/player/recently-played?limit=5';
-const TOP_TRACKS_URL = 'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5';
 const ALLOWED_ORIGIN = 'https://riad.cc';
 
 let cachedToken = null;
@@ -38,7 +36,7 @@ function cors(origin) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
 
     if (request.method === 'OPTIONS') {
@@ -65,7 +63,12 @@ export default {
       if (nowRes.status === 200) {
         const data = await nowRes.json();
         if (data.is_playing && data.item) {
-          lastPlaying = parseTrack(data.item);
+          const track = parseTrack(data.item);
+          // Persist to KV only when the track changes (KV free tier allows 1k writes/day)
+          if (env.LAST_PLAYED && (!lastPlaying || lastPlaying.url !== track.url)) {
+            ctx.waitUntil(env.LAST_PLAYED.put('last', JSON.stringify(track)));
+          }
+          lastPlaying = track;
           result = {
             playing: true,
             ...lastPlaying,
@@ -75,38 +78,20 @@ export default {
         }
       }
 
-      let recent = [];
-      const recentRes = await fetch(RECENTLY_PLAYED_URL, noCache);
-      if (recentRes.status === 200) {
-        const recentData = await recentRes.json();
-        if (recentData.items) {
-          recent = recentData.items.map(i => parseTrack(i.track));
+      if (!result) {
+        if (!lastPlaying && env.LAST_PLAYED) {
+          lastPlaying = await env.LAST_PLAYED.get('last', 'json');
         }
-      }
-
-      let topTracks = [];
-      const topRes = await fetch(TOP_TRACKS_URL, noCache);
-      if (topRes.status === 200) {
-        const topData = await topRes.json();
-        if (topData.items) {
-          topTracks = topData.items.map(i => parseTrack(i));
+        if (lastPlaying) {
+          result = { playing: false, ...lastPlaying };
         }
-      }
-
-      if (!result && recent.length > 0) {
-        lastPlaying = recent[0];
-        result = { playing: false, ...recent[0] };
-      }
-
-      if (!result && lastPlaying) {
-        result = { playing: false, ...lastPlaying };
       }
 
       if (!result) {
         return Response.json({ playing: false, track: null, topTracks: [] }, { headers: cors(origin) });
       }
 
-      result.topTracks = topTracks.filter(t => t.url !== result.url);
+      result.topTracks = [];
       return Response.json(result, { headers: cors(origin) });
     } catch {
       if (lastPlaying) {

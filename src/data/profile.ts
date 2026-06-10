@@ -62,7 +62,7 @@ export const profile: Profile = {
     tagline: "",
   },
 
-  about: "develops software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, he taught computer science at State University of New York at Buffalo. It shaped how he thinks about systems and how he explains them. He likes complicated challenges and clean abstractions.",
+  about: "develops software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, he taught computer science at State University of New York at Buffalo. He likes complicated challenges and clean abstractions.",
 
   email: "riad@riad.cc",
 

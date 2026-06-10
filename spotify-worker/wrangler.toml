@@ -4,3 +4,7 @@ compatibility_date = "2024-01-01"
 
 [vars]
 SPOTIFY_CLIENT_ID = "b8073ebdb0244107b47cfd20b78189c3"
+
+[[kv_namespaces]]
+binding = "LAST_PLAYED"
+id = "05a89c6c4991488a94586cc0c29d8c35"
