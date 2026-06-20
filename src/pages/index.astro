@@ -84,11 +84,11 @@ const structuredData = JSON.stringify({
   </div>
 
   <nav class="side-nav" id="side-nav">
+    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
     <a href="#projects">{profile.labels.nav.projects}</a>
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#teaching">{profile.labels.nav.teaching}</a>
-    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#recommendations">{profile.labels.nav.recommendations}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
   </nav>
@@ -165,6 +165,14 @@ const structuredData = JSON.stringify({
     <div class="spotify-line" id="spotify-line"></div>
 
     <section
+      id="education"
+      class="section-block"
+      data-label={profile.labels.headings.education}
+    >
+      <Fragment set:html={buildEducation(profile)} />
+    </section>
+
+    <section
       id="experience"
       class="section-block exp-section"
       data-label={profile.labels.headings.experience}
@@ -197,14 +205,6 @@ const structuredData = JSON.stringify({
     </section>
 
     <section
-      id="education"
-      class="section-block"
-      data-label={profile.labels.headings.education}
-    >
-      <Fragment set:html={buildEducation(profile)} />
-    </section>
-
-    <section
       id="recommendations"
       class="section-block"
       data-label={profile.labels.headings.recommendations}
@@ -223,11 +223,11 @@ const structuredData = JSON.stringify({
       <span class="mobile-nav-caret">&#9662;</span>
     </button>
     <div class="mobile-nav-menu" id="mobile-nav-menu">
+      <a href="#education">{profile.labels.nav.education}</a>
       <a href="#experience">{profile.labels.nav.experience}</a>
       <a href="#projects">{profile.labels.nav.projects}</a>
       <a href="#skills">{profile.labels.nav.skills}</a>
       <a href="#teaching">{profile.labels.nav.teaching}</a>
-      <a href="#education">{profile.labels.nav.education}</a>
       <a href="#recommendations">{profile.labels.nav.recommendations}</a>
       <a href="#connect">{profile.labels.nav.connect}</a>
     </div>
@@ -1171,11 +1171,11 @@ const structuredData = JSON.stringify({
       if (window._spotifyData) renderSpotify(window._spotifyData);
 
       const labels = [
+        data.labels.nav.education,
         data.labels.nav.experience,
         data.labels.nav.projects,
         data.labels.nav.skills,
         data.labels.nav.teaching,
-        data.labels.nav.education,
         data.labels.nav.recommendations,
         data.labels.nav.connect,
       ];
