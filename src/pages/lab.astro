@@ -1,882 +1,1105 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { profile } from "../data/profile";
+import { getBuildInfo } from "../lib/buildinfo";
+
+const build = getBuildInfo(8);
+const head = build.head;
+const repoBlob = `https://github.com/r14dd/r14dd.github.io/blob/${head ? head.hash : "main"}`;
 
 const metaTitle = "Riad Mukhtarov — Lab";
-const metaDescription = "Experimental features preview.";
+const metaDescription = "A working showcase of the portfolio's experimental features.";
+
+// Everything the client engine needs, serialized into a JSON script tag.
+const labData = {
+  profile: {
+    name: profile.hero.name,
+    about: "Riad " + profile.about,
+    email: profile.email,
+    links: profile.links,
+    experience: profile.experience.map((e) => ({
+      role: e.role,
+      org: e.org,
+      period: e.period,
+      location: e.location,
+    })),
+    skills: profile.skills.map((s) => ({
+      category: s.category,
+      items: s.groups.flatMap((g) => g.items),
+    })),
+    teaching: profile.teaching.map((t) => ({ title: t.title, skills: t.skills })),
+  },
+  projects: profile.projects.map((p) => ({
+    name: p.name,
+    date: p.date ?? null,
+    tech: p.tech,
+    impact: p.impact ?? "",
+    bullets: p.bullets,
+    links: p.links ?? {},
+  })),
+  build: {
+    branch: build.branch,
+    builtAt: build.builtAt,
+    count: build.count,
+    head: head,
+    commits: build.commits,
+  },
+  repoBlob,
+};
+const labDataJSON = JSON.stringify(labData).replace(/</g, "\\u003c");
+
+const sections = [
+  { id: "terminal", n: "01", t: "Terminal" },
+  { id: "wasm", n: "02", t: "Rust → WASM" },
+  { id: "perf", n: "03", t: "Web Vitals" },
+  { id: "where", n: "04", t: "Edge / geo" },
+  { id: "gitlog", n: "05", t: "git log" },
+  { id: "colophon", n: "06", t: "Colophon" },
+  { id: "offline", n: "07", t: "Offline PWA" },
+  { id: "replay", n: "08", t: "Project replay" },
+];
+
+const builtAtUtc = new Date(build.builtAt).toISOString().slice(0, 16).replace("T", " ");
 ---
 
 <BaseLayout metaTitle={metaTitle} metaDescription={metaDescription} lang="en">
-  <style is:global>
-    .lab-page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 2rem 0 6rem;
-    }
+  <script type="application/json" id="lab-data" set:html={labDataJSON} />
 
-    .lab-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      background-image: none;
-      margin-bottom: 2rem;
-      transition: color 0.2s;
-    }
-    .lab-back:hover { color: var(--accent); background-size: 0; }
+  <div class="lab-page">
+    <a class="lab-back" href="/">← back to site</a>
 
-    .lab-title {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 600;
-      color: var(--text);
-      margin: 0 0 0.4rem;
-    }
+    <header class="lab-hero" id="top">
+      <p class="lab-eyebrow">/lab · experimental</p>
+      <h1 class="lab-title">The Lab</h1>
+      <p class="lab-subtitle">
+        Every feature the principal panel greenlit, built here and actually working — none of it
+        is wired into the main site. Real Rust compiled to WebAssembly, live Web Vitals, real edge
+        timing, an offline service worker. Poke at all of it.
+      </p>
+      <p class="lab-buildline">
+        <span class="dot"></span>
+        branch <b>{build.branch}</b> · {build.count} commits ·
+        {head ? <a href={repoBlob} target="_blank" rel="noopener">{head.short}</a> : "—"}
+        {head ? ` · ${head.relative}` : ""}
+      </p>
+    </header>
 
-    .lab-subtitle {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin: 0 0 3rem;
-    }
+    <nav class="lab-toc" aria-label="Lab sections">
+      {sections.map((s) => (
+        <a href={`#${s.id}`} class="toc-chip"><span class="toc-n">{s.n}</span>{s.t}</a>
+      ))}
+    </nav>
 
-    .lab-section {
-      margin-bottom: 5rem;
-      opacity: 1 !important;
-      transform: none !important;
-    }
+    <!-- ── 01 · TERMINAL ───────────────────────────────────────── -->
+    <section class="lab-section" id="terminal">
+      <p class="lab-kicker">01 · centerpiece</p>
+      <h2 class="lab-h">The terminal, made real</h2>
+      <p class="lab-desc">
+        Not a prop. It pipes over real profile data and runs real Rust compiled to WebAssembly.
+        Type <code>help</code>, or try a pipe: <code>projects | grep rust</code>.
+      </p>
 
-    .lab-section-num {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(var(--accent-rgb), 0.5);
-      margin-bottom: 0.3rem;
-    }
-
-    .lab-section-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: var(--text);
-      margin: 0 0 0.3rem;
-    }
-
-    .lab-section-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin: 0 0 1.5rem;
-      max-width: 560px;
-    }
-
-    /* ── 01A: LIQUID METAL HERO ────────────────────── */
-    .hero-container {
-      position: relative;
-      width: 100%;
-      height: 400px;
-      border: 1px solid rgba(var(--accent-rgb), 0.12);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      cursor: crosshair;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-    }
-
-    .hero-container canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* ── 02: LANGUAGE STATS ────────────────────────── */
-    .lang-stats-container {
-      border: 1px solid rgba(var(--accent-rgb), 0.12);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-    }
-
-    .lang-stats-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .lang-stats-title {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(var(--accent-rgb), 0.55);
-    }
-
-    .lang-stats-link {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      text-decoration: none;
-      background-image: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: color 0.2s;
-    }
-    .lang-stats-link:hover { color: var(--accent); background-size: 0; }
-
-    .lang-bar-wrap {
-      height: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-      display: flex;
-      background: rgba(var(--accent-rgb), 0.06);
-      margin-bottom: 1rem;
-    }
-
-    .lang-bar-seg {
-      height: 100%;
-      transition: width 1.2s var(--ease-spring);
-      position: relative;
-    }
-
-    .lang-bar-seg:first-child { border-radius: 5px 0 0 5px; }
-    .lang-bar-seg:last-child { border-radius: 0 5px 5px 0; }
-    .lang-bar-seg:only-child { border-radius: 5px; }
-
-    .lang-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem 1.2rem;
-    }
-
-    .lang-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.78rem;
-      color: var(--text-soft);
-    }
-
-    .lang-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .lang-pct {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    .lang-repos {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(var(--accent-rgb), 0.08);
-    }
-
-    .lang-repo-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(var(--accent-rgb), 0.12);
-      font-size: 0.72rem;
-      color: var(--text-soft);
-      text-decoration: none;
-      background-image: none;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .lang-repo-chip:hover {
-      border-color: rgba(var(--accent-rgb), 0.35);
-      color: var(--accent);
-      background-size: 0;
-    }
-
-    .lang-repo-lang-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* ── 03: STICKY SCROLL TIMELINE ────────────────── */
-    .scroll-tl {
-      position: relative;
-      padding-left: 2rem;
-    }
-
-    .scroll-tl::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, rgba(var(--accent-rgb), 0.35), rgba(var(--accent-rgb), 0.05));
-    }
-
-    .scroll-tl-item {
-      position: relative;
-      padding-bottom: 3.5rem;
-      opacity: 0.35;
-      transform: translateY(20px);
-      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-spring);
-    }
-
-    .scroll-tl-item:last-child { padding-bottom: 0; }
-
-    .scroll-tl-item.in-view {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .scroll-tl-item::before {
-      content: '';
-      position: absolute;
-      left: -2rem;
-      top: 0.35rem;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      transform: translateX(-4.5px);
-      background: rgba(var(--accent-rgb), 0.2);
-      border: 1.5px solid rgba(var(--accent-rgb), 0.35);
-      transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
-    }
-
-    .scroll-tl-item.in-view::before {
-      background: rgba(var(--accent-rgb), 0.5);
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.1), 0 0 16px rgba(var(--accent-rgb), 0.2);
-    }
-
-    .scroll-tl-item.now.in-view::before {
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.15), 0 0 20px rgba(var(--accent-rgb), 0.35);
-    }
-
-    .scroll-tl-period {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.3rem;
-      transition: color 0.4s;
-    }
-
-    .scroll-tl-item.in-view .scroll-tl-period {
-      color: rgba(var(--accent-rgb), 0.6);
-    }
-
-    .scroll-tl-role {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--text);
-      margin: 0 0 0.2rem;
-      line-height: 1.35;
-    }
-
-    .scroll-tl-org {
-      font-size: 0.9rem;
-      color: rgba(var(--accent-rgb), 0.65);
-      margin: 0 0 0.1rem;
-    }
-
-    .scroll-tl-loc {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin: 0 0 0.6rem;
-    }
-
-    .scroll-tl-bullets {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .scroll-tl-bullets li {
-      position: relative;
-      padding-left: 1rem;
-      margin-bottom: 0.25rem;
-      font-size: 0.86rem;
-      color: var(--text-soft);
-      line-height: 1.55;
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: opacity 0.4s ease, transform 0.4s var(--ease-spring);
-    }
-
-    .scroll-tl-item.in-view .scroll-tl-bullets li {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .scroll-tl-bullets li::before {
-      content: '\2014';
-      position: absolute;
-      left: 0;
-      top: 0.1rem;
-      color: rgba(var(--accent-rgb), 0.3);
-      font-size: 0.7rem;
-    }
-
-    .scroll-tl-counter {
-      position: absolute;
-      right: 0;
-      top: -0.2rem;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: rgba(var(--accent-rgb), 0.04);
-      line-height: 1;
-      pointer-events: none;
-      transition: color 0.4s;
-    }
-
-    .scroll-tl-item.in-view .scroll-tl-counter {
-      color: rgba(var(--accent-rgb), 0.08);
-    }
-
-    .side-nav, .side-links { display: none !important; }
-
-    @media (max-width: 768px) {
-      .hero-container { height: 280px; }
-    }
-  </style>
-
-  <main class="lab-page">
-    <a href="/" class="lab-back">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 3L6 8l4 5"/></svg>
-      Back to site
-    </a>
-
-    <h1 class="lab-title">Feature Lab</h1>
-    <p class="lab-subtitle">Experimental features — preview before integrating into the main site.</p>
-
-    <!-- 01A: Liquid Metal Hero -->
-    <section class="lab-section">
-      <div class="lab-section-num">01a</div>
-      <h2 class="lab-section-title">Liquid Metal Hero</h2>
-      <p class="lab-section-desc">Chrome/metallic text that subtly distorts on hover — like molten metal catching light. High-end brand identity feel.</p>
-      <div class="hero-container" id="hero-metal">
-        <canvas id="metal-canvas"></canvas>
-      </div>
-    </section>
-
-    <!-- 01B: Precision Grid Hero -->
-    <section class="lab-section">
-      <div class="lab-section-num">01b</div>
-      <h2 class="lab-section-title">Precision Grid Hero</h2>
-      <p class="lab-section-desc">Your name assembles from a geometric grid of lines and dots — like an engineering blueprint coming to life. Fits the distributed systems identity.</p>
-      <div class="hero-container" id="hero-grid">
-        <canvas id="grid-canvas"></canvas>
-      </div>
-    </section>
-
-    <!-- 02: Language Stats -->
-    <section class="lab-section">
-      <div class="lab-section-num">02</div>
-      <h2 class="lab-section-title">Language Stats</h2>
-      <p class="lab-section-desc">GitHub language breakdown — shows what you ship, links to your profile. Would sit right below the terminal widget.</p>
-      <div class="lang-stats-container" id="lang-stats">
-        <div class="lang-stats-header">
-          <span class="lang-stats-title">Languages</span>
-          <a href="https://github.com/r14dd" target="_blank" rel="noopener" class="lang-stats-link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            r14dd
-          </a>
+      <div class="term" id="term">
+        <div class="term-head">
+          <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+          <span class="term-title">riad@lab — zsh</span>
         </div>
-        <div class="lang-bar-wrap" id="lang-bar"></div>
-        <div class="lang-list" id="lang-list"></div>
-        <div class="lang-repos" id="lang-repos"></div>
+        <div class="term-body" id="term-body" role="log" aria-live="polite" aria-label="Terminal output"></div>
+        <form class="term-form" id="term-form" autocomplete="off">
+          <span class="term-prompt" aria-hidden="true">riad@lab<span class="sep">:</span><span class="path">~</span><span class="sigil">$</span></span>
+          <input
+            class="term-input"
+            id="term-input"
+            type="text"
+            aria-label="Terminal input"
+            spellcheck="false"
+            autocapitalize="off"
+            autocorrect="off"
+          />
+        </form>
+      </div>
+      <div class="chips" id="term-chips">
+        <button type="button" data-cmd="help">help</button>
+        <button type="button" data-cmd="man riad">man riad</button>
+        <button type="button" data-cmd="projects | grep rust">projects | grep rust</button>
+        <button type="button" data-cmd="cat patent">cat patent</button>
+        <button type="button" data-cmd="rrf 1 2 7">rrf 1 2 7</button>
+        <button type="button" data-cmd="hash the implementation is the resume">hash …</button>
+        <button type="button" data-cmd="src rrf">src rrf</button>
+        <button type="button" data-cmd="philosophy">philosophy</button>
+        <button type="button" data-cmd="where">where</button>
+        <button type="button" data-cmd="perf">perf</button>
+        <button type="button" data-cmd="neofetch">neofetch</button>
       </div>
     </section>
 
-    <!-- 03: Sticky Scroll Timeline -->
-    <section class="lab-section">
-      <div class="lab-section-num">03</div>
-      <h2 class="lab-section-title">Cinematic Scroll Timeline</h2>
-      <p class="lab-section-desc">Same scrollable flow as the current site, but each role animates in with parallax — titles scale, bullets stagger, accent line draws itself.</p>
-      <div class="scroll-tl" id="scroll-tl">
-        {profile.experience.map((exp, i) => (
-          <div class={`scroll-tl-item ${exp.period.includes('Present') ? 'now' : ''}`} data-index={i}>
-            <span class="scroll-tl-counter">{String(i + 1).padStart(2, '0')}</span>
-            <div class="scroll-tl-period">{exp.period}</div>
-            <h3 class="scroll-tl-role">{exp.role}</h3>
-            <div class="scroll-tl-org">{exp.org}</div>
-            <div class="scroll-tl-loc">{exp.location}</div>
-            {exp.bullets.length > 0 && (
-              <ul class="scroll-tl-bullets">
-                {exp.bullets.map((b, bi) => (
-                  <li style={`transition-delay: ${bi * 80 + 150}ms`}>{b}</li>
-                ))}
-              </ul>
-            )}
+    <!-- ── 02 · RUST → WASM ────────────────────────────────────── -->
+    <section class="lab-section" id="wasm">
+      <p class="lab-kicker">02 · show, don't tell</p>
+      <h2 class="lab-h">Real Rust, compiled to WebAssembly</h2>
+      <p class="lab-desc">
+        <code>wasm/lab.rs</code> → <code>rustc --target wasm32-unknown-unknown</code> →
+        <a id="wasm-link" href="/lab/lab.wasm" target="_blank" rel="noopener">lab.wasm</a>
+        (<span id="wasm-size">843 B</span>, loaded lazily). Each function is a slice of an actual project.
+        The numbers below are computed <i>in WebAssembly</i>, not JavaScript.
+      </p>
+
+      <div class="wasm-grid">
+        <pre class="code" aria-label="Rust source"><code>{`// QuorumRAG.rs — Reciprocal Rank Fusion (the scoring core)
+pub fn rrf_term(k: i32, rank: i32) -> f64 {
+    if rank <= 0 { 0.0 } else { 1.0 / ((k + rank) as f64) }
+}
+
+// Kademlia DHT — XOR distance metric + k-bucket index
+pub fn xor_distance(a: u32, b: u32) -> u32 { a ^ b }
+pub fn bucket_index(a: u32, b: u32) -> u32 {
+    (a ^ b).leading_zeros()
+}
+
+// Content addressing — FNV-1a over a host-written buffer
+pub fn fnv1a32(bytes: &[u8]) -> u32 {
+    let mut h = 0x811c_9dc5u32;
+    for &x in bytes { h ^= x as u32; h = h.wrapping_mul(0x0100_0193); }
+    h
+}`}</code></pre>
+
+        <div class="wasm-runners">
+          <div class="runner">
+            <label>RRF — fuse 3 retriever ranks <span class="hint">(k=60; 0 = absent)</span></label>
+            <div class="runner-row">
+              <input type="number" id="rrf-a" value="1" min="0" />
+              <input type="number" id="rrf-b" value="2" min="0" />
+              <input type="number" id="rrf-c" value="7" min="0" />
+              <button type="button" id="rrf-run">fuse</button>
+            </div>
+            <output id="rrf-out" class="runner-out">—</output>
           </div>
+
+          <div class="runner">
+            <label>XOR distance — two node ids <span class="hint">(dec or 0x…)</span></label>
+            <div class="runner-row">
+              <input type="text" id="xor-a" value="0xA1" />
+              <input type="text" id="xor-b" value="0x0F" />
+              <button type="button" id="xor-run">measure</button>
+            </div>
+            <output id="xor-out" class="runner-out">—</output>
+          </div>
+
+          <div class="runner">
+            <label>FNV-1a hash — any text</label>
+            <div class="runner-row">
+              <input type="text" id="hash-in" value="the implementation is the resume" />
+              <button type="button" id="hash-run">hash</button>
+            </div>
+            <output id="hash-out" class="runner-out">—</output>
+          </div>
+          <p class="wasm-status" id="wasm-status">module not yet loaded — runs on first use</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 03 · WEB VITALS ─────────────────────────────────────── -->
+    <section class="lab-section" id="perf">
+      <p class="lab-kicker">03 · isn't afraid of the numbers</p>
+      <h2 class="lab-h">Your own Web Vitals, live</h2>
+      <p class="lab-desc">
+        Measured in <i>your</i> browser this session via the Performance APIs — no analytics,
+        nothing leaves the page.
+      </p>
+      <div class="metric-grid" id="metric-grid"></div>
+      <button type="button" class="ghost-btn" id="perf-refresh">re-measure</button>
+    </section>
+
+    <!-- ── 04 · EDGE / GEO ─────────────────────────────────────── -->
+    <section class="lab-section" id="where">
+      <p class="lab-kicker">04 · honest edge</p>
+      <h2 class="lab-h">Where are you reading from?</h2>
+      <p class="lab-desc">
+        No IP lookup, no third party. Just what your browser already knows plus round-trips it
+        measures itself. (No mythical "Baku edge" — the truth is more interesting.)
+      </p>
+      <div class="kv" id="where-kv"></div>
+    </section>
+
+    <!-- ── 05 · GIT LOG ────────────────────────────────────────── -->
+    <section class="lab-section" id="gitlog">
+      <p class="lab-kicker">05 · build-time provenance</p>
+      <h2 class="lab-h"><code>git log</code>, baked at build</h2>
+      <p class="lab-desc">
+        A GitHub Action could write this on every deploy. No live API, no token — the last commits
+        are stamped into the page when it's built.
+      </p>
+      <div class="gitlog">
+        {build.commits.map((c) => (
+          <a class="gitrow" href={`https://github.com/r14dd/r14dd.github.io/commit/${c.hash}`} target="_blank" rel="noopener">
+            <span class="gitsha">{c.short}</span>
+            <span class="gitsub">{c.subject}</span>
+            <span class="gitrel">{c.relative}</span>
+          </a>
         ))}
       </div>
     </section>
-  </main>
+
+    <!-- ── 06 · COLOPHON ───────────────────────────────────────── -->
+    <section class="lab-section" id="colophon">
+      <p class="lab-kicker">06 · authored</p>
+      <h2 class="lab-h">Colophon</h2>
+      <div class="colophon">
+        <p>
+          Built with <b>Astro</b> and hand-written CSS — no UI framework, no Tailwind. Type is
+          <b>Manrope</b>, <b>Cormorant Garamond</b>, and <b>JetBrains Mono</b>, self-hosted.
+          Deployed as static files to <b>GitHub Pages</b>; the only server anywhere is one
+          Cloudflare Worker proxying Spotify.
+        </p>
+        <p>
+          The WebAssembly on this page is genuinely <code>rustc</code>-compiled from
+          <a href={`${repoBlob}/wasm/lab.rs`} target="_blank" rel="noopener">wasm/lab.rs</a> — 843 bytes,
+          no toolchain magic. This page sets <b>no cookies</b>; it uses
+          <code>localStorage</code> only to remember your theme, mute, and terminal history.
+        </p>
+        <p class="colophon-sig">
+          {head ? <>commit <a href={repoBlob} target="_blank" rel="noopener">{head.short}</a> · built {builtAtUtc} UTC</> : "—"}
+        </p>
+      </div>
+    </section>
+
+    <!-- ── 07 · OFFLINE PWA ────────────────────────────────────── -->
+    <section class="lab-section" id="offline">
+      <p class="lab-kicker">07 · works on a plane</p>
+      <h2 class="lab-h">Installable, offline-capable</h2>
+      <p class="lab-desc">
+        A ~50-line service worker scoped to <code>/lab/</code> only — it can never touch the main
+        site. Enable it, then kill your network and reload: the lab still loads.
+      </p>
+      <div class="pwa-row">
+        <button type="button" class="ghost-btn" id="sw-enable">Enable offline</button>
+        <button type="button" class="ghost-btn" id="sw-disable">Disable &amp; clear</button>
+        <span class="pwa-status" id="sw-status">checking…</span>
+      </div>
+    </section>
+
+    <!-- ── 08 · PROJECT REPLAY ─────────────────────────────────── -->
+    <section class="lab-section" id="replay">
+      <p class="lab-kicker">08 · supporting proof</p>
+      <h2 class="lab-h"><code>patent</code> — a real run, replayed</h2>
+      <p class="lab-desc">
+        A scripted cast of the actual CLI doing its thing: fan out across registries, rank with
+        local embeddings, write an integrity-scoped verdict.
+      </p>
+      <div class="term replay">
+        <div class="term-head">
+          <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+          <span class="term-title">patent — demo</span>
+          <button type="button" class="replay-btn" id="replay-btn">▶ play</button>
+        </div>
+        <div class="term-body" id="replay-body" role="log" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <footer class="lab-foot">
+      <a class="lab-back" href="/">← back to site</a>
+      <a href="#top" class="lab-back">top ↑</a>
+    </footer>
+  </div>
+
+  <style is:global>
+    /* ============ /lab — scoped under .lab-page, global so JS-created nodes match ============ */
+    .lab-page {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 2.5rem 0 6rem;
+      --lab-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .lab-page code { font-family: var(--lab-mono); font-size: 0.86em; }
+
+    .lab-back {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: var(--lab-mono); font-size: 0.72rem;
+      letter-spacing: 0.08em; color: var(--muted);
+      text-decoration: none; background-image: none; transition: color 0.2s;
+    }
+    .lab-back:hover { color: var(--accent); background-size: 0; }
+
+    .lab-hero { margin: 2.2rem 0 0; }
+    .lab-eyebrow {
+      font-family: var(--lab-mono); font-size: 0.68rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(var(--accent-rgb), 0.7); margin: 0 0 0.7rem;
+    }
+    .lab-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem); font-weight: 600;
+      color: var(--text); margin: 0 0 0.7rem; line-height: 1.05;
+    }
+    .lab-subtitle { color: var(--muted); font-size: 0.98rem; line-height: 1.6; max-width: 640px; margin: 0 0 1rem; }
+    .lab-subtitle code { color: var(--text); }
+    .lab-buildline {
+      font-family: var(--lab-mono); font-size: 0.74rem; color: var(--muted);
+      display: flex; align-items: center; gap: 0.5rem; margin: 0; flex-wrap: wrap;
+    }
+    .lab-buildline b { color: var(--text); font-weight: 500; }
+    .lab-buildline a { color: rgba(var(--accent-rgb), 0.85); text-decoration: none; background-image: none; }
+    .lab-buildline .dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #4ade80;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.6); flex: none;
+    }
+
+    .lab-toc { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2.5rem 0 3.5rem; }
+    .toc-chip {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      font-size: 0.78rem; color: var(--muted); text-decoration: none; background-image: none;
+      border: 1px solid var(--border); border-radius: var(--radius-full, 999px);
+      padding: 0.4rem 0.8rem; transition: all 0.2s var(--ease-out, ease);
+    }
+    .toc-chip:hover { color: var(--text); border-color: rgba(var(--accent-rgb), 0.4); background: var(--card-hover); background-size: auto; }
+    .toc-n { font-family: var(--lab-mono); font-size: 0.66rem; color: rgba(var(--accent-rgb), 0.6); }
+
+    .lab-section { margin: 0 0 5.5rem; scroll-margin-top: 2rem; opacity: 1 !important; transform: none !important; }
+    .lab-kicker {
+      font-family: var(--lab-mono); font-size: 0.66rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: rgba(var(--accent-rgb), 0.55); margin: 0 0 0.5rem;
+    }
+    .lab-h { font-size: 1.5rem; font-weight: 600; color: var(--text); margin: 0 0 0.5rem; letter-spacing: -0.01em; }
+    .lab-h code { font-size: 0.92em; color: var(--accent); }
+    .lab-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; max-width: 620px; margin: 0 0 1.5rem; }
+    .lab-desc code { color: var(--text); background: var(--accent-subtle); padding: 0.05em 0.35em; border-radius: 4px; }
+
+    /* ---- terminal ---- */
+    .term {
+      border: 1px solid var(--border); border-radius: var(--radius-lg, 14px);
+      background: var(--surface-panel); overflow: hidden;
+      box-shadow: var(--shadow, 0 8px 30px rgba(0,0,0,0.3));
+    }
+    .term-head {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.7rem 0.95rem; border-bottom: 1px solid var(--border);
+      background: var(--surface-solid);
+    }
+    .term-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--border); }
+    .term-dot:nth-child(1) { background: #ff5f57; opacity: 0.85; }
+    .term-dot:nth-child(2) { background: #febc2e; opacity: 0.85; }
+    .term-dot:nth-child(3) { background: #28c840; opacity: 0.85; }
+    .term-title { margin-left: 0.6rem; font-family: var(--lab-mono); font-size: 0.72rem; color: var(--muted); }
+    .term-body {
+      font-family: var(--lab-mono); font-size: 0.8rem; line-height: 1.55;
+      padding: 1rem 1.1rem; min-height: 240px; max-height: 440px; overflow-y: auto;
+      color: var(--text); white-space: pre-wrap; word-break: break-word;
+    }
+    .term-line { white-space: pre-wrap; }
+    .term-line.cmd { color: var(--text); }
+    .term-line.cmd .p { color: rgba(var(--accent-rgb), 0.8); }
+    .term-line.muted { color: var(--muted); }
+    .term-line.accent { color: var(--accent); }
+    .term-line.err { color: #ff7b72; }
+    .term-line.ok { color: #4ade80; }
+    .term-body a { color: rgba(var(--accent-rgb), 0.95); background-image: none; }
+    .term-form { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1.1rem 0.85rem; border-top: 1px solid var(--border); }
+    .term-prompt { font-family: var(--lab-mono); font-size: 0.8rem; color: rgba(var(--accent-rgb), 0.8); white-space: nowrap; }
+    .term-prompt .sep { color: var(--muted); }
+    .term-prompt .path { color: #6ea8fe; }
+    .term-prompt .sigil { color: var(--muted); margin-left: 0.15rem; }
+    .term-input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-family: var(--lab-mono); font-size: 0.8rem; color: var(--text); padding: 0;
+    }
+    .term-input::placeholder { color: var(--muted); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
+    .chips button {
+      font-family: var(--lab-mono); font-size: 0.72rem; color: var(--muted);
+      background: transparent; border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.32rem 0.6rem; cursor: pointer; transition: all 0.18s var(--ease-out, ease);
+    }
+    .chips button:hover { color: var(--text); border-color: rgba(var(--accent-rgb), 0.45); background: var(--card-hover); }
+
+    /* ---- code blocks ---- */
+    .code {
+      font-family: var(--lab-mono); font-size: 0.76rem; line-height: 1.6;
+      background: var(--surface-panel); border: 1px solid var(--border);
+      border-radius: var(--radius-md, 10px); padding: 1rem 1.1rem; overflow-x: auto;
+      color: var(--text); margin: 0; white-space: pre;
+    }
+
+    /* ---- wasm ---- */
+    .wasm-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.1rem; align-items: start; }
+    .wasm-runners { display: flex; flex-direction: column; gap: 0.9rem; }
+    .runner { border: 1px solid var(--border); border-radius: var(--radius-md, 10px); padding: 0.85rem 0.9rem; background: var(--surface); }
+    .runner label { display: block; font-size: 0.78rem; color: var(--text); margin-bottom: 0.55rem; }
+    .runner label .hint { color: var(--muted); font-size: 0.72rem; }
+    .runner-row { display: flex; gap: 0.45rem; }
+    .runner-row input {
+      flex: 1; min-width: 0; font-family: var(--lab-mono); font-size: 0.78rem;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      padding: 0.4rem 0.55rem; color: var(--text); outline: none;
+    }
+    .runner-row input:focus { border-color: rgba(var(--accent-rgb), 0.5); }
+    .runner-row button {
+      font-family: var(--lab-mono); font-size: 0.74rem; color: var(--bg); background: var(--accent);
+      border: none; border-radius: 6px; padding: 0.4rem 0.85rem; cursor: pointer; white-space: nowrap;
+      transition: opacity 0.18s;
+    }
+    .runner-row button:hover { opacity: 0.85; }
+    .runner-out {
+      display: block; font-family: var(--lab-mono); font-size: 0.82rem; color: var(--accent);
+      margin-top: 0.6rem; word-break: break-all; min-height: 1.2em;
+    }
+    .wasm-status { font-family: var(--lab-mono); font-size: 0.7rem; color: var(--muted); margin: 0.2rem 0 0; }
+    .wasm-status.loaded { color: #4ade80; }
+
+    /* ---- perf ---- */
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.7rem; margin-bottom: 1rem; }
+    .metric {
+      border: 1px solid var(--border); border-radius: var(--radius-md, 10px);
+      padding: 0.85rem 0.95rem; background: var(--surface);
+    }
+    .metric-k { font-family: var(--lab-mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .metric-v { font-family: var(--lab-mono); font-size: 1.35rem; color: var(--text); margin-top: 0.3rem; }
+    .metric-v small { font-size: 0.7rem; color: var(--muted); }
+    .metric.good .metric-v { color: #4ade80; }
+    .metric.warn .metric-v { color: #fbbf24; }
+    .metric.bad .metric-v { color: #ff7b72; }
+
+    .ghost-btn {
+      font-family: var(--lab-mono); font-size: 0.76rem; color: var(--text);
+      background: transparent; border: 1px solid var(--border); border-radius: 7px;
+      padding: 0.5rem 1rem; cursor: pointer; transition: all 0.18s;
+    }
+    .ghost-btn:hover { border-color: rgba(var(--accent-rgb), 0.5); background: var(--card-hover); }
+
+    /* ---- where ---- */
+    .kv { border: 1px solid var(--border); border-radius: var(--radius-md, 10px); overflow: hidden; }
+    .kv-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.84rem; }
+    .kv-row:last-child { border-bottom: none; }
+    .kv-k { color: var(--muted); font-family: var(--lab-mono); font-size: 0.74rem; }
+    .kv-v { color: var(--text); font-family: var(--lab-mono); font-size: 0.78rem; text-align: right; word-break: break-word; }
+
+    /* ---- git log ---- */
+    .gitlog { border: 1px solid var(--border); border-radius: var(--radius-md, 10px); overflow: hidden; }
+    .gitrow {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 0.9rem; align-items: baseline;
+      padding: 0.6rem 1rem; border-bottom: 1px solid var(--border);
+      text-decoration: none; background-image: none; transition: background 0.15s;
+    }
+    .gitrow:last-child { border-bottom: none; }
+    .gitrow:hover { background: var(--card-hover); background-size: auto; }
+    .gitsha { font-family: var(--lab-mono); font-size: 0.74rem; color: rgba(var(--accent-rgb), 0.85); }
+    .gitsub { font-size: 0.82rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gitrel { font-family: var(--lab-mono); font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+
+    /* ---- colophon ---- */
+    .colophon { max-width: 640px; }
+    .colophon p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin: 0 0 1rem; }
+    .colophon b { color: var(--text); font-weight: 500; }
+    .colophon a { color: rgba(var(--accent-rgb), 0.9); text-decoration: none; background-image: none; border-bottom: 1px solid rgba(var(--accent-rgb), 0.3); }
+    .colophon-sig { font-family: var(--lab-mono); font-size: 0.74rem; }
+
+    /* ---- pwa ---- */
+    .pwa-row { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+    .pwa-status { font-family: var(--lab-mono); font-size: 0.74rem; color: var(--muted); }
+    .pwa-status.on { color: #4ade80; }
+    .pwa-status.off { color: var(--muted); }
+
+    /* ---- replay ---- */
+    .replay-btn {
+      margin-left: auto; font-family: var(--lab-mono); font-size: 0.7rem; color: var(--accent);
+      background: transparent; border: 1px solid rgba(var(--accent-rgb), 0.4); border-radius: 5px;
+      padding: 0.22rem 0.6rem; cursor: pointer;
+    }
+    .replay-btn:hover { background: var(--accent-subtle); }
+    #replay-body { min-height: 220px; }
+
+    .lab-foot { display: flex; justify-content: space-between; margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+    @media (max-width: 720px) {
+      .wasm-grid { grid-template-columns: 1fr; }
+      .gitrow { grid-template-columns: auto 1fr; }
+      .gitrel { display: none; }
+    }
+  </style>
 
   <script>
-    // ═══════════════════════════════════════════════════════
-    // 01A — LIQUID METAL HERO
-    // ═══════════════════════════════════════════════════════
-    {
-      const canvas = document.getElementById('metal-canvas') as HTMLCanvasElement;
-      if (canvas) {
-        const ctx = canvas.getContext('2d')!;
-        let W: number, H: number;
-        let mouseX = -9999, mouseY = -9999;
-        let particles: { x: number; y: number; ox: number; oy: number; vx: number; vy: number; size: number; brightness: number }[] = [];
+    (() => {
+      const dataEl = document.getElementById("lab-data");
+      if (!dataEl) return;
+      const DATA = JSON.parse(dataEl.textContent || "{}");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        const accentRGB = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim().split(',').map(Number);
+      const esc = (s) =>
+        String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+      /* ================= VITALS OBSERVERS (start early) ================= */
+      const vitals = { lcp: null, cls: 0, fcp: null, inp: null };
+      try {
+        new PerformanceObserver((l) => {
+          for (const e of l.getEntries()) vitals.lcp = e.startTime;
+        }).observe({ type: "largest-contentful-paint", buffered: true });
+      } catch {}
+      try {
+        new PerformanceObserver((l) => {
+          for (const e of l.getEntries()) if (!e.hadRecentInput) vitals.cls += e.value;
+        }).observe({ type: "layout-shift", buffered: true });
+      } catch {}
+      try {
+        new PerformanceObserver((l) => {
+          for (const e of l.getEntries()) if (e.name === "first-contentful-paint") vitals.fcp = e.startTime;
+        }).observe({ type: "paint", buffered: true });
+      } catch {}
+      try {
+        new PerformanceObserver((l) => {
+          for (const e of l.getEntries()) vitals.inp = Math.max(vitals.inp || 0, e.duration);
+        }).observe({ type: "event", buffered: true, durationThreshold: 16 });
+      } catch {}
 
-        function resize() {
-          const rect = canvas.parentElement!.getBoundingClientRect();
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          W = rect.width;
-          H = rect.height;
-          canvas.width = W * dpr;
-          canvas.height = H * dpr;
-          canvas.style.width = W + 'px';
-          canvas.style.height = H + 'px';
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          buildParticles();
-        }
-
-        function buildParticles() {
-          particles = [];
-          const offscreen = document.createElement('canvas');
-          offscreen.width = W;
-          offscreen.height = H;
-          const offCtx = offscreen.getContext('2d')!;
-
-          const text = 'Riad Mukhtarov';
-          const fontSize = Math.min(W / 7.5, 80);
-          offCtx.font = `600 ${fontSize}px "Cormorant Garamond", Georgia, serif`;
-          offCtx.textAlign = 'center';
-          offCtx.textBaseline = 'middle';
-          offCtx.fillStyle = '#fff';
-          offCtx.fillText(text, W / 2, H / 2);
-
-          const imageData = offCtx.getImageData(0, 0, W, H);
-          const gap = Math.max(3, Math.floor(W / 320));
-
-          for (let y = 0; y < H; y += gap) {
-            for (let x = 0; x < W; x += gap) {
-              const alpha = imageData.data[(y * W + x) * 4 + 3];
-              if (alpha > 128) {
-                particles.push({
-                  x, y, ox: x, oy: y,
-                  vx: 0, vy: 0,
-                  size: gap * 0.85,
-                  brightness: 0.3 + Math.random() * 0.3,
-                });
-              }
-            }
-          }
-        }
-
-        const MOUSE_RADIUS = 120;
-
-        function animate() {
-          ctx.clearRect(0, 0, W, H);
-          const time = performance.now() / 1000;
-
-          for (const p of particles) {
-            const dx = mouseX - p.x;
-            const dy = mouseY - p.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < MOUSE_RADIUS) {
-              const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
-              const angle = Math.atan2(dy, dx);
-              p.vx -= Math.cos(angle) * force * 4;
-              p.vy -= Math.sin(angle) * force * 4;
-            }
-
-            p.vx += (p.ox - p.x) * 0.08;
-            p.vy += (p.oy - p.y) * 0.08;
-            p.vx *= 0.82;
-            p.vy *= 0.82;
-            p.x += p.vx;
-            p.y += p.vy;
-
-            const distFromMouse = Math.sqrt((mouseX - p.x) ** 2 + (mouseY - p.y) ** 2);
-            const distFromOrigin = Math.sqrt((p.x - p.ox) ** 2 + (p.y - p.oy) ** 2);
-
-            // Metallic shimmer based on position relative to mouse
-            const shimmer = distFromMouse < MOUSE_RADIUS * 1.5
-              ? 0.6 + 0.4 * Math.cos((distFromMouse / MOUSE_RADIUS) * Math.PI)
-              : 0;
-
-            // Subtle breathing
-            const breath = 0.05 * Math.sin(time * 1.5 + p.ox * 0.01 + p.oy * 0.01);
-
-            const base = p.brightness + breath;
-            const highlight = Math.min(1, base + shimmer * 0.6 + distFromOrigin * 0.015);
-
-            // Chrome gradient: mix accent with white based on highlight
-            const r = Math.round(accentRGB[0] + (255 - accentRGB[0]) * highlight * 0.7);
-            const g = Math.round(accentRGB[1] + (255 - accentRGB[1]) * highlight * 0.7);
-            const b = Math.round(accentRGB[2] + (255 - accentRGB[2]) * highlight * 0.7);
-
-            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.6 + highlight * 0.4})`;
-            ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-          }
-
-          requestAnimationFrame(animate);
-        }
-
-        const container = canvas.parentElement!;
-        container.addEventListener('mousemove', (e) => {
-          const rect = canvas.getBoundingClientRect();
-          mouseX = e.clientX - rect.left;
-          mouseY = e.clientY - rect.top;
-        });
-        container.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
-        container.addEventListener('touchmove', (e) => {
-          const rect = canvas.getBoundingClientRect();
-          mouseX = e.touches[0].clientX - rect.left;
-          mouseY = e.touches[0].clientY - rect.top;
-        }, { passive: true });
-        container.addEventListener('touchend', () => { mouseX = -9999; mouseY = -9999; });
-
-        resize();
-        window.addEventListener('resize', resize);
-        requestAnimationFrame(animate);
+      /* ================= WASM (lazy) ================= */
+      let wasmExports = null;
+      let wasmLoading = null;
+      function setWasmStatus(txt, ok) {
+        const el = document.getElementById("wasm-status");
+        if (el) { el.textContent = txt; el.classList.toggle("loaded", !!ok); }
       }
-    }
-
-    // ═══════════════════════════════════════════════════════
-    // 01B — PRECISION GRID HERO
-    // ═══════════════════════════════════════════════════════
-    {
-      const canvas = document.getElementById('grid-canvas') as HTMLCanvasElement;
-      if (canvas) {
-        const ctx = canvas.getContext('2d')!;
-        let W: number, H: number;
-        let mouseX = -9999, mouseY = -9999;
-        let dots: { x: number; y: number; ox: number; oy: number; delay: number; active: boolean; progress: number }[] = [];
-        let lines: { x1: number; y1: number; x2: number; y2: number; delay: number; progress: number }[] = [];
-
-        const accentRGB = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim();
-        let startTime = 0;
-        let assembled = false;
-
-        function resize() {
-          const rect = canvas.parentElement!.getBoundingClientRect();
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          W = rect.width;
-          H = rect.height;
-          canvas.width = W * dpr;
-          canvas.height = H * dpr;
-          canvas.style.width = W + 'px';
-          canvas.style.height = H + 'px';
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          buildGrid();
-          startTime = performance.now();
-          assembled = false;
-        }
-
-        function buildGrid() {
-          dots = [];
-          lines = [];
-          const offscreen = document.createElement('canvas');
-          offscreen.width = W;
-          offscreen.height = H;
-          const offCtx = offscreen.getContext('2d')!;
-
-          const text = 'Riad Mukhtarov';
-          const fontSize = Math.min(W / 7.5, 80);
-          offCtx.font = `600 ${fontSize}px "Cormorant Garamond", Georgia, serif`;
-          offCtx.textAlign = 'center';
-          offCtx.textBaseline = 'middle';
-          offCtx.fillStyle = '#fff';
-          offCtx.fillText(text, W / 2, H / 2);
-
-          const imageData = offCtx.getImageData(0, 0, W, H);
-          const gap = Math.max(6, Math.floor(W / 150));
-
-          const textDots: { x: number; y: number }[] = [];
-          for (let y = 0; y < H; y += gap) {
-            for (let x = 0; x < W; x += gap) {
-              const alpha = imageData.data[(y * W + x) * 4 + 3];
-              if (alpha > 128) {
-                textDots.push({ x, y });
-              }
-            }
+      async function loadWasm() {
+        if (wasmExports) return wasmExports;
+        if (wasmLoading) return wasmLoading;
+        setWasmStatus("compiling… (fetching lab.wasm)");
+        wasmLoading = (async () => {
+          const url = "/lab/lab.wasm";
+          let instance;
+          try {
+            const r = await WebAssembly.instantiateStreaming(fetch(url), {});
+            instance = r.instance;
+          } catch {
+            const buf = await (await fetch(url)).arrayBuffer();
+            instance = (await WebAssembly.instantiate(buf, {})).instance;
           }
-
-          // Sort by distance from center for staggered assembly
-          const cx = W / 2, cy = H / 2;
-          textDots.sort((a, b) =>
-            Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy)
-          );
-
-          textDots.forEach((d, i) => {
-            const delay = i * 3;
-            dots.push({
-              x: d.x, y: d.y, ox: d.x, oy: d.y,
-              delay,
-              active: false,
-              progress: 0,
-            });
-          });
-
-          // Generate connection lines between nearby dots
-          for (let i = 0; i < textDots.length; i++) {
-            for (let j = i + 1; j < textDots.length; j++) {
-              const dist = Math.hypot(textDots[i].x - textDots[j].x, textDots[i].y - textDots[j].y);
-              if (dist <= gap * 1.5 && dist > 0) {
-                lines.push({
-                  x1: textDots[i].x, y1: textDots[i].y,
-                  x2: textDots[j].x, y2: textDots[j].y,
-                  delay: Math.max(dots[i].delay, dots[j].delay) + 100,
-                  progress: 0,
-                });
-              }
-            }
-          }
-        }
-
-        function animate() {
-          ctx.clearRect(0, 0, W, H);
-          const time = performance.now();
-          const elapsed = time - startTime;
-
-          // Background grid
-          ctx.strokeStyle = `rgba(${accentRGB}, 0.03)`;
-          ctx.lineWidth = 0.5;
-          const gridSize = 40;
-          for (let x = 0; x < W; x += gridSize) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, H);
-            ctx.stroke();
-          }
-          for (let y = 0; y < H; y += gridSize) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(W, y);
-            ctx.stroke();
-          }
-
-          // Draw connection lines
-          for (const line of lines) {
-            const t = Math.max(0, Math.min(1, (elapsed - line.delay) / 400));
-            if (t <= 0) continue;
-            line.progress = t;
-            const ease = 1 - Math.pow(1 - t, 3);
-
-            ctx.strokeStyle = `rgba(${accentRGB}, ${0.08 * ease})`;
-            ctx.lineWidth = 0.5;
-            ctx.beginPath();
-            ctx.moveTo(line.x1, line.y1);
-            ctx.lineTo(
-              line.x1 + (line.x2 - line.x1) * ease,
-              line.y1 + (line.y2 - line.y1) * ease
-            );
-            ctx.stroke();
-          }
-
-          // Draw dots
-          let allDone = true;
-          for (const dot of dots) {
-            const t = Math.max(0, Math.min(1, (elapsed - dot.delay) / 350));
-            if (t < 1) allDone = false;
-            dot.progress = t;
-            const ease = 1 - Math.pow(1 - t, 4);
-
-            if (t <= 0) continue;
-
-            // Mouse interaction (subtle displacement after assembly)
-            let dx = 0, dy = 0;
-            if (assembled) {
-              const mx = mouseX - dot.ox;
-              const my = mouseY - dot.oy;
-              const md = Math.sqrt(mx * mx + my * my);
-              if (md < 100) {
-                const force = (100 - md) / 100 * 0.3;
-                dx = -mx * force * 0.15;
-                dy = -my * force * 0.15;
-              }
-            }
-
-            const px = dot.ox + dx;
-            const py = dot.oy + dy;
-
-            const size = 2 * ease;
-            const alpha = 0.25 + 0.5 * ease;
-
-            ctx.fillStyle = `rgba(${accentRGB}, ${alpha})`;
-            ctx.fillRect(px - size / 2, py - size / 2, size, size);
-
-            // Crosshair on some dots
-            if (dot.progress > 0.8 && Math.random() > 0.9998) {
-              ctx.strokeStyle = `rgba(${accentRGB}, 0.15)`;
-              ctx.lineWidth = 0.5;
-              ctx.beginPath();
-              ctx.moveTo(px - 6, py); ctx.lineTo(px + 6, py);
-              ctx.moveTo(px, py - 6); ctx.lineTo(px, py + 6);
-              ctx.stroke();
-            }
-          }
-
-          if (allDone && !assembled) assembled = true;
-
-          // Scan line effect during assembly
-          if (!assembled) {
-            const scanY = (elapsed * 0.3) % H;
-            const scanGrad = ctx.createLinearGradient(0, scanY - 20, 0, scanY + 20);
-            scanGrad.addColorStop(0, 'transparent');
-            scanGrad.addColorStop(0.5, `rgba(${accentRGB}, 0.06)`);
-            scanGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = scanGrad;
-            ctx.fillRect(0, scanY - 20, W, 40);
-          }
-
-          requestAnimationFrame(animate);
-        }
-
-        const container = canvas.parentElement!;
-        container.addEventListener('mousemove', (e) => {
-          const rect = canvas.getBoundingClientRect();
-          mouseX = e.clientX - rect.left;
-          mouseY = e.clientY - rect.top;
-        });
-        container.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
-        container.addEventListener('touchmove', (e) => {
-          const rect = canvas.getBoundingClientRect();
-          mouseX = e.touches[0].clientX - rect.left;
-          mouseY = e.touches[0].clientY - rect.top;
-        }, { passive: true });
-        container.addEventListener('touchend', () => { mouseX = -9999; mouseY = -9999; });
-
-        resize();
-        window.addEventListener('resize', resize);
-        requestAnimationFrame(animate);
+          wasmExports = instance.exports;
+          setWasmStatus("✓ lab.wasm loaded — running in WebAssembly", true);
+          return wasmExports;
+        })();
+        return wasmLoading;
       }
-    }
+      async function wasmRRF(ranks, k = 60) {
+        const w = await loadWasm();
+        let sum = 0;
+        for (const r of ranks) sum += w.rrf_term(k | 0, r | 0);
+        return sum;
+      }
+      async function wasmXor(a, b) {
+        const w = await loadWasm();
+        return { dist: w.xor_distance(a >>> 0, b >>> 0) >>> 0, bucket: w.bucket_index(a >>> 0, b >>> 0) >>> 0 };
+      }
+      async function wasmHash(text) {
+        const w = await loadWasm();
+        const bytes = new TextEncoder().encode(text);
+        const cap = w.input_cap();
+        const n = Math.min(bytes.length, cap);
+        const ptr = w.input_ptr();
+        new Uint8Array(w.memory.buffer, ptr, n).set(bytes.subarray(0, n));
+        return w.fnv1a32(n) >>> 0;
+      }
+      const hex8 = (n) => "0x" + (n >>> 0).toString(16).padStart(8, "0");
+      function parseIntSmart(s) {
+        s = String(s).trim();
+        if (/^0x[0-9a-f]+$/i.test(s)) return parseInt(s, 16);
+        return parseInt(s, 10);
+      }
 
-    // ═══════════════════════════════════════════════════════
-    // 02 — LANGUAGE STATS (GitHub API)
-    // ═══════════════════════════════════════════════════════
-    {
-      const USERNAME = 'r14dd';
-      const langBar = document.getElementById('lang-bar');
-      const langList = document.getElementById('lang-list');
-      const langRepos = document.getElementById('lang-repos');
+      /* ================= TERMINAL ================= */
+      const body = document.getElementById("term-body");
+      const input = document.getElementById("term-input");
+      const form = document.getElementById("term-form");
+      const HKEY = "lab-history";
+      let history = [];
+      try { history = JSON.parse(localStorage.getItem(HKEY) || "[]"); } catch {}
+      let histIdx = history.length;
+      const startedAt = performance.now();
 
-      const LANG_COLORS: Record<string, string> = {
-        Rust: '#dea584', Python: '#3572A5', Go: '#00ADD8', Java: '#b07219',
-        TypeScript: '#3178c6', JavaScript: '#f1e05a', C: '#555555',
-        'C++': '#f34b7d', Shell: '#89e051', HTML: '#e34c26', CSS: '#563d7c',
-        Scala: '#c22d40', Dockerfile: '#384d54', Makefile: '#427819',
+      function out(html, cls) {
+        const div = document.createElement("div");
+        div.className = "term-line" + (cls ? " " + cls : "");
+        div.innerHTML = html;
+        body.appendChild(div);
+        body.scrollTop = body.scrollHeight;
+        return div;
+      }
+      function outLines(lines, cls) { for (const l of lines) out(esc(l), cls); }
+
+      const PROMPT = '<span class="p">riad@lab</span>:<span style="color:#6ea8fe">~</span>$ ';
+      const repo = DATA.repoBlob;
+      const projectLine = (p) => `${p.name} — ${p.impact} [${p.tech.join(", ")}]`;
+
+      const COMMANDS = {
+        help() {
+          return {
+            lines: [
+              "Available commands — many compose with pipes (|):",
+              "",
+              "  ls [projects|skills|exp]   list things        cat <name>     show details",
+              "  projects | grep rust       filter by keyword",
+              "  rrf <r1> <r2> …            RRF score (wasm)   hash <text>    FNV-1a (wasm)",
+              "  xor <a> <b>                XOR distance(wasm) src [topic]    jump to real code",
+              "  man riad                   the man page       philosophy     the through-line",
+              "  git log                    recent commits     perf           your Web Vitals",
+              "  where                      reading-from info  neofetch       system card",
+              "  whoami · uptime · date · echo · history · clear",
+              "",
+              "  pipes: head -n, tail -n, grep <pat>, wc -l    history: !! re-runs last, !n the nth",
+            ],
+            cls: "muted",
+          };
+        },
+        ls(args) {
+          const what = (args[0] || "").replace(/^\//, "");
+          if (what === "") return { lines: ["projects/   skills/   experience/   teaching/   about", ""].concat(DATA.projects.map((p) => p.name)) };
+          if (what.startsWith("project")) return { lines: DATA.projects.map((p) => p.name) };
+          if (what.startsWith("skill")) return { lines: DATA.profile.skills.map((s) => s.category) };
+          if (what.startsWith("exp")) return { lines: DATA.profile.experience.map((e) => `${e.role} — ${e.org}`) };
+          if (what.startsWith("teach")) return { lines: DATA.profile.teaching.map((t) => t.title) };
+          return { lines: [`ls: no such directory: ${what}`], cls: "err" };
+        },
+        cat(args) {
+          const q = args.join(" ").toLowerCase().trim();
+          if (!q) return { lines: ["usage: cat <project|about>"], cls: "muted" };
+          if (q === "about") return { lines: [DATA.profile.about] };
+          const p = DATA.projects.find((x) => x.name.toLowerCase().includes(q) || q.includes(x.name.toLowerCase().split(/[ .—-]/)[0]));
+          if (!p) return { lines: [`cat: ${q}: not found. try: ls projects`], cls: "err" };
+          const lines = [p.name, "─".repeat(Math.min(p.name.length, 48)), p.impact, "", `tech: ${p.tech.join(", ")}`, p.date ? `date: ${p.date}` : ""].filter(Boolean);
+          for (const b of p.bullets) lines.push("  • " + b);
+          const links = Object.entries(p.links || {});
+          if (links.length) { lines.push(""); for (const [k, v] of links) lines.push(`${k}: ${v}`); }
+          return { lines };
+        },
+        projects() { return { lines: DATA.projects.map(projectLine) }; },
+        skills() { return { lines: DATA.profile.skills.map((s) => `${s.category}: ${s.items.join(", ")}`) }; },
+        grep(args, raw, stdin) {
+          const pat = raw.trim();
+          if (!pat) return { lines: ["grep: missing pattern"], cls: "err" };
+          if (!stdin) return { lines: ["grep: reads stdin — try: projects | grep rust"], cls: "err" };
+          const re = new RegExp(pat.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+          const hits = stdin.filter((l) => re.test(l));
+          return { lines: hits.length ? hits : [`grep: no match for "${pat}"`], cls: hits.length ? "" : "muted" };
+        },
+        head(args, raw, stdin) {
+          if (!stdin) return { lines: ["head: reads stdin"], cls: "err" };
+          let n = 10; const m = raw.match(/(\d+)/); if (m) n = parseInt(m[1], 10);
+          return { lines: stdin.slice(0, n) };
+        },
+        tail(args, raw, stdin) {
+          if (!stdin) return { lines: ["tail: reads stdin"], cls: "err" };
+          let n = 10; const m = raw.match(/(\d+)/); if (m) n = parseInt(m[1], 10);
+          return { lines: stdin.slice(-n) };
+        },
+        wc(args, raw, stdin) {
+          if (!stdin) return { lines: ["wc: reads stdin"], cls: "err" };
+          return { lines: [`${stdin.length}`] };
+        },
+        async rrf(args) {
+          const ks = args.filter((a) => /^k=/.test(a)).map((a) => parseInt(a.slice(2), 10));
+          const k = ks.length ? ks[0] : 60;
+          const ranks = args.filter((a) => !/^k=/.test(a)).map((a) => parseInt(a, 10)).filter((x) => !isNaN(x));
+          if (!ranks.length) return { lines: ["usage: rrf <rank1> <rank2> …   (k=60 default; 0=absent)"], cls: "muted" };
+          const score = await wasmRRF(ranks, k);
+          const parts = ranks.map((r) => (r <= 0 ? "0" : `1/(${k}+${r})`)).join(" + ");
+          return { lines: [`rrf(k=${k}) = ${parts}`, `           = ${score.toFixed(6)}`, `(computed in WebAssembly)`] };
+        },
+        async hash(args, raw) {
+          const text = raw.trim();
+          if (!text) return { lines: ["usage: hash <text>"], cls: "muted" };
+          const h = await wasmHash(text);
+          return { lines: [`fnv1a32("${text}") = ${hex8(h)}  (${h >>> 0})`, `(computed in WebAssembly)`] };
+        },
+        async xor(args) {
+          if (args.length < 2) return { lines: ["usage: xor <a> <b>   (dec or 0x…)"], cls: "muted" };
+          const a = parseIntSmart(args[0]), b = parseIntSmart(args[1]);
+          if (isNaN(a) || isNaN(b)) return { lines: ["xor: could not parse operands"], cls: "err" };
+          const { dist, bucket } = await wasmXor(a, b);
+          return { lines: [`${hex8(a)} ⊕ ${hex8(b)} = ${hex8(dist)}  (${dist})`, `k-bucket index (shared prefix): ${bucket}`, `(computed in WebAssembly)`] };
+        },
+        src(args) {
+          const topics = {
+            rrf: ["wasm/lab.rs", "rrf_term — Reciprocal Rank Fusion (QuorumRAG)"],
+            xor: ["wasm/lab.rs", "xor_distance / bucket_index — Kademlia DHT"],
+            hash: ["wasm/lab.rs", "fnv1a32 — content addressing"],
+            wasm: ["wasm/lab.rs", "the whole module"],
+            terminal: ["src/pages/lab.astro", "this terminal engine"],
+            sw: ["public/lab/sw.js", "the offline service worker"],
+            offline: ["public/lab/sw.js", "the offline service worker"],
+          };
+          const t = (args[0] || "").toLowerCase();
+          if (!t || !topics[t]) return { lines: ["usage: src <topic>", "topics: " + Object.keys(topics).join(", ")], cls: "muted" };
+          const [file, desc] = topics[t];
+          const url = `${repo}/${file}`;
+          out(`<span class="muted"># ${esc(desc)}</span>`);
+          return { html: `${esc(file)} → <a href="${esc(url)}" target="_blank" rel="noopener">view on GitHub ↗</a>` };
+        },
+        source(args) { return COMMANDS.src(args); },
+        philosophy() { return COMMANDS.why(); },
+        why() {
+          return {
+            lines: [
+              "The through-line:",
+              "",
+              "  patent      never asserts absence — it reports only what it",
+              "              actually checked, in the sources it actually reached.",
+              "  QuorumRAG   surfaces evidence only after independent retrievers",
+              "              reach consensus. No quorum, no claim.",
+              "",
+              "  Same idea, twice: earn confidence before you assert it.",
+            ],
+          };
+        },
+        man(args) {
+          const t = (args[0] || "riad").toLowerCase();
+          if (t !== "riad") return { lines: [`No manual entry for ${t}. Try: man riad`], cls: "muted" };
+          return {
+            lines: [
+              "RIAD(1)                     Personal Manual                    RIAD(1)",
+              "",
+              "NAME",
+              "     riad — software & AI engineer; builds in Rust and Python",
+              "",
+              "SYNOPSIS",
+              "     riad [--rust] [--python] [--distributed-systems] <hard-problem>",
+              "",
+              "DESCRIPTION",
+              "     Develops software and AI systems with a focus on distributed",
+              "     systems and complex infrastructure. Previously taught data",
+              "     structures to ~1000 students at SUNY Buffalo. Likes complicated",
+              "     challenges and clean abstractions.",
+              "",
+              "     Currently: AI Engineer @ ABB (International Bank of Azerbaijan),",
+              "     Head of IT @ European Youth Parliament Azerbaijan.",
+              "",
+              "SEE ALSO",
+              "     ls(1), cat(1), grep(1), philosophy(1), git-log(1)",
+            ],
+          };
+        },
+        git(args) {
+          if ((args[0] || "") !== "log") return { lines: ["usage: git log"], cls: "muted" };
+          const lines = DATA.build.commits.map((c) => `${c.short}  ${c.subject}  (${c.relative})`);
+          lines.unshift(`branch ${DATA.build.branch} · ${DATA.build.count} commits`, "");
+          return { lines };
+        },
+        perf() {
+          const v = readVitals();
+          return {
+            lines: [
+              `FCP   ${fmtMs(v.fcp)}      LCP   ${fmtMs(v.lcp)}`,
+              `TTFB  ${fmtMs(v.ttfb)}      CLS   ${v.cls.toFixed(3)}`,
+              `DCL   ${fmtMs(v.dcl)}      INP   ${v.inp != null ? fmtMs(v.inp) : "—"}`,
+              `transferred  ${fmtKb(v.bytes)}   ·   JS  ${fmtKb(v.jsBytes)}   ·   ${v.reqs} requests`,
+              "(measured in your browser — nothing sent anywhere)",
+            ],
+          };
+        },
+        async where() {
+          out('<span class="muted">probing… (timing a few round-trips)</span>');
+          const w = await collectWhere();
+          return { lines: w.map((r) => `${(r[0] + ":").padEnd(16)} ${r[1]}`) };
+        },
+        whoami() { return { lines: ["riad"] }; },
+        date() { return { lines: [new Date().toString()] }; },
+        uptime() {
+          const s = (performance.now() - startedAt) / 1000;
+          return { lines: [`session up ${s.toFixed(1)}s · 1 user · load average: calm, calm, calm`] };
+        },
+        echo(args, raw) { return { lines: [raw] }; },
+        sudo() { return { lines: ["riad is not in the sudoers file. This incident will be reported. 🙂"], cls: "err" }; },
+        vim() { return { lines: ["Entering vim… just kidding. (:q!)  You're free."], cls: "muted" }; },
+        history() { return { lines: history.map((h, i) => `${String(i + 1).padStart(4)}  ${h}`) }; },
+        clear() { body.innerHTML = ""; return { silent: true }; },
+        neofetch() {
+          const sk = DATA.profile.skills.flatMap((s) => s.items);
+          return {
+            html: [
+              '<span class="accent">      ▄▄▄▄▄      </span>  <span class="p">riad@lab</span>',
+              '<span class="accent">    ▄█▀▀▀▀▀█▄    </span>  ─────────',
+              '<span class="accent">   █▀  ▄▄▄  ▀█   </span>  <b>os</b>      Astro static · GitHub Pages',
+              '<span class="accent">   █  █▀ ▀█  █   </span>  <b>shell</b>   lab-term (zsh-ish)',
+              '<span class="accent">   █  █▄▄▄█  █   </span>  <b>wasm</b>    rustc → wasm32 · 843 B',
+              '<span class="accent">   █▄  ▀▀▀  ▄█   </span>  <b>langs</b>   Rust · Python · Go · C',
+              '<span class="accent">    ▀█▄▄▄▄▄█▀    </span>  <b>stack</b>   ' + esc(sk.slice(0, 5).join(" · ")),
+              '<span class="accent">      ▀▀▀▀▀      </span>  <b>uptime</b>  ' + ((performance.now() - startedAt) / 1000).toFixed(1) + "s",
+            ].join("\n"),
+          };
+        },
       };
 
-      if (langBar) {
-        async function fetchLangs() {
-          try {
-            const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`, { signal: AbortSignal.timeout(8000) });
-            if (!res.ok) return;
-            const repos = await res.json();
+      function tokenize(stage) {
+        const trimmed = stage.trim();
+        const sp = trimmed.indexOf(" ");
+        const cmd = (sp === -1 ? trimmed : trimmed.slice(0, sp)).toLowerCase();
+        const raw = sp === -1 ? "" : trimmed.slice(sp + 1);
+        const args = raw.length ? raw.split(/\s+/) : [];
+        return { cmd, args, raw };
+      }
 
-            const langSizes = new Map<string, number>();
-            const langRepoList = new Map<string, { name: string; url: string }[]>();
+      async function runPipeline(line) {
+        const stages = line.split("|").map((s) => s.trim()).filter(Boolean);
+        let stdin = null;
+        let last = null;
+        for (const stage of stages) {
+          const { cmd, args, raw } = tokenize(stage);
+          const fn = COMMANDS[cmd];
+          if (!fn) { out(`${esc(cmd)}: command not found — type <b>help</b>`, "err"); return; }
+          let res;
+          try { res = await fn.call(COMMANDS, args, raw, stdin); }
+          catch (e) { out(esc(cmd + ": " + e.message), "err"); return; }
+          last = res || {};
+          stdin = last.lines ? last.lines.slice() : stdin;
+        }
+        if (!last || last.silent) return;
+        if (last.html) out(last.html, last.cls);
+        else if (last.lines) outLines(last.lines, last.cls);
+      }
 
-            for (const repo of repos) {
-              if (repo.fork || !repo.language) continue;
-              langSizes.set(repo.language, (langSizes.get(repo.language) || 0) + (repo.size || 1));
-              const list = langRepoList.get(repo.language) || [];
-              list.push({ name: repo.name, url: repo.html_url });
-              langRepoList.set(repo.language, list);
-            }
+      async function exec(line) {
+        line = line.trim();
+        if (!line) { out(PROMPT, "cmd"); return; }
+        if (line === "!!") line = history[history.length - 1] || "";
+        else if (/^!\d+$/.test(line)) line = history[parseInt(line.slice(1), 10) - 1] || "";
+        out(PROMPT + esc(line), "cmd");
+        if (!line) { out("(no such history entry)", "muted"); return; }
+        if (history[history.length - 1] !== line) {
+          history.push(line);
+          try { localStorage.setItem(HKEY, JSON.stringify(history.slice(-100))); } catch {}
+        }
+        histIdx = history.length;
+        await runPipeline(line);
+      }
 
-            const sorted = [...langSizes.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
-            const total = sorted.reduce((s, [, v]) => s + v, 0);
-
-            // Language bar
-            langBar.innerHTML = sorted.map(([lang, size]) => {
-              const pct = (size / total) * 100;
-              const color = LANG_COLORS[lang] || 'rgba(var(--accent-rgb), 0.4)';
-              return `<div class="lang-bar-seg" style="width:0%;background:${color}" data-target="${pct}" title="${lang} ${pct.toFixed(1)}%"></div>`;
-            }).join('');
-
-            // Animate bar widths
-            requestAnimationFrame(() => {
-              langBar.querySelectorAll('.lang-bar-seg').forEach((seg) => {
-                const el = seg as HTMLElement;
-                el.style.width = el.dataset.target + '%';
-              });
-            });
-
-            // Language list
-            if (langList) {
-              langList.innerHTML = sorted.map(([lang, size]) => {
-                const pct = ((size / total) * 100).toFixed(1);
-                const color = LANG_COLORS[lang] || 'rgba(var(--accent-rgb), 0.4)';
-                return `<span class="lang-item"><span class="lang-dot" style="background:${color}"></span>${lang} <span class="lang-pct">${pct}%</span></span>`;
-              }).join('');
-            }
-
-            // Recent repos with language dots
-            if (langRepos) {
-              const recentRepos = repos
-                .filter((r: { fork: boolean }) => !r.fork)
-                .slice(0, 10);
-              langRepos.innerHTML = recentRepos.map((repo: { language: string; name: string; html_url: string }) => {
-                const color = LANG_COLORS[repo.language] || 'rgba(var(--accent-rgb), 0.3)';
-                return `<a href="${repo.html_url}" target="_blank" rel="noopener" class="lang-repo-chip"><span class="lang-repo-lang-dot" style="background:${color}"></span>${repo.name}</a>`;
-              }).join('');
-            }
-
-          } catch {
-            if (langBar) langBar.innerHTML = '<span style="color:var(--muted);font-size:0.8rem;padding:0.5rem">Could not load GitHub data</span>';
+      async function runInput() {
+        const v = input.value;
+        input.value = "";
+        await exec(v);
+      }
+      // Single explicit submit path: handle Enter on keydown and prevent the
+      // browser's implicit form submission. (Relying on both was the "press
+      // enter twice" feel.) The form submit is neutralised as a backstop.
+      form.addEventListener("submit", (e) => e.preventDefault());
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") { e.preventDefault(); runInput(); return; }
+        if (e.key === "ArrowUp") { e.preventDefault(); if (histIdx > 0) { histIdx--; input.value = history[histIdx] || ""; } }
+        else if (e.key === "ArrowDown") { e.preventDefault(); if (histIdx < history.length) { histIdx++; input.value = history[histIdx] || ""; } }
+        else if (e.key === "Tab") {
+          e.preventDefault();
+          const cur = input.value.trim();
+          if (cur && !cur.includes(" ")) {
+            const names = Object.keys(COMMANDS).filter((c) => c.startsWith(cur.toLowerCase()));
+            if (names.length === 1) input.value = names[0] + " ";
+            else if (names.length > 1) out(names.join("   "), "muted");
           }
         }
+      });
+      document.getElementById("term-chips").addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-cmd]");
+        if (!b) return;
+        input.value = b.getAttribute("data-cmd");
+        input.focus();
+        runInput();
+      });
+      document.getElementById("term").addEventListener("click", (e) => {
+        if (!e.target.closest("a, button")) input.focus();
+      });
 
-        fetchLangs();
+      function boot() {
+        const lines = [
+          ["lab-term 1.0 — a real shell over real data.", "muted"],
+          ["wasm: rustc → wasm32-unknown-unknown (loads on first use)", "muted"],
+          ["type <b>help</b>, or click a chip below. pipes work: <b>projects | grep rust</b>", "muted"],
+        ];
+        let i = 0;
+        const step = () => {
+          if (i >= lines.length) return;
+          out(lines[i][0], lines[i][1]);
+          i++;
+          if (!reduceMotion) setTimeout(step, 180); else step();
+        };
+        step();
       }
-    }
+      boot();
 
-    // ═══════════════════════════════════════════════════════
-    // 03 — STICKY SCROLL TIMELINE
-    // ═══════════════════════════════════════════════════════
-    {
-      const items = document.querySelectorAll('.scroll-tl-item');
-      if (items.length > 0) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('in-view');
-            } else {
-              entry.target.classList.remove('in-view');
-            }
-          });
-        }, {
-          threshold: 0.2,
-          rootMargin: '0px 0px -10% 0px',
+      /* ================= VITALS read + render ================= */
+      function readVitals() {
+        const nav = performance.getEntriesByType("navigation")[0] || {};
+        const res = performance.getEntriesByType("resource");
+        let bytes = nav.transferSize || 0, jsBytes = 0;
+        for (const r of res) {
+          bytes += r.transferSize || 0;
+          if (r.initiatorType === "script" || /\.js(\?|$)/.test(r.name)) jsBytes += r.transferSize || 0;
+        }
+        return {
+          fcp: vitals.fcp, lcp: vitals.lcp, cls: vitals.cls, inp: vitals.inp,
+          ttfb: nav.responseStart || null,
+          dcl: nav.domContentLoadedEventEnd || null,
+          bytes, jsBytes, reqs: res.length + 1,
+        };
+      }
+      const fmtMs = (v) => (v == null ? "—" : (v < 1000 ? Math.round(v) + " ms" : (v / 1000).toFixed(2) + " s"));
+      const fmtKb = (b) => (b ? (b / 1024).toFixed(1) + " KB" : "—");
+      function rate(metric, v) {
+        if (v == null) return "";
+        const t = { lcp: [2500, 4000], fcp: [1800, 3000], cls: [0.1, 0.25], inp: [200, 500], ttfb: [800, 1800] }[metric];
+        if (!t) return "";
+        return v <= t[0] ? "good" : v <= t[1] ? "warn" : "bad";
+      }
+      function renderPerf() {
+        const v = readVitals();
+        const grid = document.getElementById("metric-grid");
+        if (!grid) return;
+        const cards = [
+          ["LCP", fmtMs(v.lcp), rate("lcp", v.lcp)],
+          ["FCP", fmtMs(v.fcp), rate("fcp", v.fcp)],
+          ["CLS", v.cls.toFixed(3), rate("cls", v.cls)],
+          ["INP", v.inp != null ? fmtMs(v.inp) : "—", rate("inp", v.inp)],
+          ["TTFB", fmtMs(v.ttfb), rate("ttfb", v.ttfb)],
+          ["DOMContentLoaded", fmtMs(v.dcl), ""],
+          ["Transferred", fmtKb(v.bytes), ""],
+          ["JavaScript", fmtKb(v.jsBytes), ""],
+          ["Requests", String(v.reqs), ""],
+        ];
+        grid.innerHTML = cards.map(([k, val, cls]) =>
+          `<div class="metric ${cls}"><div class="metric-k">${esc(k)}</div><div class="metric-v">${esc(val)}</div></div>`
+        ).join("");
+      }
+      document.getElementById("perf-refresh")?.addEventListener("click", renderPerf);
+
+      /* ================= WHERE ================= */
+      async function ping(url) {
+        const t = performance.now();
+        try { await fetch(url, { mode: "no-cors", cache: "no-store" }); }
+        catch { return null; }
+        return performance.now() - t;
+      }
+      async function collectWhere() {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown";
+        const rows = [];
+        rows.push(["timezone", tz]);
+        rows.push(["locale", navigator.language + (navigator.languages?.length ? " (" + navigator.languages.slice(0, 3).join(", ") + ")" : "")]);
+        const region = tz.includes("/") ? tz.split("/").slice(-1)[0].replace(/_/g, " ") : tz;
+        rows.push(["approx region", region]);
+        const c = navigator.connection;
+        if (c) rows.push(["connection", `${c.effectiveType || "?"}${c.rtt != null ? " · ~" + c.rtt + "ms rtt" : ""}${c.downlink != null ? " · " + c.downlink + " Mbps" : ""}`]);
+        rows.push(["online", navigator.onLine ? "yes" : "no"]);
+        const probes = [["this origin", location.origin + "/favicon.ico"], ["cloudflare", "https://cloudflare.com/favicon.ico"], ["google", "https://www.google.com/favicon.ico"]];
+        for (const [name, url] of probes) {
+          const ms = await ping(url);
+          rows.push([name + " rtt", ms == null ? "blocked" : Math.round(ms) + " ms"]);
+        }
+        rows.push(["server involved", "none — measured in your browser"]);
+        return rows;
+      }
+      function renderWhere() {
+        const el = document.getElementById("where-kv");
+        if (!el) return;
+        el.innerHTML = '<div class="kv-row"><span class="kv-k">probing…</span><span class="kv-v">measuring round-trips</span></div>';
+        collectWhere().then((rows) => {
+          el.innerHTML = rows.map((r) => `<div class="kv-row"><span class="kv-k">${esc(r[0])}</span><span class="kv-v">${esc(r[1])}</span></div>`).join("");
         });
-
-        items.forEach(item => observer.observe(item));
       }
-    }
+
+      /* ================= WASM PANEL ================= */
+      document.getElementById("rrf-run")?.addEventListener("click", async () => {
+        const a = +document.getElementById("rrf-a").value, b = +document.getElementById("rrf-b").value, c = +document.getElementById("rrf-c").value;
+        const s = await wasmRRF([a, b, c], 60);
+        document.getElementById("rrf-out").textContent = `score = ${s.toFixed(6)}  (k=60)`;
+      });
+      document.getElementById("xor-run")?.addEventListener("click", async () => {
+        const a = parseIntSmart(document.getElementById("xor-a").value), b = parseIntSmart(document.getElementById("xor-b").value);
+        if (isNaN(a) || isNaN(b)) { document.getElementById("xor-out").textContent = "parse error"; return; }
+        const { dist, bucket } = await wasmXor(a, b);
+        document.getElementById("xor-out").textContent = `${hex8(dist)} (${dist}) · bucket ${bucket}`;
+      });
+      document.getElementById("hash-run")?.addEventListener("click", async () => {
+        const h = await wasmHash(document.getElementById("hash-in").value);
+        document.getElementById("hash-out").textContent = `${hex8(h)}  (${h >>> 0})`;
+      });
+
+      /* ================= OFFLINE PWA ================= */
+      const swStatus = document.getElementById("sw-status");
+      function setSw(txt, on) { if (swStatus) { swStatus.textContent = txt; swStatus.className = "pwa-status " + (on ? "on" : "off"); } }
+      async function refreshSw() {
+        if (!("serviceWorker" in navigator)) { setSw("service workers unsupported", false); return; }
+        const reg = await navigator.serviceWorker.getRegistration("/lab/");
+        setSw(reg && reg.active ? "● offline-ready (active)" : "○ not enabled", !!(reg && reg.active));
+      }
+      document.getElementById("sw-enable")?.addEventListener("click", async () => {
+        if (!("serviceWorker" in navigator)) { setSw("service workers unsupported", false); return; }
+        try {
+          setSw("registering…", false);
+          await navigator.serviceWorker.register("/lab/sw.js", { scope: "/lab/" });
+          await navigator.serviceWorker.ready;
+          setSw("● offline-ready — kill your network and reload", true);
+        } catch (e) { setSw("failed: " + e.message, false); }
+      });
+      document.getElementById("sw-disable")?.addEventListener("click", async () => {
+        const reg = await navigator.serviceWorker?.getRegistration("/lab/");
+        if (reg) { reg.active?.postMessage({ type: "purge" }); await reg.unregister(); }
+        setSw("○ disabled & cache cleared", false);
+      });
+      refreshSw();
+
+      /* ================= PATENT REPLAY ================= */
+      const replayBody = document.getElementById("replay-body");
+      const replayBtn = document.getElementById("replay-btn");
+      const REPLAY = [
+        [PROMPT + 'patent "a rust crate that ranks dependency alternatives"', "cmd", 0],
+        ["", "muted", 120],
+        ["⠋ fanning out across registries…", "muted", 350],
+        ["  ✓ crates.io        4 candidates", "ok", 160],
+        ["  ✓ npm              2 candidates", "ok", 120],
+        ["  ✓ PyPI             1 candidate", "ok", 120],
+        ["  ✓ GitHub           7 candidates", "ok", 120],
+        ["  ✓ Go · Maven · NuGet · RubyGems · Docker Hub …", "ok", 200],
+        ["", "muted", 80],
+        ["▍ ranking 16 matches with local embeddings (fastembed)…", "muted", 480],
+        ["▍ scoring with reciprocal rank fusion (k=60)…", "muted", 360],
+        ["", "muted", 80],
+        ["verdict: 2 strong overlaps found in the sources checked.", "accent", 200],
+        ["  • cargo-deny      partial — license/advisory focus, not ranking", "", 120],
+        ["  • similar (×1)    closest match; see report", "", 120],
+        ["", "muted", 80],
+        ["note: integrity-scoped — reports only what was found where it looked.", "muted", 160],
+        ["      never asserts absence.", "muted", 160],
+        ["", "muted", 60],
+        ["✓ done in 1.84s · JSON written to ./patent.json", "ok", 0],
+      ];
+      let replaying = false;
+      async function playReplay() {
+        if (replaying) return;
+        replaying = true; replayBtn.textContent = "▶ playing…";
+        replayBody.innerHTML = "";
+        for (const [text, cls, delay] of REPLAY) {
+          const div = document.createElement("div");
+          div.className = "term-line" + (cls ? " " + cls : "");
+          div.innerHTML = text;
+          replayBody.appendChild(div);
+          replayBody.scrollTop = replayBody.scrollHeight;
+          if (!reduceMotion) await new Promise((r) => setTimeout(r, delay));
+        }
+        replaying = false; replayBtn.textContent = "↻ replay";
+      }
+      replayBtn?.addEventListener("click", playReplay);
+
+      /* ================= lazy init panels on scroll ================= */
+      const lazy = new Map([
+        ["perf", renderPerf],
+        ["where", renderWhere],
+        ["replay", () => { if (!reduceMotion) playReplay(); }],
+      ]);
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting && lazy.has(e.target.id)) {
+              lazy.get(e.target.id)();
+              lazy.delete(e.target.id);
+              io.unobserve(e.target);
+            }
+          }
+        }, { rootMargin: "120px" });
+        for (const id of lazy.keys()) { const el = document.getElementById(id); if (el) io.observe(el); }
+      } else {
+        for (const fn of lazy.values()) fn();
+      }
+    })();
   </script>
 </BaseLayout>
