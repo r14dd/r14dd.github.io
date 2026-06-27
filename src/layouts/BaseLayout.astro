@@ -130,8 +130,8 @@ const {
         --text: #1c1917;
         --text-soft: #3b3835;
         --muted: #6b6560;
-        --accent: var(--accent-light, #a8863d);
-        --accent-rgb: var(--accent-light-rgb, 168, 134, 61);
+        --accent: var(--accent-light, #876c30);
+        --accent-rgb: var(--accent-light-rgb, 135, 108, 48);
         --border: rgba(0, 0, 0, 0.06);
         --surface: rgba(255, 255, 255, 0.7);
         --surface-solid: rgba(255, 255, 255, 0.85);
@@ -330,8 +330,8 @@ const {
       }
 
       .theme-toggle {
-        width: 38px;
-        height: 38px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid var(--accent-subtle);
         background: var(--surface);
@@ -951,6 +951,130 @@ const {
 
       .tl-item ul li::marker {
         content: none;
+      }
+
+      /* ── LANGUAGE STATS ──────────────────────────── */
+      /* ── SCROLL TIMELINE ─────────────────────────── */
+      .scroll-tl {
+        position: relative;
+        padding-left: 1.6rem;
+      }
+      .scroll-tl::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom, rgba(var(--accent-rgb), 0.35), rgba(var(--accent-rgb), 0.05));
+      }
+      .scroll-tl-item {
+        position: relative;
+        padding-bottom: 2.8rem;
+        opacity: 0.3;
+        transform: translateY(16px);
+        transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-spring);
+      }
+      .scroll-tl-item:last-child { padding-bottom: 0; }
+      .scroll-tl-item.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .scroll-tl-item::before {
+        content: '';
+        position: absolute;
+        left: -1.6rem;
+        top: 0.45rem;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        transform: translateX(-4px);
+        background: rgba(var(--accent-rgb), 0.15);
+        border: 1.5px solid rgba(var(--accent-rgb), 0.3);
+        transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+      }
+      .scroll-tl-item.in-view::before {
+        background: rgba(var(--accent-rgb), 0.45);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1), 0 0 14px rgba(var(--accent-rgb), 0.2);
+      }
+      .scroll-tl-item.now.in-view::before {
+        background: var(--accent);
+        box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.12), 0 0 18px rgba(var(--accent-rgb), 0.3);
+      }
+      .scroll-tl-period {
+        font-size: 0.68rem;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        margin-bottom: 0.25rem;
+        transition: color 0.4s;
+      }
+      .scroll-tl-item.in-view .scroll-tl-period {
+        color: rgba(var(--accent-rgb), 0.55);
+      }
+      .scroll-tl-role {
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: var(--text);
+        margin: 0 0 0.15rem;
+        line-height: 1.35;
+      }
+      .scroll-tl-org {
+        font-size: 0.88rem;
+        color: rgba(var(--accent-rgb), 0.7);
+        margin: 0 0 0.1rem;
+      }
+      .scroll-tl-loc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin: 0 0 0.5rem;
+      }
+      .scroll-tl-bullets {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .scroll-tl-bullets li {
+        position: relative;
+        padding-left: 1rem;
+        margin-bottom: 0.25rem;
+        font-size: 0.86rem;
+        color: var(--text-soft);
+        line-height: 1.55;
+        opacity: 0;
+        transform: translateX(-8px);
+        transition: opacity 0.4s ease, transform 0.4s var(--ease-spring);
+      }
+      .scroll-tl-item.in-view .scroll-tl-bullets li {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .scroll-tl-bullets li::before {
+        content: '\2014';
+        position: absolute;
+        left: 0;
+        top: 0.1rem;
+        color: rgba(var(--accent-rgb), 0.3);
+        font-size: 0.7rem;
+      }
+      .scroll-tl-bullets li::marker {
+        content: none;
+      }
+      @media (max-width: 768px) {
+        .scroll-tl { padding-left: 1.2rem; }
+        .scroll-tl-item::before { left: -1.2rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .scroll-tl-item {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+        }
+        .scroll-tl-bullets li {
+          opacity: 1 !important;
+          transform: none !important;
+        }
       }
 
       /* ── PROJECTS ─────────────────────────────────────── */
@@ -2423,12 +2547,12 @@ const {
       }
 
       html.light .mini-map-dark {
-        display: block;
-        filter: var(--map-filter-light, invert(1));
+        display: none;
       }
 
       html.light .mini-map-light {
-        display: none;
+        display: block;
+        filter: var(--map-filter-light, none);
       }
 
       .mini-map-dot {
@@ -2609,6 +2733,18 @@ const {
 
         .spotify-mini-player {
           left: 0;
+        }
+      }
+
+      @media (max-width: 768px) and (min-width: 481px) {
+        body {
+          padding: 2rem 1.25rem calc(2rem + env(safe-area-inset-bottom));
+        }
+        h1 {
+          font-size: clamp(2.4rem, 7vw, 3.2rem);
+        }
+        .terminal-window {
+          font-size: 0.72rem;
         }
       }
 
@@ -3911,6 +4047,7 @@ const {
   </head>
 
   <body>
+    <noscript><style>.page-loader,.cursor-dot,.scroll-line,.terminal-cursor,.spotify-line,.cmd-palette{display:none!important}.terminal-body{min-height:auto!important}</style></noscript>
     <a href="#main-content" class="skip-link">Skip to content</a>
         <div class="page-loader" aria-hidden="true">
       <svg class="loader-mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">

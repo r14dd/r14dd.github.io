@@ -264,16 +264,16 @@ export const buildExperience = (data: I18nProfile): string => {
   return `
         <div class="sec-eyebrow">${data.labels.eyebrows.experience}</div>
         <h2 class="sec-title">${data.labels.headings.experience}</h2>
-        <div class="timeline">
+        <div class="scroll-tl">
         ${data.experience
           .map(
             (exp) => `
-              <div class="tl-item${isCurrent(exp.period) ? " now" : ""}">
-                <div class="tl-period">${exp.period}</div>
-                <div class="tl-role">${exp.role}</div>
-                <div class="tl-org">${exp.org}</div>
-                <div class="tl-loc">${exp.location}</div>
-                ${exp.bullets.length ? `<ul>${exp.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}
+              <div class="scroll-tl-item${isCurrent(exp.period) ? " now" : ""}">
+                <div class="scroll-tl-period">${exp.period}</div>
+                <div class="scroll-tl-role">${exp.role}</div>
+                <div class="scroll-tl-org">${exp.org}</div>
+                <div class="scroll-tl-loc">${exp.location}</div>
+                ${exp.bullets.length ? `<ul class="scroll-tl-bullets">${exp.bullets.map((b, i) => `<li style="transition-delay:${i * 80 + 150}ms">${b}</li>`).join("")}</ul>` : ""}
               </div>
             `,
           )

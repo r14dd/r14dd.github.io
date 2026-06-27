@@ -12,7 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.16.13"
+    "astro": "^7.0.3"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^8.60.0",

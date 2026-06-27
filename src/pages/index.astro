@@ -390,11 +390,11 @@ const structuredData = JSON.stringify({
 
     const timeAware = (() => {
       const periods = [
-        { key: 'night',     from: 0,  to: 6,  accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'invert(1) brightness(0.65) contrast(1.4) saturate(1.2)' },
-        { key: 'morning',   from: 6,  to: 12, accent: '210, 170, 90',  accentHex: '#d2aa5a', lightAccent: '175, 140, 60', lightHex: '#af8c3c', mapFilter: 'none', mapFilterLight: 'invert(1) hue-rotate(180deg)' },
-        { key: 'afternoon', from: 12, to: 17, accent: '201, 165, 90',  accentHex: '#c9a55a', lightAccent: '168, 134, 61', lightHex: '#a8863d', mapFilter: 'none', mapFilterLight: 'invert(1) hue-rotate(180deg)' },
-        { key: 'evening',   from: 17, to: 21, accent: '210, 140, 80',  accentHex: '#d28c50', lightAccent: '175, 110, 55', lightHex: '#af6e37', mapFilter: 'hue-rotate(345deg)', mapFilterLight: 'invert(1) hue-rotate(160deg)' },
-        { key: 'night',     from: 21, to: 24, accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'invert(1) brightness(0.65) contrast(1.4) saturate(1.2)' },
+        { key: 'night',     from: 0,  to: 6,  accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'brightness(0.92) contrast(1.1) saturate(0.8) sepia(0.15) hue-rotate(185deg)' },
+        { key: 'morning',   from: 6,  to: 12, accent: '210, 170, 90',  accentHex: '#d2aa5a', lightAccent: '138, 112, 48', lightHex: '#8a7030', mapFilter: 'none', mapFilterLight: 'none' },
+        { key: 'afternoon', from: 12, to: 17, accent: '201, 165, 90',  accentHex: '#c9a55a', lightAccent: '135, 108, 48', lightHex: '#876c30', mapFilter: 'none', mapFilterLight: 'none' },
+        { key: 'evening',   from: 17, to: 21, accent: '210, 140, 80',  accentHex: '#d28c50', lightAccent: '146, 92, 46', lightHex: '#925c2e', mapFilter: 'hue-rotate(345deg)', mapFilterLight: 'brightness(0.95) sepia(0.2) hue-rotate(345deg)' },
+        { key: 'night',     from: 21, to: 24, accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'brightness(0.92) contrast(1.1) saturate(0.8) sepia(0.15) hue-rotate(185deg)' },
       ];
 
       const getPeriod = () => {
@@ -547,6 +547,7 @@ const structuredData = JSON.stringify({
       const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
       if (!isDesktop) return;
 
+      const esc = (s) => typeof s === 'string' ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
       const FORTUNES = [
         "There are only two hard things in CS: cache invalidation and naming things.",
         "It works on my machine. Ship the machine.",
@@ -586,29 +587,29 @@ const structuredData = JSON.stringify({
           whoami: () => {
             const t = p.labels?.terminal || {};
             return { lines: [
-              '<span class="terminal-text">' + (t.role1 || 'AI Engineer @ ABB') + '</span>',
-              '<span class="terminal-text">' + (t.role2 || 'Head of IT @ EYP AZ') + '</span>',
+              '<span class="terminal-text">' + esc(t.role1 || 'AI Engineer @ ABB') + '</span>',
+              '<span class="terminal-text">' + esc(t.role2 || 'Head of IT @ EYP AZ') + '</span>',
             ] };
           },
           stats: () => {
             const t = p.labels?.terminal || {};
-            const wrapNum = (s) => s.replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
+            const wrapNum = (s) => esc(s).replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
             return { html: '<span class="terminal-stats" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.25rem 0.45rem"><span class="term-stat">' + wrapNum(t.stat1 || '2K+ students taught') + '</span><span class="term-stat-sep">·</span><span class="term-stat">' + wrapNum(t.stat2 || '5+ teams led') + '</span><span class="term-stat-sep">·</span><span class="term-stat">' + wrapNum(t.stat3 || '4+ yrs shipping') + '</span></span>' };
           },
           projects: () => {
             setTimeout(() => {
               document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 400);
-            return { lines: projectNames.length ? projectNames.map(n => '<span class="terminal-text">· ' + n + '</span>') : ['<span class="terminal-text">No projects loaded.</span>'] };
+            return { lines: projectNames.length ? projectNames.map(n => '<span class="terminal-text">· ' + esc(n) + '</span>') : ['<span class="terminal-text">No projects loaded.</span>'] };
           },
           skills: () => { return { lines: [
             '<span class="terminal-text">Rust · Python · Go · Tokio · FastAPI</span>',
             '<span class="terminal-text">Kafka · PostgreSQL · Docker · AWS</span>',
           ] }; },
-          contact: () => { return { html: '<span class="terminal-text">' + email + '</span>' }; },
+          contact: () => { return { html: '<span class="terminal-text">' + esc(email) + '</span>' }; },
           resume: () => { window.open(resume, '_blank'); return { html: '<span class="terminal-text">Opening resume...</span>' }; },
           github: () => { window.open(github, '_blank'); return { html: '<span class="terminal-text">Opening github.com/r14dd...</span>' }; },
-          fortune: () => { return { html: '<span class="terminal-text">' + FORTUNES[Math.floor(Math.random() * FORTUNES.length)] + '</span>' }; },
+          fortune: () => { return { html: '<span class="terminal-text">' + esc(FORTUNES[Math.floor(Math.random() * FORTUNES.length)]) + '</span>' }; },
           clear: () => null,
         };
       };
@@ -664,7 +665,7 @@ const structuredData = JSON.stringify({
               if (result && typeof result === 'object' && result.html) {
                 outLine.innerHTML = result.html;
               } else {
-                outLine.innerHTML = '<span class="terminal-text">' + result + '</span>';
+                outLine.innerHTML = '<span class="terminal-text">' + esc(String(result)) + '</span>';
               }
               termBody.insertBefore(outLine, inputLine);
             }
@@ -710,7 +711,8 @@ const structuredData = JSON.stringify({
     })();
 
     const i18nEl = document.getElementById("i18n-data");
-    const I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {};
+    let I18N = {};
+    try { I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {}; } catch { I18N = {}; }
     const languageLabels = {
       en: "English",
       ru: "Русский",
@@ -2189,8 +2191,13 @@ const structuredData = JSON.stringify({
       try {
         const res = await fetch(SPOTIFY_API, { signal: AbortSignal.timeout(5000) });
         if (res.ok) { window._spotifyData = await res.json(); renderSpotify(window._spotifyData); _spotifyFails = 0; }
+        else { _spotifyFails++; }
       } catch {
         _spotifyFails++;
+      }
+      if (_spotifyFails >= 5) {
+        const el = document.getElementById('spotify-line');
+        if (el && !el.hasChildNodes()) el.style.display = 'none';
       }
     }
     fetchSpotify();
@@ -2238,20 +2245,21 @@ const structuredData = JSON.stringify({
       });
     }, { threshold: 0.5 });
 
-    function fetchBadges(root) {
-      (root || document).querySelectorAll('.proj-badge-live').forEach(async (el) => {
+    async function fetchBadges(root) {
+      const badges = Array.from((root || document).querySelectorAll('.proj-badge-live'));
+      for (const el of badges) {
         const api = el.dataset.badgeApi;
-        if (!api) return;
+        if (!api) continue;
         const countEl = el.querySelector('.badge-count');
         if (badgeCache && badgeCache[api] != null) {
           countEl.dataset.badgeRaw = badgeCache[api];
           countEl.textContent = '0';
           if (badgeObserver) badgeObserver.observe(countEl);
-          return;
+          continue;
         }
         try {
           const res = await fetch(api, { signal: AbortSignal.timeout(5000) });
-          if (!res.ok) return;
+          if (!res.ok) { countEl.textContent = '—'; continue; }
           const data = await res.json();
           const count = api.includes('github.com') ? data.stargazers_count : data.crate?.downloads;
           if (count != null) {
@@ -2260,10 +2268,31 @@ const structuredData = JSON.stringify({
             countEl.textContent = '0';
             if (badgeObserver) badgeObserver.observe(countEl);
           }
-        } catch { /* timeout or network error */ }
-      });
+        } catch { countEl.textContent = '—'; }
+      }
     }
     fetchBadges();
+
+    // ── SCROLL TIMELINE OBSERVER ──────────────────────
+    {
+      const initScrollTl = () => {
+        const items = document.querySelectorAll('.scroll-tl-item');
+        if (!items.length) return;
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('in-view');
+            else e.target.classList.remove('in-view');
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+        items.forEach(i => obs.observe(i));
+      };
+      initScrollTl();
+
+      const contentEl = document.querySelector('.content');
+      if (contentEl) {
+        new MutationObserver(() => { initScrollTl(); }).observe(contentEl, { childList: true, subtree: true });
+      }
+    }
 
   </script>
 </BaseLayout>

@@ -1,0 +1,882 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { profile } from "../data/profile";
+
+const metaTitle = "Riad Mukhtarov — Lab";
+const metaDescription = "Experimental features preview.";
+---
+
+<BaseLayout metaTitle={metaTitle} metaDescription={metaDescription} lang="en">
+  <style is:global>
+    .lab-page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 0 6rem;
+    }
+
+    .lab-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      background-image: none;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+    .lab-back:hover { color: var(--accent); background-size: 0; }
+
+    .lab-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 0.4rem;
+    }
+
+    .lab-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0 0 3rem;
+    }
+
+    .lab-section {
+      margin-bottom: 5rem;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .lab-section-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(var(--accent-rgb), 0.5);
+      margin-bottom: 0.3rem;
+    }
+
+    .lab-section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 0.3rem;
+    }
+
+    .lab-section-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 1.5rem;
+      max-width: 560px;
+    }
+
+    /* ── 01A: LIQUID METAL HERO ────────────────────── */
+    .hero-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      border: 1px solid rgba(var(--accent-rgb), 0.12);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: crosshair;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+
+    .hero-container canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── 02: LANGUAGE STATS ────────────────────────── */
+    .lang-stats-container {
+      border: 1px solid rgba(var(--accent-rgb), 0.12);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+
+    .lang-stats-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .lang-stats-title {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(var(--accent-rgb), 0.55);
+    }
+
+    .lang-stats-link {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-decoration: none;
+      background-image: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.2s;
+    }
+    .lang-stats-link:hover { color: var(--accent); background-size: 0; }
+
+    .lang-bar-wrap {
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+      background: rgba(var(--accent-rgb), 0.06);
+      margin-bottom: 1rem;
+    }
+
+    .lang-bar-seg {
+      height: 100%;
+      transition: width 1.2s var(--ease-spring);
+      position: relative;
+    }
+
+    .lang-bar-seg:first-child { border-radius: 5px 0 0 5px; }
+    .lang-bar-seg:last-child { border-radius: 0 5px 5px 0; }
+    .lang-bar-seg:only-child { border-radius: 5px; }
+
+    .lang-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.2rem;
+    }
+
+    .lang-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .lang-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .lang-pct {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .lang-repos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(var(--accent-rgb), 0.08);
+    }
+
+    .lang-repo-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(var(--accent-rgb), 0.12);
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      text-decoration: none;
+      background-image: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .lang-repo-chip:hover {
+      border-color: rgba(var(--accent-rgb), 0.35);
+      color: var(--accent);
+      background-size: 0;
+    }
+
+    .lang-repo-lang-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── 03: STICKY SCROLL TIMELINE ────────────────── */
+    .scroll-tl {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .scroll-tl::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, rgba(var(--accent-rgb), 0.35), rgba(var(--accent-rgb), 0.05));
+    }
+
+    .scroll-tl-item {
+      position: relative;
+      padding-bottom: 3.5rem;
+      opacity: 0.35;
+      transform: translateY(20px);
+      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-spring);
+    }
+
+    .scroll-tl-item:last-child { padding-bottom: 0; }
+
+    .scroll-tl-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-tl-item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.35rem;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      transform: translateX(-4.5px);
+      background: rgba(var(--accent-rgb), 0.2);
+      border: 1.5px solid rgba(var(--accent-rgb), 0.35);
+      transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+    }
+
+    .scroll-tl-item.in-view::before {
+      background: rgba(var(--accent-rgb), 0.5);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.1), 0 0 16px rgba(var(--accent-rgb), 0.2);
+    }
+
+    .scroll-tl-item.now.in-view::before {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.15), 0 0 20px rgba(var(--accent-rgb), 0.35);
+    }
+
+    .scroll-tl-period {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+      transition: color 0.4s;
+    }
+
+    .scroll-tl-item.in-view .scroll-tl-period {
+      color: rgba(var(--accent-rgb), 0.6);
+    }
+
+    .scroll-tl-role {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0 0 0.2rem;
+      line-height: 1.35;
+    }
+
+    .scroll-tl-org {
+      font-size: 0.9rem;
+      color: rgba(var(--accent-rgb), 0.65);
+      margin: 0 0 0.1rem;
+    }
+
+    .scroll-tl-loc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 0 0 0.6rem;
+    }
+
+    .scroll-tl-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .scroll-tl-bullets li {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 0.25rem;
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      line-height: 1.55;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.4s ease, transform 0.4s var(--ease-spring);
+    }
+
+    .scroll-tl-item.in-view .scroll-tl-bullets li {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scroll-tl-bullets li::before {
+      content: '\2014';
+      position: absolute;
+      left: 0;
+      top: 0.1rem;
+      color: rgba(var(--accent-rgb), 0.3);
+      font-size: 0.7rem;
+    }
+
+    .scroll-tl-counter {
+      position: absolute;
+      right: 0;
+      top: -0.2rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: rgba(var(--accent-rgb), 0.04);
+      line-height: 1;
+      pointer-events: none;
+      transition: color 0.4s;
+    }
+
+    .scroll-tl-item.in-view .scroll-tl-counter {
+      color: rgba(var(--accent-rgb), 0.08);
+    }
+
+    .side-nav, .side-links { display: none !important; }
+
+    @media (max-width: 768px) {
+      .hero-container { height: 280px; }
+    }
+  </style>
+
+  <main class="lab-page">
+    <a href="/" class="lab-back">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 3L6 8l4 5"/></svg>
+      Back to site
+    </a>
+
+    <h1 class="lab-title">Feature Lab</h1>
+    <p class="lab-subtitle">Experimental features — preview before integrating into the main site.</p>
+
+    <!-- 01A: Liquid Metal Hero -->
+    <section class="lab-section">
+      <div class="lab-section-num">01a</div>
+      <h2 class="lab-section-title">Liquid Metal Hero</h2>
+      <p class="lab-section-desc">Chrome/metallic text that subtly distorts on hover — like molten metal catching light. High-end brand identity feel.</p>
+      <div class="hero-container" id="hero-metal">
+        <canvas id="metal-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- 01B: Precision Grid Hero -->
+    <section class="lab-section">
+      <div class="lab-section-num">01b</div>
+      <h2 class="lab-section-title">Precision Grid Hero</h2>
+      <p class="lab-section-desc">Your name assembles from a geometric grid of lines and dots — like an engineering blueprint coming to life. Fits the distributed systems identity.</p>
+      <div class="hero-container" id="hero-grid">
+        <canvas id="grid-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- 02: Language Stats -->
+    <section class="lab-section">
+      <div class="lab-section-num">02</div>
+      <h2 class="lab-section-title">Language Stats</h2>
+      <p class="lab-section-desc">GitHub language breakdown — shows what you ship, links to your profile. Would sit right below the terminal widget.</p>
+      <div class="lang-stats-container" id="lang-stats">
+        <div class="lang-stats-header">
+          <span class="lang-stats-title">Languages</span>
+          <a href="https://github.com/r14dd" target="_blank" rel="noopener" class="lang-stats-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            r14dd
+          </a>
+        </div>
+        <div class="lang-bar-wrap" id="lang-bar"></div>
+        <div class="lang-list" id="lang-list"></div>
+        <div class="lang-repos" id="lang-repos"></div>
+      </div>
+    </section>
+
+    <!-- 03: Sticky Scroll Timeline -->
+    <section class="lab-section">
+      <div class="lab-section-num">03</div>
+      <h2 class="lab-section-title">Cinematic Scroll Timeline</h2>
+      <p class="lab-section-desc">Same scrollable flow as the current site, but each role animates in with parallax — titles scale, bullets stagger, accent line draws itself.</p>
+      <div class="scroll-tl" id="scroll-tl">
+        {profile.experience.map((exp, i) => (
+          <div class={`scroll-tl-item ${exp.period.includes('Present') ? 'now' : ''}`} data-index={i}>
+            <span class="scroll-tl-counter">{String(i + 1).padStart(2, '0')}</span>
+            <div class="scroll-tl-period">{exp.period}</div>
+            <h3 class="scroll-tl-role">{exp.role}</h3>
+            <div class="scroll-tl-org">{exp.org}</div>
+            <div class="scroll-tl-loc">{exp.location}</div>
+            {exp.bullets.length > 0 && (
+              <ul class="scroll-tl-bullets">
+                {exp.bullets.map((b, bi) => (
+                  <li style={`transition-delay: ${bi * 80 + 150}ms`}>{b}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ═══════════════════════════════════════════════════════
+    // 01A — LIQUID METAL HERO
+    // ═══════════════════════════════════════════════════════
+    {
+      const canvas = document.getElementById('metal-canvas') as HTMLCanvasElement;
+      if (canvas) {
+        const ctx = canvas.getContext('2d')!;
+        let W: number, H: number;
+        let mouseX = -9999, mouseY = -9999;
+        let particles: { x: number; y: number; ox: number; oy: number; vx: number; vy: number; size: number; brightness: number }[] = [];
+
+        const accentRGB = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim().split(',').map(Number);
+
+
+        function resize() {
+          const rect = canvas.parentElement!.getBoundingClientRect();
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          W = rect.width;
+          H = rect.height;
+          canvas.width = W * dpr;
+          canvas.height = H * dpr;
+          canvas.style.width = W + 'px';
+          canvas.style.height = H + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          buildParticles();
+        }
+
+        function buildParticles() {
+          particles = [];
+          const offscreen = document.createElement('canvas');
+          offscreen.width = W;
+          offscreen.height = H;
+          const offCtx = offscreen.getContext('2d')!;
+
+          const text = 'Riad Mukhtarov';
+          const fontSize = Math.min(W / 7.5, 80);
+          offCtx.font = `600 ${fontSize}px "Cormorant Garamond", Georgia, serif`;
+          offCtx.textAlign = 'center';
+          offCtx.textBaseline = 'middle';
+          offCtx.fillStyle = '#fff';
+          offCtx.fillText(text, W / 2, H / 2);
+
+          const imageData = offCtx.getImageData(0, 0, W, H);
+          const gap = Math.max(3, Math.floor(W / 320));
+
+          for (let y = 0; y < H; y += gap) {
+            for (let x = 0; x < W; x += gap) {
+              const alpha = imageData.data[(y * W + x) * 4 + 3];
+              if (alpha > 128) {
+                particles.push({
+                  x, y, ox: x, oy: y,
+                  vx: 0, vy: 0,
+                  size: gap * 0.85,
+                  brightness: 0.3 + Math.random() * 0.3,
+                });
+              }
+            }
+          }
+        }
+
+        const MOUSE_RADIUS = 120;
+
+        function animate() {
+          ctx.clearRect(0, 0, W, H);
+          const time = performance.now() / 1000;
+
+          for (const p of particles) {
+            const dx = mouseX - p.x;
+            const dy = mouseY - p.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < MOUSE_RADIUS) {
+              const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+              const angle = Math.atan2(dy, dx);
+              p.vx -= Math.cos(angle) * force * 4;
+              p.vy -= Math.sin(angle) * force * 4;
+            }
+
+            p.vx += (p.ox - p.x) * 0.08;
+            p.vy += (p.oy - p.y) * 0.08;
+            p.vx *= 0.82;
+            p.vy *= 0.82;
+            p.x += p.vx;
+            p.y += p.vy;
+
+            const distFromMouse = Math.sqrt((mouseX - p.x) ** 2 + (mouseY - p.y) ** 2);
+            const distFromOrigin = Math.sqrt((p.x - p.ox) ** 2 + (p.y - p.oy) ** 2);
+
+            // Metallic shimmer based on position relative to mouse
+            const shimmer = distFromMouse < MOUSE_RADIUS * 1.5
+              ? 0.6 + 0.4 * Math.cos((distFromMouse / MOUSE_RADIUS) * Math.PI)
+              : 0;
+
+            // Subtle breathing
+            const breath = 0.05 * Math.sin(time * 1.5 + p.ox * 0.01 + p.oy * 0.01);
+
+            const base = p.brightness + breath;
+            const highlight = Math.min(1, base + shimmer * 0.6 + distFromOrigin * 0.015);
+
+            // Chrome gradient: mix accent with white based on highlight
+            const r = Math.round(accentRGB[0] + (255 - accentRGB[0]) * highlight * 0.7);
+            const g = Math.round(accentRGB[1] + (255 - accentRGB[1]) * highlight * 0.7);
+            const b = Math.round(accentRGB[2] + (255 - accentRGB[2]) * highlight * 0.7);
+
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.6 + highlight * 0.4})`;
+            ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+          }
+
+          requestAnimationFrame(animate);
+        }
+
+        const container = canvas.parentElement!;
+        container.addEventListener('mousemove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          mouseX = e.clientX - rect.left;
+          mouseY = e.clientY - rect.top;
+        });
+        container.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
+        container.addEventListener('touchmove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          mouseX = e.touches[0].clientX - rect.left;
+          mouseY = e.touches[0].clientY - rect.top;
+        }, { passive: true });
+        container.addEventListener('touchend', () => { mouseX = -9999; mouseY = -9999; });
+
+        resize();
+        window.addEventListener('resize', resize);
+        requestAnimationFrame(animate);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // 01B — PRECISION GRID HERO
+    // ═══════════════════════════════════════════════════════
+    {
+      const canvas = document.getElementById('grid-canvas') as HTMLCanvasElement;
+      if (canvas) {
+        const ctx = canvas.getContext('2d')!;
+        let W: number, H: number;
+        let mouseX = -9999, mouseY = -9999;
+        let dots: { x: number; y: number; ox: number; oy: number; delay: number; active: boolean; progress: number }[] = [];
+        let lines: { x1: number; y1: number; x2: number; y2: number; delay: number; progress: number }[] = [];
+
+        const accentRGB = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim();
+        let startTime = 0;
+        let assembled = false;
+
+        function resize() {
+          const rect = canvas.parentElement!.getBoundingClientRect();
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          W = rect.width;
+          H = rect.height;
+          canvas.width = W * dpr;
+          canvas.height = H * dpr;
+          canvas.style.width = W + 'px';
+          canvas.style.height = H + 'px';
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          buildGrid();
+          startTime = performance.now();
+          assembled = false;
+        }
+
+        function buildGrid() {
+          dots = [];
+          lines = [];
+          const offscreen = document.createElement('canvas');
+          offscreen.width = W;
+          offscreen.height = H;
+          const offCtx = offscreen.getContext('2d')!;
+
+          const text = 'Riad Mukhtarov';
+          const fontSize = Math.min(W / 7.5, 80);
+          offCtx.font = `600 ${fontSize}px "Cormorant Garamond", Georgia, serif`;
+          offCtx.textAlign = 'center';
+          offCtx.textBaseline = 'middle';
+          offCtx.fillStyle = '#fff';
+          offCtx.fillText(text, W / 2, H / 2);
+
+          const imageData = offCtx.getImageData(0, 0, W, H);
+          const gap = Math.max(6, Math.floor(W / 150));
+
+          const textDots: { x: number; y: number }[] = [];
+          for (let y = 0; y < H; y += gap) {
+            for (let x = 0; x < W; x += gap) {
+              const alpha = imageData.data[(y * W + x) * 4 + 3];
+              if (alpha > 128) {
+                textDots.push({ x, y });
+              }
+            }
+          }
+
+          // Sort by distance from center for staggered assembly
+          const cx = W / 2, cy = H / 2;
+          textDots.sort((a, b) =>
+            Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy)
+          );
+
+          textDots.forEach((d, i) => {
+            const delay = i * 3;
+            dots.push({
+              x: d.x, y: d.y, ox: d.x, oy: d.y,
+              delay,
+              active: false,
+              progress: 0,
+            });
+          });
+
+          // Generate connection lines between nearby dots
+          for (let i = 0; i < textDots.length; i++) {
+            for (let j = i + 1; j < textDots.length; j++) {
+              const dist = Math.hypot(textDots[i].x - textDots[j].x, textDots[i].y - textDots[j].y);
+              if (dist <= gap * 1.5 && dist > 0) {
+                lines.push({
+                  x1: textDots[i].x, y1: textDots[i].y,
+                  x2: textDots[j].x, y2: textDots[j].y,
+                  delay: Math.max(dots[i].delay, dots[j].delay) + 100,
+                  progress: 0,
+                });
+              }
+            }
+          }
+        }
+
+        function animate() {
+          ctx.clearRect(0, 0, W, H);
+          const time = performance.now();
+          const elapsed = time - startTime;
+
+          // Background grid
+          ctx.strokeStyle = `rgba(${accentRGB}, 0.03)`;
+          ctx.lineWidth = 0.5;
+          const gridSize = 40;
+          for (let x = 0; x < W; x += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, H);
+            ctx.stroke();
+          }
+          for (let y = 0; y < H; y += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(W, y);
+            ctx.stroke();
+          }
+
+          // Draw connection lines
+          for (const line of lines) {
+            const t = Math.max(0, Math.min(1, (elapsed - line.delay) / 400));
+            if (t <= 0) continue;
+            line.progress = t;
+            const ease = 1 - Math.pow(1 - t, 3);
+
+            ctx.strokeStyle = `rgba(${accentRGB}, ${0.08 * ease})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(line.x1, line.y1);
+            ctx.lineTo(
+              line.x1 + (line.x2 - line.x1) * ease,
+              line.y1 + (line.y2 - line.y1) * ease
+            );
+            ctx.stroke();
+          }
+
+          // Draw dots
+          let allDone = true;
+          for (const dot of dots) {
+            const t = Math.max(0, Math.min(1, (elapsed - dot.delay) / 350));
+            if (t < 1) allDone = false;
+            dot.progress = t;
+            const ease = 1 - Math.pow(1 - t, 4);
+
+            if (t <= 0) continue;
+
+            // Mouse interaction (subtle displacement after assembly)
+            let dx = 0, dy = 0;
+            if (assembled) {
+              const mx = mouseX - dot.ox;
+              const my = mouseY - dot.oy;
+              const md = Math.sqrt(mx * mx + my * my);
+              if (md < 100) {
+                const force = (100 - md) / 100 * 0.3;
+                dx = -mx * force * 0.15;
+                dy = -my * force * 0.15;
+              }
+            }
+
+            const px = dot.ox + dx;
+            const py = dot.oy + dy;
+
+            const size = 2 * ease;
+            const alpha = 0.25 + 0.5 * ease;
+
+            ctx.fillStyle = `rgba(${accentRGB}, ${alpha})`;
+            ctx.fillRect(px - size / 2, py - size / 2, size, size);
+
+            // Crosshair on some dots
+            if (dot.progress > 0.8 && Math.random() > 0.9998) {
+              ctx.strokeStyle = `rgba(${accentRGB}, 0.15)`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(px - 6, py); ctx.lineTo(px + 6, py);
+              ctx.moveTo(px, py - 6); ctx.lineTo(px, py + 6);
+              ctx.stroke();
+            }
+          }
+
+          if (allDone && !assembled) assembled = true;
+
+          // Scan line effect during assembly
+          if (!assembled) {
+            const scanY = (elapsed * 0.3) % H;
+            const scanGrad = ctx.createLinearGradient(0, scanY - 20, 0, scanY + 20);
+            scanGrad.addColorStop(0, 'transparent');
+            scanGrad.addColorStop(0.5, `rgba(${accentRGB}, 0.06)`);
+            scanGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = scanGrad;
+            ctx.fillRect(0, scanY - 20, W, 40);
+          }
+
+          requestAnimationFrame(animate);
+        }
+
+        const container = canvas.parentElement!;
+        container.addEventListener('mousemove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          mouseX = e.clientX - rect.left;
+          mouseY = e.clientY - rect.top;
+        });
+        container.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
+        container.addEventListener('touchmove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          mouseX = e.touches[0].clientX - rect.left;
+          mouseY = e.touches[0].clientY - rect.top;
+        }, { passive: true });
+        container.addEventListener('touchend', () => { mouseX = -9999; mouseY = -9999; });
+
+        resize();
+        window.addEventListener('resize', resize);
+        requestAnimationFrame(animate);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // 02 — LANGUAGE STATS (GitHub API)
+    // ═══════════════════════════════════════════════════════
+    {
+      const USERNAME = 'r14dd';
+      const langBar = document.getElementById('lang-bar');
+      const langList = document.getElementById('lang-list');
+      const langRepos = document.getElementById('lang-repos');
+
+      const LANG_COLORS: Record<string, string> = {
+        Rust: '#dea584', Python: '#3572A5', Go: '#00ADD8', Java: '#b07219',
+        TypeScript: '#3178c6', JavaScript: '#f1e05a', C: '#555555',
+        'C++': '#f34b7d', Shell: '#89e051', HTML: '#e34c26', CSS: '#563d7c',
+        Scala: '#c22d40', Dockerfile: '#384d54', Makefile: '#427819',
+      };
+
+      if (langBar) {
+        async function fetchLangs() {
+          try {
+            const res = await fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`, { signal: AbortSignal.timeout(8000) });
+            if (!res.ok) return;
+            const repos = await res.json();
+
+            const langSizes = new Map<string, number>();
+            const langRepoList = new Map<string, { name: string; url: string }[]>();
+
+            for (const repo of repos) {
+              if (repo.fork || !repo.language) continue;
+              langSizes.set(repo.language, (langSizes.get(repo.language) || 0) + (repo.size || 1));
+              const list = langRepoList.get(repo.language) || [];
+              list.push({ name: repo.name, url: repo.html_url });
+              langRepoList.set(repo.language, list);
+            }
+
+            const sorted = [...langSizes.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+            const total = sorted.reduce((s, [, v]) => s + v, 0);
+
+            // Language bar
+            langBar.innerHTML = sorted.map(([lang, size]) => {
+              const pct = (size / total) * 100;
+              const color = LANG_COLORS[lang] || 'rgba(var(--accent-rgb), 0.4)';
+              return `<div class="lang-bar-seg" style="width:0%;background:${color}" data-target="${pct}" title="${lang} ${pct.toFixed(1)}%"></div>`;
+            }).join('');
+
+            // Animate bar widths
+            requestAnimationFrame(() => {
+              langBar.querySelectorAll('.lang-bar-seg').forEach((seg) => {
+                const el = seg as HTMLElement;
+                el.style.width = el.dataset.target + '%';
+              });
+            });
+
+            // Language list
+            if (langList) {
+              langList.innerHTML = sorted.map(([lang, size]) => {
+                const pct = ((size / total) * 100).toFixed(1);
+                const color = LANG_COLORS[lang] || 'rgba(var(--accent-rgb), 0.4)';
+                return `<span class="lang-item"><span class="lang-dot" style="background:${color}"></span>${lang} <span class="lang-pct">${pct}%</span></span>`;
+              }).join('');
+            }
+
+            // Recent repos with language dots
+            if (langRepos) {
+              const recentRepos = repos
+                .filter((r: { fork: boolean }) => !r.fork)
+                .slice(0, 10);
+              langRepos.innerHTML = recentRepos.map((repo: { language: string; name: string; html_url: string }) => {
+                const color = LANG_COLORS[repo.language] || 'rgba(var(--accent-rgb), 0.3)';
+                return `<a href="${repo.html_url}" target="_blank" rel="noopener" class="lang-repo-chip"><span class="lang-repo-lang-dot" style="background:${color}"></span>${repo.name}</a>`;
+              }).join('');
+            }
+
+          } catch {
+            if (langBar) langBar.innerHTML = '<span style="color:var(--muted);font-size:0.8rem;padding:0.5rem">Could not load GitHub data</span>';
+          }
+        }
+
+        fetchLangs();
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // 03 — STICKY SCROLL TIMELINE
+    // ═══════════════════════════════════════════════════════
+    {
+      const items = document.querySelectorAll('.scroll-tl-item');
+      if (items.length > 0) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+            } else {
+              entry.target.classList.remove('in-view');
+            }
+          });
+        }, {
+          threshold: 0.2,
+          rootMargin: '0px 0px -10% 0px',
+        });
+
+        items.forEach(item => observer.observe(item));
+      }
+    }
+  </script>
+</BaseLayout>
