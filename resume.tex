@@ -116,10 +116,10 @@
 \begin{center}
     \textbf{\Huge \scshape \textcolor{accent}{Riad Mukhtarov}} \\ \vspace{1pt}
     \small \href{tel:+994508998676}{\underline{+994(50)-899-8676}} $|$
-    \href{mailto:riadmukh@gmail.com}{\underline{riadmukh@gmail.com}} $|$
+    \href{mailto:riad@riad.cc}{\underline{riad@riad.cc}} $|$
     \href{https://linkedin.com/in/riadmukhtarov}{\underline{LinkedIn}} $|$
     \href{https://github.com/r14dd}{\underline{GitHub}} $|$
-    \href{https://r14dd.github.io/}{\underline{Portfolio}}
+    \href{https://riad.cc}{\underline{riad.cc}}
 \end{center}
 
 
@@ -132,7 +132,7 @@
       {ABB - International Bank of Azerbaijan}{Baku, Azerbaijan}
 
     \resumeSubheading
-      {Head of IT Development Team}{Feb 2026 -- Present}
+      {Head of IT}{Feb 2026 -- Present}
       {European Youth Parliament Azerbaijan}{Baku, Azerbaijan}
       \resumeItemListStart
         \resumeItem{Leading the development team on a full website renewal, internal platform improvements, and new technology solutions supporting organizational operations}
@@ -174,11 +174,18 @@
 \section{Projects}
     \resumeSubHeadingListStart
       \resumeProjectHeading
-        {\textbf{QuorumRAG.rs }{\href{https://github.com/r14dd/quorumRAG.rs}{\textit{GitHub}}} $|$ \emph{Rust, Ollama, Tokio}}{May 2026}
+        {\textbf{patent }{\href{https://crates.io/crates/patent}{\textit{crates.io}}} {\href{https://github.com/r14dd/patent}{\textit{GitHub}}} $|$ \emph{Rust, Tokio, Ollama, fastembed}}{Jun 2026}
+          \resumeItemListStart
+            \resumeItem{Built a CLI that searches 11 open-source registries for existing implementations of a plain-English dev-tool idea, ranks matches with local embeddings, and writes a scoped verdict via LLM}
+            \resumeItem{Adopted across the Rust community as a prior-art discovery tool for crate authors and maintainers}
+            \resumeItem{Designed integrity-scoped verdict system that never asserts absence — only reports what was found in sources checked}
+          \resumeItemListEnd
+      \resumeProjectHeading
+        {\textbf{QuorumRAG.rs }{\href{https://crates.io/crates/quorumrag}{\textit{crates.io}}} $|$ \emph{Rust, Ollama, Tokio}}{May 2026}
           \resumeItemListStart
             \resumeItem{Built a multi-retriever RAG ensemble with rank fusion and quorum filtering, raising recall from 70\% to 95\%}
             \resumeItem{Applied 50\% overlapping chunk strides to prevent boundary-split answers, with parallel cached embeddings}
-            \resumeItem{Shipped as a single binary with no Python runtime dependency}
+            \resumeItem{Clustered evidence via cosine-similarity centroids so quorum vote operates on deduplicated semantic groups}
           \resumeItemListEnd
       \resumeProjectHeading
         {\textbf{almostAykhan -- RAG Chatbot }{\href{https://github.com/r14dd/almostAykhan}{\textit{GitHub}}} $|$ \emph{Python, FastAPI, OpenAI, FAISS, Docker}}{May 2026}
@@ -191,22 +198,8 @@
         {\textbf{Redis Redesign} $|$ \emph{Rust, Redis}}{Dec 2025}
           \resumeItemListStart
             \resumeItem{Replaced a monolithic cache with two layers: a key/subkey-to-id map and an id-to-value store}
-            \resumeItem{Added TTL lifecycle control to expire stale entries predictably and preserve low-latency access}
-            \resumeItem{Implemented garbage collection for expired entries and dangling cross-layer references}
+            \resumeItem{Added TTL lifecycle control with garbage collection for expired entries and dangling cross-layer references}
           \resumeItemListEnd
-      \resumeProjectHeading
-        {\textbf{Raft-Based Consensus Algorithm} $|$ \emph{Go, UDP, Protobuf}}{May 2024}
-          \resumeItemListStart
-            \resumeItem{Implemented Raft consensus with leader election, log replication, and fault tolerance}
-            \resumeItem{Built concurrent server components to maintain consistency across distributed nodes}
-          \resumeItemListEnd
-      % ---- Uncomment Kademlia only if you drop something else; with Education here it spills to page 2 ----
-      % \resumeProjectHeading
-      %   {\textbf{Distributed Hash Table (Kademlia)} $|$ \emph{Go, TCP, Protobuf}}{Feb 2024}
-      %     \resumeItemListStart
-      %       \resumeItem{Implemented a peer-to-peer distributed storage system using Kademlia routing}
-      %       \resumeItem{Achieved efficient $O(\log n)$ lookups and resilient data routing across nodes}
-      %     \resumeItemListEnd
     \resumeSubHeadingListEnd
 
 
