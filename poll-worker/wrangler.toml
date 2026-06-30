@@ -1,0 +1,21 @@
+name = "poll-api"
+main = "src/worker.js"
+compatibility_date = "2024-12-01"
+
+# RESET_SECRET (the admin key for /reset and /close) is provided via .dev.vars
+# locally (for `wrangler dev`) and via `wrangler secret put RESET_SECRET` in
+# production. It is intentionally NOT stored in this file.
+
+# ALLOW_LAN (CORS allowance for http://192.168.* / http://10.* phone origins) is
+# enabled for local class testing via .dev.vars, so it stays OFF in production —
+# prod CORS is limited to riad.cc + localhost.
+
+# Per-session poll state lives in a SQLite-backed Durable Object.
+[[durable_objects.bindings]]
+name = "POLL_ROOM"
+class_name = "PollRoom"
+
+# MUST be new_sqlite_classes (free-tier eligible), not new_classes.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PollRoom"]

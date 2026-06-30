@@ -54,7 +54,7 @@ const structuredData = JSON.stringify({
       class="lang-toggle"
       id="lang-toggle"
       type="button"
-      aria-haspopup="listbox"
+      aria-haspopup="menu"
       aria-expanded="false"
     >
       <span class="lang-globe" aria-hidden="true">
@@ -70,12 +70,12 @@ const structuredData = JSON.stringify({
     <div
       class="lang-menu"
       id="lang-menu"
-      role="listbox"
+      role="menu"
       aria-label="Select language"
     >
-      <button type="button" data-lang="en">English</button>
-      <button type="button" data-lang="ru">Русский</button>
-      <button type="button" data-lang="az">Azərbaycanca</button>
+      <button type="button" role="menuitemradio" aria-checked="true" data-lang="en">English</button>
+      <button type="button" role="menuitemradio" aria-checked="false" data-lang="ru">Русский</button>
+      <button type="button" role="menuitemradio" aria-checked="false" data-lang="az">Azərbaycanca</button>
     </div>
   </div>
 
@@ -242,7 +242,7 @@ const structuredData = JSON.stringify({
       <span class="cmd-search-icon" aria-hidden="true">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
       </span>
-      <input type="text" class="cmd-input" id="cmd-input" placeholder="Search or jump to..." autocomplete="off" spellcheck="false" aria-label="Command search"/>
+      <input type="text" class="cmd-input" id="cmd-input" placeholder="Search or jump to..." autocomplete="off" spellcheck="false" aria-label="Command search" role="combobox" aria-expanded="false" aria-controls="cmd-results" aria-activedescendant=""/>
       <span class="cmd-kbd">ESC</span>
     </div>
     <div class="cmd-results" id="cmd-results" role="listbox"></div>
@@ -298,15 +298,19 @@ const structuredData = JSON.stringify({
       buildProjectSim,
       getLogoUrl as getLogoUrlJS,
     } from "../lib/builders";
-    import gsap from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-    gsap.registerPlugin(ScrollTrigger);
 
     const _vitals = { lcp: null, cls: 0, fcp: null, inp: null };
     try { new PerformanceObserver((l) => { for (const e of l.getEntries()) _vitals.lcp = e.startTime; }).observe({ type: 'largest-contentful-paint', buffered: true }); } catch {}
     try { new PerformanceObserver((l) => { for (const e of l.getEntries()) if (!e.hadRecentInput) _vitals.cls += e.value; }).observe({ type: 'layout-shift', buffered: true }); } catch {}
     try { new PerformanceObserver((l) => { for (const e of l.getEntries()) if (e.name === 'first-contentful-paint') _vitals.fcp = e.startTime; }).observe({ type: 'paint', buffered: true }); } catch {}
     try { new PerformanceObserver((l) => { for (const e of l.getEntries()) _vitals.inp = Math.max(_vitals.inp || 0, e.duration); }).observe({ type: 'event', buffered: true, durationThreshold: 16 }); } catch {}
+
+    console.log(
+      '%criad.cc%c — built with patience, discipline, hunger, focus.\n' +
+      '"I am young, I am twenty years old; yet I know nothing of life but despair." — Remarque\n' +
+      '"No such thing as a life that\'s better than yours." — J. Cole',
+      'font-weight:bold;font-size:14px;color:#818cf8', 'font-size:12px;color:inherit'
+    );
 
     const sfx = (() => {
       let ctx = null;
@@ -645,6 +649,21 @@ const structuredData = JSON.stringify({
           '',
           '  Same idea, twice: earn confidence before you assert it.',
         ] });
+        const REMARKS = [
+          '"I am young, I am twenty years old; yet I know nothing of life but despair, death, fear." — All Quiet on the Western Front',
+          '"But perhaps that is what makes life so precious — that it can be lost." — Three Comrades',
+          '"The world has enough people who know how to die. What it needs is people who know how to live." — Three Comrades',
+          '"I did not want to think so much. I wanted peace and calm." — All Quiet on the Western Front',
+          '"We are forlorn like children, and experienced like old men." — All Quiet on the Western Front',
+        ];
+        const COLE_LINES = [
+          '"No such thing as a life that\'s better than yours." — Love Yourz',
+          '"Fool me one time, shame on you. Fool me twice, can\'t put the blame on you." — No Role Modelz',
+          '"If they don\'t know your dreams, they can\'t shoot \'em down." — Apparently',
+          '"Always gon\' be a bigger house somewhere, but n***a feel me, long as the people in that motherf***er love you dearly." — Love Yourz',
+          '"I\'m on my way, I know I\'m gonna get there some day." — The Climb Back',
+        ];
+        let quoteIdx = 0;
 
         return {
           help: () => ({ rich: [
@@ -657,6 +676,8 @@ const structuredData = JSON.stringify({
             tx('offline') + cmt('enable/disable offline mode'),
             tx('man riad') + cmt('the manual'),
             tx('philosophy') + cmt('the through-line'),
+            tx('reading · quote') + cmt('Remarque & Cole'),
+            tx('deps') + cmt('what this runs on'),
             tx('contact · resume · github') + cmt('reach me'),
             tx('fortune · neofetch') + cmt('for fun'),
             tx('clear') + cmt('clear the screen'),
@@ -765,7 +786,24 @@ const structuredData = JSON.stringify({
             ] };
           },
           history: () => ({ lines: hist.length ? hist.map((h, i) => String(i + 1).padStart(3) + '  ' + h) : ['(no history yet)'] }),
-          uptime: () => ({ lines: ['up ' + ((performance.now() - bootT) / 1000).toFixed(1) + 's · 1 user · load average: calm, calm, calm'] }),
+          uptime: () => {
+            const h = new Date().getHours();
+            const mood = h >= 0 && h < 6 ? 'nocturnal' : h < 12 ? 'building' : h < 18 ? 'shipping' : 'reflecting';
+            return { lines: ['up ' + ((performance.now() - bootT) / 1000).toFixed(1) + 's · 1 user · load average: calm, calm, calm', 'mood: ' + mood] };
+          },
+          deps: () => ({ lines: ['Dependencies:', '  patience, discipline      — Remarque', '  hunger, focus             — Cole', '  (no node_modules found. this is intentional.)'] }),
+          reading: () => {
+            const all = [...REMARKS, ...COLE_LINES];
+            const q = all[quoteIdx % all.length];
+            quoteIdx++;
+            return { lines: [q] };
+          },
+          quote: () => {
+            const all = [...REMARKS, ...COLE_LINES];
+            const q = all[quoteIdx % all.length];
+            quoteIdx++;
+            return { lines: [q] };
+          },
           date: () => ({ lines: [new Date().toString()] }),
           echo: (args, raw) => ({ lines: [raw] }),
           sudo: () => ({ lines: ['riad is not in the sudoers file. This incident will be reported. 🙂'], cls: 'err' }),
@@ -1099,9 +1137,11 @@ const structuredData = JSON.stringify({
         const vel = dt > 0 ? Math.min(dy / dt, 1) : 0;
         prevScrollY = window.scrollY;
         prevScrollTime = now;
-        document.documentElement.style.setProperty('--scroll-vel', vel.toFixed(3));
-        clearTimeout(velDecayTimer);
-        velDecayTimer = setTimeout(() => document.documentElement.style.setProperty('--scroll-vel', '0'), 150);
+        if (!prefersReducedMotion) {
+          document.documentElement.style.setProperty('--scroll-vel', vel.toFixed(3));
+          clearTimeout(velDecayTimer);
+          velDecayTimer = setTimeout(() => document.documentElement.style.setProperty('--scroll-vel', '0'), 150);
+        }
         setActiveLink();
         updateParallax();
         document.body.style.setProperty('--bg-y', `${window.scrollY * -0.2}px`);
@@ -1360,6 +1400,21 @@ const structuredData = JSON.stringify({
       if (langCurrent)
         langCurrent.textContent = languageLabels[lang] || "English";
 
+      if (lang === 'en') {
+        const heroTitle = document.querySelector("main section h1");
+        if (heroTitle) weightReveal(heroTitle, data.hero.name);
+        timeAware.apply(data);
+        const heroAbout = document.getElementById("hero-about");
+        if (heroAbout && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          heroAbout.innerHTML = data.about.split(' ').map(w => `<span class="word-gen">${w}</span>`).join(' ');
+          heroAbout.querySelectorAll('.word-gen').forEach((w, i) => {
+            setTimeout(() => w.classList.add('revealed'), 60 + i * 30);
+          });
+        }
+        initCarousel();
+        return;
+      }
+
       const heroTitle = document.querySelector("main section h1");
       const heroLinks = document.querySelector(".hero-links");
       if (heroTitle) weightReveal(heroTitle, data.hero.name);
@@ -1499,6 +1554,7 @@ const structuredData = JSON.stringify({
           return;
         }
         localStorage.setItem("portfolio-lang", lang);
+        langMenu.querySelectorAll('[role="menuitemradio"]').forEach(b => b.setAttribute('aria-checked', b === btn ? 'true' : 'false'));
         langMenu.classList.remove("open");
         langWrapper?.classList.remove("open");
         langToggle?.setAttribute("aria-expanded", "false");
@@ -1528,6 +1584,14 @@ const structuredData = JSON.stringify({
     const savedLang = localStorage.getItem("portfolio-lang") || "en";
     applyLanguage(savedLang);
     sfx.init();
+
+    {
+      const h = new Date().getHours();
+      if (h >= 0 && h < 5) {
+        document.documentElement.style.setProperty('--accent', '#a78bfa');
+        document.documentElement.style.setProperty('--accent-rgb', '167,139,250');
+      }
+    }
 
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = themeToggle?.querySelector('.theme-icon');
@@ -1649,8 +1713,8 @@ const structuredData = JSON.stringify({
         { group: 'Navigate', label: nav.recommendations, icon: 'nav', action: () => scrollCmd('recommendations') },
         { group: 'Navigate', label: nav.connect,         icon: 'nav', action: () => scrollCmd('connect')         },
         ...projects,
-        { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open('https://linkedin.com/in/riadmukhtarov', '_blank'); closeCmd(); } },
-        { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open('https://github.com/r14dd', '_blank'); closeCmd(); } },
+        { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open(currentProfile?.links?.linkedin || I18N.en.links.linkedin, '_blank'); closeCmd(); } },
+        { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open(currentProfile?.links?.github || I18N.en.links.github, '_blank'); closeCmd(); } },
         { group: 'Actions',  label: 'Toggle theme',  icon: 'action', action: () => { document.getElementById('theme-toggle')?.click(); closeCmd(); } },
         { group: 'Actions',  label: 'Toggle sound',  icon: 'action', action: () => { sfx.toggleMute(); closeCmd(); } },
         { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText(currentProfile?.email || '').then(() => showToast('Email copied')); closeCmd(); } },
@@ -1702,6 +1766,7 @@ const structuredData = JSON.stringify({
       cmdBackdrop?.classList.add('open');
       cmdPalette?.classList.add('open');
       cmdPalette?.setAttribute('aria-hidden', 'false');
+      if (cmdInput) cmdInput.setAttribute('aria-expanded', 'true');
       if (cmdPalette) focusTrap.activate(cmdPalette);
       cmdInput?.focus();
       renderCmd('');
@@ -1713,7 +1778,7 @@ const structuredData = JSON.stringify({
       cmdBackdrop?.classList.remove('open');
       cmdPalette?.classList.remove('open');
       cmdPalette?.setAttribute('aria-hidden', 'true');
-      if (cmdInput) cmdInput.value = '';
+      if (cmdInput) { cmdInput.value = ''; cmdInput.setAttribute('aria-expanded', 'false'); }
       if (!findCommitting) clearPageMarks();
       findCommitting = false;
       focusTrap.release();
@@ -1726,6 +1791,7 @@ const structuredData = JSON.stringify({
       const target = items[idx];
       if (target) { target.classList.add('highlighted'); target.scrollIntoView({ block: 'nearest' }); }
       cmdHighlightIdx = idx;
+      if (cmdInput) cmdInput.setAttribute('aria-activedescendant', target ? `cmd-opt-${idx}` : '');
     };
 
     const renderCmd = (query) => {
@@ -1752,7 +1818,14 @@ const structuredData = JSON.stringify({
       }
       cmdHighlightIdx = 0;
       if (!cmdFiltered.length) {
-        cmdResultsEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:0.85rem">No results</div>';
+        const emptyQuotes = [
+          '"Perhaps that is what makes life so precious." — Remarque',
+          '"No such thing as a life that\'s better than yours." — J. Cole',
+          '"I wanted peace and calm." — Remarque',
+          '"I\'m on my way." — J. Cole',
+        ];
+        const eq = emptyQuotes[Math.floor(Math.random() * emptyQuotes.length)];
+        cmdResultsEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:0.85rem;font-style:italic">' + eq + '</div>';
         return;
       }
       let html = '';
@@ -1763,7 +1836,7 @@ const structuredData = JSON.stringify({
           lastGroup = cmd.group;
         }
         const tag = grouped ? '' : `<span class="cmd-item-group">${cmd.group}</span>`;
-        html += `<div class="cmd-item${idx === 0 ? ' highlighted' : ''}" data-idx="${idx}" role="option"><span class="cmd-item-icon">${CMD_ICONS[cmd.icon]}</span>${cmd.label}${tag}</div>`;
+        html += `<div class="cmd-item${idx === 0 ? ' highlighted' : ''}" id="cmd-opt-${idx}" data-idx="${idx}" role="option"><span class="cmd-item-icon">${CMD_ICONS[cmd.icon]}</span>${cmd.label}${tag}</div>`;
       });
       cmdResultsEl.innerHTML = html;
       cmdResultsEl.querySelectorAll('.cmd-item').forEach((item, idx) => {
@@ -2056,6 +2129,15 @@ const structuredData = JSON.stringify({
       if (e.target.closest('a, button')) return;
       const sel = window.getSelection?.();
       if (sel && sel.toString().length > 0) return;
+      const title = card.querySelector('h3')?.textContent?.trim();
+      const p = (currentProfile?.projects || I18N.en.projects || []).find((x) => x.name === title);
+      if (p) openProject(p, card);
+    });
+    projectsSection?.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest?.('.proj-card');
+      if (!card || !projectsSection.contains(card)) return;
+      e.preventDefault();
       const title = card.querySelector('h3')?.textContent?.trim();
       const p = (currentProfile?.projects || I18N.en.projects || []).find((x) => x.name === title);
       if (p) openProject(p, card);
@@ -2455,7 +2537,7 @@ const structuredData = JSON.stringify({
       }
     }
     fetchSpotify();
-    setInterval(() => { if (_spotifyFails < 5) fetchSpotify(); }, 30000);
+    setInterval(() => { if (_spotifyFails < 5 && !document.hidden) fetchSpotify(); }, 30000);
 
     // Baku local time
     function updateBakuTime() {
@@ -2591,7 +2673,7 @@ const structuredData = JSON.stringify({
     if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
       const glCanvas = document.getElementById('hero-gl');
       if (glCanvas) {
-        const gl = glCanvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false });
+        const gl = glCanvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' });
         if (gl) {
           const dpr = Math.min(window.devicePixelRatio, 2);
           const resizeGL = () => {
@@ -2623,6 +2705,7 @@ const structuredData = JSON.stringify({
             varying vec2 vUv;
             uniform float uTime;
             uniform float uScroll;
+            uniform float uScrollVel;
             uniform vec3 uAccent;
             uniform float uOpacity;
 
@@ -2658,7 +2741,8 @@ const structuredData = JSON.stringify({
 
               vec3 col = uAccent * n * vignette * 0.45;
               float flow = noise(vec3(uv * 2.0 + vec2(uTime * 0.05, 0.0), uTime * 0.12));
-              col += uAccent * flow * 0.08 * vignette;
+              float velBoost = 1.0 + uScrollVel * 3.0;
+              col += uAccent * flow * 0.08 * vignette * velBoost;
 
               float scrollFade = 1.0 - smoothstep(0.0, 600.0, uScroll);
               gl_FragColor = vec4(col, n * vignette * uOpacity * 0.6 * scrollFade);
@@ -2680,6 +2764,7 @@ const structuredData = JSON.stringify({
 
           const uTime = gl.getUniformLocation(prog, 'uTime');
           const uScroll = gl.getUniformLocation(prog, 'uScroll');
+          const uScrollVel = gl.getUniformLocation(prog, 'uScrollVel');
           const uAccent = gl.getUniformLocation(prog, 'uAccent');
           const uOpacity = gl.getUniformLocation(prog, 'uOpacity');
 
@@ -2692,12 +2777,17 @@ const structuredData = JSON.stringify({
           let accent = parseAccent();
           let opacity = isDark ? 1.0 : 0.5;
           let time = 0;
+          let lastFrame = 0;
 
           let glAnimId = null;
-          const glTick = () => {
-            time += 0.016;
+          const glTick = (now) => {
+            const dt = lastFrame ? (now - lastFrame) / 1000 : 0.016;
+            lastFrame = now;
+            time += dt;
+            const vel = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-vel')) || 0;
             gl.uniform1f(uTime, time);
             gl.uniform1f(uScroll, window.scrollY);
+            gl.uniform1f(uScrollVel, vel);
             gl.uniform3f(uAccent, accent[0] || 0.5, accent[1] || 0.6, accent[2] || 1.0);
             gl.uniform1f(uOpacity, opacity);
             gl.clear(gl.COLOR_BUFFER_BIT);
@@ -2724,73 +2814,6 @@ const structuredData = JSON.stringify({
       }
     }
 
-    // ── GSAP SCROLLTRIGGER — section animations ──────
-    if (!prefersReducedMotion) {
-      ScrollTrigger.defaults({ toggleActions: 'play none none none' });
-
-      gsap.utils.toArray('section[id]').forEach((sec) => {
-        const h2 = sec.querySelector('h2');
-        const cards = sec.querySelectorAll('.project-card, .meta-card, .tl-item');
-        const lists = sec.querySelectorAll('ul li');
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sec,
-            start: 'top 85%',
-            end: 'top 20%',
-            once: true,
-            onEnter: () => sec.classList.add('section-revealed'),
-          }
-        });
-
-        if (h2) {
-          tl.fromTo(h2, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0);
-        }
-
-        if (cards.length) {
-          tl.fromTo(cards,
-            { y: 40, opacity: 0, scale: 0.96 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out', stagger: 0.07 },
-            0.15
-          );
-        }
-
-        if (lists.length) {
-          tl.fromTo(lists,
-            { y: 16, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out', stagger: 0.04 },
-            0.2
-          );
-        }
-      });
-
-      // parallax depth for project cards on scroll
-      gsap.utils.toArray('.project-card, .meta-card').forEach((card) => {
-        gsap.fromTo(card,
-          { y: 30 },
-          {
-            y: -10,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 0.8,
-            }
-          }
-        );
-      });
-
-      // hero content stagger on load
-      const heroSection = document.querySelector('main > section:first-of-type');
-      if (heroSection) {
-        const heroEls = heroSection.querySelectorAll('.hero-eyebrow, h1, .hero-about, .terminal-window, .hero-links');
-        gsap.fromTo(heroEls,
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.12, delay: 0.2 }
-        );
-      }
-    }
 
   </script>
 </BaseLayout>
