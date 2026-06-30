@@ -189,6 +189,7 @@ const {
         background: var(--bg);
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
+        overflow-x: hidden;
       }
 
       @media (prefers-reduced-motion: no-preference) {
@@ -446,7 +447,8 @@ const {
         border: none;
         color: var(--text-soft);
         text-align: left;
-        padding: 0.5rem 0.65rem;
+        padding: 0.6rem 0.65rem;
+        min-height: 44px;
         border-radius: var(--radius-md);
         font-size: 0.95rem;
         transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
@@ -1149,7 +1151,8 @@ const {
         background: transparent;
         border: 1px solid rgba(var(--accent-rgb), 0.2);
         color: var(--accent);
-        padding: 0.2rem 0.6rem;
+        padding: 0.4rem 0.6rem;
+        min-height: 44px;
         border-radius: var(--radius-full);
         font-size: 0.68rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
@@ -1223,6 +1226,7 @@ const {
         font-weight: 600;
         color: var(--text);
         margin: 0 0 0.5rem;
+        min-width: 0;
       }
 
       .proj-impact {
@@ -1237,6 +1241,7 @@ const {
         align-items: baseline;
         justify-content: space-between;
         gap: 0.5rem;
+        flex-wrap: wrap;
       }
 
       .proj-card-actions {
@@ -1271,7 +1276,8 @@ const {
         background: transparent;
         border: 1px solid rgba(var(--accent-rgb), 0.2);
         color: var(--accent);
-        padding: 0.2rem 0.6rem;
+        padding: 0.4rem 0.6rem;
+        min-height: 44px;
         border-radius: var(--radius-full);
         font-size: 0.68rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
@@ -1788,7 +1794,7 @@ const {
       .car-dot::before {
         content: '';
         position: absolute;
-        inset: -8px;
+        inset: -20px;
       }
       .car-dot.on {
         background: var(--text);
@@ -1817,7 +1823,8 @@ const {
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
-        padding: 0.4rem 0.7rem;
+        padding: 0.55rem 0.85rem;
+        min-height: 44px;
         border-radius: var(--radius-full);
         border: 1px solid var(--accent-muted);
         background: var(--surface);
@@ -2665,7 +2672,8 @@ const {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        padding: 0.45rem 0.95rem;
+        padding: 0.55rem 0.95rem;
+        min-height: 44px;
         border-radius: var(--radius-full);
         border: 1px solid var(--accent-muted);
         background: var(--surface);
@@ -2726,7 +2734,9 @@ const {
         section {
           margin: var(--space-8) 0 0;
         }
-        section[id] { --sec-gap: var(--space-8); }
+        #education, #experience, #projects,
+        #skills, #teaching, #recommendations,
+        #connect { --sec-gap: var(--space-8); }
 
         section:first-of-type {
           margin-top: var(--space-6);
@@ -2755,6 +2765,10 @@ const {
 
         .project-tech {
           opacity: 0.6;
+        }
+
+        .project-tech-pill {
+          opacity: 0.7;
         }
 
         .tech-meta {
@@ -2903,20 +2917,24 @@ const {
         .lang-toggle {
           padding: 0.5rem;
           border-radius: 50%;
+          min-width: 44px;
+          min-height: 44px;
         }
 
         h1 {
           font-size: clamp(2.2rem, 8vw, 2.8rem);
         }
 
-        h2 {
+        h2, .sec-title {
           font-size: 1.25rem;
         }
 
         section {
           margin: var(--space-6) 0 0;
         }
-        section[id] { --sec-gap: var(--space-6); }
+        #education, #experience, #projects,
+        #skills, #teaching, #recommendations,
+        #connect { --sec-gap: var(--space-6); }
 
         .proj-card {
           padding: 0.6rem;
@@ -2951,7 +2969,7 @@ const {
 
       @media (max-width: 360px) {
         body {
-          padding: 1.25rem 0.65rem 3rem;
+          padding: 1.25rem 0.75rem 3rem;
         }
 
         h1 {
@@ -2988,7 +3006,9 @@ const {
         section {
           margin: var(--space-6) 0 0;
         }
-        section[id] { --sec-gap: var(--space-6); }
+        #education, #experience, #projects,
+        #skills, #teaching, #recommendations,
+        #connect { --sec-gap: var(--space-6); }
 
         .connect-footer {
           padding: 1.5rem 0 1rem;
@@ -3549,8 +3569,8 @@ const {
         gap: 0.3rem;
       }
       .cmd-trigger {
-        width: 38px;
-        height: 38px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid rgba(var(--accent-rgb), 0.12);
         background: var(--surface);
@@ -3796,8 +3816,8 @@ const {
         position: absolute;
         top: 0.85rem;
         right: 0.85rem;
-        width: 32px;
-        height: 32px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         border: 1px solid rgba(var(--accent-rgb), 0.15);
         background: var(--surface);
@@ -3957,6 +3977,7 @@ const {
         align-items: center;
         gap: 0.4rem;
         padding: 0.5rem 1rem;
+        min-height: 44px;
         border: 1px solid rgba(var(--accent-rgb), 0.25);
         border-radius: var(--radius-full);
         background: rgba(var(--bg-rgb, 10,10,10), 0.85);
@@ -4006,8 +4027,10 @@ const {
         pointer-events: auto;
       }
       .mobile-nav-menu a {
-        display: block;
+        display: flex;
+        align-items: center;
         padding: 0.6rem 0.85rem;
+        min-height: 44px;
         font-family: 'JetBrains Mono', monospace;
         font-size: var(--text-xs);
         color: var(--text-soft);
@@ -4051,19 +4074,29 @@ const {
     <script>
 
       const scrollFill = document.querySelector('.scroll-line-fill');
-      if (scrollFill) {
+      if (scrollFill && window.matchMedia('(hover: hover)').matches) {
         const scrollLine = document.querySelector('.scroll-line');
-        let current = 0, target = 0;
+        let current = 0, target = 0, animating = false;
         const lerp = (a, b, t) => a + (b - a) * t;
-        const updateScroll = () => {
-          const max = document.documentElement.scrollHeight - window.innerHeight;
-          target = max > 0 ? (window.scrollY / max) * 100 : 0;
+        const tick = () => {
           current = lerp(current, target, 0.1);
           scrollFill.style.height = current.toFixed(2) + '%';
           if (scrollLine) scrollLine.style.opacity = current < 1 ? '0' : '1';
-          requestAnimationFrame(updateScroll);
+          if (Math.abs(current - target) > 0.1) {
+            requestAnimationFrame(tick);
+          } else {
+            current = target;
+            scrollFill.style.height = current.toFixed(2) + '%';
+            animating = false;
+          }
         };
-        requestAnimationFrame(updateScroll);
+        const onScroll = () => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          target = max > 0 ? (window.scrollY / max) * 100 : 0;
+          if (!animating) { animating = true; requestAnimationFrame(tick); }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
       }
 
       document.addEventListener('click', (e) => {
