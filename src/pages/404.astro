@@ -107,6 +107,7 @@
         az: { msg: 'Saytımda cəmi bir səhifə var, bura necə gəlib çıxdın?', back: 'Portfolioya qayıt' },
       };
       if (msgs[lang]) {
+        document.documentElement.lang = lang;
         document.getElementById('msg').textContent = msgs[lang].msg;
         document.getElementById('back-link').textContent = msgs[lang].back;
       }

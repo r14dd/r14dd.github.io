@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -12,8 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - uses: actions/setup-node@v5
         with:
@@ -31,6 +33,7 @@ jobs:
           git rm -rf . --quiet
           git clean -fdx --quiet
           cp -r /tmp/dist-deploy/. .
+          find . -name '.DS_Store' -delete
           git add .
           git commit -m "deploy: ${{ github.sha }}"
           git push --force origin HEAD:gh-pages

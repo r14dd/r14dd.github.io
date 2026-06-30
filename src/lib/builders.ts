@@ -311,7 +311,7 @@ export const buildProjects = (data: I18nProfile): string => {
       ? `<button class="sim-toggle" type="button" aria-label="Simulate ${simLabel} visualization"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>`
       : "";
     const simSvg = sim ? buildProjectSim(p) : "";
-    return `<div class="proj-card${sim ? " has-sim" : ""}${isWide ? " proj-card-wide" : ""}">
+    return `<div class="proj-card${sim ? " has-sim" : ""}${isWide ? " proj-card-wide" : ""}" role="button" tabindex="0" data-project="${p.name.replace(/"/g, "&quot;")}">
           <div class="proj-card-head">
             <h3 class="proj-name">${p.name}</h3>
             <div class="proj-card-actions">
@@ -486,7 +486,7 @@ export const buildConnect = (data: I18nProfile): string => {
           <div class="mini-map-container">
             <img class="mini-map-img mini-map-dark" src="/map-baku-dark.png" alt="Map of Baku, Azerbaijan" width="500" height="220" loading="lazy"/>
             <img class="mini-map-img mini-map-light" src="/map-baku-light.png" alt="Map of Baku, Azerbaijan" width="500" height="220" loading="lazy"/>
-            <div class="mini-map-dot"></div>
+            <div class="mini-map-dot" aria-hidden="true"></div>
             <div class="mini-map-label">Baku, Azerbaijan <span id="local-time"></span></div>
           </div>
         </div>

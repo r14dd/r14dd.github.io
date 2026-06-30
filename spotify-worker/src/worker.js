@@ -21,6 +21,7 @@ async function getAccessToken(env) {
   });
 
   const data = await res.json();
+  if (!data.access_token) throw new Error('Token refresh failed');
   cachedToken = data.access_token;
   tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   return cachedToken;
