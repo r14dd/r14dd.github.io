@@ -1127,6 +1127,7 @@ const structuredData = JSON.stringify({
     let prevScrollY = window.scrollY;
     let prevScrollTime = performance.now();
     let velDecayTimer = null;
+    let scrollVelJS = 0;
     window.addEventListener("scroll", () => {
       if (scrollTicking) return;
       scrollTicking = true;
@@ -1138,9 +1139,10 @@ const structuredData = JSON.stringify({
         prevScrollY = window.scrollY;
         prevScrollTime = now;
         if (!prefersReducedMotion) {
+          scrollVelJS = vel;
           document.documentElement.style.setProperty('--scroll-vel', vel.toFixed(3));
           clearTimeout(velDecayTimer);
-          velDecayTimer = setTimeout(() => document.documentElement.style.setProperty('--scroll-vel', '0'), 150);
+          velDecayTimer = setTimeout(() => { scrollVelJS = 0; document.documentElement.style.setProperty('--scroll-vel', '0'); }, 150);
         }
         setActiveLink();
         updateParallax();
@@ -2481,7 +2483,7 @@ const structuredData = JSON.stringify({
           });
         }
         var songLink = toggle.querySelector('a');
-        if (songLink) {
+        if (songLink && window.matchMedia('(hover: hover)').matches) {
           songLink.addEventListener('mouseenter', function() { el.classList.add('mini-hover'); });
           songLink.addEventListener('mouseleave', function() {
             setTimeout(function() {
@@ -2611,16 +2613,18 @@ const structuredData = JSON.stringify({
 
     // ── SCROLL TIMELINE OBSERVER ──────────────────────
     {
+      let scrollTlObs = null;
       const initScrollTl = () => {
+        if (scrollTlObs) scrollTlObs.disconnect();
         const items = document.querySelectorAll('.scroll-tl-item');
         if (!items.length) return;
-        const obs = new IntersectionObserver((entries) => {
+        scrollTlObs = new IntersectionObserver((entries) => {
           entries.forEach(e => {
             if (e.isIntersecting) e.target.classList.add('in-view');
             else e.target.classList.remove('in-view');
           });
         }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-        items.forEach(i => obs.observe(i));
+        items.forEach(i => scrollTlObs.observe(i));
       };
       initScrollTl();
 
@@ -2784,7 +2788,7 @@ const structuredData = JSON.stringify({
             const dt = lastFrame ? (now - lastFrame) / 1000 : 0.016;
             lastFrame = now;
             time += dt;
-            const vel = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--scroll-vel')) || 0;
+            const vel = scrollVelJS;
             gl.uniform1f(uTime, time);
             gl.uniform1f(uScroll, window.scrollY);
             gl.uniform1f(uScrollVel, vel);
@@ -2809,7 +2813,8 @@ const structuredData = JSON.stringify({
             accent = parseAccent();
           }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
-          window.addEventListener('resize', resizeGL, { passive: true });
+          let resizeTimer;
+          window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resizeGL, 150); }, { passive: true });
         }
       }
     }
