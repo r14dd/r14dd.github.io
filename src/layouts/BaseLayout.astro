@@ -95,7 +95,7 @@ const {
         --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
         --ease-in: cubic-bezier(0.55, 0, 1, 0.68);
 
-        --text-xs: 0.72rem;
+        --text-xs: 0.75rem;
         --text-sm: 0.82rem;
         --text-base: 1rem;
         --text-md: 1.1rem;
@@ -201,6 +201,7 @@ const {
         color: var(--text-soft);
         font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         margin: 0;
+        overflow-x: clip;
         padding: 3rem 1.5rem 4rem;
         padding-top: max(3rem, env(safe-area-inset-top));
         padding-left: max(1.5rem, env(safe-area-inset-left));
@@ -383,6 +384,7 @@ const {
         background: var(--surface);
         color: var(--accent);
         font-size: 0.9rem;
+        min-height: 44px;
         -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
         transition: box-shadow 0.25s var(--ease-out), border-color 0.25s var(--ease-out), transform 0.2s var(--ease-spring);
@@ -864,7 +866,7 @@ const {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        font-size: 0.68rem;
+        font-size: 0.75rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
         text-transform: uppercase;
         letter-spacing: 0.2em;
@@ -905,7 +907,7 @@ const {
 
 
       .tl-period {
-        font-size: 0.68rem;
+        font-size: 0.75rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
         letter-spacing: 0.05em;
         color: var(--muted);
@@ -984,7 +986,7 @@ const {
         box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.12), 0 0 18px rgba(var(--accent-rgb), 0.3);
       }
       .scroll-tl-period {
-        font-size: 0.68rem;
+        font-size: 0.75rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
         letter-spacing: 0.05em;
         color: var(--muted);
@@ -1104,7 +1106,7 @@ const {
 
       .feat-pill {
         font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 0.68rem;
+        font-size: 0.75rem;
         color: var(--text-soft);
         border: 1px solid rgba(var(--accent-rgb), 0.25);
         border-radius: var(--radius-sm);
@@ -1154,7 +1156,7 @@ const {
         padding: 0.4rem 0.6rem;
         min-height: 44px;
         border-radius: var(--radius-full);
-        font-size: 0.68rem;
+        font-size: 0.75rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
         letter-spacing: 0.03em;
         text-decoration: none;
@@ -1279,7 +1281,7 @@ const {
         padding: 0.4rem 0.6rem;
         min-height: 44px;
         border-radius: var(--radius-full);
-        font-size: 0.68rem;
+        font-size: 0.75rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
         letter-spacing: 0.03em;
         cursor: pointer;
@@ -1657,7 +1659,7 @@ const {
         white-space: normal;
       }
 
-      .testi-wrap { position: relative; overflow: hidden; }
+      .testi-wrap { position: relative; overflow: hidden; max-width: 100%; }
       .testi-scroll {
         display: flex;
         gap: 1rem;
@@ -1713,7 +1715,7 @@ const {
         align-items: center;
         justify-content: center;
         font-family: 'JetBrains Mono', monospace;
-        font-size: .72rem;
+        font-size: .75rem;
         color: var(--accent);
       }
       .testi-name {
@@ -1727,6 +1729,9 @@ const {
       .testi-linkedin {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
         color: var(--muted);
         opacity: 0.5;
         transition: opacity 0.2s ease, color 0.2s ease;
@@ -1738,16 +1743,16 @@ const {
         background-size: 0% 1px;
       }
       .testi-linkedin svg {
-        width: 13px;
-        height: 13px;
+        width: 16px;
+        height: 16px;
       }
       .testi-role {
-        font-size: .7rem;
+        font-size: .75rem;
         color: var(--muted);
       }
       .testi-course {
         font-family: 'JetBrains Mono', monospace;
-        font-size: .68rem;
+        font-size: .75rem;
         color: rgba(var(--accent-rgb), .55);
         margin-top: .1rem;
       }
@@ -2040,6 +2045,9 @@ const {
         color: var(--accent);
         text-decoration: none;
         font-style: italic;
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
       }
 
       .spotify-line a:hover {
@@ -2340,7 +2348,7 @@ const {
         max-width: 480px;
         margin: 1.2rem 0 0;
         font-family: "JetBrains Mono", ui-monospace, monospace;
-        font-size: 0.72rem;
+        font-size: 0.75rem;
         font-weight: 400;
         line-height: 1.8;
         overflow-x: auto;
@@ -2801,7 +2809,10 @@ const {
           font-size: clamp(2.4rem, 7vw, 3.2rem);
         }
         .terminal-window {
-          font-size: 0.72rem;
+          font-size: 0.75rem;
+        }
+        .spotify-expand-hint {
+          display: none;
         }
       }
 
@@ -2812,7 +2823,7 @@ const {
 
         .spotify-line {
           margin: 1.2rem 0 0;
-          font-size: 0.72rem;
+          font-size: 0.75rem;
         }
 
         .spotify-line a {
@@ -2850,7 +2861,7 @@ const {
 
         .spotify-progress-row .spotify-time {
           margin-left: 0;
-          font-size: 0.62rem;
+          font-size: 0.75rem;
         }
 
         .spotify-progress-row .spotify-progress {
@@ -2950,7 +2961,7 @@ const {
 
         .terminal-window {
           padding: 0.7rem 0.85rem;
-          font-size: 0.68rem;
+          font-size: 0.75rem;
         }
 
 
@@ -2982,7 +2993,7 @@ const {
 
         .terminal-window {
           padding: 0.6rem 0.7rem;
-          font-size: 0.68rem;
+          font-size: 0.75rem;
         }
 
         .proj-card {
@@ -3281,7 +3292,7 @@ const {
       }
 
       .teaching-skill-label {
-        font-size: 0.62rem;
+        font-size: 0.75rem;
         font-family: "JetBrains Mono", ui-monospace, monospace;
         color: var(--text-soft);
         opacity: 0.35;
