@@ -233,22 +233,9 @@ const {
       }
 
       #hero-gl {
-        position: absolute;
-        top: -2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        width: min(900px, 100vw);
-        height: 520px;
-        pointer-events: none;
-        z-index: 0;
-        opacity: 0;
-        transition: opacity 1.2s ease;
-        mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, black 30%, transparent 70%);
-        -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, black 30%, transparent 70%);
+        display: none;
       }
-      #hero-gl.visible { opacity: 1; }
       main > section:first-of-type { position: relative; z-index: 1; }
-      main > section:first-of-type > *:not(#hero-gl) { position: relative; z-index: 1; }
 
       .hero-eyebrow {
         display: inline-flex;
@@ -635,14 +622,7 @@ const {
         padding-top: var(--space-4);
         margin-top: var(--space-12);
       }
-      section[id] { margin-top: var(--sec-gap, 3rem); }
-      #education { --sec-gap: 3rem; }
-      #experience { --sec-gap: 3.5rem; }
-      #projects { --sec-gap: 4rem; }
-      #skills { --sec-gap: 4.5rem; }
-      #teaching { --sec-gap: 5rem; }
-      #recommendations { --sec-gap: 5.5rem; }
-      #connect { --sec-gap: 6rem; }
+      section[id] { margin-top: 3rem; }
 
       .side-nav {
         position: fixed;
@@ -1198,6 +1178,9 @@ const {
       }
 
       .proj-card {
+        display: grid;
+        grid-template-rows: subgrid;
+        grid-row: span 2;
         background: transparent;
         border: 1px solid rgba(255, 255, 255, 0.07);
         border-radius: var(--radius-md);
@@ -1227,7 +1210,7 @@ const {
         font-size: 0.98rem;
         font-weight: 600;
         color: var(--text);
-        margin: 0 0 0.5rem;
+        margin: 0;
         min-width: 0;
       }
 
@@ -1240,7 +1223,7 @@ const {
 
       .proj-card-head {
         display: flex;
-        align-items: baseline;
+        align-items: flex-start;
         justify-content: space-between;
         gap: 0.5rem;
         flex-wrap: wrap;
@@ -2541,22 +2524,7 @@ const {
         position: relative;
       }
       .connect-footer::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 800px;
-        height: 500px;
-        border-radius: 50%;
-        background: radial-gradient(ellipse at center, rgba(var(--accent-rgb), 0.05), transparent 70%);
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 1.2s ease;
-        z-index: -1;
-      }
-      #connect.section-revealed::before {
-        opacity: 1;
+        display: none;
       }
 
       .connect-tagline {
@@ -2740,9 +2708,7 @@ const {
         section {
           margin: var(--space-8) 0 0;
         }
-        #education, #experience, #projects,
-        #skills, #teaching, #recommendations,
-        #connect { --sec-gap: var(--space-8); }
+        section[id] { margin-top: var(--space-8); }
 
         section:first-of-type {
           margin-top: var(--space-6);
@@ -2941,9 +2907,7 @@ const {
         section {
           margin: var(--space-6) 0 0;
         }
-        #education, #experience, #projects,
-        #skills, #teaching, #recommendations,
-        #connect { --sec-gap: var(--space-6); }
+        section[id] { margin-top: var(--space-6); }
 
         .proj-card {
           padding: 0.6rem;
@@ -3015,9 +2979,7 @@ const {
         section {
           margin: var(--space-6) 0 0;
         }
-        #education, #experience, #projects,
-        #skills, #teaching, #recommendations,
-        #connect { --sec-gap: var(--space-6); }
+        section[id] { margin-top: var(--space-6); }
 
         .connect-footer {
           padding: 1.5rem 0 1rem;

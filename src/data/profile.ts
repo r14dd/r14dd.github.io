@@ -288,15 +288,9 @@ export const profile: Profile = {
       ],
     },
     {
-      category: "Communication Protocols & APIs",
+      category: "Protocols, APIs & Messaging",
       groups: [
-        { label: "", items: ["gRPC", "RESTful APIs", "GraphQL", "WebSockets", "WebRTC"] },
-      ],
-    },
-    {
-      category: "Messaging & Integration",
-      groups: [
-        { label: "", items: ["Apache Kafka", "RabbitMQ"] },
+        { label: "", items: ["gRPC", "RESTful APIs", "GraphQL", "WebSockets", "WebRTC", "Apache Kafka", "RabbitMQ"] },
       ],
     },
     {
