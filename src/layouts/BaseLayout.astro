@@ -621,6 +621,8 @@ const {
       .section-block {
         padding-top: var(--space-4);
         margin-top: var(--space-12);
+        content-visibility: auto;
+        contain-intrinsic-size: auto 600px;
       }
       section[id] { margin-top: 3rem; }
 
@@ -1300,8 +1302,8 @@ const {
         align-items: center;
         justify-content: center;
         background: rgba(0, 0, 0, 0);
-        backdrop-filter: blur(0);
-        -webkit-backdrop-filter: blur(0);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         pointer-events: none;
         transition: background 0.22s var(--ease-in), backdrop-filter 0.22s var(--ease-in), -webkit-backdrop-filter 0.22s var(--ease-in);
       }
@@ -1989,7 +1991,7 @@ const {
 
       .spotify-word.revealed {
         opacity: 1;
-        filter: blur(0);
+        filter: none;
       }
 
       .spotify-line.spotify-revealing .spotify-progress-row {
@@ -2344,7 +2346,7 @@ const {
 
       .hero-about .word-gen.revealed {
         opacity: 1;
-        filter: blur(0);
+        filter: none;
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -2641,6 +2643,7 @@ const {
       }
 
       .cta-btn {
+        position: relative;
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
@@ -2655,13 +2658,24 @@ const {
         transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), color 0.2s var(--ease-out), transform 0.15s var(--ease-spring);
       }
 
-      .cta-btn:not(:hover) {
+      .cta-btn::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.28), 0 0 36px rgba(var(--accent-rgb), 0.1);
+        opacity: 0;
+        pointer-events: none;
+        will-change: opacity;
+      }
+
+      .cta-btn:not(:hover)::after {
         animation: cta-pulse 3s ease-in-out infinite;
       }
 
       @keyframes cta-pulse {
-        0%, 100% { box-shadow: 0 0 0 rgba(var(--accent-rgb), 0); }
-        50% { box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.28), 0 0 36px rgba(var(--accent-rgb), 0.1); }
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
       }
 
       .cta-icon {
@@ -3113,7 +3127,7 @@ const {
 
       @media (hover: none) {
         .cursor-dot { display: none; }
-        .cta-btn:not(:hover) { animation: none; }
+        .cta-btn:not(:hover)::after { animation: none; }
       }
 
       .section-revealed ul li {
@@ -3331,7 +3345,7 @@ const {
 
 
       @media (prefers-reduced-motion: reduce) {
-        .cta-btn:not(:hover) { animation: none; }
+        .cta-btn:not(:hover)::after { animation: none; }
         .link-exit-pulse { animation: none; }
       }
 

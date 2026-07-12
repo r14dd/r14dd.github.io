@@ -2619,7 +2619,11 @@ const structuredData = JSON.stringify({
 
       const contentEl = document.querySelector('.content');
       if (contentEl) {
-        new MutationObserver(() => { initScrollTl(); }).observe(contentEl, { childList: true, subtree: true });
+        let scrollTlTimer;
+        new MutationObserver(() => {
+          clearTimeout(scrollTlTimer);
+          scrollTlTimer = setTimeout(initScrollTl, 200);
+        }).observe(contentEl, { childList: true, subtree: true });
       }
     }
 
