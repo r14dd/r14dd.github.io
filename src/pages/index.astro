@@ -1402,21 +1402,6 @@ const structuredData = JSON.stringify({
       if (langCurrent)
         langCurrent.textContent = languageLabels[lang] || "English";
 
-      if (lang === 'en') {
-        const heroTitle = document.querySelector("main section h1");
-        if (heroTitle) weightReveal(heroTitle, data.hero.name);
-        timeAware.apply(data);
-        const heroAbout = document.getElementById("hero-about");
-        if (heroAbout && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          heroAbout.innerHTML = data.about.split(' ').map(w => `<span class="word-gen">${w}</span>`).join(' ');
-          heroAbout.querySelectorAll('.word-gen').forEach((w, i) => {
-            setTimeout(() => w.classList.add('revealed'), 60 + i * 30);
-          });
-        }
-        initCarousel();
-        return;
-      }
-
       const heroTitle = document.querySelector("main section h1");
       const heroLinks = document.querySelector(".hero-links");
       if (heroTitle) weightReveal(heroTitle, data.hero.name);

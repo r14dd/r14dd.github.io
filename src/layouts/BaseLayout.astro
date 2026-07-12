@@ -2774,6 +2774,15 @@ const {
 
         .spotify-mini-player {
           left: 0;
+          right: auto;
+          top: 100%;
+          transform: translateY(6px) scale(0.97);
+        }
+        .spotify-line.mini-hover .spotify-mini-player {
+          transform: translateY(6px) scale(1);
+        }
+        .spotify-line.history-open .spotify-mini-player {
+          transform: translateY(6px) scale(1);
         }
       }
 
@@ -2864,12 +2873,7 @@ const {
           max-width: 160px;
         }
 
-        .spotify-mini-player {
-          left: 0;
-          right: 0;
-        }
-
-        .spotify-mini-link {
+        .spotify-line a.spotify-mini-link {
           min-width: unset;
         }
 
@@ -3809,31 +3813,7 @@ const {
       }
 
       @media (max-width: 1169px) {
-        .proj-modal {
-          top: auto;
-          bottom: 0;
-          left: 0;
-          transform: translateY(100%);
-          width: 100%;
-          max-height: 85vh;
-          max-height: 85dvh;
-          border-radius: 20px 20px 0 0;
-          transition: opacity 0.22s ease, transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-          padding-bottom: env(safe-area-inset-bottom);
-        }
-        .proj-modal.open {
-          transform: translateY(0);
-        }
-        .proj-modal::before {
-          content: '';
-          display: block;
-          width: 36px;
-          height: 4px;
-          border-radius: 2px;
-          background: rgba(var(--accent-rgb), 0.25);
-          margin: 0.6rem auto 0;
-        }
-        .proj-modal-card { padding: 1rem 1.2rem calc(2rem + env(safe-area-inset-bottom)); }
+        .proj-modal-card { padding: 1rem 1.2rem 1.6rem; }
         .proj-close { top: 0.6rem; right: 0.6rem; }
       }
 
