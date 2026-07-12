@@ -1835,6 +1835,7 @@ const {
       .spotify-line {
         margin: 1.2rem 0 0;
         padding: 0.9rem 1.1rem;
+        width: fit-content;
         max-width: 480px;
         border: 1px solid rgba(var(--accent-rgb), 0.15);
         border-radius: var(--radius-md);
@@ -2035,6 +2036,10 @@ const {
         opacity: 0.8;
       }
 
+      .spotify-line a.spotify-mini-link:hover {
+        opacity: 1;
+      }
+
       .spotify-marquee-wrap {
         display: inline-block;
         max-width: 220px;
@@ -2062,10 +2067,9 @@ const {
       }
 
       .spotify-progress-row {
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        vertical-align: middle;
-        margin-left: 10px;
+        margin-top: 6px;
         transition: opacity 0.5s ease;
       }
 
@@ -2078,13 +2082,12 @@ const {
       }
 
       .spotify-progress {
-        display: inline-block;
-        width: 60px;
+        flex: 1;
+        min-width: 0;
         height: 2px;
         background: rgba(var(--accent-rgb), 0.12);
         border-radius: 1px;
         overflow: hidden;
-        vertical-align: middle;
         margin: 0 5px;
       }
 
@@ -2101,12 +2104,11 @@ const {
       /* Mini player - hidden by default, shown on hover */
       .spotify-mini-player {
         position: absolute;
-        left: 20%;
-        top: 100%;
-        margin-top: 6px;
+        right: 0;
+        top: 0;
+        transform: translate(calc(100% + 10px), 0) scale(0.97);
         opacity: 0;
         visibility: hidden;
-        transform: translateY(4px);
         transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
         z-index: 10;
       }
@@ -2114,17 +2116,14 @@ const {
       .spotify-line.mini-hover .spotify-mini-player {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translate(calc(100% + 10px), 0) scale(1);
       }
 
       .spotify-line.history-open .spotify-mini-player {
-        top: auto;
-        bottom: 100%;
-        margin-top: 0;
-        margin-bottom: 6px;
+        transform: translate(calc(100% + 10px), 0) scale(1);
       }
 
-      .spotify-mini-link {
+      .spotify-line a.spotify-mini-link {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -2135,8 +2134,7 @@ const {
         text-decoration: none !important;
         color: var(--text);
         font-style: normal !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         min-width: 280px;
       }
 
@@ -2812,25 +2810,13 @@ const {
         }
 
         .spotify-progress-row {
-          display: flex;
-          align-items: center;
-          margin-left: 0;
-          margin-top: 6px;
-          gap: 0;
           max-height: 20px;
-          opacity: 1;
           overflow: hidden;
           transition: opacity 0.25s ease, max-height 0.3s ease, margin-top 0.3s ease;
         }
 
         .spotify-progress-row .spotify-time {
-          margin-left: 0;
           font-size: 0.75rem;
-        }
-
-        .spotify-progress-row .spotify-progress {
-          flex: 1;
-          width: auto;
         }
 
         .spotify-line.history-open .spotify-progress-row,
@@ -3041,8 +3027,6 @@ const {
       .proj-card {
         position: relative;
         padding: 0.8rem;
-        margin-left: -0.8rem;
-        margin-right: -0.8rem;
         border-radius: 8px;
         border: 1px solid transparent;
         transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out);

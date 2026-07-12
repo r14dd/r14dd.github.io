@@ -2461,17 +2461,7 @@ const structuredData = JSON.stringify({
         }
       }
       var progRow = el.querySelector('.spotify-progress-row');
-      if (progRow && window.innerWidth <= 480) {
-        var link = el.querySelector('.spotify-inline > a');
-        var logo = el.querySelector('.spotify-logo-wrap');
-        if (link && logo) {
-          var containerLeft = el.getBoundingClientRect().left;
-          var textStart = logo.getBoundingClientRect().right + 6;
-          var linkRight = link.getBoundingClientRect().right;
-          progRow.style.width = (linkRight - textStart) + 'px';
-          progRow.style.marginLeft = (textStart - containerLeft) + 'px';
-        }
-      }
+
       var toggle = document.getElementById('spotify-toggle');
       if (toggle) {
         if (topTracks.length > 0) {
