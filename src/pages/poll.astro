@@ -486,7 +486,7 @@
         }
 
         function pollState() {
-          if (!session) return;
+          if (!session || document.hidden) return;
           fetch(WORKER + '/state?s=' + encodeURIComponent(session), {
             signal: AbortSignal.timeout(8000)
           }).then(function (res) {

@@ -1,0 +1,43 @@
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<script>
+  const cursorDot = document.querySelector('.cursor-dot');
+  const cursorReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (cursorDot instanceof HTMLElement && window.matchMedia('(hover: hover)').matches && !cursorReduced) {
+    document.body.classList.add('cursor-active');
+    let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, dotVisible = false, dotScale = 1;
+
+    let dotAnimId: number | null = null;
+    const animateDot = () => {
+      dotX += (mouseX - dotX) * 0.15;
+      dotY += (mouseY - dotY) * 0.15;
+      cursorDot.style.transform = `translate3d(${dotX - 2.5}px, ${dotY - 2.5}px, 0) scale(${dotScale})`;
+      if (Math.abs(mouseX - dotX) + Math.abs(mouseY - dotY) > 0.1) {
+        dotAnimId = requestAnimationFrame(animateDot);
+      } else {
+        dotAnimId = null;
+      }
+    };
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!dotVisible) {
+        dotX = mouseX;
+        dotY = mouseY;
+        dotVisible = true;
+        cursorDot.style.opacity = '1';
+      }
+      if (!dotAnimId) dotAnimId = requestAnimationFrame(animateDot);
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cursorDot.style.opacity = '0';
+      dotVisible = false;
+    });
+
+    document.addEventListener('mouseover', (e) => {
+      dotScale = (e.target instanceof Element && e.target.closest('a, button')) ? 3 : 1;
+    });
+  }
+</script>

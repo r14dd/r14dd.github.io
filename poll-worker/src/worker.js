@@ -50,7 +50,7 @@ function cors(origin, env) {
   return {
     'Access-Control-Allow-Origin': allowed ? o : 'https://riad.cc',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
     'Cache-Control': 'no-store',
     'Vary': 'Origin',
@@ -114,21 +114,23 @@ export default {
         return forward(env, session, '/state', origin);
       }
 
-      // POST /reset?s=SESSION&key=RESET_SECRET
+      // POST /reset?s=SESSION  (Authorization: Bearer RESET_SECRET)
       if (method === 'POST' && url.pathname === '/reset') {
         const session = url.searchParams.get('s');
         if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
-        if (url.searchParams.get('key') !== env.RESET_SECRET) {
+        const authKey = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '') || url.searchParams.get('key');
+        if (authKey !== env.RESET_SECRET) {
           return json({ error: 'Unauthorized' }, origin, env, 401);
         }
         return forward(env, session, '/reset', origin);
       }
 
-      // POST /close?s=SESSION&key=RESET_SECRET  (toggles voting open/closed)
+      // POST /close?s=SESSION  (Authorization: Bearer RESET_SECRET)
       if (method === 'POST' && url.pathname === '/close') {
         const session = url.searchParams.get('s');
         if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
-        if (url.searchParams.get('key') !== env.RESET_SECRET) {
+        const authKey = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '') || url.searchParams.get('key');
+        if (authKey !== env.RESET_SECRET) {
           return json({ error: 'Unauthorized' }, origin, env, 401);
         }
         return forward(env, session, '/close', origin);

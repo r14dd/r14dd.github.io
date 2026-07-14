@@ -1,5 +1,5 @@
-const CACHE = 'portfolio-v1';
-const CORE = ['/', '/lab/lab.wasm'];
+const CACHE = 'portfolio-v2';
+const CORE = ['/'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -24,7 +24,10 @@ self.addEventListener('fetch', (e) => {
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req)
-        .then((res) => { const c = res.clone(); caches.open(CACHE).then((cache) => cache.put(req, c)); return res; })
+        .then((res) => {
+          if (res.ok) { const c = res.clone(); caches.open(CACHE).then((cache) => cache.put(req, c)); }
+          return res;
+        })
         .catch(() => caches.match(req).then((m) => m || caches.match('/')))
     );
     return;
@@ -44,5 +47,5 @@ self.addEventListener('fetch', (e) => {
 });
 
 self.addEventListener('message', (e) => {
-  if (e.data?.type === 'purge') caches.delete(CACHE);
+  if (e.data?.type === 'purge') e.waitUntil(caches.delete(CACHE));
 });

@@ -5,9 +5,15 @@ const ALLOWED_ORIGIN = 'https://riad.cc';
 let cachedToken = null;
 let tokenExpiry = 0;
 let lastPlaying = null;
+let tokenCooldownUntil = 0;
+
+let cachedResult = null;
+let cachedResultTime = 0;
+const CACHE_TTL = 15000;
 
 async function getAccessToken(env) {
   if (cachedToken && Date.now() < tokenExpiry) return cachedToken;
+  if (Date.now() < tokenCooldownUntil) throw new Error('Token refresh in cooldown');
 
   const res = await fetch(TOKEN_URL, {
     method: 'POST',
@@ -21,7 +27,10 @@ async function getAccessToken(env) {
   });
 
   const data = await res.json();
-  if (!data.access_token) throw new Error('Token refresh failed');
+  if (!data.access_token) {
+    tokenCooldownUntil = Date.now() + 60000;
+    throw new Error('Token refresh failed');
+  }
   cachedToken = data.access_token;
   tokenExpiry = Date.now() + (data.expires_in - 60) * 1000;
   return cachedToken;
@@ -32,6 +41,7 @@ function cors(origin) {
   return {
     'Access-Control-Allow-Origin': allowed ? origin : ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET',
+    'Vary': 'Origin',
     'Cache-Control': 'no-store, no-cache, must-revalidate',
   };
 }
@@ -39,9 +49,18 @@ function cors(origin) {
 export default {
   async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
+    const url = new URL(request.url);
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: cors(origin) });
+    }
+
+    if (request.method !== 'GET' || (url.pathname !== '/' && url.pathname !== '')) {
+      return new Response('Not Found', { status: 404, headers: cors(origin) });
+    }
+
+    if (cachedResult && Date.now() - cachedResultTime < CACHE_TTL) {
+      return Response.json(cachedResult, { headers: cors(origin) });
     }
 
     try {
@@ -65,7 +84,6 @@ export default {
         const data = await nowRes.json();
         if (data.is_playing && data.item) {
           const track = parseTrack(data.item);
-          // Persist to KV only when the track changes (KV free tier allows 1k writes/day)
           if (env.LAST_PLAYED && (!lastPlaying || lastPlaying.url !== track.url)) {
             ctx.waitUntil(env.LAST_PLAYED.put('last', JSON.stringify(track)));
           }
@@ -89,12 +107,19 @@ export default {
       }
 
       if (!result) {
-        return Response.json({ playing: false, track: null, topTracks: [] }, { headers: cors(origin) });
+        result = { playing: false, track: null, topTracks: [] };
+      } else {
+        result.topTracks = [];
       }
 
-      result.topTracks = [];
+      cachedResult = result;
+      cachedResultTime = Date.now();
       return Response.json(result, { headers: cors(origin) });
-    } catch {
+    } catch (e) {
+      console.error(e);
+      if (cachedResult) {
+        return Response.json(cachedResult, { headers: cors(origin) });
+      }
       if (lastPlaying) {
         return Response.json({ playing: false, ...lastPlaying, topTracks: [] }, { headers: cors(origin) });
       }

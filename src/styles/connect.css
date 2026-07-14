@@ -1,0 +1,135 @@
+.connect-footer {
+  text-align: center;
+  padding: 3rem 0 2rem;
+  position: relative;
+}
+
+.connect-footer::before {
+  display: none;
+}
+
+.connect-tagline {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 2rem;
+  font-style: italic;
+  color: var(--text);
+  margin: 0 0 1.2rem;
+}
+
+.connect-links {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.mini-map {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.mini-map-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.mini-map-img {
+  width: 280px;
+  height: auto;
+  border-radius: var(--radius-md);
+  opacity: 0.7;
+  filter: var(--map-filter, none);
+}
+
+.mini-map-light {
+  display: none;
+}
+
+html.light .mini-map-dark {
+  display: none;
+}
+
+html.light .mini-map-light {
+  display: block;
+  filter: var(--map-filter-light, none);
+}
+
+.mini-map-dot {
+  position: absolute;
+  top: 48%;
+  left: 43%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.mini-map-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  opacity: 0;
+  animation: map-ping 2s ease-out infinite;
+}
+
+.mini-map-dot::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  animation: map-ping 2s ease-out infinite 0.4s;
+}
+
+@keyframes map-ping {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+.mini-map-label {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-family: 'Manrope', sans-serif;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.mini-map-label span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mini-map-dot::before,
+  .mini-map-dot::after {
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .connect-tagline {
+    font-size: 1.5rem;
+  }
+  .connect-footer {
+    padding: 2rem 0 1.5rem;
+  }
+  .connect-links {
+    gap: 0.6rem;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .connect-footer {
+    padding: 1.5rem 0 1rem;
+  }
+}

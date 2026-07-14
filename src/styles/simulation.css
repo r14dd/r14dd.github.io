@@ -1,0 +1,231 @@
+.sim-visual {
+  touch-action: manipulation;
+}
+
+.sim-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  color: var(--accent);
+  padding: 0.4rem 0.6rem;
+  min-height: 44px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), transform 0.15s var(--ease-spring);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sim-toggle:hover {
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.15);
+}
+
+.sim-toggle:active {
+  transform: scale(0.96);
+}
+
+.sim-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  pointer-events: none;
+  transition: background 0.22s var(--ease-in), backdrop-filter 0.22s var(--ease-in), -webkit-backdrop-filter 0.22s var(--ease-in);
+}
+
+.sim-overlay.open {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: background 0.35s var(--ease-out), backdrop-filter 0.35s var(--ease-out), -webkit-backdrop-filter 0.35s var(--ease-out);
+}
+
+html.light .sim-overlay.open {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.sim-overlay-content {
+  transform: scale(0.85);
+  opacity: 0;
+  transition: transform 0.22s var(--ease-in), opacity 0.18s var(--ease-in);
+  padding: var(--space-8);
+  border-radius: var(--radius-lg);
+  background: rgba(var(--accent-rgb), 0.04);
+  border: 1px solid rgba(var(--accent-rgb), 0.12);
+  max-width: 420px;
+  width: 90vw;
+}
+
+.sim-overlay.open .sim-overlay-content {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.35s var(--ease-spring), opacity 0.3s var(--ease-out);
+}
+
+.sim-overlay-content .sim-visual {
+  display: block;
+}
+
+.sim-overlay-content .sim-visual svg {
+  width: 100%;
+  height: auto;
+}
+
+.sim-overlay-content .sim-legend {
+  text-align: center;
+  margin-top: 0.8rem;
+}
+
+.sim-visual {
+  margin-top: 0.8rem;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.sim-visual.active {
+  opacity: 1;
+  max-height: 200px;
+}
+
+.sim-visual svg {
+  width: 320px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.sim-node {
+  fill: rgba(var(--accent-rgb), 0.1);
+  stroke: rgba(var(--accent-rgb), 0.25);
+  stroke-width: 1;
+}
+
+.sim-leader-node {
+  fill: rgba(var(--accent-rgb), 0.22);
+  stroke: rgba(var(--accent-rgb), 0.55);
+  stroke-width: 1.5;
+}
+
+.sim-link {
+  stroke: rgba(var(--accent-rgb), 0.2);
+  stroke-width: 1;
+}
+
+.sim-heartbeat {
+  stroke: rgba(var(--accent-rgb), 0.15);
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+}
+
+.sim-label {
+  fill: rgba(var(--accent-rgb), 0.6);
+  font-size: 9px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.sim-pulse {
+  fill: rgba(var(--accent-rgb), 0.75);
+}
+
+.sim-log {
+  fill: rgba(var(--accent-rgb), 0.08);
+  stroke: rgba(var(--accent-rgb), 0.18);
+  stroke-width: 0.5;
+}
+
+.sim-log-new {
+  fill: rgba(var(--accent-rgb), 0.25);
+  stroke: rgba(var(--accent-rgb), 0.4);
+  stroke-width: 0.5;
+}
+
+.sim-layer-bg {
+  fill: rgba(var(--accent-rgb), 0.03);
+  stroke: rgba(var(--accent-rgb), 0.12);
+  stroke-width: 1;
+}
+
+.sim-layer-title {
+  fill: rgba(var(--accent-rgb), 0.4);
+  font-size: 7.5px;
+  text-anchor: middle;
+  letter-spacing: 0.1em;
+}
+
+.sim-entry {
+  fill: rgba(var(--accent-rgb), 0.06);
+  stroke: rgba(var(--accent-rgb), 0.15);
+  stroke-width: 0.5;
+}
+
+.sim-entry-text {
+  fill: rgba(var(--accent-rgb), 0.45);
+  font-size: 7px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.sim-ttl-track {
+  fill: rgba(var(--accent-rgb), 0.06);
+}
+
+.sim-ttl-fill {
+  fill: rgba(var(--accent-rgb), 0.4);
+}
+
+.sim-ghost {
+  opacity: 0.25;
+}
+
+.sim-visual.active .sim-heartbeat {
+  stroke: rgba(var(--accent-rgb), 0.3);
+  animation: dash 1.4s linear infinite;
+}
+
+.sim-visual.active .sim-link {
+  stroke-dasharray: 3 4;
+  animation: dash 1.2s linear infinite;
+}
+
+.sim-visual.active .sim-node {
+  animation: nodeGlow 1.6s ease forwards;
+}
+
+.sim-visual.active .sim-leader-node {
+  animation: leaderGlow 2s ease-in-out infinite;
+}
+
+.sim-visual.active .sim-target-node {
+  animation: leaderGlow 2s ease-in-out infinite;
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -14; }
+}
+
+@keyframes nodeGlow {
+  0% { fill: rgba(var(--accent-rgb), 0.1); stroke: rgba(var(--accent-rgb), 0.25); }
+  40% { fill: rgba(var(--accent-rgb), 0.3); stroke: rgba(var(--accent-rgb), 0.5); }
+  100% { fill: rgba(var(--accent-rgb), 0.15); stroke: rgba(var(--accent-rgb), 0.3); }
+}
+
+@keyframes leaderGlow {
+  0%, 100% { fill: rgba(var(--accent-rgb), 0.22); stroke: rgba(var(--accent-rgb), 0.55); }
+  50% { fill: rgba(var(--accent-rgb), 0.38); stroke: rgba(var(--accent-rgb), 0.7); }
+}

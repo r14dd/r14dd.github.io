@@ -13,7 +13,7 @@ import {
 
 const profile = profiles.en;
 const metaTitle = `${profile.hero.name} — Portfolio`;
-const metaDescription = profile.about;
+const metaDescription = "Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.";
 const structuredData = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
@@ -94,7 +94,7 @@ const structuredData = JSON.stringify({
   </nav>
 
   <aside class="side-links">
-    <span class="mono">Links</span>
+    <span class="mono" id="side-links-heading">{profile.labels.links.heading}</span>
     <a href={profile.links.linkedin} target="_blank" rel="noopener"
       >{profile.labels.links.linkedin}</a
     >
@@ -109,7 +109,6 @@ const structuredData = JSON.stringify({
 
   <main class="content" id="main-content">
     <section>
-      <canvas id="hero-gl" aria-hidden="true"></canvas>
       <p class="hero-eyebrow" id="hero-eyebrow">{profile.labels.heroEyebrow}</p>
       <h1 id="hero-name">{profile.hero.name}</h1>
       <p class="hero-about" id="hero-about">{profile.about}</p>
@@ -298,12 +297,14 @@ const structuredData = JSON.stringify({
       buildProjectSim,
       getLogoUrl as getLogoUrlJS,
     } from "../lib/builders";
-
-    const _vitals = { lcp: null, cls: 0, fcp: null, inp: null };
-    try { new PerformanceObserver((l) => { for (const e of l.getEntries()) _vitals.lcp = e.startTime; }).observe({ type: 'largest-contentful-paint', buffered: true }); } catch {}
-    try { new PerformanceObserver((l) => { for (const e of l.getEntries()) if (!e.hadRecentInput) _vitals.cls += e.value; }).observe({ type: 'layout-shift', buffered: true }); } catch {}
-    try { new PerformanceObserver((l) => { for (const e of l.getEntries()) if (e.name === 'first-contentful-paint') _vitals.fcp = e.startTime; }).observe({ type: 'paint', buffered: true }); } catch {}
-    try { new PerformanceObserver((l) => { for (const e of l.getEntries()) _vitals.inp = Math.max(_vitals.inp || 0, e.duration); }).observe({ type: 'event', buffered: true, durationThreshold: 16 }); } catch {}
+    import * as sfx from "../lib/client/sfx";
+    import * as timeAware from "../lib/client/time-aware";
+    import * as focusTrap from "../lib/client/focus-trap";
+    import { vitals as _vitals } from "../lib/client/vitals";
+    import { showToast } from "../lib/client/toast";
+    import { renderSpotify, fetchSpotify, initSpotify } from "../lib/client/spotify";
+    import { initCarousel } from "../lib/client/carousel";
+    import { fetchBadges } from "../lib/client/badges";
 
     console.log(
       '%criad.cc%c — built with patience, discipline, hunger, focus.\n' +
@@ -311,129 +312,6 @@ const structuredData = JSON.stringify({
       '"No such thing as a life that\'s better than yours." — J. Cole',
       'font-weight:bold;font-size:14px;color:#818cf8', 'font-size:12px;color:inherit'
     );
-
-    const sfx = (() => {
-      let ctx = null;
-      let muted = localStorage.getItem('portfolio-muted') === '1';
-
-      const init = () => {
-        if (muted) document.body.classList.add('sound-muted');
-      };
-
-      const toggleMute = () => {
-        muted = !muted;
-        localStorage.setItem('portfolio-muted', muted ? '1' : '0');
-        document.body.classList.toggle('sound-muted', muted);
-        if (!muted) sfx.click();
-      };
-
-      const getCtx = () => {
-        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-        if (ctx.state === 'suspended') ctx.resume();
-        return ctx;
-      };
-
-      const tap = () => {
-        if (muted) return;
-        const c = getCtx();
-        const dur = 0.04;
-        const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
-        const d = buf.getChannelData(0);
-        for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1);
-        const src = c.createBufferSource();
-        src.buffer = buf;
-        const f = c.createBiquadFilter();
-        f.type = 'bandpass';
-        f.frequency.value = 300 + Math.random() * 100;
-        f.Q.value = 2.5;
-        const g = c.createGain();
-        g.gain.setValueAtTime(0.07, c.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
-        src.connect(f).connect(g).connect(c.destination);
-        src.start(c.currentTime);
-        src.stop(c.currentTime + dur);
-      };
-
-      const click = () => {
-        if (muted) return;
-        const c = getCtx();
-        const o = c.createOscillator();
-        const g = c.createGain();
-        o.type = 'triangle';
-        o.frequency.setValueAtTime(180, c.currentTime);
-        o.frequency.exponentialRampToValueAtTime(60, c.currentTime + 0.06);
-        g.gain.setValueAtTime(0.1, c.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.06);
-        o.connect(g).connect(c.destination);
-        o.start(c.currentTime);
-        o.stop(c.currentTime + 0.06);
-      };
-
-      const whoosh = (rising = true) => {
-        if (muted) return;
-        const c = getCtx();
-        const dur = 0.18;
-        const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
-        const data = buf.getChannelData(0);
-        for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.15;
-        const src = c.createBufferSource();
-        src.buffer = buf;
-        const f = c.createBiquadFilter();
-        f.type = 'bandpass';
-        f.Q.value = 0.8;
-        const g = c.createGain();
-        if (rising) {
-          f.frequency.setValueAtTime(300, c.currentTime);
-          f.frequency.exponentialRampToValueAtTime(2000, c.currentTime + dur);
-          g.gain.setValueAtTime(0.001, c.currentTime);
-          g.gain.linearRampToValueAtTime(0.08, c.currentTime + dur * 0.4);
-          g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
-        } else {
-          f.frequency.setValueAtTime(2000, c.currentTime);
-          f.frequency.exponentialRampToValueAtTime(300, c.currentTime + dur);
-          g.gain.setValueAtTime(0.08, c.currentTime);
-          g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
-        }
-        src.connect(f).connect(g).connect(c.destination);
-        src.start(c.currentTime);
-        src.stop(c.currentTime + dur);
-      };
-
-      return { init, tap, click, whoosh, toggleMute };
-    })();
-
-    const timeAware = (() => {
-      const periods = [
-        { key: 'night',     from: 0,  to: 6,  accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'brightness(0.92) contrast(1.1) saturate(0.8) sepia(0.15) hue-rotate(185deg)' },
-        { key: 'morning',   from: 6,  to: 12, accent: '210, 170, 90',  accentHex: '#d2aa5a', lightAccent: '138, 112, 48', lightHex: '#8a7030', mapFilter: 'none', mapFilterLight: 'none' },
-        { key: 'afternoon', from: 12, to: 17, accent: '201, 165, 90',  accentHex: '#c9a55a', lightAccent: '135, 108, 48', lightHex: '#876c30', mapFilter: 'none', mapFilterLight: 'none' },
-        { key: 'evening',   from: 17, to: 21, accent: '210, 140, 80',  accentHex: '#d28c50', lightAccent: '146, 92, 46', lightHex: '#925c2e', mapFilter: 'hue-rotate(345deg)', mapFilterLight: 'brightness(0.95) sepia(0.2) hue-rotate(345deg)' },
-        { key: 'night',     from: 21, to: 24, accent: '140, 160, 210', accentHex: '#8ca0d2', lightAccent: '90, 110, 160', lightHex: '#5a6ea0', mapFilter: 'grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg)', mapFilterLight: 'brightness(0.92) contrast(1.1) saturate(0.8) sepia(0.15) hue-rotate(185deg)' },
-      ];
-
-      const getPeriod = () => {
-        const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Baku' })).getHours();
-        return periods.find(p => h >= p.from && h < p.to) || periods[2];
-      };
-
-      const apply = (data) => {
-        const p = getPeriod();
-        const greetings = data?.labels?.timeGreetings;
-        const eyebrow = document.getElementById('hero-eyebrow');
-        if (eyebrow && greetings?.[p.key]) {
-          eyebrow.textContent = greetings[p.key];
-        }
-        const r = document.documentElement;
-        r.style.setProperty('--accent', p.accentHex);
-        r.style.setProperty('--accent-rgb', p.accent);
-        r.style.setProperty('--accent-light', p.lightHex);
-        r.style.setProperty('--accent-light-rgb', p.lightAccent);
-        r.style.setProperty('--map-filter', p.mapFilter);
-        r.style.setProperty('--map-filter-light', p.mapFilterLight);
-      };
-
-      return { apply, getPeriod };
-    })();
 
     let heroFirstLoad = true;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1140,13 +1018,11 @@ const structuredData = JSON.stringify({
         prevScrollTime = now;
         if (!prefersReducedMotion) {
           scrollVelJS = vel;
-          document.documentElement.style.setProperty('--scroll-vel', vel.toFixed(3));
           clearTimeout(velDecayTimer);
-          velDecayTimer = setTimeout(() => { scrollVelJS = 0; document.documentElement.style.setProperty('--scroll-vel', '0'); }, 150);
+          velDecayTimer = setTimeout(() => { scrollVelJS = 0; }, 150);
         }
         setActiveLink();
         updateParallax();
-        document.body.style.setProperty('--bg-y', `${window.scrollY * -0.2}px`);
         scrollTicking = false;
       });
     }, { passive: true });
@@ -1211,189 +1087,6 @@ const structuredData = JSON.stringify({
       step();
     };
 
-    let carouselTimer = null;
-    let carouselAbort = null;
-    let scrollEndTimer = null;
-    const DOT_COUNT = 5;
-    const initCarousel = () => {
-      clearInterval(carouselTimer);
-      clearTimeout(scrollEndTimer);
-      if (carouselAbort) carouselAbort.abort();
-      carouselAbort = new AbortController();
-      const signal = carouselAbort.signal;
-      const scroll = document.getElementById('testi-scroll');
-      const dotsEl = document.getElementById('car-dots');
-      const prevBtn = document.getElementById('prev-btn');
-      const nextBtn = document.getElementById('next-btn');
-      if (!scroll || !dotsEl) return;
-
-      const realCards = Array.from(scroll.querySelectorAll('.testi-card'));
-      const count = realCards.length;
-      if (count < 2) return;
-
-      // Clone first and last cards to create infinite loop
-      const firstClone = realCards[0].cloneNode(true);
-      const lastClone = realCards[count - 1].cloneNode(true);
-      firstClone.setAttribute('aria-hidden', 'true');
-      lastClone.setAttribute('aria-hidden', 'true');
-      firstClone.classList.add('clone');
-      lastClone.classList.add('clone');
-      scroll.appendChild(firstClone);
-      scroll.insertBefore(lastClone, realCards[0]);
-
-      const allSlides = Array.from(scroll.children);
-      const getSlideWidth = () => {
-        const gap = parseFloat(getComputedStyle(scroll).gap) || 0;
-        return allSlides[0].offsetWidth + gap;
-      };
-
-      // Start at the first real card (index 1 in allSlides because of prepended clone)
-      scroll.style.scrollBehavior = 'auto';
-      scroll.scrollLeft = getSlideWidth();
-      scroll.style.scrollBehavior = '';
-
-      dotsEl.innerHTML = '';
-      for (let i = 0; i < DOT_COUNT; i++) {
-        const d = document.createElement('div');
-        d.className = 'car-dot' + (i === 0 ? ' on' : '');
-        d.addEventListener('click', () => {
-          const cardIdx = Math.round(i / (DOT_COUNT - 1) * (count - 1));
-          goTo(cardIdx);
-        }, { signal });
-        dotsEl.appendChild(d);
-      }
-
-      // scrollTo positions to a physical slide index (0 = prepended clone, 1 = first real, etc.)
-      const scrollToPhysical = (physIdx, smooth = true) => {
-        const sw = getSlideWidth();
-        scroll.scrollTo({ left: sw * physIdx, behavior: smooth ? 'smooth' : 'auto' });
-      };
-
-      // goTo positions to a logical card index (0..count-1)
-      const goTo = (logicalIdx) => {
-        scrollToPhysical(logicalIdx + 1, true);
-      };
-
-      const getLogicalIndex = () => {
-        const sw = getSlideWidth();
-        const physIdx = Math.round(scroll.scrollLeft / sw);
-        return ((physIdx - 1) % count + count) % count;
-      };
-
-      const cardToDot = (cardIdx) => Math.round(cardIdx / (count - 1) * (DOT_COUNT - 1));
-
-      const syncDots = () => {
-        const logical = getLogicalIndex();
-        const dotIdx = cardToDot(logical);
-        dotsEl.querySelectorAll('.car-dot').forEach((d, j) => d.classList.toggle('on', j === dotIdx));
-        return logical;
-      };
-
-      // Teleport when landing on a clone
-      let teleporting = false;
-      const checkTeleport = () => {
-        if (teleporting) return;
-        const sw = getSlideWidth();
-        const physIdx = Math.round(scroll.scrollLeft / sw);
-        if (physIdx === 0) {
-          // Landed on prepended clone (last card clone) → teleport to real last card
-          teleporting = true;
-          scroll.style.scrollBehavior = 'auto';
-          scroll.scrollLeft = sw * count;
-          scroll.style.scrollBehavior = '';
-          teleporting = false;
-        } else if (physIdx === allSlides.length - 1) {
-          // Landed on appended clone (first card clone) → teleport to real first card
-          teleporting = true;
-          scroll.style.scrollBehavior = 'auto';
-          scroll.scrollLeft = sw;
-          scroll.style.scrollBehavior = '';
-          teleporting = false;
-        }
-        syncDots();
-      };
-
-      let scrollTick = false;
-      scroll.addEventListener('scroll', () => {
-        if (teleporting) return;
-        if (!scrollTick) {
-          scrollTick = true;
-          requestAnimationFrame(() => { syncDots(); scrollTick = false; });
-        }
-        clearTimeout(scrollEndTimer);
-        scrollEndTimer = setTimeout(checkTeleport, 80);
-      }, { passive: true, signal });
-
-      prevBtn?.addEventListener('click', () => {
-        const sw = getSlideWidth();
-        scroll.scrollBy({ left: -sw, behavior: 'smooth' });
-        clearTimeout(scrollEndTimer);
-        scrollEndTimer = setTimeout(checkTeleport, 400);
-      }, { signal });
-      nextBtn?.addEventListener('click', () => {
-        const sw = getSlideWidth();
-        scroll.scrollBy({ left: sw, behavior: 'smooth' });
-        clearTimeout(scrollEndTimer);
-        scrollEndTimer = setTimeout(checkTeleport, 400);
-      }, { signal });
-
-      const wrap = scroll.closest('[aria-roledescription="carousel"]');
-      if (wrap) {
-        wrap.addEventListener('keydown', (e) => {
-          const sw = getSlideWidth();
-          if (e.key === 'ArrowLeft') { e.preventDefault(); scroll.scrollBy({ left: -sw, behavior: 'smooth' }); clearTimeout(scrollEndTimer); scrollEndTimer = setTimeout(checkTeleport, 400); }
-          else if (e.key === 'ArrowRight') { e.preventDefault(); scroll.scrollBy({ left: sw, behavior: 'smooth' }); clearTimeout(scrollEndTimer); scrollEndTimer = setTimeout(checkTeleport, 400); }
-        }, { signal });
-      }
-
-      const startAutoplay = () => {
-        clearInterval(carouselTimer);
-        carouselTimer = setInterval(() => {
-          const sw = getSlideWidth();
-          scroll.scrollBy({ left: sw, behavior: 'smooth' });
-          clearTimeout(scrollEndTimer);
-          scrollEndTimer = setTimeout(checkTeleport, 400);
-        }, 13000);
-      };
-
-      let hintDone = false;
-      const runHint = () => {
-        if (hintDone) return;
-        hintDone = true;
-        const sw = getSlideWidth();
-        let step = 0;
-        const hintNext = () => {
-          step++;
-          if (step < count) {
-            scroll.scrollBy({ left: sw, behavior: 'smooth' });
-            clearTimeout(scrollEndTimer);
-            scrollEndTimer = setTimeout(() => { checkTeleport(); hintNext(); }, 320);
-          } else {
-            // snap back to first card
-            scroll.style.scrollBehavior = 'auto';
-            scroll.scrollLeft = sw;
-            scroll.style.scrollBehavior = '';
-            syncDots();
-            startAutoplay();
-          }
-        };
-        hintNext();
-      };
-
-      const recsSection = document.getElementById('recommendations');
-      if (recsSection) {
-        const hintObs = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) {
-            hintObs.disconnect();
-            setTimeout(runHint, 400);
-          }
-        }, { threshold: 0.3 });
-        hintObs.observe(recsSection);
-      } else {
-        startAutoplay();
-      }
-    };
-
     const applyLanguage = (lang) => {
       const data = I18N[lang] || I18N.en;
       currentProfile = data;
@@ -1408,7 +1101,11 @@ const structuredData = JSON.stringify({
       timeAware.apply(data);
       const heroAbout = document.getElementById("hero-about");
       if (heroAbout) {
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const isFirstAbout = !heroAbout.dataset.applied;
+        heroAbout.dataset.applied = '1';
+        if (isFirstAbout && lang === 'en') {
+          // SSR text is already visible — skip the word-gen animation to avoid hiding the LCP element
+        } else if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
           heroAbout.innerHTML = data.about.split(' ').map(w => `<span class="word-gen">${w}</span>`).join(' ');
           heroAbout.querySelectorAll('.word-gen').forEach((w, i) => {
             setTimeout(() => w.classList.add('revealed'), 60 + i * 30);
@@ -1457,6 +1154,8 @@ const structuredData = JSON.stringify({
 
       const sideLinks = document.querySelector(".side-links");
       if (sideLinks) {
+        const heading = document.getElementById("side-links-heading");
+        if (heading) heading.textContent = data.labels.links.heading;
         const links = sideLinks.querySelectorAll("a");
         if (links[0]) links[0].textContent = data.labels.links.linkedin;
         if (links[1]) links[1].textContent = data.labels.links.github;
@@ -1624,50 +1323,6 @@ const structuredData = JSON.stringify({
     });
     updateThemeIcon();
 
-    // Shared focus trap + restoration for modal dialogs (command palette,
-    // keyboard-shortcuts overlay, project detail). Keeps Tab inside the open
-    // dialog and returns focus to whatever opened it (WCAG 2.4.3 / 2.1.2).
-    const focusTrap = (() => {
-      const SEL = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
-      let container = null, opener = null, onKey = null;
-      const visible = (el) => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement;
-      const api = {
-        activate(el) {
-          api.release();
-          container = el;
-          opener = document.activeElement;
-          onKey = (e) => {
-            if (e.key !== 'Tab' || !container) return;
-            const f = Array.from(container.querySelectorAll(SEL)).filter(visible);
-            if (!f.length) return;
-            const first = f[0], last = f[f.length - 1];
-            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-          };
-          container.addEventListener('keydown', onKey);
-        },
-        release() {
-          if (container && onKey) container.removeEventListener('keydown', onKey);
-          const back = opener;
-          container = null; opener = null; onKey = null;
-          if (back && typeof back.focus === 'function' && document.contains(back)) {
-            try { back.focus({ preventScroll: true }); } catch { /* opener gone */ }
-          }
-        },
-      };
-      return api;
-    })();
-
-    // Toast
-    const showToast = (msg) => {
-      const toast = document.getElementById('toast');
-      if (!toast) return;
-      toast.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toast._t);
-      toast._t = setTimeout(() => toast.classList.remove('show'), 2000);
-    };
-
     // Command palette
     const cmdBackdrop = document.getElementById('cmd-backdrop');
     const cmdPalette = document.getElementById('cmd-palette');
@@ -1767,7 +1422,7 @@ const structuredData = JSON.stringify({
       if (cmdInput) { cmdInput.value = ''; cmdInput.setAttribute('aria-expanded', 'false'); }
       if (!findCommitting) clearPageMarks();
       findCommitting = false;
-      focusTrap.release();
+      focusTrap.deactivate();
     };
 
     const setHighlight = (idx) => {
@@ -1866,7 +1521,7 @@ const structuredData = JSON.stringify({
       kbdBackdrop?.classList.remove('open');
       kbdOverlay?.classList.remove('open');
       kbdOverlay?.setAttribute('aria-hidden', 'true');
-      focusTrap.release();
+      focusTrap.deactivate();
     };
     kbdBackdrop?.addEventListener('click', closeKbd);
 
@@ -2077,7 +1732,7 @@ const structuredData = JSON.stringify({
       projBackdrop?.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('proj-lock');
       projOpen = false;
-      focusTrap.release();
+      focusTrap.deactivate();
     };
 
     const openProject = (p, card) => {
@@ -2152,7 +1807,10 @@ const structuredData = JSON.stringify({
 
       const contentEl = document.querySelector(".content");
       if (contentEl) {
-        new MutationObserver(() => { observeSims(); }).observe(contentEl, { childList: true, subtree: true });
+        new MutationObserver((mutations) => {
+          if (mutations.every(m => m.target.closest && m.target.closest('#spotify-line'))) return;
+          observeSims();
+        }).observe(contentEl, { childList: true, subtree: true });
       }
 
       document.querySelectorAll("section[id]").forEach((sec) => {
@@ -2179,12 +1837,15 @@ const structuredData = JSON.stringify({
               pulling = true;
             }
           }, { passive: true });
+          let lastPullDy = 0;
           document.addEventListener('touchmove', (e) => {
             if (!pulling) return;
             const dy = e.touches[0].clientY - pullStartY;
-            if (dy > 40 && dy < 160) {
+            lastPullDy = dy;
+            if (dy > 40 && dy < 200) {
               pullEl.classList.add('visible');
-              pullEl.style.top = `${Math.min(dy * 0.4, 48)}px`;
+              pullEl.style.top = `${Math.min(dy * 0.3, 48)}px`;
+              pullEl.style.opacity = Math.min((dy - 40) / 80, 1);
             } else if (dy <= 0) {
               pullEl.classList.remove('visible');
               pulling = false;
@@ -2193,10 +1854,14 @@ const structuredData = JSON.stringify({
           const endPull = () => {
             if (!pulling) return;
             pulling = false;
-            if (pullEl.classList.contains('visible')) {
+            if (lastPullDy >= 120 && pullEl.classList.contains('visible')) {
               pullEl.classList.add('refreshing');
               setTimeout(() => location.reload(), 500);
+            } else {
+              pullEl.classList.remove('visible');
+              pullEl.style.opacity = '';
             }
+            lastPullDy = 0;
           };
           document.addEventListener('touchend', endPull, { passive: true });
           document.addEventListener('touchcancel', endPull, { passive: true });
@@ -2206,10 +1871,11 @@ const structuredData = JSON.stringify({
       // Mobile: swipe down on bottom-sheet project modal to dismiss
       {
         const modal = document.getElementById('proj-modal');
-        if (modal) {
+        const modalCard = modal?.querySelector('.proj-modal-card');
+        if (modal && modalCard) {
           let mStartY = 0, mDragging = false;
           modal.addEventListener('touchstart', (e) => {
-            if (modal.scrollTop > 5) return;
+            if (modalCard.scrollTop > 5) return;
             mStartY = e.touches[0].clientY;
             mDragging = true;
           }, { passive: true });
@@ -2217,7 +1883,7 @@ const structuredData = JSON.stringify({
             if (!mDragging) return;
             const dy = e.touches[0].clientY - mStartY;
             if (dy > 0) {
-              modal.style.transform = `translateY(${dy}px)`;
+              modal.style.transform = `translate(-50%, calc(-50% + ${dy}px))`;
             } else {
               mDragging = false;
               modal.style.transform = '';
@@ -2321,268 +1987,20 @@ const structuredData = JSON.stringify({
           }
         });
 
-        const heroH1 = document.querySelector('main > section:first-of-type h1');
-        if (heroH1) {
-          let tapCount = 0, tapTimer = null;
-          heroH1.addEventListener('click', () => {
-            tapCount++;
-            clearTimeout(tapTimer);
-            tapTimer = setTimeout(() => { tapCount = 0; }, 600);
-            if (tapCount >= 3) { tapCount = 0; triggerEasterEgg(); }
-          });
-        }
       }
 
     }
 
-    // Spotify Now Playing
-    const SPOTIFY_API = 'https://spotify-now-playing.riad-mrv.workers.dev';
-    const spotifyLabels = {
-      en: { playing: 'Currently listening to', last: 'Last listened to', history: 'Top this month', recent: 'Recently played' },
-      ru: { playing: 'Сейчас слушает', last: 'Последний раз слушал', history: 'Топ за месяц', recent: 'Недавно слушал' },
-      az: { playing: 'Hazırda dinləyir', last: 'Son dinlədiyi', history: 'Bu ayın ən çox dinlənilənləri', recent: 'Son dinlənilənlər' },
-    };
-    var _spotifyProgress = null;
-    var _spotifyTimer = null;
-    var _lastTrackName = null;
-    var _spotifyFirstRender = true;
-    function fmtTime(ms) {
-      var s = Math.floor(ms / 1000);
-      var m = Math.floor(s / 60);
-      s = s % 60;
-      return m + ':' + (s < 10 ? '0' : '') + s;
-    }
-    function renderSpotify(data) {
-      const el = document.getElementById('spotify-line');
-      if (!el) return;
-      if (!data || !data.track) { el.style.display = 'none'; return; }
-      var songChanged = _lastTrackName !== null && _lastTrackName !== data.track;
-      _lastTrackName = data.track;
-      if (songChanged) {
-        el.classList.add('spotify-fade-out');
-        setTimeout(function() {
-          _applySpotify(el, data);
-          el.classList.remove('spotify-fade-out');
-        }, 300);
-        return;
-      }
-      _applySpotify(el, data);
-    }
-    function _applySpotify(el, data) {
-      const lang = document.documentElement.lang || 'en';
-      const labels = spotifyLabels[lang] || spotifyLabels.en;
-      const label = data.playing ? labels.playing : labels.last;
-      el.className = 'spotify-line' + (data.playing ? ' playing' : ' not-playing');
-      const coverUrl = data.cover || '';
-      const vinylHtml = '<span class="spotify-logo-wrap"><svg class="spotify-logo" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg><span class="spotify-expand-hint">click to expand</span></span>';
-      const trackText = data.track + ' \u2014 ' + data.artist;
-      const needsMarquee = trackText.length > 40;
-      const trackHtml = needsMarquee
-        ? '<span class="spotify-marquee-wrap"><span class="spotify-marquee">' + trackText + ' \u00a0\u00a0\u2022\u00a0\u00a0 ' + trackText + ' \u00a0\u00a0\u2022\u00a0\u00a0 </span></span>'
-        : trackText;
-      const progress = data.playing && data.duration
-        ? '<span class="spotify-progress-row"><span class="spotify-time" id="spotify-elapsed"></span><span class="spotify-progress"><span class="spotify-progress-bar" id="spotify-bar"></span></span><span class="spotify-time" id="spotify-remaining"></span></span>'
-        : '';
-      const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + coverUrl + '" alt="" width="24" height="24">' : '';
-      var recentHtml = '';
-      var topTracks = data.topTracks || [];
-      if (topTracks.length > 0) {
-        var historyLabel = (data.historySource === 'recent' ? labels.recent : labels.history) || 'Top this month';
-        recentHtml = '<div class="spotify-history" id="spotify-history"><span class="spotify-history-label">' + historyLabel + '</span>';
-        for (var i = 0; i < topTracks.length; i++) {
-          var r = topTracks[i];
-          var rCover = r.cover ? '<img class="spotify-history-cover" src="' + r.cover + '" alt="" width="40" height="40">' : '';
-          recentHtml += '<a href="' + r.url + '" target="_blank" rel="noopener" class="spotify-history-item" style="--i:' + i + '">' +
-            '<span class="spotify-history-idx">' + (i + 1) + '</span>' +
-            rCover +
-            '<span class="spotify-history-info"><span class="spotify-history-track">' + r.track + '</span><span class="spotify-history-artist">' + r.artist + '</span></span></a>';
-        }
-        recentHtml += '</div>';
-      }
-      var chevron = recentHtml ? '<span class="spotify-chevron" aria-hidden="true"></span>' : '';
-      el.innerHTML = '<div class="spotify-inline" id="spotify-toggle">' + vinylHtml + label + ' <a href="' + data.url + '" target="_blank" rel="noopener">' + trackHtml + '</a>' + chevron + '</div>' +
-        progress +
-        '<div class="spotify-mini-player"><a href="' + data.url + '" target="_blank" rel="noopener" class="spotify-mini-link">' + miniCover + '<div class="spotify-mini-info"><span class="spotify-mini-track">' + data.track + '</span><span class="spotify-mini-artist">' + data.artist + '</span></div></a></div>' + recentHtml;
-      el.style.display = '';
-      if (_spotifyFirstRender) {
-        _spotifyFirstRender = false;
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          el.classList.add('spotify-intro', 'spotify-revealing');
-          var inlineEl = el.querySelector('.spotify-inline');
-          var revealWords = [];
-          if (inlineEl) {
-            var walker = document.createTreeWalker(inlineEl, NodeFilter.SHOW_TEXT);
-            var textNodes = [];
-            var tnode;
-            while (tnode = walker.nextNode()) {
-              if (tnode.textContent.trim() && !tnode.parentNode.closest('.spotify-expand-hint')) textNodes.push(tnode);
-            }
-            textNodes.forEach(function(tn) {
-              var parts = tn.textContent.split(/(\s+)/);
-              var frag = document.createDocumentFragment();
-              parts.forEach(function(w) {
-                if (/^\s+$/.test(w)) {
-                  frag.appendChild(document.createTextNode(w));
-                } else if (w) {
-                  var span = document.createElement('span');
-                  span.className = 'spotify-word';
-                  span.textContent = w;
-                  frag.appendChild(span);
-                  revealWords.push(span);
-                }
-              });
-              tn.parentNode.replaceChild(frag, tn);
-            });
-          }
-          requestAnimationFrame(function() {
-            el.classList.remove('spotify-intro');
-            revealWords.forEach(function(span, i) {
-              setTimeout(function() { span.classList.add('revealed'); }, 150 + i * 60);
-            });
-            setTimeout(function() {
-              el.classList.remove('spotify-revealing');
-            }, 150 + revealWords.length * 60 + 250);
-          });
-        }
-      }
-      var progRow = el.querySelector('.spotify-progress-row');
+    initSpotify();
 
-      var toggle = document.getElementById('spotify-toggle');
-      if (toggle) {
-        if (topTracks.length > 0) {
-          toggle.style.cursor = 'pointer';
-          toggle.addEventListener('click', function(e) {
-            if (e.target.closest('a')) return;
-            el.classList.toggle('history-open');
-          });
-        }
-        var songLink = toggle.querySelector('a');
-        if (songLink && window.matchMedia('(hover: hover)').matches) {
-          songLink.addEventListener('mouseenter', function() { el.classList.add('mini-hover'); });
-          songLink.addEventListener('mouseleave', function() {
-            setTimeout(function() {
-              if (!el.querySelector('.spotify-mini-player:hover')) el.classList.remove('mini-hover');
-            }, 50);
-          });
-          var mini = el.querySelector('.spotify-mini-player');
-          if (mini) {
-            mini.addEventListener('mouseleave', function() { el.classList.remove('mini-hover'); });
-          }
-        }
-        var hint = el.querySelector('.spotify-expand-hint');
-        if (hint && topTracks.length > 0 && window.innerWidth > 480) {
-          setTimeout(function() { hint.classList.add('visible'); }, 800);
-          setTimeout(function() { hint.classList.add('fade-out'); }, 10800);
-          toggle.addEventListener('click', function() {
-            hint.classList.add('fade-out');
-          }, { once: true });
-        }
-      }
-
-      if (_spotifyTimer) clearInterval(_spotifyTimer);
-      if (data.playing && data.duration) {
-        _spotifyProgress = { start: Date.now(), offset: data.progress || 0, duration: data.duration };
-        function tickProgress() {
-          var bar = document.getElementById('spotify-bar');
-          var elapsedEl = document.getElementById('spotify-elapsed');
-          var remainEl = document.getElementById('spotify-remaining');
-          if (!_spotifyProgress) return;
-          var elapsed = Math.min(_spotifyProgress.offset + (Date.now() - _spotifyProgress.start), _spotifyProgress.duration);
-          var pct = (elapsed / _spotifyProgress.duration) * 100;
-          if (bar) bar.style.width = pct + '%';
-          if (elapsedEl) elapsedEl.textContent = fmtTime(elapsed);
-          if (remainEl) remainEl.textContent = '-' + fmtTime(_spotifyProgress.duration - elapsed);
-        }
-        tickProgress();
-        _spotifyTimer = setInterval(tickProgress, 1000);
-      }
-    }
-    window._spotifyData = null;
-    var _spotifyFails = 0;
-    async function fetchSpotify() {
-      try {
-        const res = await fetch(SPOTIFY_API, { signal: AbortSignal.timeout(5000) });
-        if (res.ok) { window._spotifyData = await res.json(); renderSpotify(window._spotifyData); _spotifyFails = 0; }
-        else { _spotifyFails++; }
-      } catch {
-        _spotifyFails++;
-      }
-      if (_spotifyFails >= 5) {
-        const el = document.getElementById('spotify-line');
-        if (el && !el.hasChildNodes()) el.style.display = 'none';
-      }
-    }
-    fetchSpotify();
-    setInterval(() => { if (_spotifyFails < 5 && !document.hidden) fetchSpotify(); }, 30000);
-
-    // Baku local time
     function updateBakuTime() {
-      var el = document.getElementById('local-time');
+      const el = document.getElementById('local-time');
       if (!el) return;
-      var now = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Baku', hour: 'numeric', minute: '2-digit', hour12: true });
-      el.textContent = now;
+      el.textContent = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Baku', hour: 'numeric', minute: '2-digit', hour12: true });
     }
     updateBakuTime();
     setInterval(updateBakuTime, 30000);
 
-    var badgeCache = {};
-
-    function fmtCount(count) {
-      return count >= 1000 ? (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(count);
-    }
-
-    function animateCount(el, target, duration = 2500) {
-      const start = performance.now();
-      const isK = target >= 1000;
-      function tick(now) {
-        const t = Math.min((now - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - t, 3);
-        const current = Math.round(ease * target);
-        el.textContent = isK
-          ? (current / 1000).toFixed(1).replace(/\.0$/, '') + 'k'
-          : String(current);
-        if (t < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    }
-
-    var badgeObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const raw = parseInt(el.dataset.badgeRaw, 10);
-        if (!raw) return;
-        badgeObserver.unobserve(el);
-        animateCount(el, raw);
-      });
-    }, { threshold: 0.5 });
-
-    async function fetchBadges(root) {
-      const badges = Array.from((root || document).querySelectorAll('.proj-badge-live'));
-      for (const el of badges) {
-        const api = el.dataset.badgeApi;
-        if (!api) continue;
-        const countEl = el.querySelector('.badge-count');
-        if (badgeCache && badgeCache[api] != null) {
-          countEl.dataset.badgeRaw = badgeCache[api];
-          countEl.textContent = '0';
-          if (badgeObserver) badgeObserver.observe(countEl);
-          continue;
-        }
-        try {
-          const res = await fetch(api, { signal: AbortSignal.timeout(5000) });
-          if (!res.ok) { countEl.textContent = '—'; continue; }
-          const data = await res.json();
-          const count = api.includes('github.com') ? data.stargazers_count : data.crate?.downloads;
-          if (count != null) {
-            if (badgeCache) badgeCache[api] = count;
-            countEl.dataset.badgeRaw = count;
-            countEl.textContent = '0';
-            if (badgeObserver) badgeObserver.observe(countEl);
-          }
-        } catch { countEl.textContent = '—'; }
-      }
-    }
     fetchBadges();
 
     // ── SCROLL TIMELINE OBSERVER ──────────────────────
@@ -2605,7 +2023,8 @@ const structuredData = JSON.stringify({
       const contentEl = document.querySelector('.content');
       if (contentEl) {
         let scrollTlTimer;
-        new MutationObserver(() => {
+        new MutationObserver((mutations) => {
+          if (mutations.every(m => m.target.closest && m.target.closest('#spotify-line'))) return;
           clearTimeout(scrollTlTimer);
           scrollTlTimer = setTimeout(initScrollTl, 200);
         }).observe(contentEl, { childList: true, subtree: true });
@@ -2651,151 +2070,6 @@ const structuredData = JSON.stringify({
       }
     }
 
-    // ── WEBGL HERO SHADER BACKGROUND ──────────────
-    if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
-      const glCanvas = document.getElementById('hero-gl');
-      if (glCanvas) {
-        const gl = glCanvas.getContext('webgl', { alpha: true, premultipliedAlpha: false, antialias: false, powerPreference: 'low-power' });
-        if (gl) {
-          const dpr = Math.min(window.devicePixelRatio, 2);
-          const resizeGL = () => {
-            const r = glCanvas.getBoundingClientRect();
-            glCanvas.width = r.width * dpr;
-            glCanvas.height = r.height * dpr;
-            gl.viewport(0, 0, glCanvas.width, glCanvas.height);
-          };
-          resizeGL();
-
-          const compile = (type, src) => {
-            const s = gl.createShader(type);
-            gl.shaderSource(s, src);
-            gl.compileShader(s);
-            return s;
-          };
-
-          const vs = compile(gl.VERTEX_SHADER, `
-            attribute vec2 p;
-            varying vec2 vUv;
-            void main() {
-              vUv = p * 0.5 + 0.5;
-              gl_Position = vec4(p, 0.0, 1.0);
-            }
-          `);
-
-          const fs = compile(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            varying vec2 vUv;
-            uniform float uTime;
-            uniform float uScroll;
-            uniform float uScrollVel;
-            uniform vec3 uAccent;
-            uniform float uOpacity;
-
-            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-            vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-            vec4 perm(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
-
-            float noise(vec3 p) {
-              vec3 a = floor(p);
-              vec3 d = p - a;
-              d = d * d * (3.0 - 2.0 * d);
-              vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
-              vec4 k1 = perm(b.xyxy);
-              vec4 k2 = perm(k1.xyxy + b.zzww);
-              vec4 c = k2 + a.zzzz;
-              vec4 k3 = perm(c);
-              vec4 k4 = perm(c + 1.0);
-              vec4 o1 = fract(k3 * (1.0 / 41.0));
-              vec4 o2 = fract(k4 * (1.0 / 41.0));
-              vec4 o3 = o2 * d.z + o1 * (1.0 - d.z);
-              vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
-              return o4.y * d.y + o4.x * (1.0 - d.y);
-            }
-
-            void main() {
-              vec2 uv = vUv;
-              float n = noise(vec3(uv * 3.0, uTime * 0.15)) * 0.5
-                      + noise(vec3(uv * 6.0 + 10.0, uTime * 0.1)) * 0.25
-                      + noise(vec3(uv * 12.0 + 20.0, uTime * 0.08)) * 0.125;
-
-              float dist = length(uv - vec2(0.5));
-              float vignette = smoothstep(0.7, 0.2, dist);
-
-              vec3 col = uAccent * n * vignette * 0.45;
-              float flow = noise(vec3(uv * 2.0 + vec2(uTime * 0.05, 0.0), uTime * 0.12));
-              float velBoost = 1.0 + uScrollVel * 3.0;
-              col += uAccent * flow * 0.08 * vignette * velBoost;
-
-              float scrollFade = 1.0 - smoothstep(0.0, 600.0, uScroll);
-              gl_FragColor = vec4(col, n * vignette * uOpacity * 0.6 * scrollFade);
-            }
-          `);
-
-          const prog = gl.createProgram();
-          gl.attachShader(prog, vs);
-          gl.attachShader(prog, fs);
-          gl.linkProgram(prog);
-          gl.useProgram(prog);
-
-          const buf = gl.createBuffer();
-          gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-          const pAttr = gl.getAttribLocation(prog, 'p');
-          gl.enableVertexAttribArray(pAttr);
-          gl.vertexAttribPointer(pAttr, 2, gl.FLOAT, false, 0, 0);
-
-          const uTime = gl.getUniformLocation(prog, 'uTime');
-          const uScroll = gl.getUniformLocation(prog, 'uScroll');
-          const uScrollVel = gl.getUniformLocation(prog, 'uScrollVel');
-          const uAccent = gl.getUniformLocation(prog, 'uAccent');
-          const uOpacity = gl.getUniformLocation(prog, 'uOpacity');
-
-          gl.enable(gl.BLEND);
-          gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-          const isDark = !document.documentElement.classList.contains('light');
-          const style = getComputedStyle(document.documentElement);
-          const parseAccent = () => style.getPropertyValue('--accent-rgb').trim().split(',').map(v => parseFloat(v.trim()) / 255);
-          let accent = parseAccent();
-          let opacity = isDark ? 1.0 : 0.5;
-          let time = 0;
-          let lastFrame = 0;
-
-          let glAnimId = null;
-          const glTick = (now) => {
-            const dt = lastFrame ? (now - lastFrame) / 1000 : 0.016;
-            lastFrame = now;
-            time += dt;
-            const vel = scrollVelJS;
-            gl.uniform1f(uTime, time);
-            gl.uniform1f(uScroll, window.scrollY);
-            gl.uniform1f(uScrollVel, vel);
-            gl.uniform3f(uAccent, accent[0] || 0.5, accent[1] || 0.6, accent[2] || 1.0);
-            gl.uniform1f(uOpacity, opacity);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-            glAnimId = requestAnimationFrame(glTick);
-          };
-
-          const glObs = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) { if (!glAnimId) glTick(); }
-            else { if (glAnimId) { cancelAnimationFrame(glAnimId); glAnimId = null; } }
-          }, { threshold: 0 });
-          glObs.observe(glCanvas);
-
-          requestAnimationFrame(() => glCanvas.classList.add('visible'));
-
-          new MutationObserver(() => {
-            const nowDark = !document.documentElement.classList.contains('light');
-            opacity = nowDark ? 1.0 : 0.5;
-            accent = parseAccent();
-          }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-          let resizeTimer;
-          window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resizeGL, 150); }, { passive: true });
-        }
-      }
-    }
 
 
   </script>

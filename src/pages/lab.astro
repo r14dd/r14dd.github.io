@@ -62,7 +62,7 @@ const sections = [
 const builtAtUtc = new Date(build.builtAt).toISOString().slice(0, 16).replace("T", " ");
 ---
 
-<BaseLayout metaTitle={metaTitle} metaDescription={metaDescription} lang="en">
+<BaseLayout metaTitle={metaTitle} metaDescription={metaDescription} lang="en" noindex>
   <script type="application/json" id="lab-data" set:html={labDataJSON} />
 
   <div class="lab-page">

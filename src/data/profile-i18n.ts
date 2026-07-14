@@ -15,6 +15,8 @@ type Labels = {
     resume: string;
     linkedin: string;
     github: string;
+    email: string;
+    heading: string;
   };
   headings: {
     experience: string;
@@ -36,6 +38,7 @@ type Labels = {
   heroEyebrow: string;
   timeGreetings: { morning: string; afternoon: string; evening: string; night: string };
   connectTagline: string;
+  connectLocation: string;
   taRole: string;
   headTARole: string;
   skillCategories: Record<string, string>;
@@ -73,6 +76,8 @@ export const profiles: Record<string, I18nProfile> = {
         resume: "Resume",
         linkedin: "LinkedIn",
         github: "GitHub",
+        email: "Email",
+        heading: "Links",
       },
       headings: {
         experience: "Experience",
@@ -94,6 +99,7 @@ export const profiles: Record<string, I18nProfile> = {
       heroEyebrow: "AI & Software Engineer · Baku, Azerbaijan",
       timeGreetings: { morning: "Good morning from Baku", afternoon: "Good afternoon from Baku", evening: "Good evening from Baku", night: "Burning the midnight oil in Baku" },
       connectTagline: "Let's talk.",
+      connectLocation: "Baku, Azerbaijan",
       taRole: "Teaching Assistant",
       headTARole: "Head Teaching Assistant",
       skillCategories: {
@@ -365,6 +371,8 @@ export const profiles: Record<string, I18nProfile> = {
         resume: "Резюме",
         linkedin: "LinkedIn",
         github: "GitHub",
+        email: "Эл. почта",
+        heading: "Ссылки",
       },
       headings: {
         experience: "Опыт",
@@ -386,6 +394,7 @@ export const profiles: Record<string, I18nProfile> = {
       heroEyebrow: "AI & Software инженер · Баку, Азербайджан",
       timeGreetings: { morning: "Доброе утро из Баку", afternoon: "Добрый день из Баку", evening: "Добрый вечер из Баку", night: "Ночной код из Баку" },
       connectTagline: "Давайте поговорим.",
+      connectLocation: "Баку, Азербайджан",
       taRole: "Ассистент преподавателя",
       headTARole: "Старший ассистент преподавателя",
       skillCategories: {
@@ -657,6 +666,8 @@ export const profiles: Record<string, I18nProfile> = {
         resume: "CV",
         linkedin: "LinkedIn",
         github: "GitHub",
+        email: "E-poçt",
+        heading: "Keçidlər",
       },
       headings: {
         experience: "Təcrübə",
@@ -678,6 +689,7 @@ export const profiles: Record<string, I18nProfile> = {
       heroEyebrow: "AI və Proqram Mühəndisi · Bakı, Azərbaycan",
       timeGreetings: { morning: "Bakıdan sabahınız xeyir", afternoon: "Bakıdan günortanız xeyir", evening: "Bakıdan axşamınız xeyir", night: "Bakıda gecə kodlaşma" },
       connectTagline: "Əlaqə saxlayaq.",
+      connectLocation: "Bakı, Azərbaycan",
       taRole: "Tədris assistenti",
       headTARole: "Baş tədris assistenti",
       skillCategories: {
