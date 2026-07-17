@@ -8,6 +8,7 @@
     <title>404 — Page Not Found</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <meta id="theme-color-meta" name="theme-color" content="#050505" />
     <style>
       @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/manrope-latin.woff2) format('woff2'); }
       @font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/font-11.woff2) format('woff2'); }
@@ -15,6 +16,7 @@
     <script>
       if (localStorage.getItem('portfolio-theme') === 'light') {
         document.documentElement.classList.add('light');
+        document.getElementById('theme-color-meta')?.setAttribute('content', '#ffffff');
       }
     </script>
     <style>

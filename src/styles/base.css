@@ -570,3 +570,61 @@ h2 {
   gap: 0.5rem;
   user-select: none;
 }
+
+/* Print: the homepage doubles as a résumé — strip interactive chrome and
+   force a light, ink-friendly palette. */
+@media print {
+  :root,
+  html.light {
+    --bg: #ffffff;
+    --text: #111111;
+    --text-soft: #333333;
+    --muted: #555555;
+    --noise-opacity: 0;
+  }
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    padding: 0 !important;
+  }
+  body::after,
+  .page-loader,
+  .cursor-dot,
+  .scroll-line,
+  .side-nav,
+  .side-links,
+  .lang-switcher,
+  .mobile-nav,
+  .terminal-window,
+  .spotify-line,
+  .cmd-palette,
+  .cmd-backdrop,
+  .find-nav-bar,
+  .proj-backdrop,
+  .proj-modal,
+  .pull-indicator,
+  .mini-map,
+  .sim-toggle,
+  .sim-visual,
+  .carousel-nav,
+  .toast {
+    display: none !important;
+  }
+  .section-block {
+    content-visibility: visible;
+    margin-top: 1.5rem;
+  }
+  .scroll-tl-item,
+  .scroll-tl-bullets li {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .proj-card {
+    break-inside: avoid;
+    border-color: #dddddd;
+  }
+  a {
+    color: #111111;
+    text-decoration: none;
+  }
+}
