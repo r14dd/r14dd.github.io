@@ -39,10 +39,11 @@ const structuredData = JSON.stringify({
   structuredData={structuredData}
   lang="en"
 >
+  {/* EN only — RU/AZ are fetched from /i18n/<lang>.json on first switch. */}
   <script
     type="application/json"
     id="i18n-data"
-    set:html={JSON.stringify(profiles)}
+    set:html={JSON.stringify({ en: profiles.en })}
   />
 
   <div class="lang-switcher" aria-label="Controls">
@@ -1088,8 +1089,24 @@ const structuredData = JSON.stringify({
       step();
     };
 
-    const applyLanguage = (lang) => {
-      const data = I18N[lang] || I18N.en;
+    // Only EN ships inline; other locales load once from the static endpoint.
+    const ensureLang = async (lang) => {
+      if (I18N[lang]) return I18N[lang];
+      const res = await fetch(`/i18n/${lang}.json`, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) throw new Error(`i18n ${lang}: ${res.status}`);
+      I18N[lang] = await res.json();
+      return I18N[lang];
+    };
+
+    const applyLanguage = async (lang) => {
+      let data;
+      try {
+        data = await ensureLang(lang);
+      } catch (err) {
+        console.warn("i18n fetch failed, falling back to en", err);
+        lang = "en";
+        data = I18N.en;
+      }
       currentProfile = data;
       window._termProfile = data;
       document.documentElement.lang = lang;
@@ -1247,8 +1264,9 @@ const structuredData = JSON.stringify({
         langToggle?.setAttribute("aria-expanded", "false");
         clearTimeout(langSwitchTimer);
         document.body.classList.add('lang-switching');
-        langSwitchTimer = setTimeout(() => {
-          applyLanguage(lang);
+        ensureLang(lang).catch(() => {}); // warm the locale cache during the fade
+        langSwitchTimer = setTimeout(async () => {
+          await applyLanguage(lang);
           document.body.classList.remove('lang-switching');
           langSwitchTimer = null;
         }, 200);
