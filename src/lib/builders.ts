@@ -79,6 +79,15 @@ export const skillLogoMap: Record<string, string> = {
   Trello: "/logos/si-trello.svg",
 };
 
+// All profile data is interpolated into HTML strings — escape it uniformly.
+// Safe for both element content and double-quoted attribute values.
+export const esc = (s: string): string =>
+  String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
 export const stripParens = (item: string): string =>
   item.replace(/\s*\([^)]*\)/g, "").trim();
 
@@ -116,7 +125,7 @@ const stripImpactPrefix = (s: string): string =>
   s.replace(/^(?:Impact:\s*)+/i, "");
 
 const pill = (item: string): string => {
-  const name = stripParens(item);
+  const name = esc(stripParens(item));
   const logo = getLogoUrl(item);
   return logo
     ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${name}</span>`
@@ -186,7 +195,7 @@ export const buildProjectSim = (
               </circle>
               <text class="sim-desc mono" x="290" y="68">term 3</text>
             </svg>
-            <div class="sim-legend">${legends.raft}</div>
+            <div class="sim-legend">${esc(legends.raft)}</div>
           </div>
         `;
   }
@@ -226,7 +235,7 @@ export const buildProjectSim = (
                 <animate attributeName="cy" values="50;36;50;36" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
               </circle>
             </svg>
-            <div class="sim-legend">${legends.kademlia}</div>
+            <div class="sim-legend">${esc(legends.kademlia)}</div>
           </div>
         `;
   }
@@ -264,7 +273,7 @@ export const buildProjectSim = (
               </line>
               <text class="sim-desc mono" x="245" y="120">gc sweep</text>
             </svg>
-            <div class="sim-legend">${legends.redis}</div>
+            <div class="sim-legend">${esc(legends.redis)}</div>
           </div>
         `;
   }
@@ -273,18 +282,18 @@ export const buildProjectSim = (
 
 export const buildExperience = (data: I18nProfile): string => {
   return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.experience}</div>
-        <h2 class="sec-title">${data.labels.headings.experience}</h2>
+        <div class="sec-eyebrow">${esc(data.labels.eyebrows.experience)}</div>
+        <h2 class="sec-title">${esc(data.labels.headings.experience)}</h2>
         <div class="scroll-tl">
         ${data.experience
           .map(
             (exp) => `
               <div class="scroll-tl-item${isCurrent(exp.period) ? " now" : ""}">
-                <div class="scroll-tl-period">${exp.period}</div>
-                <div class="scroll-tl-role">${exp.role}</div>
-                <div class="scroll-tl-org">${exp.org}</div>
-                <div class="scroll-tl-loc">${exp.location}</div>
-                ${exp.bullets.length ? `<ul class="scroll-tl-bullets">${exp.bullets.map((b, i) => `<li style="transition-delay:${i * 80 + 150}ms">${b}</li>`).join("")}</ul>` : ""}
+                <div class="scroll-tl-period">${esc(exp.period)}</div>
+                <div class="scroll-tl-role">${esc(exp.role)}</div>
+                <div class="scroll-tl-org">${esc(exp.org)}</div>
+                <div class="scroll-tl-loc">${esc(exp.location)}</div>
+                ${exp.bullets.length ? `<ul class="scroll-tl-bullets">${exp.bullets.map((b, i) => `<li style="transition-delay:${i * 80 + 150}ms">${esc(b)}</li>`).join("")}</ul>` : ""}
               </div>
             `,
           )
@@ -297,14 +306,14 @@ export const buildProjects = (data: I18nProfile): string => {
   const buildCard = (p: Project): string => {
     const pills = p.tech.map(pill).join("");
     const impact = p.impact
-      ? `<p class="proj-impact">${stripImpactPrefix(p.impact)}</p>`
+      ? `<p class="proj-impact">${esc(stripImpactPrefix(p.impact))}</p>`
       : "";
     const badges = (p.badges || []).map((b) =>
-      `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ""}"><a class="feat-gh" href="${b.link || "#"}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${b.pillLabel}</a> ${b.platform}</span>`
+      `<span class="badge-stat proj-badge-live" data-badge-api="${esc(b.api || "")}"><a class="feat-gh" href="${esc(b.link || "#")}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${esc(b.pillLabel)}</a> ${esc(b.platform)}</span>`
     ).join(" ");
     const badgeBullet = badges ? `<li class="badge-bullet">${badges}</li>` : "";
     const bullets = (p.bullets.length || badgeBullet)
-      ? `<ul class="feat-bullets">${badgeBullet}${p.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>`
+      ? `<ul class="feat-bullets">${badgeBullet}${p.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>`
       : "";
     const gh = p.links?.github
       ? `<a class="feat-gh" href="${p.links.github}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>`
@@ -319,12 +328,12 @@ export const buildProjects = (data: I18nProfile): string => {
     const isWide = p.name.startsWith("patent");
     const simLabel = p.name.split("—")[0].trim();
     const simBtn = sim
-      ? `<button class="sim-toggle" type="button" aria-label="${data.labels.simulate} — ${simLabel}"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>${data.labels.simulate}</button>`
+      ? `<button class="sim-toggle" type="button" aria-label="${esc(data.labels.simulate)} — ${esc(simLabel)}"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>${esc(data.labels.simulate)}</button>`
       : "";
     const simSvg = sim ? buildProjectSim(p, data.labels.simLegends) : "";
-    return `<div class="proj-card${sim ? " has-sim" : ""}${isWide ? " proj-card-wide" : ""}" role="button" tabindex="0" data-project="${p.name.replace(/"/g, "&quot;")}">
+    return `<div class="proj-card${sim ? " has-sim" : ""}${isWide ? " proj-card-wide" : ""}" role="button" tabindex="0" data-project="${esc(p.name)}">
           <div class="proj-card-head">
-            <h3 class="proj-name">${p.name}</h3>
+            <h3 class="proj-name">${esc(p.name)}</h3>
             <div class="proj-card-actions">
               ${gh}${crates}${docs}${simBtn}
             </div>
@@ -337,8 +346,8 @@ export const buildProjects = (data: I18nProfile): string => {
         </div>`;
   };
   return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.projects}</div>
-        <h2 class="sec-title">${data.labels.headings.projects}</h2>
+        <div class="sec-eyebrow">${esc(data.labels.eyebrows.projects)}</div>
+        <h2 class="sec-title">${esc(data.labels.headings.projects)}</h2>
         <div class="proj-grid">
           ${data.projects.map((p) => buildCard(p)).join("")}
         </div>
@@ -347,8 +356,8 @@ export const buildProjects = (data: I18nProfile): string => {
 
 export const buildTeaching = (data: I18nProfile): string => {
   return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.teaching}</div>
-        <h2 class="sec-title">${data.labels.headings.teaching}</h2>
+        <div class="sec-eyebrow">${esc(data.labels.eyebrows.teaching)}</div>
+        <h2 class="sec-title">${esc(data.labels.headings.teaching)}</h2>
         <div class="proj-grid">
           ${data.teaching
             .map((t) => {
@@ -357,12 +366,12 @@ export const buildTeaching = (data: I18nProfile): string => {
               const topics = all.filter((s) => !getLogoUrl(s));
               const renderBadge = (skill: string) => {
                 const logo = getLogoUrl(skill);
-                return `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${skill}</span>`;
+                return `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${esc(skill)}</span>`;
               };
               return `
             <div class="proj-card">
               <div class="proj-card-head">
-                <h3 class="proj-name">${t.title}</h3>
+                <h3 class="proj-name">${esc(t.title)}</h3>
               </div>
               <div class="proj-card-text">
                 <div class="teaching-skills">
@@ -370,7 +379,7 @@ export const buildTeaching = (data: I18nProfile): string => {
                     tools.length > 0
                       ? `
                   <div class="teaching-skill-row">
-                    <span class="teaching-skill-label">${data.labels.teachingRows.tools}</span>
+                    <span class="teaching-skill-label">${esc(data.labels.teachingRows.tools)}</span>
                     <div class="feat-pills">${tools.map(renderBadge).join("")}</div>
                   </div>`
                       : ""
@@ -379,8 +388,8 @@ export const buildTeaching = (data: I18nProfile): string => {
                     topics.length > 0
                       ? `
                   <div class="teaching-skill-row">
-                    <span class="teaching-skill-label">${data.labels.teachingRows.topics}</span>
-                    <div class="feat-pills">${topics.map((s) => `<span class="feat-pill">${s}</span>`).join("")}</div>
+                    <span class="teaching-skill-label">${esc(data.labels.teachingRows.topics)}</span>
+                    <div class="feat-pills">${topics.map((s) => `<span class="feat-pill">${esc(s)}</span>`).join("")}</div>
                   </div>`
                       : ""
                   }
@@ -395,17 +404,17 @@ export const buildTeaching = (data: I18nProfile): string => {
 
 export const buildEducation = (data: I18nProfile): string => {
   return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.education}</div>
-        <h2 class="sec-title">${data.labels.headings.education}</h2>
+        <div class="sec-eyebrow">${esc(data.labels.eyebrows.education)}</div>
+        <h2 class="sec-title">${esc(data.labels.headings.education)}</h2>
         <div class="proj-grid">
           <div class="proj-card proj-card-wide">
             <div class="proj-card-head">
-              <h3 class="proj-name">${data.education.title}</h3>
+              <h3 class="proj-name">${esc(data.education.title)}</h3>
             </div>
             <div class="proj-card-text">
-              <div class="tl-period">${data.education.meta}</div>
+              <div class="tl-period">${esc(data.education.meta)}</div>
               <ul class="feat-bullets">
-                ${data.education.bullets.map((b) => `<li>${b}</li>`).join("")}
+                ${data.education.bullets.map((b) => `<li>${esc(b)}</li>`).join("")}
               </ul>
             </div>
           </div>
@@ -415,15 +424,15 @@ export const buildEducation = (data: I18nProfile): string => {
 
 export const buildSkills = (data: I18nProfile): string => {
   return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.skills}</div>
-        <h2 class="sec-title">${data.labels.headings.skills}</h2>
+        <div class="sec-eyebrow">${esc(data.labels.eyebrows.skills)}</div>
+        <h2 class="sec-title">${esc(data.labels.headings.skills)}</h2>
         <div class="proj-grid">
           ${data.skills
             .map(
               (s) => `
             <div class="proj-card skill-card">
               <div class="proj-card-head">
-                <h3 class="proj-name">${data.labels.skillCategories[s.category] || s.category}</h3>
+                <h3 class="proj-name">${esc(data.labels.skillCategories[s.category] || s.category)}</h3>
               </div>
               <div class="proj-card-text">
                 ${s.groups
@@ -446,8 +455,8 @@ export const buildSkills = (data: I18nProfile): string => {
 
 export const buildRecommendations = (data: I18nProfile): string => {
   return `
-        <div class="sec-eyebrow">${data.labels.eyebrows.recommendations}</div>
-        <h2 class="sec-title">${data.labels.headings.recommendations}</h2>
+        <div class="sec-eyebrow">${esc(data.labels.eyebrows.recommendations)}</div>
+        <h2 class="sec-title">${esc(data.labels.headings.recommendations)}</h2>
         <div class="testi-wrap" role="group" aria-roledescription="carousel" aria-label="Student recommendations">
           <div class="testi-scroll" id="testi-scroll" aria-live="off">
             ${data.testimonials
@@ -459,13 +468,13 @@ export const buildRecommendations = (data: I18nProfile): string => {
                 return `
                 <div class="testi-card" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${data.testimonials.length}">
                   <span class="testi-mark">&ldquo;</span>
-                  <p class="testi-quote">${t.quote}</p>
+                  <p class="testi-quote">${esc(t.quote)}</p>
                   <div class="testi-author">
-                    <div class="testi-avatar">${initials}</div>
+                    <div class="testi-avatar">${esc(initials)}</div>
                     <div>
-                      <div class="testi-name">${t.name}${t.linkedin ? `<a class="testi-linkedin" href="${t.linkedin}" target="_blank" rel="noopener" aria-label="${t.name} on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>` : ""}</div>
-                      <div class="testi-role">${t.title}</div>
-                      <div class="testi-course">${t.course} &mdash; ${role}</div>
+                      <div class="testi-name">${esc(t.name)}${t.linkedin ? `<a class="testi-linkedin" href="${esc(t.linkedin)}" target="_blank" rel="noopener" aria-label="${esc(t.name)} on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>` : ""}</div>
+                      <div class="testi-role">${esc(t.title)}</div>
+                      <div class="testi-course">${esc(t.course)} &mdash; ${esc(role)}</div>
                     </div>
                   </div>
                 </div>`;
@@ -487,18 +496,18 @@ export const buildRecommendations = (data: I18nProfile): string => {
 
 export const buildConnect = (data: I18nProfile): string => {
   return `
-        <p class="connect-tagline">${data.labels.connectTagline}</p>
+        <p class="connect-tagline">${esc(data.labels.connectTagline)}</p>
         <div class="connect-links">
           <a class="cta-btn" href="${data.links.linkedin}" target="_blank" rel="noopener"><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a>
           <a class="cta-btn" href="${data.links.github}" target="_blank" rel="noopener"><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
-          <a class="cta-btn" href="mailto:${data.email}"><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>${data.labels.links.email}</a>
+          <a class="cta-btn" href="mailto:${esc(data.email)}"><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>${esc(data.labels.links.email)}</a>
         </div>
-        <div class="mini-map" aria-label="${data.labels.connectLocation}">
+        <div class="mini-map" aria-label="${esc(data.labels.connectLocation)}">
           <div class="mini-map-container">
-            <img class="mini-map-img mini-map-dark" src="/map-baku-dark.png" alt="${data.labels.connectLocation}" width="500" height="220" loading="lazy"/>
-            <img class="mini-map-img mini-map-light" src="/map-baku-light.png" alt="${data.labels.connectLocation}" width="500" height="220" loading="lazy"/>
+            <img class="mini-map-img mini-map-dark" src="/map-baku-dark.png" alt="${esc(data.labels.connectLocation)}" width="500" height="220" loading="lazy"/>
+            <img class="mini-map-img mini-map-light" src="/map-baku-light.png" alt="${esc(data.labels.connectLocation)}" width="500" height="220" loading="lazy"/>
             <div class="mini-map-dot" aria-hidden="true"></div>
-            <div class="mini-map-label">${data.labels.connectLocation} <span id="local-time"></span></div>
+            <div class="mini-map-label">${esc(data.labels.connectLocation)} <span id="local-time"></span></div>
           </div>
         </div>
       `;

@@ -21,6 +21,16 @@ const ID_RE = /^[A-Za-z0-9._-]{1,64}$/;
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const VOTE_CAP = 60;
 
+// Constant-time secret comparison (Cloudflare Workers crypto.subtle extension).
+const _enc = new TextEncoder();
+function safeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  const ab = _enc.encode(a), bb = _enc.encode(b);
+  if (ab.byteLength !== bb.byteLength) return false;
+  return crypto.subtle.timingSafeEqual(ab, bb);
+}
+
+
 // Per-session /vote flood guard (NAT-safe). The whole class sits behind ONE
 // corporate NAT, so any per-IP limit tight enough to matter would lock out the
 // room (~30 phones polling /state every 3s ≈ 600 req/min from one IP). Vote
@@ -118,8 +128,8 @@ export default {
       if (method === 'POST' && url.pathname === '/reset') {
         const session = url.searchParams.get('s');
         if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
-        const authKey = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '') || url.searchParams.get('key');
-        if (authKey !== env.RESET_SECRET) {
+        const authKey = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
+        if (!safeEqual(authKey, env.RESET_SECRET)) {
           return json({ error: 'Unauthorized' }, origin, env, 401);
         }
         return forward(env, session, '/reset', origin);
@@ -129,8 +139,8 @@ export default {
       if (method === 'POST' && url.pathname === '/close') {
         const session = url.searchParams.get('s');
         if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
-        const authKey = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '') || url.searchParams.get('key');
-        if (authKey !== env.RESET_SECRET) {
+        const authKey = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
+        if (!safeEqual(authKey, env.RESET_SECRET)) {
           return json({ error: 'Unauthorized' }, origin, env, 401);
         }
         return forward(env, session, '/close', origin);

@@ -71,7 +71,7 @@ function _applySpotify(el: HTMLElement, data: any) {
   const progress = data.playing && data.duration
     ? '<span class="spotify-progress-row"><span class="spotify-time" id="spotify-elapsed"></span><span class="spotify-progress"><span class="spotify-progress-bar" id="spotify-bar"></span></span><span class="spotify-time" id="spotify-remaining"></span></span>'
     : '';
-  const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + coverUrl + '" alt="" width="24" height="24">' : '';
+  const miniCover = coverUrl ? '<img class="spotify-mini-cover" src="' + _escHtml(coverUrl) + '" alt="" width="24" height="24">' : '';
   let recentHtml = '';
   const topTracks = data.topTracks || [];
   if (topTracks.length > 0) {
