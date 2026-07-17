@@ -373,7 +373,6 @@
         var pollOpen = true;     // assume open until /state says otherwise
         var roundLocked = false; // set when this round is capped (room full)
         var storedGen = null;    // last seen generation (re-vote detector)
-        var pollTimer = null;
 
         function getVoted() { return votedKey ? localStorage.getItem(votedKey) : null; }
 
@@ -556,7 +555,7 @@
         }
 
         pollState();
-        pollTimer = setInterval(pollState, 3000);
+        setInterval(pollState, 3000);
 
         // Catch up immediately when the phone wakes / tab refocuses.
         document.addEventListener('visibilitychange', function () {

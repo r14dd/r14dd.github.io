@@ -364,26 +364,6 @@ section[id] { margin-top: 3rem; }
   color: var(--text);
 }
 
-.tech-meta {
-  color: var(--muted);
-  font-size: 0.85rem;
-  font-weight: 400;
-  line-height: 1.4;
-  opacity: 0.4;
-  transition: opacity 0.2s ease;
-}
-
-.simulate-btn {
-  background: transparent;
-  border: 1px solid rgba(var(--accent-rgb), 0.2);
-  color: var(--accent);
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  opacity: 0;
-}
-
 .sim-target-node {
   fill: rgba(var(--accent-rgb), 0.25);
   stroke: rgba(var(--accent-rgb), 0.6);

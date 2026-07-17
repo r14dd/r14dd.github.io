@@ -12,6 +12,9 @@ import {
 } from "../lib/builders";
 
 const profile = profiles.en;
+// Mirror of the runtime wrapNum in applyLanguage — keep in sync.
+const wrapStatNum = (s: string) =>
+  s.replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
 const metaTitle = `${profile.hero.name} — Portfolio`;
 const metaDescription = "Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.";
 const structuredData = JSON.stringify({
@@ -125,21 +128,21 @@ const structuredData = JSON.stringify({
             <span class="terminal-cmd">whoami</span>
           </div>
           <div class="terminal-line">
-            <span class="terminal-text" id="term-role1">AI Engineer @ ABB · International Bank of Azerbaijan</span>
+            <span class="terminal-text" id="term-role1">{profile.labels.terminal.role1}</span>
           </div>
           <div class="terminal-line">
-            <span class="terminal-text" id="term-role2">Head of IT @ European Youth Parliament AZ</span>
+            <span class="terminal-text" id="term-role2">{profile.labels.terminal.role2}</span>
           </div>
           <div class="terminal-line">
             <span class="terminal-prompt">→</span>
             <span class="terminal-cmd">stats</span>
           </div>
           <div class="terminal-line terminal-stats">
-            <span class="term-stat" id="term-stat1"><span class="term-stat-num">2K+</span> students taught</span>
+            <span class="term-stat" id="term-stat1"><Fragment set:html={wrapStatNum(profile.labels.terminal.stat1)} /></span>
             <span class="term-stat-sep">·</span>
-            <span class="term-stat" id="term-stat2"><span class="term-stat-num">5+</span> teams led</span>
+            <span class="term-stat" id="term-stat2"><Fragment set:html={wrapStatNum(profile.labels.terminal.stat2)} /></span>
             <span class="term-stat-sep">·</span>
-            <span class="term-stat" id="term-stat3"><span class="term-stat-num">4+</span> yrs shipping</span>
+            <span class="term-stat" id="term-stat3"><Fragment set:html={wrapStatNum(profile.labels.terminal.stat3)} /></span>
           </div>
           <div class="terminal-line" id="term-input-line">
             <span class="terminal-prompt">→</span>
@@ -302,7 +305,7 @@ const structuredData = JSON.stringify({
     import * as focusTrap from "../lib/client/focus-trap";
     import { vitals as _vitals } from "../lib/client/vitals";
     import { showToast } from "../lib/client/toast";
-    import { renderSpotify, fetchSpotify, initSpotify } from "../lib/client/spotify";
+    import { renderSpotify, initSpotify } from "../lib/client/spotify";
     import { initCarousel } from "../lib/client/carousel";
     import { fetchBadges } from "../lib/client/badges";
 
@@ -1002,25 +1005,10 @@ const structuredData = JSON.stringify({
     };
 
     let scrollTicking = false;
-    let prevScrollY = window.scrollY;
-    let prevScrollTime = performance.now();
-    let velDecayTimer = null;
-    let scrollVelJS = 0;
     window.addEventListener("scroll", () => {
       if (scrollTicking) return;
       scrollTicking = true;
       requestAnimationFrame(() => {
-        const now = performance.now();
-        const dt = now - prevScrollTime;
-        const dy = Math.abs(window.scrollY - prevScrollY);
-        const vel = dt > 0 ? Math.min(dy / dt, 1) : 0;
-        prevScrollY = window.scrollY;
-        prevScrollTime = now;
-        if (!prefersReducedMotion) {
-          scrollVelJS = vel;
-          clearTimeout(velDecayTimer);
-          velDecayTimer = setTimeout(() => { scrollVelJS = 0; }, 150);
-        }
         setActiveLink();
         updateParallax();
         scrollTicking = false;

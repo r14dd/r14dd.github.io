@@ -1,6 +1,6 @@
 // Build-time git + build metadata. Runs in Node during `astro build`/`dev`
 // (frontmatter + static endpoints), never in the browser. Used by /lab for the
-// `git log` command, the "last pushed" line, the colophon SHA, and /lab/api/build.json.
+// `git log` command, the "last pushed" line, and the colophon SHA.
 import { execSync } from "node:child_process";
 
 function sh(cmd: string, fallback = ""): string {

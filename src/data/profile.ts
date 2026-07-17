@@ -30,7 +30,6 @@ export type Testimonial = {
 export type Profile = {
   hero: {
     name: string;
-    tagline: string;
   };
   about: string;
   email: string;
@@ -59,7 +58,6 @@ export type Profile = {
 export const profile: Profile = {
   hero: {
     name: "Riad Mukhtarov",
-    tagline: "",
   },
 
   about: "develops software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, he taught computer science at State University of New York at Buffalo. He likes complicated challenges and clean abstractions.",

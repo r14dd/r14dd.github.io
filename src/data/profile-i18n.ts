@@ -140,7 +140,6 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Риад Мухтаров",
-      tagline: "",
     },
     about: "разрабатывает ПО и AI-системы на Rust и Python, с акцентом на распределённые системы и сложную инфраструктуру. До этого он преподавал информатику в State University of New York at Buffalo. Любит сложные задачи и чистые абстракции.",
     experience: [
@@ -442,7 +441,6 @@ export const profiles: Record<string, I18nProfile> = {
     hero: {
       ...profile.hero,
       name: "Riad Muxtarov",
-      tagline: "",
     },
     about: "Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlər və mürəkkəb infrastruktura fokuslanmaqla. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.",
     experience: [

@@ -137,7 +137,7 @@ export default {
       }
 
       return json({ error: 'Not found' }, origin, env, 404);
-    } catch (e) {
+    } catch {
       return json({ error: 'Internal error' }, origin, env, 500);
     }
   },

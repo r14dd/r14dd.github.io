@@ -187,7 +187,7 @@ function _applySpotify(el: HTMLElement, data: any) {
   }
 }
 
-export async function fetchSpotify() {
+async function fetchSpotify() {
   try {
     const res = await fetch(SPOTIFY_API, { signal: AbortSignal.timeout(5000) });
     if (res.ok) {
