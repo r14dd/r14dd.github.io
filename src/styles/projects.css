@@ -61,12 +61,15 @@ html.light .feat-card:hover {
 }
 
 .feat-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.75rem;
+  font-size: 0.62rem;
   color: var(--text-soft);
   border: 1px solid rgba(var(--accent-rgb), 0.25);
   border-radius: var(--radius-sm);
-  padding: 0.1rem 0.42rem;
+  padding: 0.1rem 0.45rem;
   white-space: nowrap;
 }
 
@@ -200,17 +203,17 @@ html.light .proj-card {
 
 .proj-card-head {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  align-content: start;
+  gap: 0.55rem;
 }
 
 .proj-card-actions {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .badge-bullet {
@@ -521,6 +524,10 @@ body.proj-lock {
 .proj-modal .project-tech-pills .project-tech-pill {
   opacity: 0.85;
   border-color: rgba(var(--accent-rgb), 0.22);
+}
+
+.proj-modal-actions {
+  margin: 0.35rem 0 0.2rem;
 }
 
 .proj-modal .sim-visual.active {

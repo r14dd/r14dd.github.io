@@ -41,6 +41,9 @@ type Labels = {
   connectLocation: string;
   taRole: string;
   headTARole: string;
+  simulate: string;
+  simLegends: { raft: string; kademlia: string; redis: string };
+  teachingRows: { tools: string; topics: string };
   skillCategories: Record<string, string>;
   terminal: {
     role1: string;
@@ -102,6 +105,13 @@ export const profiles: Record<string, I18nProfile> = {
       connectLocation: "Baku, Azerbaijan",
       taRole: "Teaching Assistant",
       headTARole: "Head Teaching Assistant",
+      simulate: "Simulate",
+      simLegends: {
+        raft: "Leader replicates log entries via AppendEntries RPC",
+        kademlia: "Iterative FIND_NODE lookup converges via XOR distance",
+        redis: "Two-layer TTL-aware cache with garbage collection",
+      },
+      teachingRows: { tools: "tools", topics: "topics" },
       skillCategories: {
         "Programming Languages": "Programming Languages",
         "Backend & Runtimes": "Backend & Runtimes",
@@ -397,6 +407,13 @@ export const profiles: Record<string, I18nProfile> = {
       connectLocation: "Баку, Азербайджан",
       taRole: "Ассистент преподавателя",
       headTARole: "Старший ассистент преподавателя",
+      simulate: "Симуляция",
+      simLegends: {
+        raft: "Лидер реплицирует записи лога через AppendEntries RPC",
+        kademlia: "Итеративный поиск FIND_NODE сходится по XOR-расстоянию",
+        redis: "Двухуровневый кэш с учётом TTL и сборкой мусора",
+      },
+      teachingRows: { tools: "инструменты", topics: "темы" },
       skillCategories: {
         "Programming Languages": "Языки программирования",
         "Backend & Runtimes": "Backend и среды выполнения",
@@ -692,6 +709,13 @@ export const profiles: Record<string, I18nProfile> = {
       connectLocation: "Bakı, Azərbaycan",
       taRole: "Tədris assistenti",
       headTARole: "Baş tədris assistenti",
+      simulate: "Simulyasiya",
+      simLegends: {
+        raft: "Lider log qeydlərini AppendEntries RPC ilə replikasiya edir",
+        kademlia: "İterativ FIND_NODE axtarışı XOR məsafəsi ilə hədəfə yaxınlaşır",
+        redis: "TTL-ə əsaslanan ikiqat keş və garbage collection",
+      },
+      teachingRows: { tools: "alətlər", topics: "mövzular" },
       skillCategories: {
         "Programming Languages": "Proqramlaşdırma dilləri",
         "Backend & Runtimes": "Backend və Runtime",

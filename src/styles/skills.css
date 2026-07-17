@@ -85,16 +85,15 @@ html.light .skill-badge-local img {
 }
 
 .teaching-skills {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: start;
+  gap: 0.35rem 0.55rem;
   margin-top: 0.5rem;
 }
 
 .teaching-skill-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.55rem;
+  display: contents;
 }
 
 .teaching-skill-label {
@@ -102,8 +101,7 @@ html.light .skill-badge-local img {
   font-family: "JetBrains Mono", ui-monospace, monospace;
   color: var(--text-soft);
   opacity: 0.35;
-  width: 2.8rem;
-  flex-shrink: 0;
+  min-width: 2.8rem;
   letter-spacing: 0.04em;
   line-height: 20px;
 }

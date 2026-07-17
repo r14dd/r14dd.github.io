@@ -123,7 +123,18 @@ const pill = (item: string): string => {
     : `<span class="feat-pill">${name}</span>`;
 };
 
-export const buildProjectSim = (p: Project): string => {
+type SimLegends = { raft: string; kademlia: string; redis: string };
+
+const DEFAULT_SIM_LEGENDS: SimLegends = {
+  raft: "Leader replicates log entries via AppendEntries RPC",
+  kademlia: "Iterative FIND_NODE lookup converges via XOR distance",
+  redis: "Two-layer TTL-aware cache with garbage collection",
+};
+
+export const buildProjectSim = (
+  p: Project,
+  legends: SimLegends = DEFAULT_SIM_LEGENDS,
+): string => {
   if (isRaft(p.name)) {
     return `
           <div class="sim-visual" data-sim="raft">
@@ -175,7 +186,7 @@ export const buildProjectSim = (p: Project): string => {
               </circle>
               <text class="sim-desc mono" x="290" y="68">term 3</text>
             </svg>
-            <div class="sim-legend">Leader replicates log entries via AppendEntries RPC</div>
+            <div class="sim-legend">${legends.raft}</div>
           </div>
         `;
   }
@@ -215,7 +226,7 @@ export const buildProjectSim = (p: Project): string => {
                 <animate attributeName="cy" values="50;36;50;36" dur="3s" keyTimes="0;0.3;0.6;1" repeatCount="indefinite"/>
               </circle>
             </svg>
-            <div class="sim-legend">Iterative FIND_NODE lookup converges via XOR distance</div>
+            <div class="sim-legend">${legends.kademlia}</div>
           </div>
         `;
   }
@@ -253,7 +264,7 @@ export const buildProjectSim = (p: Project): string => {
               </line>
               <text class="sim-desc mono" x="245" y="120">gc sweep</text>
             </svg>
-            <div class="sim-legend">Two-layer TTL-aware cache with garbage collection</div>
+            <div class="sim-legend">${legends.redis}</div>
           </div>
         `;
   }
@@ -308,14 +319,14 @@ export const buildProjects = (data: I18nProfile): string => {
     const isWide = p.name.startsWith("patent");
     const simLabel = p.name.split("—")[0].trim();
     const simBtn = sim
-      ? `<button class="sim-toggle" type="button" aria-label="Simulate ${simLabel} visualization"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>Simulate</button>`
+      ? `<button class="sim-toggle" type="button" aria-label="${data.labels.simulate} — ${simLabel}"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>${data.labels.simulate}</button>`
       : "";
-    const simSvg = sim ? buildProjectSim(p) : "";
+    const simSvg = sim ? buildProjectSim(p, data.labels.simLegends) : "";
     return `<div class="proj-card${sim ? " has-sim" : ""}${isWide ? " proj-card-wide" : ""}" role="button" tabindex="0" data-project="${p.name.replace(/"/g, "&quot;")}">
           <div class="proj-card-head">
             <h3 class="proj-name">${p.name}</h3>
             <div class="proj-card-actions">
-              ${simBtn}${gh}${crates}${docs}
+              ${gh}${crates}${docs}${simBtn}
             </div>
           </div>
           <div class="proj-card-text">
@@ -359,7 +370,7 @@ export const buildTeaching = (data: I18nProfile): string => {
                     tools.length > 0
                       ? `
                   <div class="teaching-skill-row">
-                    <span class="teaching-skill-label">tools</span>
+                    <span class="teaching-skill-label">${data.labels.teachingRows.tools}</span>
                     <div class="feat-pills">${tools.map(renderBadge).join("")}</div>
                   </div>`
                       : ""
@@ -368,7 +379,7 @@ export const buildTeaching = (data: I18nProfile): string => {
                     topics.length > 0
                       ? `
                   <div class="teaching-skill-row">
-                    <span class="teaching-skill-label">topics</span>
+                    <span class="teaching-skill-label">${data.labels.teachingRows.topics}</span>
                     <div class="feat-pills">${topics.map((s) => `<span class="feat-pill">${s}</span>`).join("")}</div>
                   </div>`
                       : ""
