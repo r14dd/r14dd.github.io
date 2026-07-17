@@ -118,10 +118,12 @@
   padding-left: 1.6rem;
 }
 
+/* Line sits 4px in from the section edge: .section-block's content-visibility
+   forces paint containment, so anything left of x=0 would be clipped. */
 .scroll-tl::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: 4px;
   top: 0;
   bottom: 0;
   width: 1px;
@@ -151,7 +153,6 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  transform: translateX(-4px);
   background: rgba(var(--accent-rgb), 0.15);
   border: 1.5px solid rgba(var(--accent-rgb), 0.3);
   transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
