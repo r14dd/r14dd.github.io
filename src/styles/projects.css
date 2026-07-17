@@ -116,14 +116,15 @@
 }
 
 .proj-card {
+  position: relative;
   display: grid;
   grid-template-rows: subgrid;
   grid-row: span 2;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-  transition: border-color 0.25s var(--ease-out), background 0.25s var(--ease-out), transform 0.2s var(--ease-spring);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.8rem;
+  transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
 }
 
 @media (hover: hover) {
@@ -218,6 +219,9 @@ html.light .proj-card {
   transition: opacity 0.25s ease, max-height 0.25s ease;
 }
 
+/* Full-bleed cards on phones: the section clip box is widened by the same
+   amount in base.css (.section-block margin/padding-inline), so the card's
+   border and hover ring stay inside the paint-containment boundary. */
 @media (max-width: 480px) {
   .proj-card {
     padding: 0.6rem;
@@ -234,18 +238,13 @@ html.light .proj-card {
   }
 }
 
-.proj-card {
-  position: relative;
-  padding: 0.8rem;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
-}
-
+/* Ring lives in the card's own transparent 1px border strip (inset 0, not -1px):
+   .section-block paint containment clips anything outside the section box, and
+   at ≤480px the card edges sit exactly on that boundary. */
 .proj-card::before {
   content: '';
   position: absolute;
-  inset: -1px;
+  inset: 0;
   border-radius: inherit;
   padding: 1px;
   background: conic-gradient(
@@ -306,13 +305,16 @@ body.proj-lock {
   backdrop-filter: blur(7px);
   z-index: 700;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.22s ease;
+  transition: opacity 0.22s ease, visibility 0s linear 0.22s;
 }
 
 .proj-backdrop.open {
   opacity: 1;
+  visibility: visible;
   pointer-events: all;
+  transition: opacity 0.22s ease;
 }
 
 .proj-modal {
@@ -329,16 +331,19 @@ body.proj-lock {
   box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(var(--accent-rgb), 0.05);
   z-index: 701;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   overflow: hidden;
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
 }
 
 .proj-modal.open {
   opacity: 1;
+  visibility: visible;
   pointer-events: all;
+  transition: opacity 0.2s ease;
 }
 
 .proj-modal-card {

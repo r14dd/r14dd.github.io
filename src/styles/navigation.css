@@ -109,14 +109,16 @@ body.lang-switching .lang-switcher {
   backdrop-filter: blur(12px);
   box-shadow: 0 16px 40px var(--shadow);
   opacity: 0;
+  visibility: hidden;
   transform: scale(0.92) translateY(-6px);
   transform-origin: top right;
   pointer-events: none;
-  transition: opacity 0.15s var(--ease-out), transform 0.15s var(--ease-out);
+  transition: opacity 0.15s var(--ease-out), transform 0.15s var(--ease-out), visibility 0s linear 0.15s;
 }
 
 .lang-menu.open {
   opacity: 1;
+  visibility: visible;
   transform: scale(1) translateY(0);
   pointer-events: auto;
   transition: opacity 0.2s var(--ease-out), transform 0.22s var(--ease-spring);

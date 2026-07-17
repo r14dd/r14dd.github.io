@@ -2,7 +2,7 @@ const SEL = 'a[href],button:not([disabled]),input:not([disabled]),textarea:not([
 
 let container: HTMLElement | null = null;
 let opener: Element | null = null;
-let handler: ((e: KeyboardEvent) => void) | null = null;
+let handler: ((_e: KeyboardEvent) => void) | null = null;
 
 const visible = (el: HTMLElement) =>
   el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement;

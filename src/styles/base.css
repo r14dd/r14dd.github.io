@@ -119,6 +119,13 @@ input, textarea {
   border-radius: 4px;
 }
 
+/* Elements whose edges touch the section paint-containment boundary get an
+   inset focus ring so the indicator stays fully visible. */
+.proj-card:focus-visible,
+.car-btn:focus-visible {
+  outline-offset: -3px;
+}
+
 .skip-link {
   position: fixed;
   top: 0;
@@ -336,6 +343,23 @@ footer {
   margin-top: var(--space-12);
   content-visibility: auto;
   contain-intrinsic-size: auto 600px;
+}
+
+/* content-visibility forces paint containment: descendants are clipped at the
+   section box. Phones pull .proj-card edge-to-edge with negative margins, so
+   widen the clip box by the same amount (net content position is unchanged). */
+@media (max-width: 480px) {
+  .section-block {
+    margin-inline: -0.6rem;
+    padding-inline: 0.6rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .section-block {
+    margin-inline: -0.5rem;
+    padding-inline: 0.5rem;
+  }
 }
 
 section[id] { margin-top: 3rem; }

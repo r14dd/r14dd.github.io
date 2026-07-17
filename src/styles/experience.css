@@ -118,12 +118,13 @@
   padding-left: 1.6rem;
 }
 
-/* Line sits 4px in from the section edge: .section-block's content-visibility
-   forces paint containment, so anything left of x=0 would be clipped. */
+/* Line sits 8px in from the section edge: .section-block's content-visibility
+   forces paint containment, so anything left of x=0 would be clipped — the
+   8px inset leaves room for the dots' 4px in-view halo. */
 .scroll-tl::before {
   content: '';
   position: absolute;
-  left: 4px;
+  left: 8px;
   top: 0;
   bottom: 0;
   width: 1px;
@@ -148,7 +149,7 @@
 .scroll-tl-item::before {
   content: '';
   position: absolute;
-  left: -1.6rem;
+  left: calc(-1.6rem + 4px);
   top: 0.45rem;
   width: 8px;
   height: 8px;
@@ -240,7 +241,7 @@
 
 @media (max-width: 768px) {
   .scroll-tl { padding-left: 1.2rem; }
-  .scroll-tl-item::before { left: -1.2rem; }
+  .scroll-tl-item::before { left: calc(-1.2rem + 4px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
