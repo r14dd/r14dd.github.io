@@ -41,7 +41,7 @@ function cors(origin) {
   return {
     'Access-Control-Allow-Origin': allowed ? origin : ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET',
-    'Vary': 'Origin',
+    Vary: 'Origin',
     'Cache-Control': 'no-store, no-cache, must-revalidate',
   };
 }
@@ -72,9 +72,9 @@ export default {
         const images = item.album?.images || [];
         return {
           track: item.name,
-          artist: item.artists.map(a => a.name).join(', '),
+          artist: item.artists.map((a) => a.name).join(', '),
           url: item.external_urls.spotify,
-          cover: (images.find(i => i.width === 300) || images[0])?.url || null,
+          cover: (images.find((i) => i.width === 300) || images[0])?.url || null,
         };
       }
 
@@ -121,9 +121,15 @@ export default {
         return Response.json(cachedResult, { headers: cors(origin) });
       }
       if (lastPlaying) {
-        return Response.json({ playing: false, ...lastPlaying, topTracks: [] }, { headers: cors(origin) });
+        return Response.json(
+          { playing: false, ...lastPlaying, topTracks: [] },
+          { headers: cors(origin) },
+        );
       }
-      return Response.json({ playing: false, track: null, topTracks: [] }, { headers: cors(origin), status: 500 });
+      return Response.json(
+        { playing: false, track: null, topTracks: [] },
+        { headers: cors(origin), status: 500 },
+      );
     }
   },
 };

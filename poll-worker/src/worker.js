@@ -25,11 +25,11 @@ const VOTE_CAP = 60;
 const _enc = new TextEncoder();
 function safeEqual(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string') return false;
-  const ab = _enc.encode(a), bb = _enc.encode(b);
+  const ab = _enc.encode(a),
+    bb = _enc.encode(b);
   if (ab.byteLength !== bb.byteLength) return false;
   return crypto.subtle.timingSafeEqual(ab, bb);
 }
-
 
 // Per-session /vote flood guard (NAT-safe). The whole class sits behind ONE
 // corporate NAT, so any per-IP limit tight enough to matter would lock out the
@@ -39,8 +39,8 @@ function safeEqual(a, b) {
 // rate inside its own Durable Object. 300/60s is far above any real class
 // (~30 students x a few rounds ≈ ≤120 vote requests) so it never blocks legit
 // use. In-memory only — no storage writes, per DO instance.
-const VOTE_RATE_LIMIT = 300;            // max /vote requests per session per window
-const VOTE_RATE_WINDOW_MS = 60 * 1000;  // sliding-window length
+const VOTE_RATE_LIMIT = 300; // max /vote requests per session per window
+const VOTE_RATE_WINDOW_MS = 60 * 1000; // sliding-window length
 
 const isId = (v) => typeof v === 'string' && ID_RE.test(v);
 
@@ -50,8 +50,7 @@ const isId = (v) => typeof v === 'string' && ID_RE.test(v);
 // themselves, so this can't be spoofed cross-origin.
 function cors(origin, env) {
   const o = origin || '';
-  const lan =
-    env && (env.ALLOW_LAN === 'true' || env.ALLOW_LAN === true || env.ALLOW_LAN === '1');
+  const lan = env && (env.ALLOW_LAN === 'true' || env.ALLOW_LAN === true || env.ALLOW_LAN === '1');
   const allowed =
     o === 'https://riad.cc' ||
     o.startsWith('http://localhost:') ||
@@ -63,7 +62,7 @@ function cors(origin, env) {
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
     'Cache-Control': 'no-store',
-    'Vary': 'Origin',
+    Vary: 'Origin',
   };
 }
 
@@ -226,10 +225,7 @@ export class PollRoom {
         return this.vote(body.voterId, body.choice, origin);
       }
       case '/results':
-        return this.reply(
-          { ...this.counts, total: this.total(), open: this.open },
-          origin
-        );
+        return this.reply({ ...this.counts, total: this.total(), open: this.open }, origin);
       case '/state':
         return this.reply({ open: this.open, generation: this.generation }, origin);
       case '/reset':

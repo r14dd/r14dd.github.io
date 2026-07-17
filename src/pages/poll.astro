@@ -5,7 +5,8 @@
 // the manrope-latin.woff2 preload, then force a calm dark theme to match riad.cc.
 // The page never learns the option text or vote counts: it only sends A/B/C/D.
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en" translate="no">
   <head>
     <meta charset="utf-8" />
@@ -22,9 +23,35 @@
     <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <style is:global>
-      @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/manrope-cyrillic.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-      @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/manrope-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-      @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/manrope-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face {
+        font-family: 'Manrope';
+        font-style: normal;
+        font-weight: 200 800;
+        font-display: swap;
+        src: url(/fonts/manrope-cyrillic.woff2) format('woff2');
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: 'Manrope';
+        font-style: normal;
+        font-weight: 200 800;
+        font-display: swap;
+        src: url(/fonts/manrope-latin-ext.woff2) format('woff2');
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+          U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+          U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Manrope';
+        font-style: normal;
+        font-weight: 200 800;
+        font-display: swap;
+        src: url(/fonts/manrope-latin.woff2) format('woff2');
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+          U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
 
       :root {
         color-scheme: dark;
@@ -34,14 +61,17 @@
         --muted: #777777;
         --accent: #c9a55a;
         --accent-rgb: 201, 165, 90;
-        --border: rgba(255, 255, 255, 0.10);
+        --border: rgba(255, 255, 255, 0.1);
         --surface: rgba(255, 255, 255, 0.035);
         --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
-      html, body {
+      html,
+      body {
         margin: 0;
         padding: 0;
         min-height: 100%;
@@ -50,7 +80,13 @@
       body {
         background: var(--bg);
         color: var(--text);
-        font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family:
+          'Manrope',
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
         min-height: 100svh;
@@ -59,11 +95,8 @@
         flex-direction: column;
         align-items: center;
         /* Respect notches; comfortable breathing room. */
-        padding:
-          calc(env(safe-area-inset-top) + 32px)
-          calc(env(safe-area-inset-right) + 22px)
-          calc(env(safe-area-inset-bottom) + 28px)
-          calc(env(safe-area-inset-left) + 22px);
+        padding: calc(env(safe-area-inset-top) + 32px) calc(env(safe-area-inset-right) + 22px)
+          calc(env(safe-area-inset-bottom) + 28px) calc(env(safe-area-inset-left) + 22px);
       }
 
       .shell {
@@ -174,7 +207,9 @@
         background: var(--accent);
         border-color: var(--accent);
       }
-      .poll-option.chosen .cue { color: var(--accent); }
+      .poll-option.chosen .cue {
+        color: var(--accent);
+      }
 
       .poll-option:disabled {
         cursor: default;
@@ -193,9 +228,15 @@
         color: var(--text-soft);
         transition: color 160ms ease;
       }
-      .status[data-tone="ok"] { color: var(--accent); }
-      .status[data-tone="warn"] { color: #e0a96d; }
-      .status[data-tone="error"] { color: #e2725b; }
+      .status[data-tone='ok'] {
+        color: var(--accent);
+      }
+      .status[data-tone='warn'] {
+        color: #e0a96d;
+      }
+      .status[data-tone='error'] {
+        color: #e2725b;
+      }
 
       .foot {
         text-align: center;
@@ -206,7 +247,9 @@
       }
 
       /* Force-hide elements with [hidden]; class display:flex would otherwise win. */
-      [hidden] { display: none !important; }
+      [hidden] {
+        display: none !important;
+      }
 
       /* ── Camera-less fallback: type the code shown on the projector ── */
       .join {
@@ -237,13 +280,18 @@
         border: 1.5px solid var(--border);
         border-radius: 16px;
         touch-action: manipulation;
-        transition: border-color 160ms ease, background-color 160ms ease;
+        transition:
+          border-color 160ms ease,
+          background-color 160ms ease;
       }
-      .join__input::placeholder { color: var(--muted); font-weight: 500; }
+      .join__input::placeholder {
+        color: var(--muted);
+        font-weight: 500;
+      }
       .join__input:focus {
         outline: none;
         border-color: var(--accent);
-        background: rgba(var(--accent-rgb), 0.10);
+        background: rgba(var(--accent-rgb), 0.1);
       }
       .join__input:focus-visible {
         outline: 3px solid rgba(var(--accent-rgb), 0.65);
@@ -264,19 +312,31 @@
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
-        transition: transform 140ms var(--ease-spring), opacity 160ms ease;
+        transition:
+          transform 140ms var(--ease-spring),
+          opacity 160ms ease;
       }
-      .join__btn:active { transform: scale(0.975); }
+      .join__btn:active {
+        transform: scale(0.975);
+      }
       .join__btn:focus-visible {
         outline: 3px solid rgba(var(--accent-rgb), 0.65);
         outline-offset: 2px;
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .poll-option { transition: none; }
-        .poll-option:active:not(:disabled) { transform: none; }
-        .join__btn { transition: none; }
-        .join__btn:active { transform: none; }
+        .poll-option {
+          transition: none;
+        }
+        .poll-option:active:not(:disabled) {
+          transform: none;
+        }
+        .join__btn {
+          transition: none;
+        }
+        .join__btn:active {
+          transform: none;
+        }
       }
     </style>
   </head>
@@ -337,9 +397,10 @@
         var session = params.get('s');
 
         // Worker base by hostname — must equal the prod value the slide engine uses.
-        var WORKER = location.hostname === 'riad.cc'
-          ? 'https://poll-api.riad-mrv.workers.dev'
-          : 'http://' + location.hostname + ':8787';
+        var WORKER =
+          location.hostname === 'riad.cc'
+            ? 'https://poll-api.riad-mrv.workers.dev'
+            : 'http://' + location.hostname + ':8787';
 
         // LAN http (e.g. a phone hitting 192.168.x.x) is NOT a secure context, so
         // crypto.randomUUID is undefined there — build a v4 UUID from getRandomValues.
@@ -350,10 +411,23 @@
           var h = [];
           for (var i = 0; i < 16; i++) h.push(b[i].toString(16).padStart(2, '0'));
           var s = h.join('');
-          return s.slice(0, 8) + '-' + s.slice(8, 12) + '-' + s.slice(12, 16) + '-' + s.slice(16, 20) + '-' + s.slice(20);
+          return (
+            s.slice(0, 8) +
+            '-' +
+            s.slice(8, 12) +
+            '-' +
+            s.slice(12, 16) +
+            '-' +
+            s.slice(16, 20) +
+            '-' +
+            s.slice(20)
+          );
         }
 
-        var voterId = localStorage.getItem('poll-voter') || ((crypto.randomUUID && crypto.randomUUID()) || fallbackUuid());
+        var voterId =
+          localStorage.getItem('poll-voter') ||
+          (crypto.randomUUID && crypto.randomUUID()) ||
+          fallbackUuid();
         localStorage.setItem('poll-voter', voterId);
 
         var statusEl = document.getElementById('status');
@@ -364,17 +438,21 @@
         // poll doesn't show dead C/D buttons. Absent/invalid -> keep all four.
         var optionCount = parseInt(params.get('n'), 10);
         if (optionCount >= 2 && optionCount < 4) {
-          buttons.slice(optionCount).forEach(function (b) { b.remove(); });
+          buttons.slice(optionCount).forEach(function (b) {
+            b.remove();
+          });
           buttons = buttons.slice(0, optionCount);
         }
 
-        var votedKey = session ? ('poll-voted-' + session) : null;
+        var votedKey = session ? 'poll-voted-' + session : null;
         var inFlight = false;
-        var pollOpen = true;     // assume open until /state says otherwise
+        var pollOpen = true; // assume open until /state says otherwise
         var roundLocked = false; // set when this round is capped (room full)
-        var storedGen = null;    // last seen generation (re-vote detector)
+        var storedGen = null; // last seen generation (re-vote detector)
 
-        function getVoted() { return votedKey ? localStorage.getItem(votedKey) : null; }
+        function getVoted() {
+          return votedKey ? localStorage.getItem(votedKey) : null;
+        }
 
         function setStatus(msg, tone) {
           statusEl.textContent = msg || '';
@@ -401,64 +479,75 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ session: session, choice: choice, voterId: voterId }),
-            signal: AbortSignal.timeout(8000)
-          }).then(function (res) {
-            return res.json().catch(function () { return {}; }).then(function (data) {
-              return { status: res.status, ok: res.ok, data: data || {} };
-            });
-          }).then(function (r) {
-            inFlight = false;
+            signal: AbortSignal.timeout(8000),
+          })
+            .then(function (res) {
+              return res
+                .json()
+                .catch(function () {
+                  return {};
+                })
+                .then(function (data) {
+                  return { status: res.status, ok: res.ok, data: data || {} };
+                });
+            })
+            .then(function (r) {
+              inFlight = false;
 
-            // Already voted (lost-response recovery) — treat as success.
-            if (r.status === 409) {
-              var c409 = r.data.choice || choice;
-              localStorage.setItem(votedKey, c409);
-              syncButtons();
-              setStatus('Already counted — you chose ' + c409 + '.', 'ok');
-              return;
-            }
+              // Already voted (lost-response recovery) — treat as success.
+              if (r.status === 409) {
+                var c409 = r.data.choice || choice;
+                localStorage.setItem(votedKey, c409);
+                syncButtons();
+                setStatus('Already counted — you chose ' + c409 + '.', 'ok');
+                return;
+              }
 
-            if (r.ok) {
-              // Voting closed: the worker returns 200 {ok:false, closed:true}.
-              // Don't record the vote or lock the student — let them vote when
-              // the instructor reopens the round.
-              if (r.data.closed || r.data.ok === false) {
+              if (r.ok) {
+                // Voting closed: the worker returns 200 {ok:false, closed:true}.
+                // Don't record the vote or lock the student — let them vote when
+                // the instructor reopens the round.
+                if (r.data.closed || r.data.ok === false) {
+                  pollOpen = false;
+                  syncButtons();
+                  setStatus('Voting is closed right now.', 'warn');
+                  return;
+                }
+                // Room full: the vote was not counted.
+                if (r.data.capped) {
+                  roundLocked = true;
+                  syncButtons();
+                  setStatus(
+                    'The room is full (60 votes in). Your answer could not be counted.',
+                    'warn',
+                  );
+                  return;
+                }
+                var c = r.data.choice || choice;
+                localStorage.setItem(votedKey, c);
+                syncButtons();
+                setStatus('Vote recorded — you chose ' + c + '.', 'ok');
+                return;
+              }
+
+              // Voting closed (worker may signal via flag/error text).
+              if (r.data.closed || /clos/i.test(r.data.error || '')) {
                 pollOpen = false;
                 syncButtons();
                 setStatus('Voting is closed right now.', 'warn');
                 return;
               }
-              // Room full: the vote was not counted.
-              if (r.data.capped) {
-                roundLocked = true;
-                syncButtons();
-                setStatus('The room is full (60 votes in). Your answer could not be counted.', 'warn');
-                return;
-              }
-              var c = r.data.choice || choice;
-              localStorage.setItem(votedKey, c);
-              syncButtons();
-              setStatus('Vote recorded — you chose ' + c + '.', 'ok');
-              return;
-            }
 
-            // Voting closed (worker may signal via flag/error text).
-            if (r.data.closed || /clos/i.test(r.data.error || '')) {
-              pollOpen = false;
+              // Anything else — let them retry (idempotent via voterId).
               syncButtons();
-              setStatus('Voting is closed right now.', 'warn');
-              return;
-            }
-
-            // Anything else — let them retry (idempotent via voterId).
-            syncButtons();
-            setStatus('Could not record that — tap to try again.', 'error');
-          }).catch(function () {
-            // Timeout / network. Retrying is safe: the voterId de-dupes server-side.
-            inFlight = false;
-            syncButtons();
-            setStatus('Network hiccup — tap to try again.', 'error');
-          });
+              setStatus('Could not record that — tap to try again.', 'error');
+            })
+            .catch(function () {
+              // Timeout / network. Retrying is safe: the voterId de-dupes server-side.
+              inFlight = false;
+              syncButtons();
+              setStatus('Network hiccup — tap to try again.', 'error');
+            });
         }
 
         buttons.forEach(function (b) {
@@ -472,7 +561,10 @@
           var voted = getVoted();
           var wasOpen = pollOpen;
           pollOpen = open;
-          if (voted || inFlight || roundLocked) { syncButtons(); return; }
+          if (voted || inFlight || roundLocked) {
+            syncButtons();
+            return;
+          }
           if (!open) {
             syncButtons();
             setStatus('Hang tight — voting isn’t open yet.');
@@ -487,29 +579,36 @@
         function pollState() {
           if (!session || document.hidden) return;
           fetch(WORKER + '/state?s=' + encodeURIComponent(session), {
-            signal: AbortSignal.timeout(8000)
-          }).then(function (res) {
-            if (!res.ok) return null;
-            return res.json();
-          }).then(function (data) {
-            if (!data) return;
-            var gen = data.generation;
-            var open = data.open !== false; // default open
+            signal: AbortSignal.timeout(8000),
+          })
+            .then(function (res) {
+              if (!res.ok) return null;
+              return res.json();
+            })
+            .then(function (data) {
+              if (!data) return;
+              var gen = data.generation;
+              var open = data.open !== false; // default open
 
-            if (storedGen === null) {
-              storedGen = (typeof gen === 'number') ? gen : 0;
-            } else if (typeof gen === 'number' && gen > storedGen) {
-              // New round — clear our vote and reset to votable.
-              storedGen = gen;
-              roundLocked = false;
-              if (votedKey) localStorage.removeItem(votedKey);
-              pollOpen = open;
-              syncButtons();
-              setStatus(open ? 'New round — tap your answer.' : 'Hang tight — voting isn’t open yet.');
-              return;
-            }
-            applyOpenState(open);
-          }).catch(function () { /* transient — ignore, try again next tick */ });
+              if (storedGen === null) {
+                storedGen = typeof gen === 'number' ? gen : 0;
+              } else if (typeof gen === 'number' && gen > storedGen) {
+                // New round — clear our vote and reset to votable.
+                storedGen = gen;
+                roundLocked = false;
+                if (votedKey) localStorage.removeItem(votedKey);
+                pollOpen = open;
+                syncButtons();
+                setStatus(
+                  open ? 'New round — tap your answer.' : 'Hang tight — voting isn’t open yet.',
+                );
+                return;
+              }
+              applyOpenState(open);
+            })
+            .catch(function () {
+              /* transient — ignore, try again next tick */
+            });
         }
 
         // ── Boot ──────────────────────────────────────────────────────────

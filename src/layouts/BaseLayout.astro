@@ -5,11 +5,11 @@ import ScrollLine from '../components/ScrollLine.astro';
 import Footer from '../components/Footer.astro';
 
 const {
-  metaTitle = "Riad Mukhtarov — Portfolio",
-  metaDescription = "Backend & Distributed Systems engineer building reliable, production‑ready, event‑driven systems.",
-  metaImage = "https://riad.cc/og-preview.jpg",
-  structuredData = "",
-  lang = "en",
+  metaTitle = 'Riad Mukhtarov — Portfolio',
+  metaDescription = 'Backend & Distributed Systems engineer building reliable, production‑ready, event‑driven systems.',
+  metaImage = 'https://riad.cc/og-preview.jpg',
+  structuredData = '',
+  lang = 'en',
   noindex = false,
 } = Astro.props;
 
@@ -28,7 +28,8 @@ import '../styles/skills.css';
 import '../styles/connect.css';
 import '../styles/ui.css';
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang={lang} translate="no">
   <head>
     <meta charset="utf-8" />
@@ -81,7 +82,21 @@ import '../styles/ui.css';
   </head>
 
   <body>
-    <noscript><style>.page-loader,.cursor-dot,.scroll-line,.terminal-cursor,.spotify-line,.cmd-palette{display:none!important}.terminal-body{min-height:auto!important}</style></noscript>
+    <noscript
+      ><style>
+        .page-loader,
+        .cursor-dot,
+        .scroll-line,
+        .terminal-cursor,
+        .spotify-line,
+        .cmd-palette {
+          display: none !important;
+        }
+        .terminal-body {
+          min-height: auto !important;
+        }
+      </style></noscript
+    >
     <a href="#main-content" class="skip-link">Skip to content</a>
     <PageLoader />
     <CursorDot />
@@ -97,16 +112,16 @@ import '../styles/ui.css';
         }
       });
 
-      window.addEventListener("pageshow", (e) => {
+      window.addEventListener('pageshow', (e) => {
         if (e.persisted) {
           window.scrollTo(0, 0);
         }
       });
 
-      window.addEventListener("load", () => {
+      window.addEventListener('load', () => {
         window.scrollTo(0, 0);
-        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        document.body.classList.add("intro-done");
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.body.classList.add('intro-done');
         if (prefersReduced) {
           document.querySelectorAll('section').forEach((s) => {
             s.classList.add('section-revealed');
@@ -116,14 +131,17 @@ import '../styles/ui.css';
         document.querySelectorAll('section:not([id])').forEach((s) => {
           s.classList.add('section-revealed');
         });
-        const revealIO = new IntersectionObserver((entries, obs) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add('section-revealed');
-              obs.unobserve(e.target);
-            }
-          });
-        }, { threshold: 0, rootMargin: '0px 0px -15% 0px' });
+        const revealIO = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('section-revealed');
+                obs.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0, rootMargin: '0px 0px -15% 0px' },
+        );
         document.querySelectorAll('section[id]').forEach((s) => revealIO.observe(s));
       });
     </script>

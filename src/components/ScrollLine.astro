@@ -1,27 +1,32 @@
 <div class="scroll-line" aria-hidden="true"><div class="scroll-line-fill"></div></div>
 
 <script>
-  const scrollFill = document.querySelector('.scroll-line-fill');
+  const scrollFill = document.querySelector<HTMLElement>('.scroll-line-fill');
   if (scrollFill && window.matchMedia('(hover: hover)').matches) {
     const scrollLine = document.querySelector('.scroll-line');
-    let current = 0, target = 0, animating = false;
+    let current = 0,
+      target = 0,
+      animating = false;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const tick = () => {
       current = lerp(current, target, 0.1);
-      scrollFill.style.transform = 'scaleY(' + (current / 100) + ')';
+      scrollFill.style.transform = 'scaleY(' + current / 100 + ')';
       if (scrollLine instanceof HTMLElement) scrollLine.style.opacity = current < 1 ? '0' : '1';
       if (Math.abs(current - target) > 0.1) {
         requestAnimationFrame(tick);
       } else {
         current = target;
-        scrollFill.style.transform = 'scaleY(' + (current / 100) + ')';
+        scrollFill.style.transform = 'scaleY(' + current / 100 + ')';
         animating = false;
       }
     };
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       target = max > 0 ? (window.scrollY / max) * 100 : 0;
-      if (!animating) { animating = true; requestAnimationFrame(tick); }
+      if (!animating) {
+        animating = true;
+        requestAnimationFrame(tick);
+      }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();

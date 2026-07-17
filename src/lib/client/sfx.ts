@@ -24,7 +24,7 @@ export function tap() {
   const dur = 0.04;
   const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
   const d = buf.getChannelData(0);
-  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
   const src = c.createBufferSource();
   src.buffer = buf;
   const f = c.createBiquadFilter();

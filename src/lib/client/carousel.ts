@@ -44,10 +44,14 @@ export function initCarousel() {
   for (let i = 0; i < DOT_COUNT; i++) {
     const d = document.createElement('div');
     d.className = 'car-dot' + (i === 0 ? ' on' : '');
-    d.addEventListener('click', () => {
-      const cardIdx = Math.round(i / (DOT_COUNT - 1) * (count - 1));
-      goTo(cardIdx);
-    }, { signal });
+    d.addEventListener(
+      'click',
+      () => {
+        const cardIdx = Math.round((i / (DOT_COUNT - 1)) * (count - 1));
+        goTo(cardIdx);
+      },
+      { signal },
+    );
     dotsEl.appendChild(d);
   }
 
@@ -63,10 +67,10 @@ export function initCarousel() {
   const getLogicalIndex = () => {
     const sw = getSlideWidth();
     const physIdx = Math.round(scroll.scrollLeft / sw);
-    return ((physIdx - 1) % count + count) % count;
+    return (((physIdx - 1) % count) + count) % count;
   };
 
-  const cardToDot = (cardIdx: number) => Math.round(cardIdx / (count - 1) * (DOT_COUNT - 1));
+  const cardToDot = (cardIdx: number) => Math.round((cardIdx / (count - 1)) * (DOT_COUNT - 1));
 
   const syncDots = () => {
     const logical = getLogicalIndex();
@@ -97,36 +101,64 @@ export function initCarousel() {
   };
 
   let scrollTick = false;
-  scroll.addEventListener('scroll', () => {
-    if (teleporting) return;
-    if (!scrollTick) {
-      scrollTick = true;
-      requestAnimationFrame(() => { syncDots(); scrollTick = false; });
-    }
-    if (scrollEndTimer) clearTimeout(scrollEndTimer);
-    scrollEndTimer = setTimeout(checkTeleport, 80);
-  }, { passive: true, signal });
+  scroll.addEventListener(
+    'scroll',
+    () => {
+      if (teleporting) return;
+      if (!scrollTick) {
+        scrollTick = true;
+        requestAnimationFrame(() => {
+          syncDots();
+          scrollTick = false;
+        });
+      }
+      if (scrollEndTimer) clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(checkTeleport, 80);
+    },
+    { passive: true, signal },
+  );
 
-  prevBtn?.addEventListener('click', () => {
-    const sw = getSlideWidth();
-    scroll.scrollBy({ left: -sw, behavior: 'smooth' });
-    if (scrollEndTimer) clearTimeout(scrollEndTimer);
-    scrollEndTimer = setTimeout(checkTeleport, 400);
-  }, { signal });
-  nextBtn?.addEventListener('click', () => {
-    const sw = getSlideWidth();
-    scroll.scrollBy({ left: sw, behavior: 'smooth' });
-    if (scrollEndTimer) clearTimeout(scrollEndTimer);
-    scrollEndTimer = setTimeout(checkTeleport, 400);
-  }, { signal });
+  prevBtn?.addEventListener(
+    'click',
+    () => {
+      const sw = getSlideWidth();
+      scroll.scrollBy({ left: -sw, behavior: 'smooth' });
+      if (scrollEndTimer) clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(checkTeleport, 400);
+    },
+    { signal },
+  );
+  nextBtn?.addEventListener(
+    'click',
+    () => {
+      const sw = getSlideWidth();
+      scroll.scrollBy({ left: sw, behavior: 'smooth' });
+      if (scrollEndTimer) clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(checkTeleport, 400);
+    },
+    { signal },
+  );
 
   const wrap = scroll.closest('[aria-roledescription="carousel"]');
   if (wrap) {
-    wrap.addEventListener('keydown', (e) => {
-      const sw = getSlideWidth();
-      if ((e as KeyboardEvent).key === 'ArrowLeft') { e.preventDefault(); scroll.scrollBy({ left: -sw, behavior: 'smooth' }); if (scrollEndTimer) clearTimeout(scrollEndTimer); scrollEndTimer = setTimeout(checkTeleport, 400); }
-      else if ((e as KeyboardEvent).key === 'ArrowRight') { e.preventDefault(); scroll.scrollBy({ left: sw, behavior: 'smooth' }); if (scrollEndTimer) clearTimeout(scrollEndTimer); scrollEndTimer = setTimeout(checkTeleport, 400); }
-    }, { signal });
+    wrap.addEventListener(
+      'keydown',
+      (e) => {
+        const sw = getSlideWidth();
+        if ((e as KeyboardEvent).key === 'ArrowLeft') {
+          e.preventDefault();
+          scroll.scrollBy({ left: -sw, behavior: 'smooth' });
+          if (scrollEndTimer) clearTimeout(scrollEndTimer);
+          scrollEndTimer = setTimeout(checkTeleport, 400);
+        } else if ((e as KeyboardEvent).key === 'ArrowRight') {
+          e.preventDefault();
+          scroll.scrollBy({ left: sw, behavior: 'smooth' });
+          if (scrollEndTimer) clearTimeout(scrollEndTimer);
+          scrollEndTimer = setTimeout(checkTeleport, 400);
+        }
+      },
+      { signal },
+    );
   }
 
   const startAutoplay = () => {
@@ -150,7 +182,10 @@ export function initCarousel() {
       if (step < count) {
         scroll.scrollBy({ left: sw, behavior: 'smooth' });
         if (scrollEndTimer) clearTimeout(scrollEndTimer);
-        scrollEndTimer = setTimeout(() => { checkTeleport(); hintNext(); }, 320);
+        scrollEndTimer = setTimeout(() => {
+          checkTeleport();
+          hintNext();
+        }, 320);
       } else {
         scroll.style.scrollBehavior = 'auto';
         scroll.scrollLeft = sw;
@@ -169,17 +204,27 @@ export function initCarousel() {
     // closures (holding detached carousel nodes) stop firing.
     hintObs?.disconnect();
     autoObs?.disconnect();
-    hintObs = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        hintObs?.disconnect();
-        setTimeout(runHint, 400);
-      }
-    }, { threshold: 0.3 });
+    hintObs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          hintObs?.disconnect();
+          setTimeout(runHint, 400);
+        }
+      },
+      { threshold: 0.3 },
+    );
     hintObs.observe(recsSection);
-    autoObs = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) { if (!carouselTimer) startAutoplay(); }
-      else { if (carouselTimer) clearInterval(carouselTimer); carouselTimer = null; }
-    }, { threshold: 0 });
+    autoObs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          if (!carouselTimer) startAutoplay();
+        } else {
+          if (carouselTimer) clearInterval(carouselTimer);
+          carouselTimer = null;
+        }
+      },
+      { threshold: 0 },
+    );
     autoObs.observe(recsSection);
   } else {
     startAutoplay();

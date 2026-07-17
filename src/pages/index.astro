@@ -1,6 +1,6 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { profiles } from "../data/profile-i18n";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { profiles } from '../data/profile-i18n';
 import {
   buildExperience,
   buildProjects,
@@ -9,26 +9,23 @@ import {
   buildSkills,
   buildRecommendations,
   buildConnect,
-} from "../lib/builders";
+} from '../lib/builders';
 
 const profile = profiles.en;
 // Mirror of the runtime wrapNum in applyLanguage — keep in sync.
 const wrapStatNum = (s: string) =>
   s.replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
 const metaTitle = `${profile.hero.name} — Portfolio`;
-const metaDescription = "Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.";
+const metaDescription =
+  'Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.';
 const structuredData = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Person",
+  '@context': 'https://schema.org',
+  '@type': 'Person',
   name: profile.hero.name,
-  alternateName: ["Riad Muxtarov", "r14dd"],
-  jobTitle: "AI/Software Engineer",
-  url: "https://riad.cc",
-  sameAs: [
-    profile.links.linkedin,
-    profile.links.github,
-    "https://crates.io/users/r14dd",
-  ],
+  alternateName: ['Riad Muxtarov', 'r14dd'],
+  jobTitle: 'AI/Software Engineer',
+  url: 'https://riad.cc',
+  sameAs: [profile.links.linkedin, profile.links.github, 'https://crates.io/users/r14dd'],
   email: `mailto:${profile.email}`,
 });
 ---
@@ -40,16 +37,25 @@ const structuredData = JSON.stringify({
   lang="en"
 >
   {/* EN only — RU/AZ are fetched from /i18n/<lang>.json on first switch. */}
-  <script
-    type="application/json"
-    id="i18n-data"
-    set:html={JSON.stringify({ en: profiles.en })}
-  />
+  <script type="application/json" id="i18n-data" set:html={JSON.stringify({ en: profiles.en })} />
 
   <div class="lang-switcher" aria-label="Controls">
-    <button class="cmd-trigger" id="cmd-trigger" type="button" aria-label="Open command palette (⌘K)">
+    <button
+      class="cmd-trigger"
+      id="cmd-trigger"
+      type="button"
+      aria-label="Open command palette (⌘K)"
+    >
       <span class="cmd-trigger-label">⌘K</span>
-      <svg class="cmd-trigger-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
+      <svg
+        class="cmd-trigger-icon"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        ><circle cx="6.5" cy="6.5" r="4.5"></circle><path d="M10 10l3 3"></path></svg
+      >
     </button>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode">
       <span class="theme-icon" aria-hidden="true">☀️</span>
@@ -62,29 +68,40 @@ const structuredData = JSON.stringify({
       aria-expanded="false"
     >
       <span class="lang-globe" aria-hidden="true">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="8" cy="8" r="6"/>
-          <path d="M8 2C7 4 6.5 6 6.5 8s.5 4 1.5 6M8 2c1 2 1.5 4 1.5 6S9 12 8 14"/>
-          <path d="M2.5 5.5h11M2.5 10.5h11"/>
+        <svg
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="8" cy="8" r="6"></circle>
+          <path d="M8 2C7 4 6.5 6 6.5 8s.5 4 1.5 6M8 2c1 2 1.5 4 1.5 6S9 12 8 14"></path>
+          <path d="M2.5 5.5h11M2.5 10.5h11"></path>
         </svg>
       </span>
       <span class="lang-label" id="lang-current">English</span>
       <span class="lang-caret" aria-hidden="true">▾</span>
     </button>
-    <div
-      class="lang-menu"
-      id="lang-menu"
-      role="menu"
-      aria-label="Select language"
-    >
+    <div class="lang-menu" id="lang-menu" role="menu" aria-label="Select language">
       <button type="button" role="menuitemradio" aria-checked="true" data-lang="en">English</button>
-      <button type="button" role="menuitemradio" aria-checked="false" data-lang="ru">Русский</button>
-      <button type="button" role="menuitemradio" aria-checked="false" data-lang="az">Azərbaycanca</button>
+      <button type="button" role="menuitemradio" aria-checked="false" data-lang="ru">Русский</button
+      >
+      <button type="button" role="menuitemradio" aria-checked="false" data-lang="az"
+        >Azərbaycanca</button
+      >
     </div>
   </div>
 
   <div class="pull-indicator" id="pull-indicator" aria-hidden="true">
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 2v12M5 5l3-3 3 3"/></svg>
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"><path d="M8 2v12M5 5l3-3 3 3"></path></svg
+    >
   </div>
 
   <nav class="side-nav" id="side-nav">
@@ -102,13 +119,9 @@ const structuredData = JSON.stringify({
     <a href={profile.links.linkedin} target="_blank" rel="noopener"
       >{profile.labels.links.linkedin}</a
     >
-    <a href={profile.links.github} target="_blank" rel="noopener"
-      >{profile.labels.links.github}</a
-    >
+    <a href={profile.links.github} target="_blank" rel="noopener">{profile.labels.links.github}</a>
     <a href={`mailto:${profile.email}`}>Email</a>
-    <a href={profile.links.resume} target="_blank" rel="noopener"
-      >{profile.labels.links.resume}</a
-    >
+    <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
   </aside>
 
   <main class="content" id="main-content">
@@ -139,11 +152,17 @@ const structuredData = JSON.stringify({
             <span class="terminal-cmd">stats</span>
           </div>
           <div class="terminal-line terminal-stats">
-            <span class="term-stat" id="term-stat1"><Fragment set:html={wrapStatNum(profile.labels.terminal.stat1)} /></span>
+            <span class="term-stat" id="term-stat1"
+              ><Fragment set:html={wrapStatNum(profile.labels.terminal.stat1)} /></span
+            >
             <span class="term-stat-sep">·</span>
-            <span class="term-stat" id="term-stat2"><Fragment set:html={wrapStatNum(profile.labels.terminal.stat2)} /></span>
+            <span class="term-stat" id="term-stat2"
+              ><Fragment set:html={wrapStatNum(profile.labels.terminal.stat2)} /></span
+            >
             <span class="term-stat-sep">·</span>
-            <span class="term-stat" id="term-stat3"><Fragment set:html={wrapStatNum(profile.labels.terminal.stat3)} /></span>
+            <span class="term-stat" id="term-stat3"
+              ><Fragment set:html={wrapStatNum(profile.labels.terminal.stat3)} /></span
+            >
           </div>
           <div class="terminal-line" id="term-input-line">
             <span class="terminal-prompt">→</span>
@@ -154,25 +173,59 @@ const structuredData = JSON.stringify({
 
       <div class="hero-links">
         <a href={profile.links.linkedin} target="_blank" rel="noopener"
-          ><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>{profile.labels.links.linkedin}</a
+          ><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
+            ><path
+              d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+            ></path></svg
+          >{profile.labels.links.linkedin}</a
         >
         <a href={profile.links.github} target="_blank" rel="noopener"
-          ><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>{profile.labels.links.github}</a
+          ><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
+            ><path
+              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+            ></path></svg
+          >{profile.labels.links.github}</a
         >
-        <a href={`mailto:${profile.email}`}><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>Email</a>
+        <a href={`mailto:${profile.email}`}
+          ><svg
+            class="cta-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect x="2" y="4" width="20" height="16" rx="2"></rect><path
+              d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg
+          >Email</a
+        >
         <a href={profile.links.resume} target="_blank" rel="noopener"
-          ><svg class="cta-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>{profile.labels.links.resume}</a
+          ><svg
+            class="cta-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline
+              points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line
+              x1="16"
+              y1="17"
+              x2="8"
+              y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg
+          >{profile.labels.links.resume}</a
         >
       </div>
     </section>
 
     <div class="spotify-line" id="spotify-line"></div>
 
-    <section
-      id="education"
-      class="section-block"
-      data-label={profile.labels.headings.education}
-    >
+    <section id="education" class="section-block" data-label={profile.labels.headings.education}>
       <Fragment set:html={buildEducation(profile)} />
     </section>
 
@@ -200,11 +253,7 @@ const structuredData = JSON.stringify({
       <Fragment set:html={buildSkills(profile)} />
     </section>
 
-    <section
-      id="teaching"
-      class="section-block"
-      data-label={profile.labels.headings.teaching}
-    >
+    <section id="teaching" class="section-block" data-label={profile.labels.headings.teaching}>
       <Fragment set:html={buildTeaching(profile)} />
     </section>
 
@@ -240,12 +289,38 @@ const structuredData = JSON.stringify({
   <div class="toast" id="toast" aria-live="polite"></div>
 
   <div class="cmd-backdrop" id="cmd-backdrop" aria-hidden="true"></div>
-  <div class="cmd-palette" id="cmd-palette" role="dialog" aria-modal="true" aria-label="Command palette" aria-hidden="true">
+  <div
+    class="cmd-palette"
+    id="cmd-palette"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Command palette"
+    aria-hidden="true"
+  >
     <div class="cmd-input-wrap">
       <span class="cmd-search-icon" aria-hidden="true">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l3 3"/></svg>
+        <svg
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          ><circle cx="6.5" cy="6.5" r="4.5"></circle><path d="M10 10l3 3"></path></svg
+        >
       </span>
-      <input type="text" class="cmd-input" id="cmd-input" placeholder="Search or jump to..." autocomplete="off" spellcheck="false" aria-label="Command search" role="combobox" aria-expanded="false" aria-controls="cmd-results" aria-activedescendant=""/>
+      <input
+        type="text"
+        class="cmd-input"
+        id="cmd-input"
+        placeholder="Search or jump to..."
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Command search"
+        role="combobox"
+        aria-expanded="false"
+        aria-controls="cmd-results"
+        aria-activedescendant=""
+      />
       <span class="cmd-kbd">ESC</span>
     </div>
     <div class="cmd-results" id="cmd-results" role="listbox"></div>
@@ -258,33 +333,98 @@ const structuredData = JSON.stringify({
   </div>
 
   <div class="kbd-backdrop" id="kbd-backdrop" aria-hidden="true"></div>
-  <div class="kbd-overlay" id="kbd-overlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" aria-hidden="true" tabindex="-1">
+  <div
+    class="kbd-overlay"
+    id="kbd-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Keyboard shortcuts"
+    aria-hidden="true"
+    tabindex="-1"
+  >
     <div class="kbd-head">
       <span>Keyboard shortcuts</span>
       <span class="cmd-kbd">ESC</span>
     </div>
     <div class="kbd-grid">
-      <div class="kbd-row"><span class="kbd-desc">Command palette</span><span class="kbd-keys"><kbd>⌘</kbd><kbd>K</kbd></span></div>
-      <div class="kbd-row"><span class="kbd-desc">This menu</span><span class="kbd-keys"><kbd>?</kbd></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Find in page</span><span class="kbd-keys"><kbd>⌘</kbd><kbd>F</kbd></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Jump to section</span><span class="kbd-keys"><kbd>g</kbd><span class="kbd-then">then</span><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd>t</kbd><kbd>d</kbd><kbd>r</kbd><kbd>m</kbd><kbd>c</kbd></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Toggle theme</span><span class="kbd-keys"><kbd>\</kbd></span></div>
-      <div class="kbd-row"><span class="kbd-desc">Close overlays</span><span class="kbd-keys"><kbd>esc</kbd></span></div>
+      <div class="kbd-row">
+        <span class="kbd-desc">Command palette</span><span class="kbd-keys"
+          ><kbd>⌘</kbd><kbd>K</kbd></span
+        >
+      </div>
+      <div class="kbd-row">
+        <span class="kbd-desc">This menu</span><span class="kbd-keys"><kbd>?</kbd></span>
+      </div>
+      <div class="kbd-row">
+        <span class="kbd-desc">Find in page</span><span class="kbd-keys"
+          ><kbd>⌘</kbd><kbd>F</kbd></span
+        >
+      </div>
+      <div class="kbd-row">
+        <span class="kbd-desc">Jump to section</span><span class="kbd-keys"
+          ><kbd>g</kbd><span class="kbd-then">then</span><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd
+            >t</kbd
+          ><kbd>d</kbd><kbd>r</kbd><kbd>m</kbd><kbd>c</kbd></span
+        >
+      </div>
+      <div class="kbd-row">
+        <span class="kbd-desc">Toggle theme</span><span class="kbd-keys"><kbd>\</kbd></span>
+      </div>
+      <div class="kbd-row">
+        <span class="kbd-desc">Close overlays</span><span class="kbd-keys"><kbd>esc</kbd></span>
+      </div>
     </div>
   </div>
 
   <div class="easter-overlay" id="easter-overlay" aria-hidden="true"></div>
   <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
   <div class="find-nav-bar" id="find-nav-bar" aria-hidden="true">
-    <button class="find-nav-btn" id="find-nav-prev" type="button" aria-label="Previous match"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 11L6 7l4-4"/></svg></button>
+    <button class="find-nav-btn" id="find-nav-prev" type="button" aria-label="Previous match"
+      ><svg
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"><path d="M10 11L6 7l4-4"></path></svg
+      ></button
+    >
     <span class="find-nav-count" id="find-nav-count" aria-live="polite"></span>
-    <button class="find-nav-btn" id="find-nav-next" type="button" aria-label="Next match"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 11l4-4-4-4"/></svg></button>
-    <button class="find-nav-close" id="find-nav-close" type="button" aria-label="Close"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    <button class="find-nav-btn" id="find-nav-next" type="button" aria-label="Next match"
+      ><svg
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"><path d="M6 11l4-4-4-4"></path></svg
+      ></button
+    >
+    <button class="find-nav-close" id="find-nav-close" type="button" aria-label="Close"
+      ><svg
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"></path></svg
+      ></button
+    >
   </div>
 
-  <div class="proj-modal" id="proj-modal" role="dialog" aria-modal="true" aria-label="Project detail" aria-hidden="true">
+  <div
+    class="proj-modal"
+    id="proj-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Project detail"
+    aria-hidden="true"
+  >
     <button class="proj-close" id="proj-close" type="button" aria-label="Close project detail">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+      <svg
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"></path></svg
+      >
     </button>
     <div class="proj-modal-card" id="proj-modal-card"></div>
   </div>
@@ -301,21 +441,22 @@ const structuredData = JSON.stringify({
       buildProjectSim,
       getLogoUrl as getLogoUrlJS,
       esc as escData,
-    } from "../lib/builders";
-    import * as sfx from "../lib/client/sfx";
-    import * as timeAware from "../lib/client/time-aware";
-    import * as focusTrap from "../lib/client/focus-trap";
-    import { vitals as _vitals } from "../lib/client/vitals";
-    import { showToast } from "../lib/client/toast";
-    import { renderSpotify, initSpotify } from "../lib/client/spotify";
-    import { initCarousel } from "../lib/client/carousel";
-    import { fetchBadges } from "../lib/client/badges";
+    } from '../lib/builders';
+    import * as sfx from '../lib/client/sfx';
+    import * as timeAware from '../lib/client/time-aware';
+    import * as focusTrap from '../lib/client/focus-trap';
+    import { vitals as _vitals } from '../lib/client/vitals';
+    import { showToast } from '../lib/client/toast';
+    import { renderSpotify, initSpotify } from '../lib/client/spotify';
+    import { initCarousel } from '../lib/client/carousel';
+    import { fetchBadges } from '../lib/client/badges';
 
     console.log(
       '%criad.cc%c — built with patience, discipline, hunger, focus.\n' +
-      '"I am young, I am twenty years old; yet I know nothing of life but despair." — Remarque\n' +
-      '"No such thing as a life that\'s better than yours." — J. Cole',
-      'font-weight:bold;font-size:14px;color:#818cf8', 'font-size:12px;color:inherit'
+        '"I am young, I am twenty years old; yet I know nothing of life but despair." — Remarque\n' +
+        '"No such thing as a life that\'s better than yours." — J. Cole',
+      'font-weight:bold;font-size:14px;color:#818cf8',
+      'font-size:12px;color:inherit',
     );
 
     let heroFirstLoad = true;
@@ -347,7 +488,10 @@ const structuredData = JSON.stringify({
         if (prefersReducedMotion) {
           el.textContent = text;
         } else {
-          const go = () => { el.style.visibility = 'visible'; wordReveal(el, text); };
+          const go = () => {
+            el.style.visibility = 'visible';
+            wordReveal(el, text);
+          };
           if (document.body.classList.contains('intro-done')) {
             go();
           } else {
@@ -374,36 +518,41 @@ const structuredData = JSON.stringify({
       const lines = Array.from(document.querySelectorAll('.terminal-body .terminal-line'));
       if (!lines.length) return;
 
-      lines.forEach(l => l.classList.add('term-hidden'));
+      lines.forEach((l) => l.classList.add('term-hidden'));
 
       const revealLine = (line) => {
         line.classList.remove('term-hidden');
         line.classList.add('term-visible');
       };
 
-      const wait = (ms) => new Promise(r => setTimeout(r, ms));
+      const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-      const typeText = (el, text) => new Promise(resolve => {
-        el.textContent = '';
-        let i = 0;
-        const step = () => {
-          if (i >= text.length) return resolve();
-          const chunk = Math.random() < 0.4 ? 2 : 1;
-          el.textContent = text.slice(0, Math.min(i + chunk, text.length));
-          i = Math.min(i + chunk, text.length);
-          if (i < text.length) setTimeout(step, 18 + Math.random() * 25);
-          else resolve();
-        };
-        step();
-      });
-
-      const waitForIntro = () => new Promise(resolve => {
-        if (document.body.classList.contains('intro-done')) return resolve();
-        const obs = new MutationObserver(() => {
-          if (document.body.classList.contains('intro-done')) { obs.disconnect(); resolve(); }
+      const typeText = (el, text) =>
+        new Promise((resolve) => {
+          el.textContent = '';
+          let i = 0;
+          const step = () => {
+            if (i >= text.length) return resolve();
+            const chunk = Math.random() < 0.4 ? 2 : 1;
+            el.textContent = text.slice(0, Math.min(i + chunk, text.length));
+            i = Math.min(i + chunk, text.length);
+            if (i < text.length) setTimeout(step, 18 + Math.random() * 25);
+            else resolve();
+          };
+          step();
         });
-        obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-      });
+
+      const waitForIntro = () =>
+        new Promise((resolve) => {
+          if (document.body.classList.contains('intro-done')) return resolve();
+          const obs = new MutationObserver(() => {
+            if (document.body.classList.contains('intro-done')) {
+              obs.disconnect();
+              resolve();
+            }
+          });
+          obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        });
 
       (async () => {
         await waitForIntro();
@@ -444,16 +593,23 @@ const structuredData = JSON.stringify({
       const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
       if (!isDesktop) return;
 
-      const esc = (s) => typeof s === 'string' ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+      const esc = (s) =>
+        typeof s === 'string'
+          ? s
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+          : '';
       const FORTUNES = [
-        "There are only two hard things in CS: cache invalidation and naming things.",
-        "It works on my machine. Ship the machine.",
-        "// TODO: fix this later (written 3 years ago)",
-        "A good programmer looks both ways before crossing a one-way street.",
-        "Rust: where the compiler is your therapist.",
-        "First, solve the problem. Then, write the code.",
-        "Deleted code is debugged code.",
-        "The best code is no code at all.",
+        'There are only two hard things in CS: cache invalidation and naming things.',
+        'It works on my machine. Ship the machine.',
+        '// TODO: fix this later (written 3 years ago)',
+        'A good programmer looks both ways before crossing a one-way street.',
+        'Rust: where the compiler is your therapist.',
+        'First, solve the problem. Then, write the code.',
+        'Deleted code is debugged code.',
+        'The best code is no code at all.',
       ];
 
       const termBody = document.querySelector('.terminal-body');
@@ -461,51 +617,128 @@ const structuredData = JSON.stringify({
       if (!termBody || !inputLine) return;
 
       let hist = [];
-      try { hist = JSON.parse(localStorage.getItem('term-history') || '[]'); if (!Array.isArray(hist)) hist = []; } catch { hist = []; }
+      try {
+        hist = JSON.parse(localStorage.getItem('term-history') || '[]');
+        if (!Array.isArray(hist)) hist = [];
+      } catch {
+        hist = [];
+      }
       let histIdx = hist.length;
       const bootT = performance.now();
 
       // Rust → WebAssembly (public/lab/lab.wasm) — lazy-loaded on first rrf/hash/xor.
-      let wasmExports = null, wasmLoading = null;
+      let wasmExports = null,
+        wasmLoading = null;
       const loadWasm = () => {
         if (wasmExports) return Promise.resolve(wasmExports);
         if (wasmLoading) return wasmLoading;
         wasmLoading = (async () => {
           const url = '/lab/lab.wasm';
           let instance;
-          try { instance = (await WebAssembly.instantiateStreaming(fetch(url), {})).instance; }
-          catch { instance = (await WebAssembly.instantiate(await (await fetch(url)).arrayBuffer(), {})).instance; }
+          try {
+            instance = (await WebAssembly.instantiateStreaming(fetch(url), {})).instance;
+          } catch {
+            instance = (await WebAssembly.instantiate(await (await fetch(url)).arrayBuffer(), {}))
+              .instance;
+          }
           wasmExports = instance.exports;
           return wasmExports;
         })();
         return wasmLoading;
       };
       const hex8 = (n) => '0x' + (n >>> 0).toString(16).padStart(8, '0');
-      const parseIntSmart = (s) => { s = String(s).trim(); return /^0x[0-9a-f]+$/i.test(s) ? parseInt(s, 16) : parseInt(s, 10); };
-      const wasmRRF = async (ranks, k = 60) => { const w = await loadWasm(); let sum = 0; for (const r of ranks) sum += w.rrf_term(k | 0, r | 0); return sum; };
-      const wasmXor = async (a, b) => { const w = await loadWasm(); return { dist: w.xor_distance(a >>> 0, b >>> 0) >>> 0, bucket: w.bucket_index(a >>> 0, b >>> 0) >>> 0 }; };
-      const wasmHash = async (text) => { const w = await loadWasm(); const bytes = new TextEncoder().encode(text); const n = Math.min(bytes.length, w.input_cap()); const ptr = w.input_ptr(); new Uint8Array(w.memory.buffer, ptr, n).set(bytes.subarray(0, n)); return w.fnv1a32(n) >>> 0; };
+      const parseIntSmart = (s) => {
+        s = String(s).trim();
+        return /^0x[0-9a-f]+$/i.test(s) ? parseInt(s, 16) : parseInt(s, 10);
+      };
+      const wasmRRF = async (ranks, k = 60) => {
+        const w = await loadWasm();
+        let sum = 0;
+        for (const r of ranks) sum += w.rrf_term(k | 0, r | 0);
+        return sum;
+      };
+      const wasmXor = async (a, b) => {
+        const w = await loadWasm();
+        return {
+          dist: w.xor_distance(a >>> 0, b >>> 0) >>> 0,
+          bucket: w.bucket_index(a >>> 0, b >>> 0) >>> 0,
+        };
+      };
+      const wasmHash = async (text) => {
+        const w = await loadWasm();
+        const bytes = new TextEncoder().encode(text);
+        const n = Math.min(bytes.length, w.input_cap());
+        const ptr = w.input_ptr();
+        new Uint8Array(w.memory.buffer, ptr, n).set(bytes.subarray(0, n));
+        return w.fnv1a32(n) >>> 0;
+      };
 
-      const fmtMs = (v) => (v == null ? '—' : (v < 1000 ? Math.round(v) + ' ms' : (v / 1000).toFixed(2) + ' s'));
+      const fmtMs = (v) =>
+        v == null ? '—' : v < 1000 ? Math.round(v) + ' ms' : (v / 1000).toFixed(2) + ' s';
       const fmtKb = (b) => (b ? (b / 1024).toFixed(1) + ' KB' : '—');
       const readVitals = () => {
         const nav = performance.getEntriesByType('navigation')[0] || {};
         const res = performance.getEntriesByType('resource');
-        let bytes = nav.transferSize || 0, jsBytes = 0;
-        for (const r of res) { bytes += r.transferSize || 0; if (r.initiatorType === 'script' || /\.js(\?|$)/.test(r.name)) jsBytes += r.transferSize || 0; }
-        return { fcp: _vitals.fcp, lcp: _vitals.lcp, cls: _vitals.cls, inp: _vitals.inp, ttfb: nav.responseStart || null, dcl: nav.domContentLoadedEventEnd || null, bytes, jsBytes, reqs: res.length + 1 };
+        let bytes = nav.transferSize || 0,
+          jsBytes = 0;
+        for (const r of res) {
+          bytes += r.transferSize || 0;
+          if (r.initiatorType === 'script' || /\.js(\?|$)/.test(r.name))
+            jsBytes += r.transferSize || 0;
+        }
+        return {
+          fcp: _vitals.fcp,
+          lcp: _vitals.lcp,
+          cls: _vitals.cls,
+          inp: _vitals.inp,
+          ttfb: nav.responseStart || null,
+          dcl: nav.domContentLoadedEventEnd || null,
+          bytes,
+          jsBytes,
+          reqs: res.length + 1,
+        };
       };
-      const probePing = async (url) => { const t = performance.now(); try { await fetch(url, { mode: 'no-cors', cache: 'no-store' }); } catch { return null; } return performance.now() - t; };
+      const probePing = async (url) => {
+        const t = performance.now();
+        try {
+          await fetch(url, { mode: 'no-cors', cache: 'no-store' });
+        } catch {
+          return null;
+        }
+        return performance.now() - t;
+      };
       const collectWhere = async () => {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown';
         const rows = [['timezone', tz]];
-        rows.push(['locale', navigator.language + (navigator.languages?.length ? ' (' + navigator.languages.slice(0, 3).join(', ') + ')' : '')]);
-        rows.push(['approx region', tz.includes('/') ? tz.split('/').slice(-1)[0].replace(/_/g, ' ') : tz]);
+        rows.push([
+          'locale',
+          navigator.language +
+            (navigator.languages?.length
+              ? ' (' + navigator.languages.slice(0, 3).join(', ') + ')'
+              : ''),
+        ]);
+        rows.push([
+          'approx region',
+          tz.includes('/') ? tz.split('/').slice(-1)[0].replace(/_/g, ' ') : tz,
+        ]);
         const c = navigator.connection;
-        if (c) rows.push(['connection', (c.effectiveType || '?') + (c.rtt != null ? ' · ~' + c.rtt + 'ms rtt' : '') + (c.downlink != null ? ' · ' + c.downlink + ' Mbps' : '')]);
+        if (c)
+          rows.push([
+            'connection',
+            (c.effectiveType || '?') +
+              (c.rtt != null ? ' · ~' + c.rtt + 'ms rtt' : '') +
+              (c.downlink != null ? ' · ' + c.downlink + ' Mbps' : ''),
+          ]);
         rows.push(['online', navigator.onLine ? 'yes' : 'no']);
-        const probes = [['this origin', location.origin + '/favicon.ico'], ['cloudflare', 'https://cloudflare.com/favicon.ico'], ['google', 'https://www.google.com/favicon.ico']];
-        for (const [name, url] of probes) { const ms = await probePing(url); rows.push([name + ' rtt', ms == null ? 'blocked' : Math.round(ms) + ' ms']); }
+        const probes = [
+          ['this origin', location.origin + '/favicon.ico'],
+          ['cloudflare', 'https://cloudflare.com/favicon.ico'],
+          ['google', 'https://www.google.com/favicon.ico'],
+        ];
+        for (const [name, url] of probes) {
+          const ms = await probePing(url);
+          rows.push([name + ' rtt', ms == null ? 'blocked' : Math.round(ms) + ' ms']);
+        }
         rows.push(['server involved', 'none — measured in your browser']);
         return rows;
       };
@@ -521,17 +754,20 @@ const structuredData = JSON.stringify({
         const experience = p.experience || [];
         const tx = (s) => '<span class="terminal-text">' + esc(s) + '</span>';
         const cmt = (s) => '<span class="terminal-comment">' + esc(s) + '</span>';
-        const skillItems = (s) => (s.groups ? s.groups.flatMap(g => g.items || []) : (s.items || []));
-        const philo = () => ({ lines: [
-          'The through-line:',
-          '',
-          '  patent      never asserts absence — it reports only what it',
-          '              actually checked, in the sources it reached.',
-          '  QuorumRAG   surfaces evidence only after independent retrievers',
-          '              reach consensus. No quorum, no claim.',
-          '',
-          '  Same idea, twice: earn confidence before you assert it.',
-        ] });
+        const skillItems = (s) =>
+          s.groups ? s.groups.flatMap((g) => g.items || []) : s.items || [];
+        const philo = () => ({
+          lines: [
+            'The through-line:',
+            '',
+            '  patent      never asserts absence — it reports only what it',
+            '              actually checked, in the sources it reached.',
+            '  QuorumRAG   surfaces evidence only after independent retrievers',
+            '              reach consensus. No quorum, no claim.',
+            '',
+            '  Same idea, twice: earn confidence before you assert it.',
+          ],
+        });
         const REMARKS = [
           '"I am young, I am twenty years old; yet I know nothing of life but despair, death, fear." — All Quiet on the Western Front',
           '"But perhaps that is what makes life so precious — that it can be lost." — Three Comrades',
@@ -542,40 +778,55 @@ const structuredData = JSON.stringify({
         const COLE_LINES = [
           '"No such thing as a life that\'s better than yours." — Love Yourz',
           '"Fool me one time, shame on you. Fool me twice, can\'t put the blame on you." — No Role Modelz',
-          '"If they don\'t know your dreams, they can\'t shoot \'em down." — Apparently',
+          "\"If they don't know your dreams, they can't shoot 'em down.\" — Apparently",
           '"Always gon\' be a bigger house somewhere, but n***a feel me, long as the people in that motherf***er love you dearly." — Love Yourz',
           '"I\'m on my way, I know I\'m gonna get there some day." — The Climb Back',
         ];
         let quoteIdx = 0;
 
         return {
-          help: () => ({ rich: [
-            tx('ls · cat · grep') + cmt('explore — try: projects | grep rust'),
-            tx('whoami · stats') + cmt('roles & quick numbers'),
-            tx('projects · skills') + cmt('what I build'),
-            tx('rrf · hash · xor') + cmt('real Rust, run live in WebAssembly'),
-            tx('perf · where') + cmt('your Web Vitals & connection info'),
-            tx('patent') + cmt('a real project run, replayed'),
-            tx('offline') + cmt('enable/disable offline mode'),
-            tx('man riad') + cmt('the manual'),
-            tx('philosophy') + cmt('the through-line'),
-            tx('reading · quote') + cmt('Remarque & Cole'),
-            tx('deps') + cmt('what this runs on'),
-            tx('contact · resume · github') + cmt('reach me'),
-            tx('fortune · neofetch') + cmt('for fun'),
-            tx('clear') + cmt('clear the screen'),
-          ] }),
-          whoami: () => ({ lines: [t.role1 || 'AI Engineer @ ABB', t.role2 || 'Head of IT @ EYP AZ'] }),
+          help: () => ({
+            rich: [
+              tx('ls · cat · grep') + cmt('explore — try: projects | grep rust'),
+              tx('whoami · stats') + cmt('roles & quick numbers'),
+              tx('projects · skills') + cmt('what I build'),
+              tx('rrf · hash · xor') + cmt('real Rust, run live in WebAssembly'),
+              tx('perf · where') + cmt('your Web Vitals & connection info'),
+              tx('patent') + cmt('a real project run, replayed'),
+              tx('offline') + cmt('enable/disable offline mode'),
+              tx('man riad') + cmt('the manual'),
+              tx('philosophy') + cmt('the through-line'),
+              tx('reading · quote') + cmt('Remarque & Cole'),
+              tx('deps') + cmt('what this runs on'),
+              tx('contact · resume · github') + cmt('reach me'),
+              tx('fortune · neofetch') + cmt('for fun'),
+              tx('clear') + cmt('clear the screen'),
+            ],
+          }),
+          whoami: () => ({
+            lines: [t.role1 || 'AI Engineer @ ABB', t.role2 || 'Head of IT @ EYP AZ'],
+          }),
           stats: () => {
-            const wrapNum = (s) => esc(s).replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
-            return { html: '<span class="terminal-stats" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.25rem 0.45rem"><span class="term-stat">' + wrapNum(t.stat1 || '2K+ students taught') + '</span><span class="term-stat-sep">·</span><span class="term-stat">' + wrapNum(t.stat2 || '5+ teams led') + '</span><span class="term-stat-sep">·</span><span class="term-stat">' + wrapNum(t.stat3 || '4+ yrs shipping') + '</span></span>' };
+            const wrapNum = (s) =>
+              esc(s).replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
+            return {
+              html:
+                '<span class="terminal-stats" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.25rem 0.45rem"><span class="term-stat">' +
+                wrapNum(t.stat1 || '2K+ students taught') +
+                '</span><span class="term-stat-sep">·</span><span class="term-stat">' +
+                wrapNum(t.stat2 || '5+ teams led') +
+                '</span><span class="term-stat-sep">·</span><span class="term-stat">' +
+                wrapNum(t.stat3 || '4+ yrs shipping') +
+                '</span></span>',
+            };
           },
           ls: (args) => {
             const w = (args[0] || '').replace(/^\//, '').toLowerCase();
             if (!w) return { lines: ['projects/   skills/   experience/   about'] };
-            if (w.startsWith('project')) return { lines: projects.map(x => x.name) };
-            if (w.startsWith('skill')) return { lines: skills.map(s => s.category) };
-            if (w.startsWith('exp')) return { lines: experience.map(e => e.role + ' — ' + e.org) };
+            if (w.startsWith('project')) return { lines: projects.map((x) => x.name) };
+            if (w.startsWith('skill')) return { lines: skills.map((s) => s.category) };
+            if (w.startsWith('exp'))
+              return { lines: experience.map((e) => e.role + ' — ' + e.org) };
             if (w.startsWith('about')) return { lines: [('Riad ' + (p.about || '')).trim()] };
             return { lines: ['ls: no such directory: ' + w], cls: 'err' };
           },
@@ -583,98 +834,202 @@ const structuredData = JSON.stringify({
             const q = args.join(' ').toLowerCase().trim();
             if (!q) return { lines: ['usage: cat <project|about>'], cls: 'muted' };
             if (q === 'about') return { lines: [('Riad ' + (p.about || '')).trim()] };
-            const x = projects.find(pr => pr.name.toLowerCase().includes(q) || q.includes(pr.name.toLowerCase().split(/[ .—-]/)[0]));
+            const x = projects.find(
+              (pr) =>
+                pr.name.toLowerCase().includes(q) ||
+                q.includes(pr.name.toLowerCase().split(/[ .—-]/)[0]),
+            );
             if (!x) return { lines: ['cat: ' + q + ': not found. try: ls projects'], cls: 'err' };
             const out = [x.name];
             if (x.impact) out.push(x.impact);
             if (x.tech && x.tech.length) out.push('tech: ' + x.tech.join(', '));
-            (x.bullets || []).forEach(b => out.push('  • ' + b));
+            (x.bullets || []).forEach((b) => out.push('  • ' + b));
             return { lines: out };
           },
           projects: (args, raw, stdin, solo) => {
-            if (solo) setTimeout(() => document.getElementById('projects')?.scrollIntoView({ behavior: scrollBehavior, block: 'start' }), 600);
-            return { lines: projects.length ? projects.map(x => x.name + (x.tech && x.tech.length ? ' — ' + x.tech.join(', ') : '')) : ['No projects loaded.'] };
+            if (solo)
+              setTimeout(
+                () =>
+                  document
+                    .getElementById('projects')
+                    ?.scrollIntoView({ behavior: scrollBehavior, block: 'start' }),
+                600,
+              );
+            return {
+              lines: projects.length
+                ? projects.map(
+                    (x) => x.name + (x.tech && x.tech.length ? ' — ' + x.tech.join(', ') : ''),
+                  )
+                : ['No projects loaded.'],
+            };
           },
-          skills: () => ({ lines: skills.length ? skills.map(s => s.category + ': ' + skillItems(s).join(', ')) : ['Rust · Python · Go · Tokio · FastAPI', 'Kafka · PostgreSQL · Docker · AWS'] }),
+          skills: () => ({
+            lines: skills.length
+              ? skills.map((s) => s.category + ': ' + skillItems(s).join(', '))
+              : ['Rust · Python · Go · Tokio · FastAPI', 'Kafka · PostgreSQL · Docker · AWS'],
+          }),
           grep: (args, raw, stdin) => {
             const pat = raw.trim();
             if (!pat) return { lines: ['grep: missing pattern'], cls: 'err' };
-            if (!stdin) return { lines: ['grep: reads a pipe — try: projects | grep rust'], cls: 'err' };
-            let re; try { re = new RegExp(pat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'); } catch { re = null; }
-            const hits = re ? stdin.filter(l => re.test(l)) : [];
-            return { lines: hits.length ? hits : ['grep: no match for "' + pat + '"'], cls: hits.length ? '' : 'muted' };
+            if (!stdin)
+              return { lines: ['grep: reads a pipe — try: projects | grep rust'], cls: 'err' };
+            let re;
+            try {
+              re = new RegExp(pat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            } catch {
+              re = null;
+            }
+            const hits = re ? stdin.filter((l) => re.test(l)) : [];
+            return {
+              lines: hits.length ? hits : ['grep: no match for "' + pat + '"'],
+              cls: hits.length ? '' : 'muted',
+            };
           },
-          head: (args, raw, stdin) => { if (!stdin) return { lines: ['head: reads a pipe'], cls: 'err' }; let n = 5; const m = raw.match(/(\d+)/); if (m) n = parseInt(m[1], 10); return { lines: stdin.slice(0, n) }; },
-          tail: (args, raw, stdin) => { if (!stdin) return { lines: ['tail: reads a pipe'], cls: 'err' }; let n = 5; const m = raw.match(/(\d+)/); if (m) n = parseInt(m[1], 10); return { lines: stdin.slice(-n) }; },
-          wc: (args, raw, stdin) => { if (!stdin) return { lines: ['wc: reads a pipe'], cls: 'err' }; return { lines: [String(stdin.length)] }; },
+          head: (args, raw, stdin) => {
+            if (!stdin) return { lines: ['head: reads a pipe'], cls: 'err' };
+            let n = 5;
+            const m = raw.match(/(\d+)/);
+            if (m) n = parseInt(m[1], 10);
+            return { lines: stdin.slice(0, n) };
+          },
+          tail: (args, raw, stdin) => {
+            if (!stdin) return { lines: ['tail: reads a pipe'], cls: 'err' };
+            let n = 5;
+            const m = raw.match(/(\d+)/);
+            if (m) n = parseInt(m[1], 10);
+            return { lines: stdin.slice(-n) };
+          },
+          wc: (args, raw, stdin) => {
+            if (!stdin) return { lines: ['wc: reads a pipe'], cls: 'err' };
+            return { lines: [String(stdin.length)] };
+          },
           man: (args) => {
             const who = (args[0] || 'riad').toLowerCase();
-            if (who !== 'riad') return { lines: ['No manual entry for ' + who + '. Try: man riad'], cls: 'muted' };
-            return { lines: [
-              'RIAD(1)            Personal Manual            RIAD(1)',
-              '',
-              'NAME',
-              '     riad — software & AI engineer; Rust and Python',
-              '',
-              'SYNOPSIS',
-              '     riad [--rust] [--python] [--distributed] <problem>',
-              '',
-              'DESCRIPTION',
-              '     Builds software and AI systems with a focus on',
-              '     distributed systems and complex infrastructure.',
-              '     Previously taught ~1000 CS students at SUNY Buffalo.',
-              '',
-              'ROLES',
-              '     ' + (t.role1 || 'AI Engineer @ ABB'),
-              '     ' + (t.role2 || 'Head of IT @ EYP AZ'),
-              '',
-              'SEE ALSO',
-              '     ls(1), cat(1), grep(1), philosophy(1), perf(1), patent(1)',
-            ] };
+            if (who !== 'riad')
+              return { lines: ['No manual entry for ' + who + '. Try: man riad'], cls: 'muted' };
+            return {
+              lines: [
+                'RIAD(1)            Personal Manual            RIAD(1)',
+                '',
+                'NAME',
+                '     riad — software & AI engineer; Rust and Python',
+                '',
+                'SYNOPSIS',
+                '     riad [--rust] [--python] [--distributed] <problem>',
+                '',
+                'DESCRIPTION',
+                '     Builds software and AI systems with a focus on',
+                '     distributed systems and complex infrastructure.',
+                '     Previously taught ~1000 CS students at SUNY Buffalo.',
+                '',
+                'ROLES',
+                '     ' + (t.role1 || 'AI Engineer @ ABB'),
+                '     ' + (t.role2 || 'Head of IT @ EYP AZ'),
+                '',
+                'SEE ALSO',
+                '     ls(1), cat(1), grep(1), philosophy(1), perf(1), patent(1)',
+              ],
+            };
           },
           philosophy: philo,
           why: philo,
           rrf: async (args) => {
-            const ks = args.filter(a => /^k=/.test(a)).map(a => parseInt(a.slice(2), 10));
+            const ks = args.filter((a) => /^k=/.test(a)).map((a) => parseInt(a.slice(2), 10));
             const k = ks.length ? ks[0] : 60;
-            const ranks = args.filter(a => !/^k=/.test(a)).map(a => parseInt(a, 10)).filter(x => !isNaN(x));
-            if (!ranks.length) return { lines: ['usage: rrf <rank1> <rank2> …   (k=60 default; 0 = absent)'], cls: 'muted' };
+            const ranks = args
+              .filter((a) => !/^k=/.test(a))
+              .map((a) => parseInt(a, 10))
+              .filter((x) => !isNaN(x));
+            if (!ranks.length)
+              return {
+                lines: ['usage: rrf <rank1> <rank2> …   (k=60 default; 0 = absent)'],
+                cls: 'muted',
+              };
             const score = await wasmRRF(ranks, k);
-            const parts = ranks.map(r => r <= 0 ? '0' : '1/(' + k + '+' + r + ')').join(' + ');
-            return { lines: ['rrf(k=' + k + ') = ' + parts, '           = ' + score.toFixed(6), '(computed in WebAssembly · lab.wasm)'] };
+            const parts = ranks.map((r) => (r <= 0 ? '0' : '1/(' + k + '+' + r + ')')).join(' + ');
+            return {
+              lines: [
+                'rrf(k=' + k + ') = ' + parts,
+                '           = ' + score.toFixed(6),
+                '(computed in WebAssembly · lab.wasm)',
+              ],
+            };
           },
           hash: async (args, raw) => {
             const text = raw.trim();
             if (!text) return { lines: ['usage: hash <text>'], cls: 'muted' };
             const h = await wasmHash(text);
-            return { lines: ['fnv1a32("' + text + '") = ' + hex8(h) + '  (' + (h >>> 0) + ')', '(computed in WebAssembly · lab.wasm)'] };
+            return {
+              lines: [
+                'fnv1a32("' + text + '") = ' + hex8(h) + '  (' + (h >>> 0) + ')',
+                '(computed in WebAssembly · lab.wasm)',
+              ],
+            };
           },
           xor: async (args) => {
-            if (args.length < 2) return { lines: ['usage: xor <a> <b>   (dec or 0x…)'], cls: 'muted' };
-            const a = parseIntSmart(args[0]), b = parseIntSmart(args[1]);
-            if (isNaN(a) || isNaN(b)) return { lines: ['xor: could not parse operands'], cls: 'err' };
+            if (args.length < 2)
+              return { lines: ['usage: xor <a> <b>   (dec or 0x…)'], cls: 'muted' };
+            const a = parseIntSmart(args[0]),
+              b = parseIntSmart(args[1]);
+            if (isNaN(a) || isNaN(b))
+              return { lines: ['xor: could not parse operands'], cls: 'err' };
             const r = await wasmXor(a, b);
-            return { lines: [hex8(a) + ' ⊕ ' + hex8(b) + ' = ' + hex8(r.dist) + '  (' + r.dist + ')', 'k-bucket index (shared prefix): ' + r.bucket, '(computed in WebAssembly · lab.wasm)'] };
+            return {
+              lines: [
+                hex8(a) + ' ⊕ ' + hex8(b) + ' = ' + hex8(r.dist) + '  (' + r.dist + ')',
+                'k-bucket index (shared prefix): ' + r.bucket,
+                '(computed in WebAssembly · lab.wasm)',
+              ],
+            };
           },
           neofetch: () => {
-            const langGroup = skills.find(s => /Programming|Language/i.test(s.category));
-            const langs = langGroup ? skillItems(langGroup).slice(0, 4) : ['Rust', 'Python', 'Go', 'C'];
-            return { lines: [
-              '  riad@portfolio',
-              '  ──────────────',
-              '  roles  ' + (t.role1 || 'AI Engineer @ ABB'),
-              '  langs  ' + langs.join(' · '),
-              '  stack  Tokio · FastAPI · Kafka · Postgres · Docker',
-              '  shell  hero-term — type help',
-            ] };
+            const langGroup = skills.find((s) => /Programming|Language/i.test(s.category));
+            const langs = langGroup
+              ? skillItems(langGroup).slice(0, 4)
+              : ['Rust', 'Python', 'Go', 'C'];
+            return {
+              lines: [
+                '  riad@portfolio',
+                '  ──────────────',
+                '  roles  ' + (t.role1 || 'AI Engineer @ ABB'),
+                '  langs  ' + langs.join(' · '),
+                '  stack  Tokio · FastAPI · Kafka · Postgres · Docker',
+                '  shell  hero-term — type help',
+              ],
+            };
           },
-          history: () => ({ lines: hist.length ? hist.map((h, i) => String(i + 1).padStart(3) + '  ' + h) : ['(no history yet)'] }),
+          history: () => ({
+            lines: hist.length
+              ? hist.map((h, i) => String(i + 1).padStart(3) + '  ' + h)
+              : ['(no history yet)'],
+          }),
           uptime: () => {
             const h = new Date().getHours();
-            const mood = h >= 0 && h < 6 ? 'nocturnal' : h < 12 ? 'building' : h < 18 ? 'shipping' : 'reflecting';
-            return { lines: ['up ' + ((performance.now() - bootT) / 1000).toFixed(1) + 's · 1 user · load average: calm, calm, calm', 'mood: ' + mood] };
+            const mood =
+              h >= 0 && h < 6
+                ? 'nocturnal'
+                : h < 12
+                  ? 'building'
+                  : h < 18
+                    ? 'shipping'
+                    : 'reflecting';
+            return {
+              lines: [
+                'up ' +
+                  ((performance.now() - bootT) / 1000).toFixed(1) +
+                  's · 1 user · load average: calm, calm, calm',
+                'mood: ' + mood,
+              ],
+            };
           },
-          deps: () => ({ lines: ['Dependencies:', '  patience, discipline      — Remarque', '  hunger, focus             — Cole', '  (no node_modules found. this is intentional.)'] }),
+          deps: () => ({
+            lines: [
+              'Dependencies:',
+              '  patience, discipline      — Remarque',
+              '  hunger, focus             — Cole',
+              '  (no node_modules found. this is intentional.)',
+            ],
+          }),
           reading: () => {
             const all = [...REMARKS, ...COLE_LINES];
             const q = all[quoteIdx % all.length];
@@ -689,76 +1044,114 @@ const structuredData = JSON.stringify({
           },
           date: () => ({ lines: [new Date().toString()] }),
           echo: (args, raw) => ({ lines: [raw] }),
-          sudo: () => ({ lines: ['riad is not in the sudoers file. This incident will be reported. 🙂'], cls: 'err' }),
+          sudo: () => ({
+            lines: ['riad is not in the sudoers file. This incident will be reported. 🙂'],
+            cls: 'err',
+          }),
           vim: () => ({ lines: ["Entering vim… kidding. (:q!) You're free."], cls: 'muted' }),
           contact: () => ({ html: tx(email) }),
-          resume: () => { window.open(resume, '_blank'); return { html: tx('Opening resume...') }; },
-          github: () => { window.open(github, '_blank'); return { html: tx('Opening github.com/r14dd...') }; },
+          resume: () => {
+            window.open(resume, '_blank');
+            return { html: tx('Opening resume...') };
+          },
+          github: () => {
+            window.open(github, '_blank');
+            return { html: tx('Opening github.com/r14dd...') };
+          },
           perf: () => {
             const v = readVitals();
-            return { lines: [
-              'FCP   ' + fmtMs(v.fcp) + '      LCP   ' + fmtMs(v.lcp),
-              'TTFB  ' + fmtMs(v.ttfb) + '      CLS   ' + v.cls.toFixed(3),
-              'DCL   ' + fmtMs(v.dcl) + '      INP   ' + (v.inp != null ? fmtMs(v.inp) : '—'),
-              'transferred  ' + fmtKb(v.bytes) + '   ·   JS  ' + fmtKb(v.jsBytes) + '   ·   ' + v.reqs + ' requests',
-              '(measured in your browser — nothing sent anywhere)',
-            ] };
+            return {
+              lines: [
+                'FCP   ' + fmtMs(v.fcp) + '      LCP   ' + fmtMs(v.lcp),
+                'TTFB  ' + fmtMs(v.ttfb) + '      CLS   ' + v.cls.toFixed(3),
+                'DCL   ' + fmtMs(v.dcl) + '      INP   ' + (v.inp != null ? fmtMs(v.inp) : '—'),
+                'transferred  ' +
+                  fmtKb(v.bytes) +
+                  '   ·   JS  ' +
+                  fmtKb(v.jsBytes) +
+                  '   ·   ' +
+                  v.reqs +
+                  ' requests',
+                '(measured in your browser — nothing sent anywhere)',
+              ],
+            };
           },
           where: async () => {
             const w = await collectWhere();
-            return { lines: w.map(r => (r[0] + ':').padEnd(16) + ' ' + r[1]) };
+            return { lines: w.map((r) => (r[0] + ':').padEnd(16) + ' ' + r[1]) };
           },
           patent: () => {
-            const ok = (s) => '<span class="terminal-text" style="color:#4ade80">' + esc(s) + '</span>';
+            const ok = (s) =>
+              '<span class="terminal-text" style="color:#4ade80">' + esc(s) + '</span>';
             const dim = (s) => '<span class="terminal-text is-muted">' + esc(s) + '</span>';
-            const acc = (s) => '<span class="terminal-text" style="color:var(--accent)">' + esc(s) + '</span>';
-            return { rich: [
-              dim('$ patent "a rust crate that ranks dependency alternatives"'),
-              '',
-              dim('⠋ fanning out across registries…'),
-              ok('  ✓ crates.io        4 candidates'),
-              ok('  ✓ npm              2 candidates'),
-              ok('  ✓ PyPI             1 candidate'),
-              ok('  ✓ GitHub           7 candidates'),
-              ok('  ✓ Go · Maven · NuGet · RubyGems · Docker Hub …'),
-              '',
-              dim('▍ ranking 16 matches with local embeddings (fastembed)…'),
-              dim('▍ scoring with reciprocal rank fusion (k=60)…'),
-              '',
-              acc('verdict: 2 strong overlaps found in the sources checked.'),
-              '<span class="terminal-text term-pre">' + esc('  • cargo-deny      partial — license/advisory focus, not ranking') + '</span>',
-              '<span class="terminal-text term-pre">' + esc('  • similar (×1)    closest match; see report') + '</span>',
-              '',
-              dim('note: integrity-scoped — reports only what was found where it looked.'),
-              dim('      never asserts absence.'),
-              '',
-              ok('✓ done in 1.84s · JSON written to ./patent.json'),
-            ] };
+            const acc = (s) =>
+              '<span class="terminal-text" style="color:var(--accent)">' + esc(s) + '</span>';
+            return {
+              rich: [
+                dim('$ patent "a rust crate that ranks dependency alternatives"'),
+                '',
+                dim('⠋ fanning out across registries…'),
+                ok('  ✓ crates.io        4 candidates'),
+                ok('  ✓ npm              2 candidates'),
+                ok('  ✓ PyPI             1 candidate'),
+                ok('  ✓ GitHub           7 candidates'),
+                ok('  ✓ Go · Maven · NuGet · RubyGems · Docker Hub …'),
+                '',
+                dim('▍ ranking 16 matches with local embeddings (fastembed)…'),
+                dim('▍ scoring with reciprocal rank fusion (k=60)…'),
+                '',
+                acc('verdict: 2 strong overlaps found in the sources checked.'),
+                '<span class="terminal-text term-pre">' +
+                  esc('  • cargo-deny      partial — license/advisory focus, not ranking') +
+                  '</span>',
+                '<span class="terminal-text term-pre">' +
+                  esc('  • similar (×1)    closest match; see report') +
+                  '</span>',
+                '',
+                dim('note: integrity-scoped — reports only what was found where it looked.'),
+                dim('      never asserts absence.'),
+                '',
+                ok('✓ done in 1.84s · JSON written to ./patent.json'),
+              ],
+            };
           },
           offline: async (args) => {
-            if (!('serviceWorker' in navigator)) return { lines: ['service workers not supported in this browser'], cls: 'err' };
+            if (!('serviceWorker' in navigator))
+              return { lines: ['service workers not supported in this browser'], cls: 'err' };
             const sub = (args[0] || '').toLowerCase();
             if (sub === 'enable') {
               try {
                 await navigator.serviceWorker.register('/sw.js', { scope: '/' });
                 await navigator.serviceWorker.ready;
-                return { lines: ['● service worker registered — offline-ready', 'kill your network and reload to test'] };
-              } catch (e) { return { lines: ['failed: ' + e.message], cls: 'err' }; }
+                return {
+                  lines: [
+                    '● service worker registered — offline-ready',
+                    'kill your network and reload to test',
+                  ],
+                };
+              } catch (e) {
+                return { lines: ['failed: ' + e.message], cls: 'err' };
+              }
             }
             if (sub === 'disable') {
               const reg = await navigator.serviceWorker.getRegistration('/');
-              if (reg) { reg.active?.postMessage({ type: 'purge' }); await reg.unregister(); }
+              if (reg) {
+                reg.active?.postMessage({ type: 'purge' });
+                await reg.unregister();
+              }
               return { lines: ['○ service worker unregistered & cache cleared'] };
             }
             const reg = await navigator.serviceWorker.getRegistration('/');
             const active = reg && reg.active;
-            return { lines: [
-              active ? '● offline-ready (service worker active)' : '○ not enabled',
-              '',
-              'usage:',
-              '  offline enable    register service worker for offline access',
-              '  offline disable   unregister & clear cache',
-            ] };
+            return {
+              lines: [
+                active ? '● offline-ready (service worker active)' : '○ not enabled',
+                '',
+                'usage:',
+                '  offline enable    register service worker for offline access',
+                '  offline disable   unregister & clear cache',
+              ],
+            };
           },
           fortune: () => ({ html: tx(FORTUNES[Math.floor(Math.random() * FORTUNES.length)]) }),
           clear: () => ({ action: 'clear' }),
@@ -786,14 +1179,25 @@ const structuredData = JSON.stringify({
         };
         const render = (res) => {
           if (!res) return;
-          if (res.rich) { res.rich.forEach(h => addRow(h)); return; }
-          if (res.html) { addRow(res.html); return; }
+          if (res.rich) {
+            res.rich.forEach((h) => addRow(h));
+            return;
+          }
+          if (res.html) {
+            addRow(res.html);
+            return;
+          }
           if (res.lines) {
             const c = res.cls === 'err' ? ' is-err' : res.cls === 'muted' ? ' is-muted' : '';
-            res.lines.forEach(l => addRow('<span class="terminal-text term-pre' + c + '">' + esc(l) + '</span>'));
+            res.lines.forEach((l) =>
+              addRow('<span class="terminal-text term-pre' + c + '">' + esc(l) + '</span>'),
+            );
           }
         };
-        const clearScreen = () => Array.from(termBody.children).forEach(el => { if (el !== inputLine) el.remove(); });
+        const clearScreen = () =>
+          Array.from(termBody.children).forEach((el) => {
+            if (el !== inputLine) el.remove();
+          });
         const tokenize = (stage) => {
           const s = stage.trim();
           const sp = s.indexOf(' ');
@@ -811,27 +1215,52 @@ const structuredData = JSON.stringify({
 
           const echoLine = document.createElement('div');
           echoLine.className = 'terminal-line term-visible';
-          echoLine.innerHTML = '<span class="terminal-prompt">→</span> <span class="terminal-cmd">' + esc(line || rawInput.trim()) + '</span>';
+          echoLine.innerHTML =
+            '<span class="terminal-prompt">→</span> <span class="terminal-cmd">' +
+            esc(line || rawInput.trim()) +
+            '</span>';
           termBody.insertBefore(echoLine, inputLine);
 
-          if (!line) { render({ lines: ['no such history entry'], cls: 'muted' }); termBody.scrollTop = termBody.scrollHeight; return; }
+          if (!line) {
+            render({ lines: ['no such history entry'], cls: 'muted' });
+            termBody.scrollTop = termBody.scrollHeight;
+            return;
+          }
 
           if (hist[hist.length - 1] !== line) {
             hist.push(line);
-            try { localStorage.setItem('term-history', JSON.stringify(hist.slice(-100))); } catch {}
+            try {
+              localStorage.setItem('term-history', JSON.stringify(hist.slice(-100)));
+            } catch {}
           }
           histIdx = hist.length;
 
-          const stages = line.split('|').map(s => s.trim()).filter(Boolean);
+          const stages = line
+            .split('|')
+            .map((s) => s.trim())
+            .filter(Boolean);
           const commands = getCommands();
-          let stdin = null, last = null;
+          let stdin = null,
+            last = null;
           for (const stage of stages) {
             const { cmd, args, raw } = tokenize(stage);
             const fn = commands[cmd];
-            if (!fn) { render({ lines: ["command not found: " + cmd + ". type 'help'"], cls: 'err' }); termBody.scrollTop = termBody.scrollHeight; return; }
-            try { last = (await fn(args, raw, stdin, stages.length === 1)) || {}; }
-            catch (err) { render({ lines: [cmd + ': ' + err.message], cls: 'err' }); termBody.scrollTop = termBody.scrollHeight; return; }
-            if (last.action === 'clear') { clearScreen(); return; }
+            if (!fn) {
+              render({ lines: ['command not found: ' + cmd + ". type 'help'"], cls: 'err' });
+              termBody.scrollTop = termBody.scrollHeight;
+              return;
+            }
+            try {
+              last = (await fn(args, raw, stdin, stages.length === 1)) || {};
+            } catch (err) {
+              render({ lines: [cmd + ': ' + err.message], cls: 'err' });
+              termBody.scrollTop = termBody.scrollHeight;
+              return;
+            }
+            if (last.action === 'clear') {
+              clearScreen();
+              return;
+            }
             stdin = last.lines ? last.lines.slice() : stdin;
           }
           if (last && !last.silent) render(last);
@@ -845,15 +1274,23 @@ const structuredData = JSON.stringify({
             input.value = '';
           } else if (e.key === 'ArrowUp') {
             e.preventDefault();
-            if (histIdx > 0) { histIdx--; input.value = hist[histIdx] || ''; }
+            if (histIdx > 0) {
+              histIdx--;
+              input.value = hist[histIdx] || '';
+            }
           } else if (e.key === 'ArrowDown') {
             e.preventDefault();
-            if (histIdx < hist.length) { histIdx++; input.value = histIdx < hist.length ? (hist[histIdx] || '') : ''; }
+            if (histIdx < hist.length) {
+              histIdx++;
+              input.value = histIdx < hist.length ? hist[histIdx] || '' : '';
+            }
           } else if (e.key === 'Tab') {
             e.preventDefault();
             const cur = input.value.trim();
             if (cur && !cur.includes(' ')) {
-              const names = Object.keys(getCommands()).filter(c => c.startsWith(cur.toLowerCase()));
+              const names = Object.keys(getCommands()).filter((c) =>
+                c.startsWith(cur.toLowerCase()),
+              );
               if (names.length === 1) input.value = names[0] + ' ';
               else if (names.length > 1) render({ lines: [names.join('   ')], cls: 'muted' });
             }
@@ -873,32 +1310,36 @@ const structuredData = JSON.stringify({
       }
     })();
 
-    const i18nEl = document.getElementById("i18n-data");
+    const i18nEl = document.getElementById('i18n-data');
     let I18N = {};
-    try { I18N = i18nEl ? JSON.parse(i18nEl.textContent || "{}") : {}; } catch { I18N = {}; }
+    try {
+      I18N = i18nEl ? JSON.parse(i18nEl.textContent || '{}') : {};
+    } catch {
+      I18N = {};
+    }
     const languageLabels = {
-      en: "English",
-      ru: "Русский",
-      az: "Azərbaycanca",
+      en: 'English',
+      ru: 'Русский',
+      az: 'Azərbaycanca',
     };
 
     const openFromHash = () => {
-      const id = window.location.hash.replace("#", "");
+      const id = window.location.hash.replace('#', '');
       if (!id) return;
       const section = document.getElementById(id);
       if (!section) return;
-      section.scrollIntoView({ behavior: scrollBehavior, block: "start" });
+      section.scrollIntoView({ behavior: scrollBehavior, block: 'start' });
     };
 
-    window.addEventListener("hashchange", openFromHash);
-    window.addEventListener("load", openFromHash);
+    window.addEventListener('hashchange', openFromHash);
+    window.addEventListener('load', openFromHash);
 
-    const sections = Array.from(document.querySelectorAll("section[id]"));
-    const navLinks = Array.from(document.querySelectorAll(".side-nav a"));
-    const mobileNav = document.getElementById("mobile-nav");
-    const mobileLabel = document.getElementById("mobile-nav-label");
-    const mobileMenu = document.getElementById("mobile-nav-menu");
-    const mobileMenuLinks = mobileMenu ? Array.from(mobileMenu.querySelectorAll("a")) : [];
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    const navLinks = Array.from(document.querySelectorAll('.side-nav a'));
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileLabel = document.getElementById('mobile-nav-label');
+    const mobileMenu = document.getElementById('mobile-nav-menu');
+    const mobileMenuLinks = mobileMenu ? Array.from(mobileMenu.querySelectorAll('a')) : [];
 
     // Runs every scroll frame — DOM writes are gated on the active id actually
     // changing so a steady scroll doesn't mutate (and re-layout) per frame.
@@ -914,21 +1355,29 @@ const structuredData = JSON.stringify({
       }
       if (current?.id === lastActiveId) return;
       lastActiveId = current?.id ?? null;
-      navLinks.forEach((link) => link.classList.remove("active"));
-      const active = navLinks.find(link => link.getAttribute("href") === `#${current.id}`);
-      active?.classList.add("active");
+      navLinks.forEach((link) => link.classList.remove('active'));
+      const active = navLinks.find((link) => link.getAttribute('href') === `#${current.id}`);
+      active?.classList.add('active');
 
       if (mobileLabel && current?.id) {
-        const mobileActive = mobileMenuLinks.find(a => a.getAttribute("href") === `#${current.id}`);
+        const mobileActive = mobileMenuLinks.find(
+          (a) => a.getAttribute('href') === `#${current.id}`,
+        );
         mobileLabel.textContent = mobileActive ? mobileActive.textContent : current.id;
-        mobileMenuLinks.forEach(a => a.classList.toggle("active", a === mobileActive));
+        mobileMenuLinks.forEach((a) => a.classList.toggle('active', a === mobileActive));
       }
     };
-    const refreshActiveLink = () => { lastActiveId = null; setActiveLink(); };
+    const refreshActiveLink = () => {
+      lastActiveId = null;
+      setActiveLink();
+    };
 
     const smoothScrollTo = (el, duration = 480) => {
       const end = el.getBoundingClientRect().top + window.scrollY - 24;
-      if (prefersReducedMotion) { window.scrollTo(0, end); return; }
+      if (prefersReducedMotion) {
+        window.scrollTo(0, end);
+        return;
+      }
       const start = window.scrollY;
       const startTime = performance.now();
       const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
@@ -940,149 +1389,159 @@ const structuredData = JSON.stringify({
       requestAnimationFrame(step);
     };
     // prefers-reduced-motion variant for every scrollIntoView call site.
-    const scrollBehavior = prefersReducedMotion ? "auto" : "smooth";
+    const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
 
     navLinks.forEach((link) => {
-      link.addEventListener("click", (e) => {
+      link.addEventListener('click', (e) => {
         e.preventDefault();
-        const id = link.getAttribute("href")?.replace("#", "");
+        const id = link.getAttribute('href')?.replace('#', '');
         if (!id) return;
         const target = document.getElementById(id);
         if (!target) return;
         smoothScrollTo(target);
-        history.pushState(null, "", `#${id}`);
+        history.pushState(null, '', `#${id}`);
       });
     });
 
     if (mobileNav) {
-      const pill = document.getElementById("mobile-nav-pill");
+      const pill = document.getElementById('mobile-nav-pill');
       let hideTimer;
       const showNav = () => {
-        if (window.scrollY > 200) mobileNav.classList.add("visible");
+        if (window.scrollY > 200) mobileNav.classList.add('visible');
         clearTimeout(hideTimer);
         hideTimer = setTimeout(() => {
-          if (!mobileNav.classList.contains("open")) mobileNav.classList.remove("visible");
+          if (!mobileNav.classList.contains('open')) mobileNav.classList.remove('visible');
         }, 2500);
       };
       let scrollTick = false;
-      window.addEventListener("scroll", () => {
-        if (!scrollTick) {
-          scrollTick = true;
-          requestAnimationFrame(() => {
-            scrollTick = false;
-            if (window.scrollY <= 200) {
-              mobileNav.classList.remove("visible");
-              return;
-            }
-            showNav();
-          });
-        }
-      }, { passive: true });
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (!scrollTick) {
+            scrollTick = true;
+            requestAnimationFrame(() => {
+              scrollTick = false;
+              if (window.scrollY <= 200) {
+                mobileNav.classList.remove('visible');
+                return;
+              }
+              showNav();
+            });
+          }
+        },
+        { passive: true },
+      );
 
-      pill?.addEventListener("click", () => {
-        mobileNav.classList.toggle("open");
-        if (mobileNav.classList.contains("open")) {
-          mobileNav.classList.add("visible");
+      pill?.addEventListener('click', () => {
+        mobileNav.classList.toggle('open');
+        if (mobileNav.classList.contains('open')) {
+          mobileNav.classList.add('visible');
           clearTimeout(hideTimer);
         }
       });
-      mobileMenuLinks.forEach(a => {
-        a.addEventListener("click", (e) => {
+      mobileMenuLinks.forEach((a) => {
+        a.addEventListener('click', (e) => {
           e.preventDefault();
-          mobileNav.classList.remove("open");
-          const id = a.getAttribute("href")?.replace("#", "");
+          mobileNav.classList.remove('open');
+          const id = a.getAttribute('href')?.replace('#', '');
           if (!id) return;
           const target = document.getElementById(id);
           if (target) smoothScrollTo(target);
-          history.pushState(null, "", `#${id}`);
+          history.pushState(null, '', `#${id}`);
         });
       });
-      document.addEventListener("click", (e) => {
-        if (!mobileNav.contains(e.target)) mobileNav.classList.remove("open");
+      document.addEventListener('click', (e) => {
+        if (!mobileNav.contains(e.target)) mobileNav.classList.remove('open');
       });
     }
 
-    const heroEl = document.querySelector("main > section:first-of-type");
+    const heroEl = document.querySelector('main > section:first-of-type');
     const isTouch = window.matchMedia('(hover: none)').matches;
     if (isTouch && heroEl) {
-      const h1 = heroEl.querySelector("h1");
-      if (h1) h1.style.transform = "";
+      const h1 = heroEl.querySelector('h1');
+      if (h1) h1.style.transform = '';
     }
     const updateParallax = () => {
       if (!heroEl || isTouch) return;
       const scrolled = window.scrollY;
-      const h1 = heroEl.querySelector("h1");
+      const h1 = heroEl.querySelector('h1');
       if (h1) h1.style.transform = `translateY(${scrolled * 0.12}px)`;
     };
 
     let scrollTicking = false;
-    window.addEventListener("scroll", () => {
-      if (scrollTicking) return;
-      scrollTicking = true;
-      requestAnimationFrame(() => {
-        setActiveLink();
-        updateParallax();
-        scrollTicking = false;
-      });
-    }, { passive: true });
-    window.addEventListener("load", () => {
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+          setActiveLink();
+          updateParallax();
+          scrollTicking = false;
+        });
+      },
+      { passive: true },
+    );
+    window.addEventListener('load', () => {
       setActiveLink();
       updateParallax();
     });
 
-    const simOverlay = document.createElement("div");
-    simOverlay.className = "sim-overlay";
+    const simOverlay = document.createElement('div');
+    simOverlay.className = 'sim-overlay';
     simOverlay.innerHTML = '<div class="sim-overlay-content"></div>';
     document.body.appendChild(simOverlay);
     let simTimer = null;
 
     const openSimOverlay = (card) => {
-      const sv = card.querySelector(".sim-visual");
+      const sv = card.querySelector('.sim-visual');
       if (!sv) return;
-      const content = simOverlay.querySelector(".sim-overlay-content");
+      const content = simOverlay.querySelector('.sim-overlay-content');
       content.innerHTML = sv.outerHTML;
-      const cloned = content.querySelector(".sim-visual");
+      const cloned = content.querySelector('.sim-visual');
       if (cloned) {
-        cloned.classList.add("active");
+        cloned.classList.add('active');
         // CSS can't stop SMIL — drop <animate> nodes under reduced motion.
-        if (prefersReducedMotion) cloned.querySelectorAll("animate").forEach((a) => a.remove());
+        if (prefersReducedMotion) cloned.querySelectorAll('animate').forEach((a) => a.remove());
       }
-      simOverlay.classList.add("open");
+      simOverlay.classList.add('open');
       simTimer = setTimeout(closeSimOverlay, 3000);
     };
 
     const closeSimOverlay = () => {
       clearTimeout(simTimer);
-      simOverlay.classList.remove("open");
-      const content = simOverlay.querySelector(".sim-overlay-content");
-      setTimeout(() => { content.innerHTML = ""; }, 300);
+      simOverlay.classList.remove('open');
+      const content = simOverlay.querySelector('.sim-overlay-content');
+      setTimeout(() => {
+        content.innerHTML = '';
+      }, 300);
     };
 
-    simOverlay.addEventListener("click", closeSimOverlay);
+    simOverlay.addEventListener('click', closeSimOverlay);
 
     // "Simulate" buttons are handled by a single delegated listener on the
     // #projects section (further down) so they survive every language
     // re-render without per-button re-binding.
 
-
-
-    const langToggle = document.getElementById("lang-toggle");
-    const langMenu = document.getElementById("lang-menu");
-    const langCurrent = document.getElementById("lang-current");
+    const langToggle = document.getElementById('lang-toggle');
+    const langMenu = document.getElementById('lang-menu');
+    const langCurrent = document.getElementById('lang-current');
 
     let currentProfile = I18N.en;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const typed = new WeakSet();
     const typeH2 = (h2) => {
       if (prefersReduced) return;
-      const textNode = Array.from(h2.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
+      const textNode = Array.from(h2.childNodes).find(
+        (n) => n.nodeType === 3 && n.textContent.trim(),
+      );
       if (!textNode) return;
       const text = textNode.textContent;
       const len = text.length;
       const perChar = 400 / len;
       let i = 0;
-      textNode.textContent = "";
+      textNode.textContent = '';
       const step = () => {
         textNode.textContent = text.slice(0, ++i);
         if (i < len) setTimeout(step, perChar);
@@ -1104,28 +1563,30 @@ const structuredData = JSON.stringify({
       try {
         data = await ensureLang(lang);
       } catch (err) {
-        console.warn("i18n fetch failed, falling back to en", err);
-        lang = "en";
+        console.warn('i18n fetch failed, falling back to en', err);
+        lang = 'en';
         data = I18N.en;
       }
       currentProfile = data;
       window._termProfile = data;
       document.documentElement.lang = lang;
-      if (langCurrent)
-        langCurrent.textContent = languageLabels[lang] || "English";
+      if (langCurrent) langCurrent.textContent = languageLabels[lang] || 'English';
 
-      const heroTitle = document.querySelector("main section h1");
-      const heroLinks = document.querySelector(".hero-links");
+      const heroTitle = document.querySelector('main section h1');
+      const heroLinks = document.querySelector('.hero-links');
       if (heroTitle) weightReveal(heroTitle, data.hero.name);
       timeAware.apply(data);
-      const heroAbout = document.getElementById("hero-about");
+      const heroAbout = document.getElementById('hero-about');
       if (heroAbout) {
         const isFirstAbout = !heroAbout.dataset.applied;
         heroAbout.dataset.applied = '1';
         if (isFirstAbout && lang === 'en') {
           // SSR text is already visible — skip the word-gen animation to avoid hiding the LCP element
         } else if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          heroAbout.innerHTML = data.about.split(' ').map(w => `<span class="word-gen">${w}</span>`).join(' ');
+          heroAbout.innerHTML = data.about
+            .split(' ')
+            .map((w) => `<span class="word-gen">${w}</span>`)
+            .join(' ');
           heroAbout.querySelectorAll('.word-gen').forEach((w, i) => {
             setTimeout(() => w.classList.add('revealed'), 60 + i * 30);
           });
@@ -1146,7 +1607,7 @@ const structuredData = JSON.stringify({
       if (ts2) ts2.innerHTML = wrapNum(t.stat2);
       if (ts3) ts3.innerHTML = wrapNum(t.stat3);
       if (heroLinks) {
-        const links = heroLinks.querySelectorAll("a");
+        const links = heroLinks.querySelectorAll('a');
         // Replace only the text node so the inline SVG icon survives re-render
         const setLinkLabel = (link, label) => {
           for (const node of link.childNodes) {
@@ -1159,28 +1620,28 @@ const structuredData = JSON.stringify({
         };
         if (links[0]) {
           setLinkLabel(links[0], data.labels.links.linkedin);
-          links[0].setAttribute("href", data.links.linkedin);
+          links[0].setAttribute('href', data.links.linkedin);
         }
         if (links[1]) {
           setLinkLabel(links[1], data.labels.links.github);
-          links[1].setAttribute("href", data.links.github);
+          links[1].setAttribute('href', data.links.github);
         }
         if (links[3]) {
           setLinkLabel(links[3], data.labels.links.resume);
-          links[3].setAttribute("href", data.links.resume);
+          links[3].setAttribute('href', data.links.resume);
         }
       }
 
-      const sideLinks = document.querySelector(".side-links");
+      const sideLinks = document.querySelector('.side-links');
       if (sideLinks) {
-        const heading = document.getElementById("side-links-heading");
+        const heading = document.getElementById('side-links-heading');
         if (heading) heading.textContent = data.labels.links.heading;
-        const links = sideLinks.querySelectorAll("a");
+        const links = sideLinks.querySelectorAll('a');
         if (links[0]) links[0].textContent = data.labels.links.linkedin;
         if (links[1]) links[1].textContent = data.labels.links.github;
         if (links[3]) {
           links[3].textContent = data.labels.links.resume;
-          links[3].setAttribute("href", data.links.resume);
+          links[3].setAttribute('href', data.links.resume);
         }
       }
 
@@ -1203,66 +1664,79 @@ const structuredData = JSON.stringify({
       });
       setActiveLink();
 
-      const expSection = document.getElementById("experience");
-      const projSection = document.getElementById("projects");
-      const teachSection = document.getElementById("teaching");
-      const eduSection = document.getElementById("education");
-      const skillsSection = document.getElementById("skills");
-      const recsSection = document.getElementById("recommendations");
-      const connectSection = document.getElementById("connect");
+      const expSection = document.getElementById('experience');
+      const projSection = document.getElementById('projects');
+      const teachSection = document.getElementById('teaching');
+      const eduSection = document.getElementById('education');
+      const skillsSection = document.getElementById('skills');
+      const recsSection = document.getElementById('recommendations');
+      const connectSection = document.getElementById('connect');
 
       if (expSection) expSection.innerHTML = buildExperience(data);
-      if (projSection) { projSection.innerHTML = buildProjects(data); fetchBadges(projSection); }
+      if (projSection) {
+        projSection.innerHTML = buildProjects(data);
+        fetchBadges(projSection);
+      }
       if (teachSection) teachSection.innerHTML = buildTeaching(data);
       if (eduSection) eduSection.innerHTML = buildEducation(data);
       if (skillsSection) skillsSection.innerHTML = buildSkills(data);
       if (recsSection) recsSection.innerHTML = buildRecommendations(data);
       if (connectSection) connectSection.innerHTML = buildConnect(data);
 
-      [expSection, projSection, teachSection, eduSection, skillsSection, recsSection, connectSection].forEach(sec => {
+      [
+        expSection,
+        projSection,
+        teachSection,
+        eduSection,
+        skillsSection,
+        recsSection,
+        connectSection,
+      ].forEach((sec) => {
         if (!sec) return;
         if (!sec.classList.contains('section-revealed')) return;
         const h2 = sec.querySelector('h2');
         if (h2) typeH2(h2);
       });
 
-      expSection?.setAttribute("data-label", data.labels.headings.experience);
-      projSection?.setAttribute("data-label", data.labels.headings.projects);
-      teachSection?.setAttribute("data-label", data.labels.headings.teaching);
-      eduSection?.setAttribute("data-label", data.labels.headings.education);
-      skillsSection?.setAttribute("data-label", data.labels.headings.skills);
-      recsSection?.setAttribute("data-label", data.labels.headings.recommendations);
-      connectSection?.setAttribute("data-label", data.labels.headings.connect);
+      expSection?.setAttribute('data-label', data.labels.headings.experience);
+      projSection?.setAttribute('data-label', data.labels.headings.projects);
+      teachSection?.setAttribute('data-label', data.labels.headings.teaching);
+      eduSection?.setAttribute('data-label', data.labels.headings.education);
+      skillsSection?.setAttribute('data-label', data.labels.headings.skills);
+      recsSection?.setAttribute('data-label', data.labels.headings.recommendations);
+      connectSection?.setAttribute('data-label', data.labels.headings.connect);
 
       initCarousel();
 
       refreshActiveLink();
     };
 
-    const langWrapper = document.querySelector(".lang-switcher");
-    langToggle?.addEventListener("click", () => {
-      const isOpen = langMenu?.classList.contains("open");
-      langMenu?.classList.toggle("open", !isOpen);
-      langWrapper?.classList.toggle("open", !isOpen);
-      langToggle?.setAttribute("aria-expanded", String(!isOpen));
+    const langWrapper = document.querySelector('.lang-switcher');
+    langToggle?.addEventListener('click', () => {
+      const isOpen = langMenu?.classList.contains('open');
+      langMenu?.classList.toggle('open', !isOpen);
+      langWrapper?.classList.toggle('open', !isOpen);
+      langToggle?.setAttribute('aria-expanded', String(!isOpen));
     });
 
     let langSwitchTimer = null;
-    langMenu?.querySelectorAll("button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const lang = btn.getAttribute("data-lang") || "en";
-        const current = document.documentElement.lang || "en";
+    langMenu?.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang') || 'en';
+        const current = document.documentElement.lang || 'en';
         if (lang === current) {
-          langMenu.classList.remove("open");
-          langWrapper?.classList.remove("open");
-          langToggle?.setAttribute("aria-expanded", "false");
+          langMenu.classList.remove('open');
+          langWrapper?.classList.remove('open');
+          langToggle?.setAttribute('aria-expanded', 'false');
           return;
         }
-        localStorage.setItem("portfolio-lang", lang);
-        langMenu.querySelectorAll('[role="menuitemradio"]').forEach(b => b.setAttribute('aria-checked', b === btn ? 'true' : 'false'));
-        langMenu.classList.remove("open");
-        langWrapper?.classList.remove("open");
-        langToggle?.setAttribute("aria-expanded", "false");
+        localStorage.setItem('portfolio-lang', lang);
+        langMenu
+          .querySelectorAll('[role="menuitemradio"]')
+          .forEach((b) => b.setAttribute('aria-checked', b === btn ? 'true' : 'false'));
+        langMenu.classList.remove('open');
+        langWrapper?.classList.remove('open');
+        langToggle?.setAttribute('aria-expanded', 'false');
         clearTimeout(langSwitchTimer);
         document.body.classList.add('lang-switching');
         ensureLang(lang).catch(() => {}); // warm the locale cache during the fade
@@ -1274,20 +1748,17 @@ const structuredData = JSON.stringify({
       });
     });
 
-    document.addEventListener("click", (event) => {
+    document.addEventListener('click', (event) => {
       if (!langMenu || !langToggle) return;
       const target = event.target;
-      if (
-        target instanceof Node &&
-        (langMenu.contains(target) || langToggle.contains(target))
-      )
+      if (target instanceof Node && (langMenu.contains(target) || langToggle.contains(target)))
         return;
-      langMenu.classList.remove("open");
-      langWrapper?.classList.remove("open");
-      langToggle.setAttribute("aria-expanded", "false");
+      langMenu.classList.remove('open');
+      langWrapper?.classList.remove('open');
+      langToggle.setAttribute('aria-expanded', 'false');
     });
 
-    const savedLang = localStorage.getItem("portfolio-lang") || "en";
+    const savedLang = localStorage.getItem('portfolio-lang') || 'en';
     applyLanguage(savedLang);
     sfx.init();
 
@@ -1304,7 +1775,10 @@ const structuredData = JSON.stringify({
     const updateThemeIcon = () => {
       const isLight = document.documentElement.classList.contains('light');
       if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
-      themeToggle?.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+      themeToggle?.setAttribute(
+        'aria-label',
+        isLight ? 'Switch to dark mode' : 'Switch to light mode',
+      );
     };
     themeToggle?.addEventListener('click', () => {
       sfx.click();
@@ -1331,13 +1805,17 @@ const structuredData = JSON.stringify({
       const y = rect.top + rect.height / 2;
       const endRadius = Math.hypot(
         Math.max(x, window.innerWidth - x),
-        Math.max(y, window.innerHeight - y)
+        Math.max(y, window.innerHeight - y),
       );
       const transition = document.startViewTransition(doToggle);
       transition.ready.then(() => {
         document.documentElement.animate(
           { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
-          { duration: 900, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+          {
+            duration: 900,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            pseudoElement: '::view-transition-new(root)',
+          },
         );
       });
     });
@@ -1355,31 +1833,111 @@ const structuredData = JSON.stringify({
     const CMD_ICONS = {
       nav: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 5l4 3-4 3"/></svg>',
       link: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1v-3M10 2h4v4M14 2L8 8"/></svg>',
-      action: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5.5"/><path d="M8 5.5V8l1.5 1.5"/></svg>',
-      project: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg>',
+      action:
+        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5.5"/><path d="M8 5.5V8l1.5 1.5"/></svg>',
+      project:
+        '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="9" y="2.5" width="4.5" height="4.5" rx="1"/><rect x="2.5" y="9" width="4.5" height="4.5" rx="1"/><rect x="9" y="9" width="4.5" height="4.5" rx="1"/></svg>',
       find: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6.5" cy="6.5" r="3.5"/><path d="M9.5 9.5l3 3"/></svg>',
     };
 
     const getCommands = () => {
       const nav = currentProfile?.labels?.nav || I18N.en.labels.nav;
       const projects = (currentProfile?.projects || I18N.en.projects || []).map((p) => ({
-        group: 'Projects', label: p.name, icon: 'project', action: () => flashProject(p.name),
+        group: 'Projects',
+        label: p.name,
+        icon: 'project',
+        action: () => flashProject(p.name),
       }));
       return [
-        { group: 'Navigate', label: nav.education,  icon: 'nav',    action: () => scrollCmd('education')  },
-        { group: 'Navigate', label: nav.experience, icon: 'nav',    action: () => scrollCmd('experience') },
-        { group: 'Navigate', label: nav.projects,   icon: 'nav',    action: () => scrollCmd('projects')   },
-        { group: 'Navigate', label: nav.teaching,   icon: 'nav',    action: () => scrollCmd('teaching')   },
-        { group: 'Navigate', label: nav.skills,     icon: 'nav',    action: () => scrollCmd('skills')     },
-        { group: 'Navigate', label: nav.recommendations, icon: 'nav', action: () => scrollCmd('recommendations') },
-        { group: 'Navigate', label: nav.connect,         icon: 'nav', action: () => scrollCmd('connect')         },
+        {
+          group: 'Navigate',
+          label: nav.education,
+          icon: 'nav',
+          action: () => scrollCmd('education'),
+        },
+        {
+          group: 'Navigate',
+          label: nav.experience,
+          icon: 'nav',
+          action: () => scrollCmd('experience'),
+        },
+        {
+          group: 'Navigate',
+          label: nav.projects,
+          icon: 'nav',
+          action: () => scrollCmd('projects'),
+        },
+        {
+          group: 'Navigate',
+          label: nav.teaching,
+          icon: 'nav',
+          action: () => scrollCmd('teaching'),
+        },
+        { group: 'Navigate', label: nav.skills, icon: 'nav', action: () => scrollCmd('skills') },
+        {
+          group: 'Navigate',
+          label: nav.recommendations,
+          icon: 'nav',
+          action: () => scrollCmd('recommendations'),
+        },
+        { group: 'Navigate', label: nav.connect, icon: 'nav', action: () => scrollCmd('connect') },
         ...projects,
-        { group: 'Links',    label: 'LinkedIn',      icon: 'link',   action: () => { window.open(currentProfile?.links?.linkedin || I18N.en.links.linkedin, '_blank'); closeCmd(); } },
-        { group: 'Links',    label: 'GitHub',        icon: 'link',   action: () => { window.open(currentProfile?.links?.github || I18N.en.links.github, '_blank'); closeCmd(); } },
-        { group: 'Actions',  label: 'Toggle theme',  icon: 'action', action: () => { document.getElementById('theme-toggle')?.click(); closeCmd(); } },
-        { group: 'Actions',  label: 'Toggle sound',  icon: 'action', action: () => { sfx.toggleMute(); closeCmd(); } },
-        { group: 'Actions',  label: 'Copy email',    icon: 'action', action: () => { navigator.clipboard?.writeText(currentProfile?.email || '').then(() => showToast('Email copied')); closeCmd(); } },
-        { group: 'Actions',  label: 'Keyboard shortcuts', icon: 'action', action: () => { closeCmd(); openKbd(); } },
+        {
+          group: 'Links',
+          label: 'LinkedIn',
+          icon: 'link',
+          action: () => {
+            window.open(currentProfile?.links?.linkedin || I18N.en.links.linkedin, '_blank');
+            closeCmd();
+          },
+        },
+        {
+          group: 'Links',
+          label: 'GitHub',
+          icon: 'link',
+          action: () => {
+            window.open(currentProfile?.links?.github || I18N.en.links.github, '_blank');
+            closeCmd();
+          },
+        },
+        {
+          group: 'Actions',
+          label: 'Toggle theme',
+          icon: 'action',
+          action: () => {
+            document.getElementById('theme-toggle')?.click();
+            closeCmd();
+          },
+        },
+        {
+          group: 'Actions',
+          label: 'Toggle sound',
+          icon: 'action',
+          action: () => {
+            sfx.toggleMute();
+            closeCmd();
+          },
+        },
+        {
+          group: 'Actions',
+          label: 'Copy email',
+          icon: 'action',
+          action: () => {
+            navigator.clipboard
+              ?.writeText(currentProfile?.email || '')
+              .then(() => showToast('Email copied'));
+            closeCmd();
+          },
+        },
+        {
+          group: 'Actions',
+          label: 'Keyboard shortcuts',
+          icon: 'action',
+          action: () => {
+            closeCmd();
+            openKbd();
+          },
+        },
       ];
     };
 
@@ -1392,9 +1950,13 @@ const structuredData = JSON.stringify({
     const flashProject = (name) => {
       closeCmd();
       const projSec = document.getElementById('projects');
-      const card = Array.from(document.querySelectorAll('#projects .proj-card'))
-        .find((c) => c.querySelector('h3')?.textContent?.trim() === name);
-      if (!card) { projSec?.scrollIntoView({ behavior: scrollBehavior, block: 'start' }); return; }
+      const card = Array.from(document.querySelectorAll('#projects .proj-card')).find(
+        (c) => c.querySelector('h3')?.textContent?.trim() === name,
+      );
+      if (!card) {
+        projSec?.scrollIntoView({ behavior: scrollBehavior, block: 'start' });
+        return;
+      }
       card.scrollIntoView({ behavior: scrollBehavior, block: 'center' });
       card.classList.remove('cmd-flash');
       void card.offsetWidth;
@@ -1405,12 +1967,17 @@ const structuredData = JSON.stringify({
     const fuzzyScore = (text, q) => {
       text = text.toLowerCase();
       q = q.toLowerCase();
-      let ti = 0, score = 0, streak = 0;
+      let ti = 0,
+        score = 0,
+        streak = 0;
       for (let qi = 0; qi < q.length; qi++) {
         const ch = q[qi];
         let found = -1;
         for (let j = ti; j < text.length; j++) {
-          if (text[j] === ch) { found = j; break; }
+          if (text[j] === ch) {
+            found = j;
+            break;
+          }
         }
         if (found === -1) return -1;
         score += found === ti ? 2 + streak : 1;
@@ -1439,7 +2006,10 @@ const structuredData = JSON.stringify({
       cmdBackdrop?.classList.remove('open');
       cmdPalette?.classList.remove('open');
       cmdPalette?.setAttribute('aria-hidden', 'true');
-      if (cmdInput) { cmdInput.value = ''; cmdInput.setAttribute('aria-expanded', 'false'); }
+      if (cmdInput) {
+        cmdInput.value = '';
+        cmdInput.setAttribute('aria-expanded', 'false');
+      }
       if (!findCommitting) clearPageMarks();
       findCommitting = false;
       focusTrap.deactivate();
@@ -1448,9 +2018,12 @@ const structuredData = JSON.stringify({
     const setHighlight = (idx) => {
       const items = cmdResultsEl?.querySelectorAll('.cmd-item');
       if (!items) return;
-      items.forEach(i => i.classList.remove('highlighted'));
+      items.forEach((i) => i.classList.remove('highlighted'));
       const target = items[idx];
-      if (target) { target.classList.add('highlighted'); target.scrollIntoView({ block: 'nearest' }); }
+      if (target) {
+        target.classList.add('highlighted');
+        target.scrollIntoView({ block: 'nearest' });
+      }
       cmdHighlightIdx = idx;
       if (cmdInput) cmdInput.setAttribute('aria-activedescendant', target ? `cmd-opt-${idx}` : '');
     };
@@ -1482,13 +2055,21 @@ const structuredData = JSON.stringify({
       if (q) {
         grouped = false;
         cmdFiltered = all
-          .map((c) => ({ c, s: Math.max(fuzzyScore(c.label, q), fuzzyScore(c.group + ' ' + c.label, q) - 4) }))
+          .map((c) => ({
+            c,
+            s: Math.max(fuzzyScore(c.label, q), fuzzyScore(c.group + ' ' + c.label, q) - 4),
+          }))
           .filter((x) => x.s >= 0)
           .sort((a, b) => b.s - a.s)
           .map((x) => x.c);
         if (matchCount > 0) {
           cmdFiltered = [
-            { label: `${matchCount} match${matchCount === 1 ? '' : 'es'} on page`, group: 'Find', icon: 'find', action: commitFind },
+            {
+              label: `${matchCount} match${matchCount === 1 ? '' : 'es'} on page`,
+              group: 'Find',
+              icon: 'find',
+              action: commitFind,
+            },
             ...cmdFiltered,
           ];
         }
@@ -1504,7 +2085,10 @@ const structuredData = JSON.stringify({
           '"I\'m on my way." — J. Cole',
         ];
         const eq = emptyQuotes[Math.floor(Math.random() * emptyQuotes.length)];
-        cmdResultsEl.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:0.85rem;font-style:italic">' + eq + '</div>';
+        cmdResultsEl.innerHTML =
+          '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:0.85rem;font-style:italic">' +
+          eq +
+          '</div>';
         return;
       }
       let html = '';
@@ -1520,15 +2104,20 @@ const structuredData = JSON.stringify({
       cmdResultsEl.innerHTML = html;
       cmdResultsEl.querySelectorAll('.cmd-item').forEach((item, idx) => {
         item.addEventListener('click', () => cmdFiltered[idx]?.action());
-        item.addEventListener('mouseenter', () => { cmdHighlightIdx = idx; setHighlight(idx); });
+        item.addEventListener('mouseenter', () => {
+          cmdHighlightIdx = idx;
+          setHighlight(idx);
+        });
       });
     };
 
-    cmdInput?.addEventListener('input', e => renderCmd(e.target.value));
+    cmdInput?.addEventListener('input', (e) => renderCmd(e.target.value));
     cmdBackdrop?.addEventListener('click', closeCmd);
-    document.getElementById('cmd-trigger')?.addEventListener('click', () => cmdOpen ? closeCmd() : openCmd());
+    document
+      .getElementById('cmd-trigger')
+      ?.addEventListener('click', () => (cmdOpen ? closeCmd() : openCmd()));
 
-    document.addEventListener('keydown', e => {
+    document.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key.toLowerCase() === 'f')) {
         e.preventDefault();
         if (projOpen || kbdOpen) return;
@@ -1537,11 +2126,21 @@ const structuredData = JSON.stringify({
       }
       if (!cmdOpen) return;
       const items = cmdResultsEl?.querySelectorAll('.cmd-item');
-      if (e.key === 'Escape') { closeCmd(); return; }
+      if (e.key === 'Escape') {
+        closeCmd();
+        return;
+      }
       if (!items?.length) return;
-      if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight((cmdHighlightIdx + 1) % items.length); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight((cmdHighlightIdx - 1 + items.length) % items.length); }
-      else if (e.key === 'Enter') { e.preventDefault(); cmdFiltered[cmdHighlightIdx]?.action(); }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setHighlight((cmdHighlightIdx + 1) % items.length);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setHighlight((cmdHighlightIdx - 1 + items.length) % items.length);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        cmdFiltered[cmdHighlightIdx]?.action();
+      }
     });
 
     const kbdBackdrop = document.getElementById('kbd-backdrop');
@@ -1552,7 +2151,10 @@ const structuredData = JSON.stringify({
       kbdBackdrop?.classList.add('open');
       kbdOverlay?.classList.add('open');
       kbdOverlay?.setAttribute('aria-hidden', 'false');
-      if (kbdOverlay) { focusTrap.activate(kbdOverlay); kbdOverlay.focus(); }
+      if (kbdOverlay) {
+        focusTrap.activate(kbdOverlay);
+        kbdOverlay.focus();
+      }
     };
     const closeKbd = () => {
       kbdOpen = false;
@@ -1570,9 +2172,12 @@ const structuredData = JSON.stringify({
     let findCommitting = false;
 
     const clearPageMarks = () => {
-      pageMarks.forEach(m => {
+      pageMarks.forEach((m) => {
         const p = m.parentNode;
-        if (p) { p.replaceChild(document.createTextNode(m.textContent), m); p.normalize(); }
+        if (p) {
+          p.replaceChild(document.createTextNode(m.textContent), m);
+          p.normalize();
+        }
       });
       pageMarks = [];
       pageMarkQuery = null;
@@ -1587,22 +2192,30 @@ const structuredData = JSON.stringify({
       const walker = document.createTreeWalker(
         document.getElementById('main-content') || document.body,
         NodeFilter.SHOW_TEXT,
-        { acceptNode: n => {
-          const p = n.parentElement;
-          if (!p || ['SCRIPT','STYLE','MARK'].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
-          if (p.closest('.find-nav-bar,.cmd-palette,.kbd-overlay,.proj-modal')) return NodeFilter.FILTER_REJECT;
-          return NodeFilter.FILTER_ACCEPT;
-        }}
+        {
+          acceptNode: (n) => {
+            const p = n.parentElement;
+            if (!p || ['SCRIPT', 'STYLE', 'MARK'].includes(p.tagName))
+              return NodeFilter.FILTER_REJECT;
+            if (p.closest('.find-nav-bar,.cmd-palette,.kbd-overlay,.proj-modal'))
+              return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          },
+        },
       );
       const nodes = [];
       let node;
       while ((node = walker.nextNode())) nodes.push(node);
-      nodes.forEach(tn => {
+      nodes.forEach((tn) => {
         const text = tn.textContent;
-        if (!re.test(text)) { re.lastIndex = 0; return; }
+        if (!re.test(text)) {
+          re.lastIndex = 0;
+          return;
+        }
         re.lastIndex = 0;
         const frag = document.createDocumentFragment();
-        let last = 0, m;
+        let last = 0,
+          m;
         while ((m = re.exec(text)) !== null) {
           if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
           const mark = document.createElement('mark');
@@ -1645,20 +2258,35 @@ const structuredData = JSON.stringify({
     const commitFind = () => {
       findCommitting = true;
       closeCmd();
-      if (pageMarks.length) { findIdx = 0; updateFindActive(); showFindNav(); }
+      if (pageMarks.length) {
+        findIdx = 0;
+        updateFindActive();
+        showFindNav();
+      }
     };
 
     document.getElementById('find-nav-prev')?.addEventListener('click', () => {
-      if (pageMarks.length) { findIdx = (findIdx - 1 + pageMarks.length) % pageMarks.length; updateFindActive(); }
+      if (pageMarks.length) {
+        findIdx = (findIdx - 1 + pageMarks.length) % pageMarks.length;
+        updateFindActive();
+      }
     });
     document.getElementById('find-nav-next')?.addEventListener('click', () => {
-      if (pageMarks.length) { findIdx = (findIdx + 1) % pageMarks.length; updateFindActive(); }
+      if (pageMarks.length) {
+        findIdx = (findIdx + 1) % pageMarks.length;
+        updateFindActive();
+      }
     });
     document.getElementById('find-nav-close')?.addEventListener('click', hideFindNav);
 
     const SECTION_KEYS = {
-      e: 'experience', p: 'projects', s: 'skills',
-      t: 'teaching', d: 'education', c: 'connect', m: 'recommendations',
+      e: 'experience',
+      p: 'projects',
+      s: 'skills',
+      t: 'teaching',
+      d: 'education',
+      c: 'connect',
+      m: 'recommendations',
     };
     const isTypingTarget = (el) =>
       !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
@@ -1668,20 +2296,37 @@ const structuredData = JSON.stringify({
     document.addEventListener('keydown', (e) => {
       if (cmdOpen || isTypingTarget(document.activeElement)) return;
       if (projOpen) {
-        if (e.key === 'Escape') { e.preventDefault(); closeProject(); }
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeProject();
+        }
         return;
       }
       if (kbdOpen) {
-        if (e.key === 'Escape' || e.key === '?') { e.preventDefault(); closeKbd(); }
+        if (e.key === 'Escape' || e.key === '?') {
+          e.preventDefault();
+          closeKbd();
+        }
         return;
       }
       if (findNavOpen) {
-        if (e.key === 'Escape') { e.preventDefault(); hideFindNav(); }
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          hideFindNav();
+        }
         return;
       }
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === '?') { e.preventDefault(); openKbd(); return; }
-      if (e.key === '\\') { e.preventDefault(); document.getElementById('theme-toggle')?.click(); return; }
+      if (e.key === '?') {
+        e.preventDefault();
+        openKbd();
+        return;
+      }
+      if (e.key === '\\') {
+        e.preventDefault();
+        document.getElementById('theme-toggle')?.click();
+        return;
+      }
       if (gPending) {
         gPending = false;
         clearTimeout(gTimer);
@@ -1696,7 +2341,9 @@ const structuredData = JSON.stringify({
       if (e.key.toLowerCase() === 'g') {
         gPending = true;
         clearTimeout(gTimer);
-        gTimer = setTimeout(() => { gPending = false; }, 1200);
+        gTimer = setTimeout(() => {
+          gPending = false;
+        }, 1200);
       }
     });
 
@@ -1713,12 +2360,14 @@ const structuredData = JSON.stringify({
 
     const populateProject = (p) => {
       if (!projModalCard) return;
-      const tech = (p.tech || []).map((t) => {
-        const logo = getLogoUrlJS(t);
-        return logo
-          ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${escData(t)}</span>`
-          : `<span class="feat-pill">${escData(t)}</span>`;
-      }).join('');
+      const tech = (p.tech || [])
+        .map((t) => {
+          const logo = getLogoUrlJS(t);
+          return logo
+            ? `<span class="skill-badge-local"><img src="${logo}" alt="" aria-hidden="true" loading="lazy" />${escData(t)}</span>`
+            : `<span class="feat-pill">${escData(t)}</span>`;
+        })
+        .join('');
       const bullets = (p.bullets || []).map((b) => `<li>${escData(b)}</li>`).join('');
       const sim = buildProjectSim(p, currentProfile?.labels?.simLegends);
       const ghLink = p.links?.github
@@ -1730,13 +2379,17 @@ const structuredData = JSON.stringify({
       const docsLink = p.links?.docs
         ? `<a class="feat-gh" href="${p.links.docs}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 1A1.5 1.5 0 0 0 2 2.5v11A1.5 1.5 0 0 0 3.5 15H13a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3.5zM3 2.5a.5.5 0 0 1 .5-.5H13v9H3.5a1.5 1.5 0 0 0-.5.085V2.5zM3.5 12H13v2H3.5a.5.5 0 0 1 0-1zM5 4h6v1H5V4zm0 2.5h6v1H5v-1z"/></svg>docs.rs</a>`
         : '';
-      const badgesHtml = (p.badges || []).map((b) =>
-        `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ''}"><a class="feat-gh" href="${b.link || '#'}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${b.pillLabel}</a> ${b.platform}</span>`
-      ).join(' ');
+      const badgesHtml = (p.badges || [])
+        .map(
+          (b) =>
+            `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ''}"><a class="feat-gh" href="${b.link || '#'}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${b.pillLabel}</a> ${b.platform}</span>`,
+        )
+        .join(' ');
       const badgeBullet = badgesHtml ? `<li class="badge-bullet">${badgesHtml}</li>` : '';
-      const actions = (ghLink || cratesLink || docsLink)
-        ? `<div class="proj-card-actions proj-modal-actions">${ghLink}${cratesLink}${docsLink}</div>`
-        : '';
+      const actions =
+        ghLink || cratesLink || docsLink
+          ? `<div class="proj-card-actions proj-modal-actions">${ghLink}${cratesLink}${docsLink}</div>`
+          : '';
       projModalCard.innerHTML = `
         <div class="proj-modal-head">
           <h3>${escData(p.name)}</h3>
@@ -1744,7 +2397,7 @@ const structuredData = JSON.stringify({
         ${actions}
         <div class="project-tech-pills">${tech}</div>
         ${p.impact ? `<div class="project-impact">${escData(stripImpact(p.impact))}</div>` : ''}
-        ${(bullets || badgeBullet) ? `<ul class="project-bullets">${badgeBullet}${bullets}</ul>` : ''}
+        ${bullets || badgeBullet ? `<ul class="project-bullets">${badgeBullet}${bullets}</ul>` : ''}
         ${sim}
       `;
       const sv = projModalCard.querySelector('.sim-visual');
@@ -1780,7 +2433,11 @@ const structuredData = JSON.stringify({
 
     const openProject = (p, card) => {
       projLastCard = card;
-      if (!supportsVT || reduceMotion()) { populateProject(p); showProjModal(); return; }
+      if (!supportsVT || reduceMotion()) {
+        populateProject(p);
+        showProjModal();
+        return;
+      }
       card.style.transform = '';
       card.style.viewTransitionName = PROJ_VT;
       const t = document.startViewTransition(() => {
@@ -1789,19 +2446,26 @@ const structuredData = JSON.stringify({
         showProjModal();
         projModalCard.style.viewTransitionName = PROJ_VT;
       });
-      t.finished.finally(() => { if (projModalCard) projModalCard.style.viewTransitionName = ''; });
+      t.finished.finally(() => {
+        if (projModalCard) projModalCard.style.viewTransitionName = '';
+      });
     };
 
     const closeProject = () => {
       if (!projOpen) return;
-      if (!supportsVT || reduceMotion()) { hideProjModal(); return; }
+      if (!supportsVT || reduceMotion()) {
+        hideProjModal();
+        return;
+      }
       projModalCard.style.viewTransitionName = PROJ_VT;
       const t = document.startViewTransition(() => {
         projModalCard.style.viewTransitionName = '';
         hideProjModal();
         if (projLastCard) projLastCard.style.viewTransitionName = PROJ_VT;
       });
-      t.finished.finally(() => { if (projLastCard) projLastCard.style.viewTransitionName = ''; });
+      t.finished.finally(() => {
+        if (projLastCard) projLastCard.style.viewTransitionName = '';
+      });
     };
 
     const projectsSection = document.getElementById('projects');
@@ -1809,7 +2473,10 @@ const structuredData = JSON.stringify({
       const card = e.target.closest?.('.proj-card');
       if (!card || !projectsSection.contains(card)) return;
       const simBtn = e.target.closest?.('.sim-toggle');
-      if (simBtn) { openSimOverlay(card); return; }
+      if (simBtn) {
+        openSimOverlay(card);
+        return;
+      }
       if (e.target.closest('a, button')) return;
       const sel = window.getSelection?.();
       if (sel && sel.toString().length > 0) return;
@@ -1830,72 +2497,84 @@ const structuredData = JSON.stringify({
     projClose?.addEventListener('click', closeProject);
 
     if (!prefersReduced) {
-      const simObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const sim = entry.target.querySelector(".sim-visual");
-          if (sim) sim.classList.add("active");
-          simObserver.unobserve(entry.target);
-        });
-      }, { threshold: 0.25 });
+      const simObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const sim = entry.target.querySelector('.sim-visual');
+            if (sim) sim.classList.add('active');
+            simObserver.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.25 },
+      );
       const observedSimCards = new WeakSet();
       const observeSims = () => {
-        document.querySelectorAll(".proj-card").forEach((card) => {
-          if (observedSimCards.has(card) || !card.querySelector(".sim-visual")) return;
+        document.querySelectorAll('.proj-card').forEach((card) => {
+          if (observedSimCards.has(card) || !card.querySelector('.sim-visual')) return;
           observedSimCards.add(card);
           simObserver.observe(card);
         });
       };
       observeSims();
 
-      const contentEl = document.querySelector(".content");
+      const contentEl = document.querySelector('.content');
       if (contentEl) {
         new MutationObserver((mutations) => {
-          if (mutations.every(m => m.target.closest && m.target.closest('#spotify-line'))) return;
+          if (mutations.every((m) => m.target.closest && m.target.closest('#spotify-line'))) return;
           observeSims();
         }).observe(contentEl, { childList: true, subtree: true });
       }
 
-      document.querySelectorAll("section[id]").forEach((sec) => {
+      document.querySelectorAll('section[id]').forEach((sec) => {
         new MutationObserver((_, obs) => {
-          if (sec.classList.contains("section-revealed")) {
-            const h2 = sec.querySelector("h2");
+          if (sec.classList.contains('section-revealed')) {
+            const h2 = sec.querySelector('h2');
             if (h2 && !typed.has(h2)) {
               typed.add(h2);
               typeH2(h2);
             }
             obs.disconnect();
           }
-        }).observe(sec, { attributes: true, attributeFilter: ["class"] });
+        }).observe(sec, { attributes: true, attributeFilter: ['class'] });
       });
 
       // Mobile: pull-to-refresh animation (visual only)
       {
         const pullEl = document.getElementById('pull-indicator');
         if (pullEl && 'ontouchstart' in window) {
-          let pullStartY = 0, pulling = false;
-          document.addEventListener('touchstart', (e) => {
-            if (window.scrollY < 5 && !cmdOpen && !projOpen && !kbdOpen) {
-              pullStartY = e.touches[0].clientY;
-              pulling = true;
-            }
-          }, { passive: true });
+          let pullStartY = 0,
+            pulling = false;
+          document.addEventListener(
+            'touchstart',
+            (e) => {
+              if (window.scrollY < 5 && !cmdOpen && !projOpen && !kbdOpen) {
+                pullStartY = e.touches[0].clientY;
+                pulling = true;
+              }
+            },
+            { passive: true },
+          );
           let lastPullDy = 0;
-          document.addEventListener('touchmove', (e) => {
-            if (!pulling) return;
-            const dy = e.touches[0].clientY - pullStartY;
-            lastPullDy = dy;
-            if (dy > 40 && dy < 200) {
-              pullEl.classList.add('visible');
-              // transform, not top: layout properties during an active touch
-              // gesture force layout per touchmove.
-              pullEl.style.transform = `translate(-50%, ${Math.min(dy * 0.3, 48) - 16}px)`;
-              pullEl.style.opacity = Math.min((dy - 40) / 80, 1);
-            } else if (dy <= 0) {
-              pullEl.classList.remove('visible');
-              pulling = false;
-            }
-          }, { passive: true });
+          document.addEventListener(
+            'touchmove',
+            (e) => {
+              if (!pulling) return;
+              const dy = e.touches[0].clientY - pullStartY;
+              lastPullDy = dy;
+              if (dy > 40 && dy < 200) {
+                pullEl.classList.add('visible');
+                // transform, not top: layout properties during an active touch
+                // gesture force layout per touchmove.
+                pullEl.style.transform = `translate(-50%, ${Math.min(dy * 0.3, 48) - 16}px)`;
+                pullEl.style.opacity = Math.min((dy - 40) / 80, 1);
+              } else if (dy <= 0) {
+                pullEl.classList.remove('visible');
+                pulling = false;
+              }
+            },
+            { passive: true },
+          );
           const endPull = () => {
             if (!pulling) return;
             pulling = false;
@@ -1919,22 +2598,31 @@ const structuredData = JSON.stringify({
         const modal = document.getElementById('proj-modal');
         const modalCard = modal?.querySelector('.proj-modal-card');
         if (modal && modalCard) {
-          let mStartY = 0, mDragging = false;
-          modal.addEventListener('touchstart', (e) => {
-            if (modalCard.scrollTop > 5) return;
-            mStartY = e.touches[0].clientY;
-            mDragging = true;
-          }, { passive: true });
-          modal.addEventListener('touchmove', (e) => {
-            if (!mDragging) return;
-            const dy = e.touches[0].clientY - mStartY;
-            if (dy > 0) {
-              modal.style.transform = `translate(-50%, calc(-50% + ${dy}px))`;
-            } else {
-              mDragging = false;
-              modal.style.transform = '';
-            }
-          }, { passive: true });
+          let mStartY = 0,
+            mDragging = false;
+          modal.addEventListener(
+            'touchstart',
+            (e) => {
+              if (modalCard.scrollTop > 5) return;
+              mStartY = e.touches[0].clientY;
+              mDragging = true;
+            },
+            { passive: true },
+          );
+          modal.addEventListener(
+            'touchmove',
+            (e) => {
+              if (!mDragging) return;
+              const dy = e.touches[0].clientY - mStartY;
+              if (dy > 0) {
+                modal.style.transform = `translate(-50%, calc(-50% + ${dy}px))`;
+              } else {
+                mDragging = false;
+                modal.style.transform = '';
+              }
+            },
+            { passive: true },
+          );
           const endDrag = (e) => {
             if (!mDragging) return;
             mDragging = false;
@@ -1945,44 +2633,67 @@ const structuredData = JSON.stringify({
             modal.style.transform = '';
           };
           modal.addEventListener('touchend', endDrag, { passive: true });
-          modal.addEventListener('touchcancel', () => { mDragging = false; modal.style.transform = ''; }, { passive: true });
+          modal.addEventListener(
+            'touchcancel',
+            () => {
+              mDragging = false;
+              modal.style.transform = '';
+            },
+            { passive: true },
+          );
         }
       }
-
-
 
       // Pinch-to-zoom on sim visuals (inside project modal)
       {
         const modalEl = document.getElementById('proj-modal');
         if (modalEl && 'ontouchstart' in window) {
-          let initDist = 0, curScale = 1, zooming = false, simTarget = null;
-          const getDist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
-          modalEl.addEventListener('touchstart', (e) => {
-            if (e.touches.length !== 2) return;
-            simTarget = e.target.closest('.sim-visual');
-            if (!simTarget) return;
-            zooming = true;
-            initDist = getDist(e.touches);
-            const rect = simTarget.getBoundingClientRect();
-            const mx = ((e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left) / rect.width * 100;
-            const my = ((e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top) / rect.height * 100;
-            simTarget.style.setProperty('--pinch-x', mx + '%');
-            simTarget.style.setProperty('--pinch-y', my + '%');
-            simTarget.classList.add('pinch-zooming');
-          }, { passive: true });
-          modalEl.addEventListener('touchmove', (e) => {
-            if (!zooming || e.touches.length !== 2 || !simTarget) return;
-            const dist = getDist(e.touches);
-            curScale = Math.max(1, Math.min(3, dist / initDist));
-            simTarget.style.transform = `scale(${curScale})`;
-          }, { passive: true });
+          let initDist = 0,
+            curScale = 1,
+            zooming = false,
+            simTarget = null;
+          const getDist = (t) =>
+            Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+          modalEl.addEventListener(
+            'touchstart',
+            (e) => {
+              if (e.touches.length !== 2) return;
+              simTarget = e.target.closest('.sim-visual');
+              if (!simTarget) return;
+              zooming = true;
+              initDist = getDist(e.touches);
+              const rect = simTarget.getBoundingClientRect();
+              const mx =
+                (((e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left) / rect.width) *
+                100;
+              const my =
+                (((e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top) / rect.height) *
+                100;
+              simTarget.style.setProperty('--pinch-x', mx + '%');
+              simTarget.style.setProperty('--pinch-y', my + '%');
+              simTarget.classList.add('pinch-zooming');
+            },
+            { passive: true },
+          );
+          modalEl.addEventListener(
+            'touchmove',
+            (e) => {
+              if (!zooming || e.touches.length !== 2 || !simTarget) return;
+              const dist = getDist(e.touches);
+              curScale = Math.max(1, Math.min(3, dist / initDist));
+              simTarget.style.transform = `scale(${curScale})`;
+            },
+            { passive: true },
+          );
           const endZoom = () => {
             if (!zooming || !simTarget) return;
             zooming = false;
             simTarget.style.transition = 'transform 0.3s ease';
             simTarget.style.transform = '';
             simTarget.classList.remove('pinch-zooming');
-            setTimeout(() => { if (simTarget) simTarget.style.transition = ''; }, 300);
+            setTimeout(() => {
+              if (simTarget) simTarget.style.transition = '';
+            }, 300);
             simTarget = null;
             curScale = 1;
           };
@@ -1993,7 +2704,18 @@ const structuredData = JSON.stringify({
 
       // Easter egg: Konami code (desktop) + triple-tap logo (mobile)
       {
-        const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+        const KONAMI = [
+          'ArrowUp',
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowDown',
+          'ArrowLeft',
+          'ArrowRight',
+          'ArrowLeft',
+          'ArrowRight',
+          'b',
+          'a',
+        ];
         let konamiIdx = 0;
         const easterOverlay = document.getElementById('easter-overlay');
 
@@ -2001,14 +2723,15 @@ const structuredData = JSON.stringify({
           if (!easterOverlay) return;
           easterOverlay.innerHTML = '';
           easterOverlay.classList.add('active');
-          const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+          const chars =
+            'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
           const colCount = Math.floor(window.innerWidth / 20);
           for (let i = 0; i < colCount; i++) {
             const col = document.createElement('div');
             col.className = 'matrix-col';
-            col.style.left = (i * 20 + Math.random() * 6) + 'px';
-            col.style.animationDuration = (2 + Math.random() * 3) + 's';
-            col.style.animationDelay = (Math.random() * 2) + 's';
+            col.style.left = i * 20 + Math.random() * 6 + 'px';
+            col.style.animationDuration = 2 + Math.random() * 3 + 's';
+            col.style.animationDelay = Math.random() * 2 + 's';
             let str = '';
             const len = 8 + Math.floor(Math.random() * 16);
             for (let j = 0; j < len; j++) str += chars[Math.floor(Math.random() * chars.length)];
@@ -2019,7 +2742,9 @@ const structuredData = JSON.stringify({
           showToast('You found the secret');
           setTimeout(() => {
             easterOverlay.classList.remove('active');
-            setTimeout(() => { easterOverlay.innerHTML = ''; }, 500);
+            setTimeout(() => {
+              easterOverlay.innerHTML = '';
+            }, 500);
           }, 5000);
         };
 
@@ -2027,14 +2752,15 @@ const structuredData = JSON.stringify({
           if (cmdOpen || projOpen || kbdOpen) return;
           if (e.key === KONAMI[konamiIdx]) {
             konamiIdx++;
-            if (konamiIdx === KONAMI.length) { konamiIdx = 0; triggerEasterEgg(); }
+            if (konamiIdx === KONAMI.length) {
+              konamiIdx = 0;
+              triggerEasterEgg();
+            }
           } else {
             konamiIdx = e.key === KONAMI[0] ? 1 : 0;
           }
         });
-
       }
-
     }
 
     initSpotify();
@@ -2042,7 +2768,12 @@ const structuredData = JSON.stringify({
     function updateBakuTime() {
       const el = document.getElementById('local-time');
       if (!el) return;
-      el.textContent = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Baku', hour: 'numeric', minute: '2-digit', hour12: true });
+      el.textContent = new Date().toLocaleTimeString('en-US', {
+        timeZone: 'Asia/Baku',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      });
     }
     updateBakuTime();
     setInterval(updateBakuTime, 30000);
@@ -2056,13 +2787,16 @@ const structuredData = JSON.stringify({
         if (scrollTlObs) scrollTlObs.disconnect();
         const items = document.querySelectorAll('.scroll-tl-item');
         if (!items.length) return;
-        scrollTlObs = new IntersectionObserver((entries) => {
-          entries.forEach(e => {
-            if (e.isIntersecting) e.target.classList.add('in-view');
-            else e.target.classList.remove('in-view');
-          });
-        }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-        items.forEach(i => scrollTlObs.observe(i));
+        scrollTlObs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) e.target.classList.add('in-view');
+              else e.target.classList.remove('in-view');
+            });
+          },
+          { threshold: 0.15, rootMargin: '0px 0px -8% 0px' },
+        );
+        items.forEach((i) => scrollTlObs.observe(i));
       };
       initScrollTl();
 
@@ -2070,7 +2804,7 @@ const structuredData = JSON.stringify({
       if (contentEl) {
         let scrollTlTimer;
         new MutationObserver((mutations) => {
-          if (mutations.every(m => m.target.closest && m.target.closest('#spotify-line'))) return;
+          if (mutations.every((m) => m.target.closest && m.target.closest('#spotify-line'))) return;
           clearTimeout(scrollTlTimer);
           scrollTlTimer = setTimeout(initScrollTl, 200);
         }).observe(contentEl, { childList: true, subtree: true });
@@ -2115,8 +2849,5 @@ const structuredData = JSON.stringify({
         connectObs.observe(connectEl, { attributes: true, attributeFilter: ['class'] });
       }
     }
-
-
-
   </script>
 </BaseLayout>

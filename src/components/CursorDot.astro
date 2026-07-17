@@ -3,9 +3,18 @@
 <script>
   const cursorDot = document.querySelector('.cursor-dot');
   const cursorReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (cursorDot instanceof HTMLElement && window.matchMedia('(hover: hover)').matches && !cursorReduced) {
+  if (
+    cursorDot instanceof HTMLElement &&
+    window.matchMedia('(hover: hover)').matches &&
+    !cursorReduced
+  ) {
     document.body.classList.add('cursor-active');
-    let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, dotVisible = false, dotScale = 1;
+    let mouseX = 0,
+      mouseY = 0,
+      dotX = 0,
+      dotY = 0,
+      dotVisible = false,
+      dotScale = 1;
 
     let dotAnimId: number | null = null;
     const animateDot = () => {
@@ -37,7 +46,7 @@
     });
 
     document.addEventListener('mouseover', (e) => {
-      dotScale = (e.target instanceof Element && e.target.closest('a, button')) ? 3 : 1;
+      dotScale = e.target instanceof Element && e.target.closest('a, button') ? 3 : 1;
     });
   }
 </script>
