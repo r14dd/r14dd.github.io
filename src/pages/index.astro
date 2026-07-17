@@ -590,7 +590,7 @@ const structuredData = JSON.stringify({
             return { lines: out };
           },
           projects: (args, raw, stdin, solo) => {
-            if (solo) setTimeout(() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 600);
+            if (solo) setTimeout(() => document.getElementById('projects')?.scrollIntoView({ behavior: scrollBehavior, block: 'start' }), 600);
             return { lines: projects.length ? projects.map(x => x.name + (x.tech && x.tech.length ? ' — ' + x.tech.join(', ') : '')) : ['No projects loaded.'] };
           },
           skills: () => ({ lines: skills.length ? skills.map(s => s.category + ': ' + skillItems(s).join(', ')) : ['Rust · Python · Go · Tokio · FastAPI', 'Kafka · PostgreSQL · Docker · AWS'] }),
@@ -885,7 +885,7 @@ const structuredData = JSON.stringify({
       if (!id) return;
       const section = document.getElementById(id);
       if (!section) return;
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
+      section.scrollIntoView({ behavior: scrollBehavior, block: "start" });
     };
 
     window.addEventListener("hashchange", openFromHash);
@@ -898,6 +898,9 @@ const structuredData = JSON.stringify({
     const mobileMenu = document.getElementById("mobile-nav-menu");
     const mobileMenuLinks = mobileMenu ? Array.from(mobileMenu.querySelectorAll("a")) : [];
 
+    // Runs every scroll frame — DOM writes are gated on the active id actually
+    // changing so a steady scroll doesn't mutate (and re-layout) per frame.
+    let lastActiveId = null;
     const setActiveLink = () => {
       const scrollPos = window.scrollY + 120;
       let current = sections[0];
@@ -907,6 +910,8 @@ const structuredData = JSON.stringify({
       if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 4) {
         current = sections[sections.length - 1];
       }
+      if (current?.id === lastActiveId) return;
+      lastActiveId = current?.id ?? null;
       navLinks.forEach((link) => link.classList.remove("active"));
       const active = navLinks.find(link => link.getAttribute("href") === `#${current.id}`);
       active?.classList.add("active");
@@ -917,10 +922,12 @@ const structuredData = JSON.stringify({
         mobileMenuLinks.forEach(a => a.classList.toggle("active", a === mobileActive));
       }
     };
+    const refreshActiveLink = () => { lastActiveId = null; setActiveLink(); };
 
     const smoothScrollTo = (el, duration = 480) => {
-      const start = window.scrollY;
       const end = el.getBoundingClientRect().top + window.scrollY - 24;
+      if (prefersReducedMotion) { window.scrollTo(0, end); return; }
+      const start = window.scrollY;
       const startTime = performance.now();
       const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
       const step = (now) => {
@@ -930,6 +937,8 @@ const structuredData = JSON.stringify({
       };
       requestAnimationFrame(step);
     };
+    // prefers-reduced-motion variant for every scrollIntoView call site.
+    const scrollBehavior = prefersReducedMotion ? "auto" : "smooth";
 
     navLinks.forEach((link) => {
       link.addEventListener("click", (e) => {
@@ -1031,7 +1040,11 @@ const structuredData = JSON.stringify({
       const content = simOverlay.querySelector(".sim-overlay-content");
       content.innerHTML = sv.outerHTML;
       const cloned = content.querySelector(".sim-visual");
-      if (cloned) cloned.classList.add("active");
+      if (cloned) {
+        cloned.classList.add("active");
+        // CSS can't stop SMIL — drop <animate> nodes under reduced motion.
+        if (prefersReducedMotion) cloned.querySelectorAll("animate").forEach((a) => a.remove());
+      }
       simOverlay.classList.add("open");
       simTimer = setTimeout(closeSimOverlay, 3000);
     };
@@ -1205,7 +1218,7 @@ const structuredData = JSON.stringify({
 
       initCarousel();
 
-      setActiveLink();
+      refreshActiveLink();
     };
 
     const langWrapper = document.querySelector(".lang-switcher");
@@ -1353,7 +1366,7 @@ const structuredData = JSON.stringify({
 
     const scrollCmd = (id) => {
       const sec = document.getElementById(id);
-      sec?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      sec?.scrollIntoView({ behavior: scrollBehavior, block: 'start' });
       closeCmd();
     };
 
@@ -1362,8 +1375,8 @@ const structuredData = JSON.stringify({
       const projSec = document.getElementById('projects');
       const card = Array.from(document.querySelectorAll('#projects .proj-card'))
         .find((c) => c.querySelector('h3')?.textContent?.trim() === name);
-      if (!card) { projSec?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
-      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (!card) { projSec?.scrollIntoView({ behavior: scrollBehavior, block: 'start' }); return; }
+      card.scrollIntoView({ behavior: scrollBehavior, block: 'center' });
       card.classList.remove('cmd-flash');
       void card.offsetWidth;
       card.classList.add('cmd-flash');
@@ -1423,12 +1436,30 @@ const structuredData = JSON.stringify({
       if (cmdInput) cmdInput.setAttribute('aria-activedescendant', target ? `cmd-opt-${idx}` : '');
     };
 
-    const renderCmd = (query) => {
+    // The full-page find-and-mark pass (TreeWalker + replaceChild per hit) is
+    // too heavy to run per keystroke — debounce it and re-render the palette
+    // when the marks land. The command list itself stays synchronous.
+    let pageMarkQuery = null;
+    let pageMarkCount = 0;
+    let pageMarkTimer = null;
+    const schedulePageMarks = (q) => {
+      if (q === pageMarkQuery) return;
+      clearTimeout(pageMarkTimer);
+      pageMarkTimer = setTimeout(() => {
+        // clearPageMarks (inside highlightPage) resets pageMarkQuery — set it after.
+        pageMarkCount = q.length >= 2 ? highlightPage(q) : (clearPageMarks(), 0);
+        pageMarkQuery = q;
+        if (cmdOpen && cmdInput && cmdInput.value.trim() === q) renderCmd(cmdInput.value, true);
+      }, 120);
+    };
+
+    const renderCmd = (query, fromMarks = false) => {
       if (!cmdResultsEl) return;
       const all = getCommands();
       const q = query.trim();
       let grouped = true;
-      const matchCount = q.length >= 2 ? highlightPage(q) : (clearPageMarks(), 0);
+      if (!fromMarks) schedulePageMarks(q);
+      const matchCount = q === pageMarkQuery ? pageMarkCount : 0;
       if (q) {
         grouped = false;
         cmdFiltered = all
@@ -1525,6 +1556,8 @@ const structuredData = JSON.stringify({
         if (p) { p.replaceChild(document.createTextNode(m.textContent), m); p.normalize(); }
       });
       pageMarks = [];
+      pageMarkQuery = null;
+      pageMarkCount = 0;
     };
 
     const highlightPage = (q) => {
@@ -1570,7 +1603,7 @@ const structuredData = JSON.stringify({
       pageMarks.forEach((m, i) => m.classList.toggle('search-highlight-active', i === findIdx));
       const cur = pageMarks[findIdx];
       if (cur) {
-        cur.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cur.scrollIntoView({ behavior: scrollBehavior, block: 'center' });
       }
       const el = document.getElementById('find-nav-count');
       if (el) el.textContent = pageMarks.length ? `${findIdx + 1} / ${pageMarks.length}` : '';
@@ -1636,7 +1669,7 @@ const structuredData = JSON.stringify({
         const id = SECTION_KEYS[e.key.toLowerCase()];
         if (id) {
           e.preventDefault();
-          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.getElementById(id)?.scrollIntoView({ behavior: scrollBehavior, block: 'start' });
           history.pushState(null, '', `#${id}`);
         }
         return;
@@ -1696,7 +1729,10 @@ const structuredData = JSON.stringify({
         ${sim}
       `;
       const sv = projModalCard.querySelector('.sim-visual');
-      if (sv) sv.classList.add('active');
+      if (sv) {
+        sv.classList.add('active');
+        if (reduceMotion()) sv.querySelectorAll('animate').forEach((a) => a.remove());
+      }
       fetchBadges(projModalCard);
     };
 
@@ -1832,7 +1868,9 @@ const structuredData = JSON.stringify({
             lastPullDy = dy;
             if (dy > 40 && dy < 200) {
               pullEl.classList.add('visible');
-              pullEl.style.top = `${Math.min(dy * 0.3, 48)}px`;
+              // transform, not top: layout properties during an active touch
+              // gesture force layout per touchmove.
+              pullEl.style.transform = `translate(-50%, ${Math.min(dy * 0.3, 48) - 16}px)`;
               pullEl.style.opacity = Math.min((dy - 40) / 80, 1);
             } else if (dy <= 0) {
               pullEl.classList.remove('visible');
@@ -1848,6 +1886,7 @@ const structuredData = JSON.stringify({
             } else {
               pullEl.classList.remove('visible');
               pullEl.style.opacity = '';
+              pullEl.style.transform = '';
             }
             lastPullDy = 0;
           };

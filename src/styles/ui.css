@@ -35,9 +35,9 @@
 
 .pull-indicator {
   position: fixed;
-  top: -3rem;
+  top: 1rem;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -4rem);
   z-index: 100;
   width: 2.5rem;
   height: 2.5rem;
@@ -48,14 +48,14 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: top 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
   pointer-events: none;
 }
 
 .pull-indicator svg { width: 16px; height: 16px; color: var(--accent); }
 
 .pull-indicator.visible {
-  top: 1rem;
+  transform: translate(-50%, 0);
   opacity: 1;
 }
 
@@ -616,4 +616,12 @@ mark.search-highlight-active {
 
 @media (max-width: 1169px) {
   .find-nav-bar { display: none !important; }
+}
+
+/* The film-grain overlay is a permanent full-screen compositor layer blended
+   every frame — measurable GPU/battery cost on phones for a subtle texture. */
+@media (max-width: 768px) {
+  body::after {
+    display: none;
+  }
 }

@@ -1,6 +1,8 @@
 let carouselTimer: ReturnType<typeof setInterval> | null = null;
 let carouselAbort: AbortController | null = null;
 let scrollEndTimer: ReturnType<typeof setTimeout> | null = null;
+let hintObs: IntersectionObserver | null = null;
+let autoObs: IntersectionObserver | null = null;
 const DOT_COUNT = 5;
 
 export function initCarousel() {
@@ -162,14 +164,19 @@ export function initCarousel() {
 
   const recsSection = document.getElementById('recommendations');
   if (recsSection) {
-    const hintObs = new IntersectionObserver((entries) => {
+    // initCarousel re-runs on every language switch against the persistent
+    // #recommendations element — disconnect the previous pair so stale
+    // closures (holding detached carousel nodes) stop firing.
+    hintObs?.disconnect();
+    autoObs?.disconnect();
+    hintObs = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        hintObs.disconnect();
+        hintObs?.disconnect();
         setTimeout(runHint, 400);
       }
     }, { threshold: 0.3 });
     hintObs.observe(recsSection);
-    const autoObs = new IntersectionObserver((entries) => {
+    autoObs = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) { if (!carouselTimer) startAutoplay(); }
       else { if (carouselTimer) clearInterval(carouselTimer); carouselTimer = null; }
     }, { threshold: 0 });

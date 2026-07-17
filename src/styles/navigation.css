@@ -409,3 +409,18 @@ body.lang-switching .lang-switcher {
     transition: none;
   }
 }
+
+/* Persistent fixed chrome pays backdrop-filter resampling on every scrolled
+   frame — on phones (where frames are most expensive and the pill is shown
+   *while* scrolling) trade the blur for a near-opaque panel. Transient
+   surfaces (menus, palette, modal) keep their blur: they only cost while open. */
+@media (max-width: 768px) {
+  .theme-toggle,
+  .lang-toggle,
+  .cmd-trigger,
+  .mobile-nav-pill {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--surface-panel);
+  }
+}

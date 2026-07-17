@@ -229,3 +229,12 @@ html.light .sim-overlay.open {
   0%, 100% { fill: rgba(var(--accent-rgb), 0.22); stroke: rgba(var(--accent-rgb), 0.55); }
   50% { fill: rgba(var(--accent-rgb), 0.38); stroke: rgba(var(--accent-rgb), 0.7); }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .sim-visual *,
+  .sim-visual::before,
+  .sim-visual::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

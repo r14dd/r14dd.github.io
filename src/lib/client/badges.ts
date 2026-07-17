@@ -27,6 +27,9 @@ const badgeObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 
 export async function fetchBadges(root?: HTMLElement | null) {
+  // Each call renders fresh badge nodes (language switch replaces innerHTML) —
+  // drop observations of the now-detached previous generation.
+  badgeObserver.disconnect();
   const badges = Array.from((root || document).querySelectorAll('.proj-badge-live')) as HTMLElement[];
   for (const el of badges) {
     const api = (el as HTMLElement).dataset.badgeApi;

@@ -172,6 +172,8 @@ function _applySpotify(el: HTMLElement, data: any) {
   if (data.playing && data.duration) {
     _spotifyProgress = { start: Date.now(), offset: data.progress || 0, duration: data.duration };
     function tickProgress() {
+      // Progress derives from wall clock, so it self-corrects on wake.
+      if (document.hidden) return;
       const bar = document.getElementById('spotify-bar');
       const elapsedEl = document.getElementById('spotify-elapsed');
       const remainEl = document.getElementById('spotify-remaining');
