@@ -1,4 +1,6 @@
 export type Project = {
+  /** Stable key used to attach RU/AZ translations — never rendered. */
+  id: string;
   name: string;
   tech: string[];
   date?: string;
@@ -126,6 +128,7 @@ export const profile: Profile = {
 
   projects: [
     {
+      id: "patent",
       name: "patent",
       tech: ["Rust", "Tokio", "Ollama", "ratatui", "fastembed"],
       impact: "CLI that takes a plain-English dev-tool idea, searches open-source registries for existing implementations, ranks matches with local embeddings, and writes a scoped verdict via LLM.",
@@ -146,6 +149,7 @@ export const profile: Profile = {
       ],
     },
     {
+      id: "quorumrag",
       name: "QuorumRAG.rs — Consensus-Based RAG",
       tech: ["Rust", "Ollama", "Tokio"],
       impact: "Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Achieved 95% recall vs 70% baseline.",
@@ -163,6 +167,7 @@ export const profile: Profile = {
       },
     },
     {
+      id: "almostaykhan",
       name: "almostAykhan — ABB Bank RAG Chatbot",
       tech: ["Python", "FastAPI", "OpenAI", "FAISS", "Docker"],
       impact: "RAG chatbot answering questions exclusively from ABB Bank's public content with multilingual support and strict context-only guardrails.",
@@ -178,6 +183,7 @@ export const profile: Profile = {
       },
     },
     {
+      id: "matchsentinel",
       name: "MatchSentinel — Transaction Monitoring Platform",
       tech: [
         "Java",
@@ -200,6 +206,7 @@ export const profile: Profile = {
       },
     },
     {
+      id: "raft",
       name: "Raft-Based Consensus Algorithm",
       tech: ["Go", "UDP", "Protobuf"],
       impact:
@@ -214,6 +221,7 @@ export const profile: Profile = {
       ],
     },
     {
+      id: "kademlia",
       name: "Distributed Hash Table (Kademlia)",
       tech: ["Go", "TCP", "Protobuf"],
       impact:
@@ -227,6 +235,7 @@ export const profile: Profile = {
       ],
     },
     {
+      id: "redis",
       name: "Redis Redesign",
       tech: ["Rust", "Tokio", "Redis"],
       impact:

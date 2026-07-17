@@ -1,5 +1,25 @@
 import { profile } from "./profile";
-import type { Profile } from "./profile";
+import type { Profile, Project } from "./profile";
+
+type ProjectTr = {
+  name: string;
+  impact?: string;
+  date?: string;
+  bullets: string[];
+  badges?: Project["badges"];
+};
+
+// Merge a language's project translations over the canonical EN projects by
+// stable id. Positional (index-based) coupling silently attached the wrong
+// links/tech when EN projects were reordered; this throws at build time when
+// a translation is missing instead.
+const translateProjects = (tr: Record<string, ProjectTr>) =>
+  profile.projects.map((p) => {
+    const t = tr[p.id];
+    if (!t) throw new Error(`profile-i18n: missing project translation for "${p.id}"`);
+    return { ...p, ...t };
+  });
+
 
 type Labels = {
   nav: {
@@ -195,10 +215,9 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
     ],
-    projects: [
-      {
+    projects: translateProjects({
+      patent: {
         name: "patent",
-        tech: profile.projects[0].tech,
         impact: "CLI, который принимает описание dev-tool идеи на простом языке, ищет по open-source реестрам существующие реализации, ранжирует совпадения локальными эмбеддингами и формирует вердикт через LLM.",
         date: "Июн 2026",
         bullets: [
@@ -206,15 +225,13 @@ export const profiles: Record<string, I18nProfile> = {
           "Спроектировал систему вердиктов с ограниченной областью — никогда не утверждает отсутствие, только сообщает о найденном в проверенных источниках",
           "Добавил интерактивный ratatui TUI с детальным просмотром, открытием браузера и структурированным JSON-выводом для CI-пайплайнов",
         ],
-        links: profile.projects[0].links,
         badges: [
           { api: "https://api.github.com/repos/r14dd/patent", pillLabel: "звёзд", platform: "на GitHub", link: "https://github.com/r14dd/patent" },
           { api: "https://crates.io/api/v1/crates/patent", pillLabel: "загрузок", platform: "на crates.io", link: "https://crates.io/crates/patent" },
         ],
       },
-      {
+      quorumrag: {
         name: "QuorumRAG.rs — RAG на основе консенсуса",
-        tech: profile.projects[1].tech,
         impact: "Мульти-ретриверный RAG с кворумной фильтрацией, требующей согласия между ретриверами перед выдачей результатов. Достигнут recall 95% против 70% baseline.",
         date: "Май 2026",
         bullets: [
@@ -224,11 +241,9 @@ export const profiles: Record<string, I18nProfile> = {
           "Добавил параллельное создание эмбеддингов с кэшированием для оптимизации холодного старта",
           "Кластеризовал доказательства через центроиды косинусного сходства для кворумного голосования по дедуплицированным семантическим группам",
         ],
-        links: profile.projects[1].links,
       },
-      {
+      almostaykhan: {
         name: "almostAykhan — RAG чат-бот ABB Bank",
-        tech: profile.projects[2].tech,
         impact:
           "RAG чат-бот, отвечающий исключительно на основе публичного контента ABB Bank с мультиязычной поддержкой и строгими ограничениями контекста.",
         date: "Май 2026",
@@ -238,11 +253,9 @@ export const profiles: Record<string, I18nProfile> = {
           "Применил distance-gate для обнаружения внеконтекстных запросов — возвращает «Bunu bilmirəm» при выходе за рамки",
           "Добавил наблюдаемость через SQLite и дашборд аналитики запросов на Chart.js",
         ],
-        links: profile.projects[2].links,
       },
-      {
+      matchsentinel: {
         name: "MatchSentinel — Платформа мониторинга транзакций",
-        tech: profile.projects[3].tech,
         impact:
           "End-to-end pipeline мониторинга транзакций с event-driven скорингом, асинхронной обработкой через RabbitMQ и идемпотентной обработкой данных.",
         date: "Янв 2026",
@@ -252,11 +265,9 @@ export const profiles: Record<string, I18nProfile> = {
           "Реализовал per‑service БД с миграциями Liquibase и конфигурацией по окружениям",
           "Развернул на AWS EC2 через Docker Compose, Linux‑сети и публичные сервисные endpoints",
         ],
-        links: profile.projects[3].links,
       },
-      {
+      raft: {
         name: "Алгоритм консенсуса Raft",
-        tech: profile.projects[4].tech,
         impact:
           "Консенсус Raft, сохраняющий согласованность при отказах узлов через лидер-элекцию и репликацию логов.",
         date: "Май 2024",
@@ -268,9 +279,8 @@ export const profiles: Record<string, I18nProfile> = {
           "Спроектировал кастомный RPC-фреймворк поверх UDP с Protobuf-сериализацией, ретрансмиссией и дедупликацией сообщений",
         ],
       },
-      {
+      kademlia: {
         name: "Распределенная хеш‑таблица (Kademlia)",
-        tech: profile.projects[5].tech,
         impact:
           "Kademlia DHT для устойчивого peer-discovery и O(log n) поиска в динамических сетях.",
         date: "Фев 2024",
@@ -281,9 +291,8 @@ export const profiles: Record<string, I18nProfile> = {
           "Добавил переиздание ключей и избыточное хранение на k ближайших узлах для отказоустойчивости",
         ],
       },
-      {
+      redis: {
         name: "Redis Redesign",
-        tech: profile.projects[6].tech,
         impact:
           "Двухслойный TTL-кэш, устраняющий несогласованность устаревших данных при сохранении низкой задержки.",
         date: "Дек 2025",
@@ -294,7 +303,7 @@ export const profiles: Record<string, I18nProfile> = {
           "Сохранил низкую latency при усилении консистентности в распределенной нагрузке",
         ],
       },
-    ],
+    }),
     teaching: [
       {
         title: "Структуры данных",
@@ -496,10 +505,9 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
     ],
-    projects: [
-      {
+    projects: translateProjects({
+      patent: {
         name: "patent",
-        tech: profile.projects[0].tech,
         impact: "Sadə dildə dev-tool ideyası qəbul edən, open-source reyestrlərində mövcud implementasiyaları axtaran, uyğunluqları lokal embedding-lərlə sıralayan və LLM vasitəsilə əhatəli vərdict yazan CLI.",
         date: "İyun 2026",
         bullets: [
@@ -507,15 +515,13 @@ export const profiles: Record<string, I18nProfile> = {
           "Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli vərdict sistemi qurdum",
           "Detallı baxış, brauzer açma və CI pipeline-ları üçün strukturlaşdırılmış JSON çıxışı olan interaktiv ratatui TUI əlavə etdim",
         ],
-        links: profile.projects[0].links,
         badges: [
           { api: "https://api.github.com/repos/r14dd/patent", pillLabel: "ulduz", platform: "GitHub-da", link: "https://github.com/r14dd/patent" },
           { api: "https://crates.io/api/v1/crates/patent", pillLabel: "yükləmə", platform: "crates.io-da", link: "https://crates.io/crates/patent" },
         ],
       },
-      {
+      quorumrag: {
         name: "QuorumRAG.rs — Konsensus əsaslı RAG",
-        tech: profile.projects[1].tech,
         impact: "Nəticələri təqdim etməzdən əvvəl retriverlər arası konsensus tələb edən kvorum filtrasiyalı multi-retriver RAG. Baseline 70%-ə qarşı 95% recall əldə edilib.",
         date: "May 2026",
         bullets: [
@@ -525,11 +531,9 @@ export const profiles: Record<string, I18nProfile> = {
           "Soyuq başlanğıc performansını optimallaşdırmaq üçün keşləmə ilə paralel embedding əlavə etdim",
           "Kvorum səsverməsinin deduplikasiya edilmiş semantik qruplar üzərində işləməsi üçün kosinus oxşarlığı sentroidləri ilə sübutları klasterləşdirdim",
         ],
-        links: profile.projects[1].links,
       },
-      {
+      almostaykhan: {
         name: "almostAykhan — ABB Bank RAG Chatbotu",
-        tech: profile.projects[2].tech,
         impact:
           "ABB Bank-ın ictimai məzmunundan eksklüziv cavab verən çoxdilli dəstək və ciddi kontekst məhdudiyyətləri olan RAG chatbotu.",
         date: "May 2026",
@@ -539,11 +543,9 @@ export const profiles: Record<string, I18nProfile> = {
           "Kontekst xaricindəki sorğuları aşkar etmək üçün distance-gate tətbiq etdim — 'Bunu bilmirəm' qaytarır",
           "SQLite müşahidə imkanı və Chart.js sorğu analitika dashboardu əlavə etdim",
         ],
-        links: profile.projects[2].links,
       },
-      {
+      matchsentinel: {
         name: "MatchSentinel — Tranzaksiya monitorinq platforması",
-        tech: profile.projects[3].tech,
         impact:
           "Event-driven skorinq, RabbitMQ ilə asinxron emal və idempotent məlumat emalı ilə end-to-end tranzaksiya monitorinqi pipeline-ı.",
         date: "Yan 2026",
@@ -553,11 +555,9 @@ export const profiles: Record<string, I18nProfile> = {
           "Liquibase ilə per‑service DB və mühit‑əsaslı konfiqurasiyanı tətbiq etdim",
           "Docker Compose, Linux şəbəkəsi və public endpoint‑lərlə AWS EC2‑yə yerləşdirdim",
         ],
-        links: profile.projects[3].links,
       },
-      {
+      raft: {
         name: "Raft əsaslı konsensus alqoritmi",
-        tech: profile.projects[4].tech,
         impact:
           "Lider seçimi və log replikasiyası vasitəsilə node nasazlıqlarında konsistensiyanı qoruyan Raft konsensusu.",
         date: "May 2024",
@@ -569,9 +569,8 @@ export const profiles: Record<string, I18nProfile> = {
           "UDP üzərindən Protobuf serializasiyası, retransmissiya və mesaj deduplikasiyası ilə xüsusi RPC framework-u qurdum",
         ],
       },
-      {
+      kademlia: {
         name: "Paylanmış Hash Table (Kademlia)",
-        tech: profile.projects[5].tech,
         impact:
           "Dinamik şəbəkələrdə dayanıqlı peer-discovery və O(log n) axtarış üçün Kademlia DHT.",
         date: "Fev 2024",
@@ -582,9 +581,8 @@ export const profiles: Record<string, I18nProfile> = {
           "Nasazlıq tolerantlığı üçün k ən yaxın node-da açar-dəyər yenidən nəşri və ehtiyat saxlama əlavə etdim",
         ],
       },
-      {
+      redis: {
         name: "Redis Redesign",
-        tech: profile.projects[6].tech,
         impact:
           "Aşağı gecikmə ilə köhnəlmiş məlumat uyğunsuzluğunu aradan qaldıran ikiqat TTL-ə əsaslanan cache.",
         date: "Dek 2025",
@@ -595,7 +593,7 @@ export const profiles: Record<string, I18nProfile> = {
           "Paylanmış yüklərdə konsistensiyanı artırarkən aşağı latency-ni saxladım",
         ],
       },
-    ],
+    }),
     teaching: [
       {
         title: "Məlumat strukturları",
