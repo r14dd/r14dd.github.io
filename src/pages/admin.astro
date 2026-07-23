@@ -398,11 +398,15 @@
       <main id="dash" hidden>
         <div class="tiles">
           <div class="card">
-            <span class="tile-label"><span class="swatch" style="background:var(--gold)"></span>Visits</span>
+            <span class="tile-label"
+              ><span class="swatch" style="background:var(--gold)"></span>Visits</span
+            >
             <div class="tile-value" id="t-visits">—</div>
           </div>
           <div class="card">
-            <span class="tile-label"><span class="swatch" style="background:var(--blue)"></span>Page views</span>
+            <span class="tile-label"
+              ><span class="swatch" style="background:var(--blue)"></span>Page views</span
+            >
             <div class="tile-value" id="t-views">—</div>
           </div>
         </div>
@@ -502,7 +506,11 @@
           }
           var mk = function (labels) {
             return labels.map(function (l, i) {
-              return { label: l, visits: Math.round(tv / (i + 2)), views: Math.round(tp / (i + 2)) };
+              return {
+                label: l,
+                visits: Math.round(tv / (i + 2)),
+                views: Math.round(tp / (i + 2)),
+              };
             });
           };
           return {
@@ -553,7 +561,10 @@
               data = b;
               render();
               $('meta').textContent =
-                b.from.slice(0, 16).replace('T', ' ') + ' → ' + b.to.slice(0, 16).replace('T', ' ') + ' UTC · cached ≤5 min';
+                b.from.slice(0, 16).replace('T', ' ') +
+                ' → ' +
+                b.to.slice(0, 16).replace('T', ' ') +
+                ' UTC · cached ≤5 min';
             })
             .catch(function (e) {
               loading.hidden = true;
@@ -712,9 +723,27 @@
             'stroke-width': 1,
             visibility: 'hidden',
           });
-          var dotV = el('circle', { r: 4, fill: 'var(--gold)', stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden' });
-          var dotP = el('circle', { r: 4, fill: 'var(--blue)', stroke: 'var(--surface)', 'stroke-width': 2, visibility: 'hidden' });
-          var hit = el('rect', { x: PAD.l, y: PAD.t, width: innerW, height: innerH, fill: 'transparent' });
+          var dotV = el('circle', {
+            r: 4,
+            fill: 'var(--gold)',
+            stroke: 'var(--surface)',
+            'stroke-width': 2,
+            visibility: 'hidden',
+          });
+          var dotP = el('circle', {
+            r: 4,
+            fill: 'var(--blue)',
+            stroke: 'var(--surface)',
+            'stroke-width': 2,
+            visibility: 'hidden',
+          });
+          var hit = el('rect', {
+            x: PAD.l,
+            y: PAD.t,
+            width: innerW,
+            height: innerH,
+            fill: 'transparent',
+          });
           chart.appendChild(cross);
           chart.appendChild(dotV);
           chart.appendChild(dotP);

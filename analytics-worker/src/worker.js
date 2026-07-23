@@ -31,7 +31,9 @@ function safeEqual(a, b) {
 function cors(origin) {
   const o = origin || '';
   const allowed =
-    o === 'https://riad.cc' || o.startsWith('http://localhost:') || o.startsWith('http://127.0.0.1:');
+    o === 'https://riad.cc' ||
+    o.startsWith('http://localhost:') ||
+    o.startsWith('http://127.0.0.1:');
   return {
     'Access-Control-Allow-Origin': allowed ? o : 'https://riad.cc',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
@@ -156,7 +158,8 @@ export default {
     const url = new URL(request.url);
     const corsHeaders = cors(request.headers.get('Origin'));
 
-    if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders });
+    if (request.method === 'OPTIONS')
+      return new Response(null, { status: 204, headers: corsHeaders });
     if (request.method !== 'GET' || url.pathname !== '/summary') {
       return json({ error: 'not found' }, 404, corsHeaders);
     }
