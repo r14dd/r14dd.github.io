@@ -437,6 +437,13 @@
     <script is:inline>
       (function () {
         'use strict';
+        // Whoever opens the admin dashboard is the owner: flag this browser so
+        // the site-wide beacon bootstrap never counts their visits again.
+        try {
+          localStorage.setItem('riad-notrack', '1');
+        } catch (e) {
+          /* private mode: nothing to flag */
+        }
         var API = 'https://analytics-api.riad-mrv.workers.dev';
         var KEY_STORE = 'admin-key';
         var DEMO = new URLSearchParams(location.search).has('demo');

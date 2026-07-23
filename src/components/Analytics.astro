@@ -2,17 +2,27 @@
 // Cloudflare Web Analytics — cookieless beacon, no fingerprinting, no
 // cross-site tracking. Token comes from dash.cloudflare.com → Analytics &
 // Logs → Web Analytics → riad.cc. The token is public by design (it ships
-// in page source); an empty token renders nothing.
+// in page source).
+//
+// The beacon is injected at runtime rather than as a static tag so the site
+// owner's own visits stay uncounted: opening /admin sets the opt-out flag in
+// localStorage (per browser), and this bootstrap skips the beacon when it's
+// present.
 const CF_BEACON_TOKEN = 'e6e3dc46a5b7488bb4e3fab8ac6ac7ce';
 ---
 
-{
-  CF_BEACON_TOKEN && (
-    <script
-      is:inline
-      type="module"
-      src="https://static.cloudflareinsights.com/beacon.min.js"
-      data-cf-beacon={JSON.stringify({ token: CF_BEACON_TOKEN })}
-    />
-  )
-}
+<script is:inline define:vars={{ token: CF_BEACON_TOKEN }}>
+  (function () {
+    if (!token) return;
+    try {
+      if (localStorage.getItem('riad-notrack') === '1') return;
+    } catch (e) {
+      /* storage blocked: count the visit */
+    }
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    s.setAttribute('data-cf-beacon', JSON.stringify({ token: token }));
+    document.head.appendChild(s);
+  })();
+</script>
