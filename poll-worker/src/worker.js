@@ -70,6 +70,34 @@ function json(data, origin, env, status = 200) {
   return Response.json(data, { status, headers: cors(origin, env) });
 }
 
+// Absorb polling storms before they reach the Durable Object: /state and
+// /results are polled by every phone in the room, so a 1s edge cache caps DO
+// reads at ~1 per second per session per colo — invisible next to the 3s
+// client poll interval, but it stops a scripted GET flood from burning DO
+// request quota. The cached copy is stored header-bare and CORS is re-derived
+// per request, so one client's Origin never leaks into another's response.
+async function cachedForward(env, ctx, session, path, origin) {
+  const key = new Request('https://poll-api.cache' + path + '?s=' + encodeURIComponent(session));
+  const cache = caches.default;
+  const hit = await cache.match(key);
+  if (hit) {
+    return new Response(hit.body, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', ...cors(origin, env) },
+    });
+  }
+  const res = await forward(env, session, path, origin);
+  if (res.status === 200) {
+    const body = await res.clone().text();
+    const copy = new Response(body, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'max-age=1' },
+    });
+    ctx.waitUntil(cache.put(key, copy));
+  }
+  return res;
+}
+
 // Hand a request to the session's Durable Object. The action is the pathname;
 // the caller's Origin rides along as ?o= so the DO can echo correct CORS.
 function forward(env, session, path, origin, payload) {
@@ -85,7 +113,7 @@ function forward(env, session, path, origin, payload) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
     const url = new URL(request.url);
     const method = request.method;
@@ -113,14 +141,14 @@ export default {
       if (method === 'GET' && url.pathname === '/results') {
         const session = url.searchParams.get('s');
         if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
-        return forward(env, session, '/results', origin);
+        return cachedForward(env, ctx, session, '/results', origin);
       }
 
       // GET /state?s=SESSION  (counts-free; phones poll this for re-vote rounds)
       if (method === 'GET' && url.pathname === '/state') {
         const session = url.searchParams.get('s');
         if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
-        return forward(env, session, '/state', origin);
+        return cachedForward(env, ctx, session, '/state', origin);
       }
 
       // POST /reset?s=SESSION  (Authorization: Bearer RESET_SECRET)
