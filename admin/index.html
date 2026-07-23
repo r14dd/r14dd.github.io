@@ -1,0 +1,399 @@
+<!DOCTYPE html><html lang="en" translate="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex"><meta name="theme-color" content="#050505"><title>Analytics — riad.cc</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/font-11.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:Manrope;font-style:normal;font-weight:200 800;font-display:swap;src:url(/fonts/manrope-latin.woff2)format("woff2")}@font-face{font-family:JetBrains Mono;font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/font-11.woff2)format("woff2")}:root{color-scheme:dark;--bg:#050505;--surface:#101010;--surface-2:#1a1a1a;--border:#ffffff14;--text:#eee;--text-2:#9a9a9a;--muted:#8a8a8a;--grid:#1f1f1f;--baseline:#2e2e2e;--gold:#b08a40;--blue:#3987e5;--mono:"JetBrains Mono", ui-monospace, monospace;--sans:"Manrope", system-ui, sans-serif}*{box-sizing:border-box}body{background:var(--bg);min-height:100svh;color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;margin:0;font-size:15px;line-height:1.5}.wrap{max-width:1080px;margin:0 auto;padding:40px clamp(16px,4vw,32px) 80px}header{flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:8px;display:flex}h1{letter-spacing:-.01em;margin:0;font-size:20px;font-weight:600}h1 a{color:var(--text-2);font-weight:400;text-decoration:none}.meta-line{font-family:var(--mono);color:var(--muted);min-height:18px;margin:0 0 24px;font-size:12px}.controls{align-items:center;gap:8px;display:flex}.ranges{border:1px solid var(--border);border-radius:8px;display:inline-flex;overflow:hidden}.ranges button{appearance:none;color:var(--text-2);font-family:var(--mono);cursor:pointer;background:0 0;border:0;min-height:40px;padding:8px 14px;font-size:12px}.ranges button[aria-pressed=true]{background:var(--surface-2);color:var(--text)}.ranges button:focus-visible,.ghost-btn:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}.ghost-btn{appearance:none;border:1px solid var(--border);color:var(--text-2);font-family:var(--mono);cursor:pointer;background:0 0;border-radius:8px;min-height:40px;padding:8px 14px;font-size:12px}.ghost-btn:hover{color:var(--text)}.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}.card h2{font-size:12px;font-weight:500;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin:0 0 14px}.tiles{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px;display:grid}.tile-label{font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);align-items:center;gap:8px;font-size:12px;display:flex}.swatch{border-radius:3px;flex-shrink:0;width:10px;height:10px}.tile-value{letter-spacing:-.02em;color:var(--text);margin-top:6px;font-size:34px;font-weight:600}.series-card{margin-bottom:12px}.series-card .head{flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;display:flex}.legend{color:var(--text-2);gap:16px;font-size:13px;display:flex}.legend span{align-items:center;gap:6px;display:inline-flex}#chart{width:100%;margin-top:4px;display:block}#chart text{font-family:var(--mono);fill:var(--muted);font-size:11px}.grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;display:grid}.rows{flex-direction:column;gap:10px;display:flex}.row{border-radius:6px;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;display:grid}.row:hover{background:var(--surface-2)}.row .label{color:var(--text);white-space:nowrap;text-overflow:ellipsis;min-width:0;font-size:13px;overflow:hidden}.row .num{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text-2);align-self:center;font-size:12px}.row .bar-track{grid-column:1/-1;height:10px}.row .bar{background:var(--gold);border-radius:0 4px 4px 0;min-width:2px;height:100%}.empty-note{font-family:var(--mono);color:var(--muted);font-size:12px}#tip{z-index:10;pointer-events:none;background:var(--surface-2);border:1px solid var(--border);font-family:var(--mono);color:var(--text);white-space:nowrap;border-radius:8px;padding:8px 10px;font-size:12px;display:none;position:fixed}#tip .t-dim{color:var(--muted)}#gate{background:var(--bg);z-index:20;place-items:center;display:grid;position:fixed;inset:0}#gate form{flex-direction:column;gap:12px;width:min(360px,90vw);display:flex}#gate label{font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);font-size:12px}#gate input{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--mono);border-radius:8px;padding:12px 14px;font-size:14px}#gate input:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}#gate button{appearance:none;background:var(--gold);color:#050505;font-family:var(--sans);cursor:pointer;border:0;border-radius:8px;min-height:44px;padding:12px;font-size:14px;font-weight:600}#gate .gate-err{font-family:var(--mono);color:#e66767;min-height:18px;margin:0;font-size:12px}.state{font-family:var(--mono);color:var(--muted);text-align:center;padding:48px 0;font-size:13px}.state.err{color:#e66767}[hidden]{display:none!important}
+</style></head><body><div id="gate" hidden><form id="gate-form"><label for="gate-key">Admin key</label><input id="gate-key" type="password" autocomplete="current-password" required><p class="gate-err" id="gate-err"></p><button type="submit">Unlock</button></form></div><div class="wrap"><header><h1><a href="/">riad.cc</a> / analytics</h1><div class="controls"><div class="ranges" role="group" aria-label="Time range"><button type="button" data-range="24h" aria-pressed="false">24h</button><button type="button" data-range="7d" aria-pressed="true">7d</button><button type="button" data-range="30d" aria-pressed="false">30d</button></div><button type="button" class="ghost-btn" id="signout">Sign out</button></div></header><p class="meta-line" id="meta"></p><div id="loading" class="state">loading…</div><div id="error" class="state err" hidden></div><main id="dash" hidden><div class="tiles"><div class="card"><span class="tile-label"><span class="swatch" style="background:var(--gold)"></span>Visits</span><div class="tile-value" id="t-visits">—</div></div><div class="card"><span class="tile-label"><span class="swatch" style="background:var(--blue)"></span>Page views</span><div class="tile-value" id="t-views">—</div></div></div><div class="card series-card"><div class="head"><h2>Traffic</h2><div class="legend" aria-hidden="true"><span><span class="swatch" style="background:var(--gold)"></span>Visits</span><span><span class="swatch" style="background:var(--blue)"></span>Page views</span></div></div><svg id="chart" role="img" aria-label="Visits and page views over time"></svg></div><div class="grid"><div class="card"><h2>Top pages</h2><div class="rows" id="b-paths"></div></div><div class="card"><h2>Referrers</h2><div class="rows" id="b-referers"></div></div><div class="card"><h2>Countries</h2><div class="rows" id="b-countries"></div></div><div class="card"><h2>Browsers</h2><div class="rows" id="b-browsers"></div></div><div class="card"><h2>Devices</h2><div class="rows" id="b-devices"></div></div></div></main></div><div id="tip"></div><script>
+      (function () {
+        'use strict';
+        // Whoever opens the admin dashboard is the owner: flag this browser so
+        // the site-wide beacon bootstrap never counts their visits again.
+        try {
+          localStorage.setItem('riad-notrack', '1');
+        } catch (e) {
+          /* private mode: nothing to flag */
+        }
+        var API = 'https://analytics-api.riad-mrv.workers.dev';
+        var KEY_STORE = 'admin-key';
+        var DEMO = new URLSearchParams(location.search).has('demo');
+        var range = '7d';
+        var data = null;
+
+        var $ = function (id) {
+          return document.getElementById(id);
+        };
+        var gate = $('gate'),
+          dash = $('dash'),
+          loading = $('loading'),
+          errBox = $('error'),
+          tip = $('tip'),
+          chart = $('chart');
+
+        var fmt = function (n) {
+          if (n >= 100000) return (n / 1000).toFixed(0) + 'k';
+          if (n >= 10000) return (n / 1000).toFixed(1) + 'k';
+          return String(n);
+        };
+        var fmtT = function (iso, hourly) {
+          var d = new Date(iso);
+          return hourly
+            ? String(d.getUTCHours()).padStart(2, '0') + ':00'
+            : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+        };
+
+        // ── auth gate ──
+        function getKey() {
+          return localStorage.getItem(KEY_STORE) || '';
+        }
+        function askKey(msg) {
+          gate.hidden = false;
+          $('gate-err').textContent = msg || '';
+          $('gate-key').focus();
+        }
+        $('gate-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          localStorage.setItem(KEY_STORE, $('gate-key').value.trim());
+          gate.hidden = true;
+          load();
+        });
+        $('signout').addEventListener('click', function () {
+          localStorage.removeItem(KEY_STORE);
+          location.search = '';
+        });
+
+        // ── data ──
+        function demoData() {
+          var hourly = range === '24h';
+          var n = hourly ? 24 : range === '7d' ? 7 : 30;
+          var now = Date.now();
+          var series = [];
+          var tv = 0,
+            tp = 0;
+          for (var i = 0; i < n; i++) {
+            var v = Math.max(0, Math.round(14 + 10 * Math.sin(i / 2.2) + 8 * Math.random()));
+            var p = Math.round(v * (1.6 + Math.random() * 0.5));
+            tv += v;
+            tp += p;
+            series.push({
+              t: new Date(now - (n - 1 - i) * (hourly ? 36e5 : 864e5)).toISOString(),
+              visits: v,
+              views: p,
+            });
+          }
+          var mk = function (labels) {
+            return labels.map(function (l, i) {
+              return {
+                label: l,
+                visits: Math.round(tv / (i + 2)),
+                views: Math.round(tp / (i + 2)),
+              };
+            });
+          };
+          return {
+            range: range,
+            totals: { visits: tv, views: tp },
+            series: series,
+            paths: mk(['/', '/lab', '/colophon', '/poll']),
+            referers: mk(['(direct)', 'linkedin.com', 'github.com', 'google.com']),
+            countries: mk(['Azerbaijan', 'United States', 'Germany', 'Turkey']),
+            browsers: mk(['Chrome', 'Safari', 'Firefox']),
+            devices: mk(['desktop', 'mobile']),
+          };
+        }
+
+        function load() {
+          loading.hidden = false;
+          errBox.hidden = true;
+          dash.hidden = true;
+          $('meta').textContent = '';
+          if (DEMO) {
+            data = demoData();
+            render();
+            $('meta').textContent = 'demo data — not live';
+            return;
+          }
+          if (!getKey()) {
+            loading.hidden = true;
+            askKey('');
+            return;
+          }
+          fetch(API + '/summary?range=' + range, {
+            headers: { Authorization: 'Bearer ' + getKey() },
+          })
+            .then(function (r) {
+              if (r.status === 401) {
+                localStorage.removeItem(KEY_STORE);
+                loading.hidden = true;
+                askKey('wrong key');
+                return null;
+              }
+              return r.json().then(function (b) {
+                if (!r.ok) throw new Error(b.error || 'HTTP ' + r.status);
+                return b;
+              });
+            })
+            .then(function (b) {
+              if (!b) return;
+              data = b;
+              render();
+              $('meta').textContent =
+                b.from.slice(0, 16).replace('T', ' ') +
+                ' → ' +
+                b.to.slice(0, 16).replace('T', ' ') +
+                ' UTC · cached ≤5 min';
+            })
+            .catch(function (e) {
+              loading.hidden = true;
+              errBox.hidden = false;
+              errBox.textContent = 'failed: ' + e.message;
+            });
+        }
+
+        // ── render ──
+        function render() {
+          loading.hidden = true;
+          dash.hidden = false;
+          $('t-visits').textContent = fmt(data.totals.visits);
+          $('t-views').textContent = fmt(data.totals.views);
+          drawChart();
+          bars('b-paths', data.paths);
+          bars('b-referers', data.referers);
+          bars('b-countries', data.countries);
+          bars('b-browsers', data.browsers);
+          bars('b-devices', data.devices);
+        }
+
+        function bars(id, items) {
+          var host = $(id);
+          host.textContent = '';
+          if (!items || !items.length) {
+            var p = document.createElement('p');
+            p.className = 'empty-note';
+            p.textContent = 'no data yet';
+            host.appendChild(p);
+            return;
+          }
+          var max = items[0].visits || 1;
+          items.forEach(function (it) {
+            var row = document.createElement('div');
+            row.className = 'row';
+            var label = document.createElement('span');
+            label.className = 'label';
+            label.textContent = it.label;
+            label.title = it.label;
+            var num = document.createElement('span');
+            num.className = 'num';
+            num.textContent = fmt(it.visits);
+            var track = document.createElement('div');
+            track.className = 'bar-track';
+            var bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.width = Math.max(1, (it.visits / max) * 100) + '%';
+            track.appendChild(bar);
+            row.appendChild(label);
+            row.appendChild(num);
+            row.appendChild(track);
+            row.addEventListener('pointerenter', function (e) {
+              showTip(e, it.label, [
+                ['visits', it.visits],
+                ['views', it.views],
+              ]);
+            });
+            row.addEventListener('pointerleave', hideTip);
+            host.appendChild(row);
+          });
+        }
+
+        // Hand-rolled two-line timeseries: 2px lines, shared y-scale (both are
+        // counts), hourly or daily buckets, crosshair + tooltip on hover.
+        var PAD = { l: 40, r: 30, t: 12, b: 26 };
+        function drawChart() {
+          var s = data.series || [];
+          var W = chart.clientWidth || 800;
+          var H = 260;
+          chart.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+          chart.setAttribute('height', H);
+          chart.textContent = '';
+          if (!s.length) return;
+
+          var hourly = data.range === '24h';
+          var innerW = W - PAD.l - PAD.r;
+          var innerH = H - PAD.t - PAD.b;
+          var maxY = 1;
+          s.forEach(function (d) {
+            maxY = Math.max(maxY, d.visits, d.views);
+          });
+          // nice ceiling: 1/2/5 × 10^k
+          var pow = Math.pow(10, Math.floor(Math.log10(maxY)));
+          var niced = [1, 2, 5, 10].map(function (m) {
+            return m * pow;
+          });
+          maxY = niced.find(function (v) {
+            return v >= maxY;
+          });
+
+          var x = function (i) {
+            return PAD.l + (s.length === 1 ? innerW / 2 : (i / (s.length - 1)) * innerW);
+          };
+          var y = function (v) {
+            return PAD.t + innerH - (v / maxY) * innerH;
+          };
+          var NS = 'http://www.w3.org/2000/svg';
+          var el = function (tag, attrs) {
+            var e = document.createElementNS(NS, tag);
+            for (var k in attrs) e.setAttribute(k, attrs[k]);
+            return e;
+          };
+
+          // gridlines + y ticks (0, ½, max)
+          [0, 0.5, 1].forEach(function (f) {
+            var gy = y(maxY * f);
+            chart.appendChild(
+              el('line', {
+                x1: PAD.l,
+                x2: W - PAD.r,
+                y1: gy,
+                y2: gy,
+                stroke: f === 0 ? 'var(--baseline)' : 'var(--grid)',
+                'stroke-width': 1,
+              }),
+            );
+            var t = el('text', { x: PAD.l - 8, y: gy + 4, 'text-anchor': 'end' });
+            t.textContent = fmt(Math.round(maxY * f));
+            chart.appendChild(t);
+          });
+
+          // x ticks: ~6 evenly spaced
+          var step = Math.max(1, Math.round(s.length / 6));
+          for (var i = 0; i < s.length; i += step) {
+            var t = el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' });
+            t.textContent = fmtT(s[i].t, hourly);
+            chart.appendChild(t);
+          }
+
+          var line = function (key, color) {
+            var d = s
+              .map(function (p, i) {
+                return (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p[key]).toFixed(1);
+              })
+              .join(' ');
+            chart.appendChild(
+              el('path', {
+                d: d,
+                fill: 'none',
+                stroke: color,
+                'stroke-width': 2,
+                'stroke-linejoin': 'round',
+                'stroke-linecap': 'round',
+              }),
+            );
+          };
+          line('views', 'var(--blue)');
+          line('visits', 'var(--gold)');
+
+          // hover layer: crosshair + dots + tooltip, nearest bucket
+          var cross = el('line', {
+            y1: PAD.t,
+            y2: PAD.t + innerH,
+            stroke: 'var(--baseline)',
+            'stroke-width': 1,
+            visibility: 'hidden',
+          });
+          var dotV = el('circle', {
+            r: 4,
+            fill: 'var(--gold)',
+            stroke: 'var(--surface)',
+            'stroke-width': 2,
+            visibility: 'hidden',
+          });
+          var dotP = el('circle', {
+            r: 4,
+            fill: 'var(--blue)',
+            stroke: 'var(--surface)',
+            'stroke-width': 2,
+            visibility: 'hidden',
+          });
+          var hit = el('rect', {
+            x: PAD.l,
+            y: PAD.t,
+            width: innerW,
+            height: innerH,
+            fill: 'transparent',
+          });
+          chart.appendChild(cross);
+          chart.appendChild(dotV);
+          chart.appendChild(dotP);
+          chart.appendChild(hit);
+
+          hit.addEventListener('pointermove', function (e) {
+            var rect = chart.getBoundingClientRect();
+            var px = ((e.clientX - rect.left) / rect.width) * W;
+            var i = Math.round(((px - PAD.l) / innerW) * (s.length - 1));
+            i = Math.max(0, Math.min(s.length - 1, i));
+            var cx = x(i);
+            cross.setAttribute('x1', cx);
+            cross.setAttribute('x2', cx);
+            cross.setAttribute('visibility', 'visible');
+            dotV.setAttribute('cx', cx);
+            dotV.setAttribute('cy', y(s[i].visits));
+            dotV.setAttribute('visibility', 'visible');
+            dotP.setAttribute('cx', cx);
+            dotP.setAttribute('cy', y(s[i].views));
+            dotP.setAttribute('visibility', 'visible');
+            showTip(e, fmtT(s[i].t, hourly), [
+              ['visits', s[i].visits],
+              ['views', s[i].views],
+            ]);
+          });
+          hit.addEventListener('pointerleave', function () {
+            cross.setAttribute('visibility', 'hidden');
+            dotV.setAttribute('visibility', 'hidden');
+            dotP.setAttribute('visibility', 'hidden');
+            hideTip();
+          });
+        }
+
+        // ── tooltip ──
+        function showTip(e, title, rows) {
+          tip.textContent = '';
+          var b = document.createElement('div');
+          b.textContent = title;
+          tip.appendChild(b);
+          rows.forEach(function (r) {
+            var d = document.createElement('div');
+            var dim = document.createElement('span');
+            dim.className = 't-dim';
+            dim.textContent = r[0] + ' ';
+            d.appendChild(dim);
+            d.appendChild(document.createTextNode(String(r[1])));
+            tip.appendChild(d);
+          });
+          tip.style.display = 'block';
+          var tw = tip.offsetWidth;
+          var x = e.clientX + 14 + tw > innerWidth ? e.clientX - tw - 10 : e.clientX + 14;
+          tip.style.left = x + 'px';
+          tip.style.top = Math.max(8, e.clientY - 10) + 'px';
+        }
+        function hideTip() {
+          tip.style.display = 'none';
+        }
+
+        // ── range switcher ──
+        document.querySelectorAll('.ranges button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            if (btn.dataset.range === range) return;
+            range = btn.dataset.range;
+            document.querySelectorAll('.ranges button').forEach(function (b) {
+              b.setAttribute('aria-pressed', String(b === btn));
+            });
+            load();
+          });
+        });
+
+        var resizeT = 0;
+        addEventListener('resize', function () {
+          clearTimeout(resizeT);
+          resizeT = setTimeout(function () {
+            if (data && !dash.hidden) drawChart();
+          }, 150);
+        });
+
+        load();
+      })();
+    </script></body></html>
