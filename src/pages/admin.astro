@@ -500,7 +500,7 @@
         // the site-wide beacon bootstrap never counts their visits again.
         try {
           localStorage.setItem('riad-notrack', '1');
-        } catch (e) {
+        } catch {
           /* private mode: nothing to flag */
         }
         var API = 'https://analytics-api.riad-mrv.workers.dev';

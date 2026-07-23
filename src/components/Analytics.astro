@@ -16,7 +16,7 @@ const CF_BEACON_TOKEN = 'e6e3dc46a5b7488bb4e3fab8ac6ac7ce';
     if (!token) return;
     try {
       if (localStorage.getItem('riad-notrack') === '1') return;
-    } catch (e) {
+    } catch {
       /* storage blocked: count the visit */
     }
     var s = document.createElement('script');
