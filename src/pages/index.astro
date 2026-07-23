@@ -136,7 +136,7 @@ const structuredData = JSON.stringify({
           <span class="dot dot-yellow"></span>
           <span class="dot dot-green"></span>
         </div>
-        <div class="terminal-body">
+        <div class="terminal-body" data-lenis-prevent>
           <div class="terminal-line">
             <span class="terminal-prompt">→</span>
             <span class="terminal-cmd">whoami</span>
@@ -323,7 +323,7 @@ const structuredData = JSON.stringify({
       />
       <span class="cmd-kbd">ESC</span>
     </div>
-    <div class="cmd-results" id="cmd-results" role="listbox"></div>
+    <div class="cmd-results" id="cmd-results" role="listbox" data-lenis-prevent></div>
     <div class="cmd-footer">
       <span class="cmd-footer-hint"><span class="cmd-kbd">↑↓</span> navigate</span>
       <span class="cmd-footer-hint"><span class="cmd-kbd">↵</span> select</span>
@@ -426,7 +426,7 @@ const structuredData = JSON.stringify({
         stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"></path></svg
       >
     </button>
-    <div class="proj-modal-card" id="proj-modal-card"></div>
+    <div class="proj-modal-card" id="proj-modal-card" data-lenis-prevent></div>
   </div>
 
   <script>
@@ -1373,6 +1373,11 @@ const structuredData = JSON.stringify({
     };
 
     const smoothScrollTo = (el, duration = 480) => {
+      const lenis = window.__lenis;
+      if (lenis) {
+        lenis.scrollTo(el, { offset: -24 });
+        return;
+      }
       const end = el.getBoundingClientRect().top + window.scrollY - 24;
       if (prefersReducedMotion) {
         window.scrollTo(0, end);

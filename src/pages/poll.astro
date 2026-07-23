@@ -4,6 +4,7 @@
 // CSS. We copy only the viewport meta, the three Manrope @font-face blocks and
 // the manrope-latin.woff2 preload, then force a calm dark theme to match riad.cc.
 // The page never learns the option text or vote counts: it only sends A/B/C/D.
+import Analytics from '../components/Analytics.astro';
 ---
 
 <!doctype html>
@@ -21,6 +22,7 @@
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <Analytics />
 
     <style is:global>
       @font-face {

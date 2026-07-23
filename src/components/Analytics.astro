@@ -1,0 +1,18 @@
+---
+// Cloudflare Web Analytics — cookieless beacon, no fingerprinting, no
+// cross-site tracking. Token comes from dash.cloudflare.com → Analytics &
+// Logs → Web Analytics → riad.cc. The token is public by design (it ships
+// in page source); an empty token renders nothing.
+const CF_BEACON_TOKEN = 'e6e3dc46a5b7488bb4e3fab8ac6ac7ce';
+---
+
+{
+  CF_BEACON_TOKEN && (
+    <script
+      is:inline
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={JSON.stringify({ token: CF_BEACON_TOKEN })}
+    />
+  )
+}

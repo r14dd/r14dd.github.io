@@ -3,6 +3,7 @@ import PageLoader from '../components/PageLoader.astro';
 import CursorDot from '../components/CursorDot.astro';
 import ScrollLine from '../components/ScrollLine.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 
 const {
   metaTitle = 'Riad Mukhtarov — Portfolio',
@@ -79,6 +80,7 @@ import '../styles/ui.css';
 
     <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/font-5.woff2" as="font" type="font/woff2" crossorigin />
+    <Analytics />
   </head>
 
   <body>
@@ -104,6 +106,24 @@ import '../styles/ui.css';
     <slot />
 
     <script>
+      import Lenis from 'lenis';
+
+      // Buttery wheel scrolling: Lenis eases wheel input toward its target on
+      // an rAF loop. Touch stays native (synthetic touch smoothing fights the
+      // OS), reduced-motion users keep instant scrolling, and scroll events
+      // still fire natively so every existing scroll listener works unchanged.
+      // Exposed as window.__lenis so anchor navigation routes through it —
+      // any external per-frame scrollTo animation would fight the lerp.
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const lenis = new Lenis({ duration: 1.1, smoothWheel: true, syncTouch: false });
+        (window as any).__lenis = lenis;
+        const raf = (time: number) => {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
+      }
+
       document.addEventListener('click', (e) => {
         const target = e.target as Element;
         if (target.closest('.section-block h2')) {

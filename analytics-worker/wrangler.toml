@@ -1,0 +1,17 @@
+name = "analytics-api"
+main = "src/worker.js"
+compatibility_date = "2024-12-01"
+
+# Secrets (NOT stored in this file, set via `wrangler secret put`):
+#   ANALYTICS_API_TOKEN — Cloudflare API token with Account Analytics:Read,
+#                         used for the GraphQL RUM queries.
+#   ADMIN_KEY           — bearer key the /admin page must present.
+#
+# Locally both come from .dev.vars (see .dev.vars.example).
+
+[vars]
+# Account + Web Analytics site the queries are scoped to. Neither is a secret:
+# the account tag is in every dashboard URL and the site tag identifies the
+# public beacon site.
+ACCOUNT_TAG = "90a4414f4f6490a4c4584ca4a1d9f189"
+SITE_TAG = ""

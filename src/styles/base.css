@@ -292,6 +292,16 @@ html {
   }
 }
 
+/* Lenis drives scroll position per-frame; CSS smooth easing on top of that
+   double-eases every write into mush. */
+html.lenis {
+  height: auto;
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text-soft);

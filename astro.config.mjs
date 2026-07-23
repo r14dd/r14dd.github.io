@@ -8,7 +8,7 @@ export default defineConfig({
   output: 'static',
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/poll') && !page.includes('/lab'),
+      filter: (page) => !page.includes('/poll') && !page.includes('/lab') && !page.includes('/admin'),
     }),
   ],
   build: {
