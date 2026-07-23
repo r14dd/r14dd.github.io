@@ -1,23 +1,27 @@
-name: Deploy Astro site to GitHub Pages vol 2
+name: Deploy Astro site to GitHub Pages
 
 on:
   push:
     branches: [main]
 
+# The artifact flow (upload-pages-artifact → deploy-pages) publishes
+# atomically: a green run means the site IS live. The previous gh-pages
+# branch + legacy Pages build could succeed while the publish step silently
+# never fired, leaving a stale site behind a green checkmark.
 concurrency:
   group: pages-deploy
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - uses: actions/setup-node@v5
         with:
@@ -29,16 +33,17 @@ jobs:
       - run: npm run check
       - run: npm run build
 
-      - name: Deploy to gh-pages
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          cp -r dist /tmp/dist-deploy
-          git checkout --orphan gh-pages-temp
-          git rm -rf . --quiet
-          git clean -fdx --quiet
-          cp -r /tmp/dist-deploy/. .
-          find . -name '.DS_Store' -delete
-          git add .
-          git commit -m "deploy: ${{ github.sha }}"
-          git push --force origin HEAD:gh-pages
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
