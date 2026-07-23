@@ -194,6 +194,44 @@
         color: var(--text);
       }
 
+      /* ── Core Web Vitals (p75, real visitors) ── */
+      .cwv {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 16px;
+      }
+      .cwv-value {
+        margin-top: 4px;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--text);
+      }
+      .cwv-verdict {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 2px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-2);
+      }
+      .cwv-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--muted);
+      }
+      .cwv-good .cwv-dot {
+        background: #0ca30c;
+      }
+      .cwv-mid .cwv-dot {
+        background: #fab219;
+      }
+      .cwv-poor .cwv-dot {
+        background: #d03b3b;
+      }
+
       /* ── Timeseries ── */
       .series-card {
         margin-bottom: 12px;
@@ -412,6 +450,27 @@
         </div>
 
         <div class="card series-card">
+          <h2>Core Web Vitals · p75 of real visitors</h2>
+          <div class="cwv">
+            <div>
+              <span class="tile-label">LCP</span>
+              <div class="cwv-value" id="v-lcp">—</div>
+              <span class="cwv-verdict" id="v-lcp-verdict"></span>
+            </div>
+            <div>
+              <span class="tile-label">INP</span>
+              <div class="cwv-value" id="v-inp">—</div>
+              <span class="cwv-verdict" id="v-inp-verdict"></span>
+            </div>
+            <div>
+              <span class="tile-label">CLS</span>
+              <div class="cwv-value" id="v-cls">—</div>
+              <span class="cwv-verdict" id="v-cls-verdict"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card series-card">
           <div class="head">
             <h2>Traffic</h2>
             <div class="legend" aria-hidden="true">
@@ -523,6 +582,7 @@
           return {
             range: range,
             totals: { visits: tv, views: tp },
+            vitals: { samples: tv, lcpP75: 1840, inpP75: 96, clsP75: 0.04 },
             series: series,
             paths: mk(['/', '/lab', '/colophon', '/poll']),
             referers: mk(['(direct)', 'linkedin.com', 'github.com', 'google.com']),
@@ -581,11 +641,53 @@
         }
 
         // ── render ──
+        // Google CWV thresholds: [good ≤, needs-improvement ≤]; beyond is poor.
+        var CWV = {
+          lcp: {
+            t: [2500, 4000],
+            show: function (v) {
+              return (v / 1000).toFixed(1) + 's';
+            },
+          },
+          inp: {
+            t: [200, 500],
+            show: function (v) {
+              return Math.round(v) + 'ms';
+            },
+          },
+          cls: {
+            t: [0.1, 0.25],
+            show: function (v) {
+              return v.toFixed(2);
+            },
+          },
+        };
+        function renderVital(key, value, samples) {
+          var el = $('v-' + key);
+          var verdict = $('v-' + key + '-verdict');
+          verdict.className = 'cwv-verdict';
+          if (value == null || !samples) {
+            el.textContent = '—';
+            verdict.innerHTML = '<span class="cwv-dot"></span>no data yet';
+            return;
+          }
+          var c = CWV[key];
+          el.textContent = c.show(value);
+          var cls = value <= c.t[0] ? 'cwv-good' : value <= c.t[1] ? 'cwv-mid' : 'cwv-poor';
+          var label = value <= c.t[0] ? 'good' : value <= c.t[1] ? 'needs work' : 'poor';
+          verdict.classList.add(cls);
+          verdict.innerHTML = '<span class="cwv-dot"></span>' + label;
+        }
+
         function render() {
           loading.hidden = true;
           dash.hidden = false;
           $('t-visits').textContent = fmt(data.totals.visits);
           $('t-views').textContent = fmt(data.totals.views);
+          var vit = data.vitals || {};
+          renderVital('lcp', vit.lcpP75, vit.samples);
+          renderVital('inp', vit.inpP75, vit.samples);
+          renderVital('cls', vit.clsP75, vit.samples);
           drawChart();
           bars('b-paths', data.paths);
           bars('b-referers', data.referers);

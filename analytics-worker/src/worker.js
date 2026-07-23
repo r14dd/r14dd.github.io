@@ -59,7 +59,7 @@ function buildQuery(seriesDim) {
     ${dim}: rumPageloadEventsAdaptiveGroups(
       filter: $filter, limit: 15, orderBy: [count_DESC]
     ) { count sum { visits } dimensions { metric: ${dim} } }`;
-  return `query Summary($accountTag: string, $filter: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject) {
+  return `query Summary($accountTag: string, $filter: AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject, $vfilter: AccountRumWebVitalsEventsAdaptiveGroupsFilter_InputObject) {
     viewer {
       accounts(filter: { accountTag: $accountTag }) {
         total: rumPageloadEventsAdaptiveGroups(filter: $filter, limit: 1) {
@@ -68,6 +68,14 @@ function buildQuery(seriesDim) {
         series: rumPageloadEventsAdaptiveGroups(
           filter: $filter, limit: 744, orderBy: [${seriesDim}_ASC]
         ) { count sum { visits } dimensions { t: ${seriesDim} } }
+        vitals: rumWebVitalsEventsAdaptiveGroups(filter: $vfilter, limit: 1) {
+          count
+          quantiles {
+            largestContentfulPaintP75
+            interactionToNextPaintP75
+            cumulativeLayoutShiftP75
+          }
+        }
         ${breakdown('requestPath')}
         ${breakdown('refererHost')}
         ${breakdown('countryName')}
@@ -127,6 +135,7 @@ async function fetchSummary(env, range) {
       variables: {
         accountTag: env.ACCOUNT_TAG,
         filter: { AND: filters },
+        vfilter: { AND: filters },
       },
     }),
   });
@@ -136,6 +145,7 @@ async function fetchSummary(env, range) {
   }
 
   const acc = body.data?.viewer?.accounts?.[0] || {};
+  const vq = acc.vitals?.[0]?.quantiles;
   return {
     range,
     from: new Date(from).toISOString(),
@@ -143,6 +153,12 @@ async function fetchSummary(env, range) {
     totals: {
       visits: acc.total?.[0]?.sum.visits || 0,
       views: acc.total?.[0]?.count || 0,
+    },
+    vitals: {
+      samples: acc.vitals?.[0]?.count || 0,
+      lcpP75: vq?.largestContentfulPaintP75 ?? null,
+      inpP75: vq?.interactionToNextPaintP75 ?? null,
+      clsP75: vq?.cumulativeLayoutShiftP75 ?? null,
     },
     series: fillSeries(acc.series, from, to, hourly),
     paths: topN(acc.requestPath),
