@@ -13,8 +13,8 @@ export const initCrackGlass = () => {
 
   let pane = null;
   let svg = null;
-  // Each fracture is kept with the x it was struck at, so the repair sweep can
-  // heal them one by one as it reaches them instead of fading the lot at once.
+  // Each fracture keeps the point it was struck at, so the crew can walk to that
+  // exact spot and mend it there rather than clearing the glass wholesale.
   const fractures = [];
 
   const isInteractive = (el) => {
@@ -94,16 +94,52 @@ export const initCrackGlass = () => {
     }
 
     svg.appendChild(g);
-    fractures.push({ el: g, x });
+    fractures.push({ el: g, x, y });
     pane.classList.add('cracked');
   };
 
-  const spawnCrew = () => {
+  // Impacts landing on top of each other are one job, not several. Merging also
+  // bounds the walk: a long rage-click burst still resolves in a few stops.
+  const clusterImpacts = () => {
+    let radius = 90;
+    let groups = [];
+    for (let attempt = 0; attempt < 6; attempt++) {
+      groups = [];
+      for (const f of fractures) {
+        const near = groups.find((c) => Math.hypot(c.x - f.x, c.y - f.y) <= radius);
+        if (near) {
+          // The first impact stays the anchor the crew walks to.
+          near.items.push(f);
+        } else {
+          groups.push({ x: f.x, y: f.y, items: [f] });
+        }
+      }
+      if (groups.length <= 5) break;
+      radius *= 1.7;
+    }
+    return groups;
+  };
+
+  const tween = (ms, onFrame) =>
+    new Promise((resolve) => {
+      let t0 = null;
+      const step = (ts) => {
+        if (t0 === null) t0 = ts;
+        const p = Math.min((ts - t0) / ms, 1);
+        onFrame(p < 1 ? p * p * (3 - 2 * p) : 1); // smoothstep
+        p < 1 ? requestAnimationFrame(step) : resolve();
+      };
+      requestAnimationFrame(step);
+    });
+
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  const spawnCrew = async () => {
     if (!pane) return;
     pane.classList.add('repairing');
 
     const crew = document.createElement('div');
-    crew.className = 'repair-crew';
+    crew.className = 'repair-crew active';
     ['\u{1F9F9}', '\u{1F527}'].forEach((ch, i) => {
       const w = document.createElement('span');
       w.className = 'repair-worker';
@@ -111,54 +147,68 @@ export const initCrackGlass = () => {
       w.style.animationDelay = `${i * 0.12}s`;
       crew.appendChild(w);
     });
-
-    // A soft vertical band travelling with the crew — the visible edge between
-    // "still broken" on the right and "mended" on the left.
-    const wipe = document.createElement('div');
-    wipe.className = 'repair-wipe';
-
-    pane.appendChild(wipe);
     pane.appendChild(crew);
-    crew.classList.add('active');
 
-    const START = -90;
-    const END = innerWidth + 90;
-    const SWEEP_MS = 1900;
-    const pending = fractures.slice().sort((a, b) => a.x - b.x);
-    let t0 = null;
-
-    const step = (ts) => {
-      if (t0 === null) t0 = ts;
-      const p = Math.min((ts - t0) / SWEEP_MS, 1);
-      // Ease out slightly so they arrive rather than teleport off-screen.
-      const x = START + (END - START) * (1 - Math.pow(1 - p, 1.6));
-
-      crew.style.transform = `translateX(${x}px)`;
-      wipe.style.transform = `translateX(${x}px)`;
-
-      // Heal every fracture the crew has now walked past.
-      while (pending.length && pending[0].x <= x) {
-        const f = pending.shift();
-        f.el.classList.add('crack-healed');
-      }
-
-      if (p < 1) {
-        requestAnimationFrame(step);
-        return;
-      }
-
-      if (svg) svg.innerHTML = '';
-      fractures.length = 0;
-      if (pane) {
-        pane.classList.remove('cracked', 'repairing');
-        crew.remove();
-        wipe.remove();
-      }
-      document.body.classList.remove('glass-shattered');
-      glassActive = false;
+    const stops = clusterImpacts();
+    const place = (x, y) => {
+      crew.style.transform = `translate(${x}px, ${y}px)`;
     };
 
-    requestAnimationFrame(step);
+    // Walk in from whichever side edge is closest to the first break.
+    let cur = { x: stops.length && stops[0].x > innerWidth / 2 ? innerWidth + 80 : -80, y: 0 };
+    cur.y = stops.length ? stops[0].y : innerHeight / 2;
+    place(cur.x, cur.y);
+
+    const PATCH_MS = stops.length > 3 ? 150 : 230;
+
+    // Visit the nearest remaining break each time, so the path never criss-crosses.
+    const remaining = stops.slice();
+    while (remaining.length) {
+      let bi = 0;
+      let bd = Infinity;
+      remaining.forEach((s, i) => {
+        const dist = Math.hypot(s.x - cur.x, s.y - cur.y);
+        if (dist < bd) {
+          bd = dist;
+          bi = i;
+        }
+      });
+      const stop = remaining.splice(bi, 1)[0];
+
+      const from = { ...cur };
+      await tween(Math.min(Math.max(bd / 1.4, 220), 560), (p) => {
+        place(from.x + (stop.x - from.x) * p, from.y + (stop.y - from.y) * p);
+      });
+      cur = { x: stop.x, y: stop.y };
+
+      // Patch this break, here, before moving on.
+      crew.classList.add('fixing');
+      const patch = document.createElement('div');
+      patch.className = 'repair-patch';
+      patch.style.left = `${stop.x}px`;
+      patch.style.top = `${stop.y}px`;
+      pane.appendChild(patch);
+
+      await wait(PATCH_MS);
+      stop.items.forEach((f) => f.el.classList.add('crack-healed'));
+      await wait(PATCH_MS);
+      crew.classList.remove('fixing');
+      setTimeout(() => patch.remove(), 500);
+    }
+
+    // Job done — walk off the nearest edge.
+    const exitX = cur.x > innerWidth / 2 ? innerWidth + 90 : -90;
+    const from = { ...cur };
+    await tween(460, (p) => place(from.x + (exitX - from.x) * p, from.y));
+
+    if (svg) svg.innerHTML = '';
+    fractures.length = 0;
+    if (pane) {
+      pane.classList.remove('cracked', 'repairing');
+      crew.remove();
+    }
+    document.body.classList.remove('glass-shattered');
+    glassActive = false;
   };
 
   // Listen on pointerdown, not click. Rage-clicking is a burst of mousedowns;

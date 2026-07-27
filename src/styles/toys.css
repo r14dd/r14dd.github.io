@@ -47,35 +47,50 @@ html.light .crack-ring {
   transition: opacity 0.28s ease;
 }
 
-/* The moving boundary between broken and mended glass. */
-.repair-wipe {
+/* A patch worked into the spot that was actually hit. */
+.repair-patch {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 130px;
-  margin-left: -65px;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--accent-rgb), 0.35);
   pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(var(--accent-rgb), 0.05) 45%,
-    rgba(var(--accent-rgb), 0.11) 50%,
-    rgba(var(--accent-rgb), 0.05) 55%,
-    transparent 100%
-  );
+  animation: patch-set 0.55s ease forwards;
 }
 
+@keyframes patch-set {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  35% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* The crew stands just below-left of the break they are working on. */
 .repair-crew {
   position: absolute;
-  bottom: 12%;
+  top: 0;
   left: 0;
+  margin: 6px 0 0 -20px;
   display: flex;
   gap: 9px;
   font-size: 15px;
   line-height: 1;
   pointer-events: none;
   will-change: transform;
+}
+
+/* Quicker, busier bob while a break is being patched. */
+.repair-crew.fixing .repair-worker {
+  animation-duration: 0.16s;
 }
 
 .repair-worker {
