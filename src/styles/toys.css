@@ -8,6 +8,13 @@
   overflow: hidden;
 }
 
+/* While the glass is broken, further rage-clicks must not drag out a text
+   selection — the burst should read as hitting glass, not selecting a paragraph. */
+body.glass-shattered {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .crack-line {
   fill: none;
   stroke: rgba(255, 255, 255, 0.55);
@@ -92,11 +99,18 @@ html.light .crack-ring {
 
 .dot-interactive {
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .dot-interactive:hover {
   transform: scale(1.3);
+}
+
+/* Press feedback, so the click is acknowledged on the way down. */
+.dot-interactive:active {
+  transform: scale(0.85);
 }
 
 .terminal-sulk {
@@ -114,10 +128,6 @@ html.light .crack-ring {
   opacity: 0.7;
 }
 
-.term-collapsed .terminal-body {
-  display: none;
-}
-
 .term-collapsed {
   cursor: pointer;
 }
@@ -126,16 +136,30 @@ html.light .crack-ring {
   transition: max-width 0.4s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
+/* Collapse and expand animate the body's height instead of toggling display,
+   so the window actually moves rather than snapping between two states. */
+.term-toyable .terminal-body {
+  transition:
+    max-height 0.34s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1)),
+    opacity 0.2s ease;
+}
+
+.term-collapsed .terminal-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
 .term-expanded {
   max-width: 720px !important;
 }
 
 .term-expanded .terminal-body {
-  max-height: none;
+  max-height: 520px;
 }
 
 .term-squashed {
-  animation: squash-bounce 2.8s ease forwards;
+  animation: squash-bounce 0.9s ease forwards;
   transform-origin: bottom center;
 }
 
@@ -143,17 +167,17 @@ html.light .crack-ring {
   0% {
     transform: scaleY(1);
   }
-  8% {
-    transform: scaleY(0.06);
+  18% {
+    transform: scaleY(0.08);
   }
-  75% {
-    transform: scaleY(0.06);
+  55% {
+    transform: scaleY(0.08);
+  }
+  74% {
+    transform: scaleY(1.06);
   }
   88% {
-    transform: scaleY(1.08);
-  }
-  94% {
-    transform: scaleY(0.97);
+    transform: scaleY(0.98);
   }
   100% {
     transform: scaleY(1);
@@ -162,13 +186,15 @@ html.light .crack-ring {
 
 /* ── Ferris ───────────────────────────────────────────────────────── */
 
+/* 30x21 matches the 40x28 viewBox exactly, so the sprite never letterboxes. */
 .ferris {
   position: absolute;
-  width: 28px;
-  height: 20px;
+  width: 30px;
+  height: 21px;
   z-index: 10;
   cursor: default;
   pointer-events: auto;
+  overflow: visible;
   transition: opacity 0.5s ease;
 }
 
@@ -231,108 +257,6 @@ html.light .crack-ring {
 
 .reader-number.visible {
   display: block;
-}
-
-/* ── Song Relay ───────────────────────────────────────────────────── */
-
-.relay-card {
-  display: none;
-  margin-top: 0.6rem;
-  font-size: 0.75rem;
-  color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  line-height: 1.7;
-}
-
-.relay-card.visible {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.relay-from {
-  opacity: 0.6;
-}
-
-.relay-song {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
-}
-
-.relay-song:hover {
-  border-color: var(--accent);
-}
-
-.relay-note {
-  opacity: 0.5;
-}
-
-.relay-artist {
-  opacity: 0.6;
-  font-size: 0.65rem;
-}
-
-.relay-pass {
-  background: none;
-  border: 1px solid rgba(var(--accent-rgb), 0.25);
-  color: var(--accent);
-  font-family: inherit;
-  font-size: 0.65rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-}
-
-.relay-pass:hover {
-  border-color: var(--accent);
-}
-
-.relay-pass:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.relay-picker {
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 0.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  scrollbar-width: none;
-}
-
-.relay-pick {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: none;
-  border: none;
-  color: var(--text-soft);
-  font-family: inherit;
-  font-size: 0.7rem;
-  padding: 0.3rem 0.5rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.15s ease;
-}
-
-.relay-pick:hover {
-  background: var(--overlay-strong);
-}
-
-.relay-pick-artist {
-  color: var(--muted);
-  font-size: 0.6rem;
 }
 
 /* ── Paper Airplane ──────────────────────────────────────────────── */
@@ -481,189 +405,4 @@ html.light .crack-ring {
   75% {
     transform: translateX(4px);
   }
-}
-
-/* ── Phone Trick ─────────────────────────────────────────────────── */
-
-.phone-qr {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.3rem;
-  opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 0.5s ease,
-    transform 0.5s ease;
-}
-
-.phone-qr.phone-qr-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.phone-qr-code {
-  width: 120px;
-  height: 120px;
-}
-
-.phone-qr-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  border-radius: var(--radius-sm);
-}
-
-.phone-qr-label {
-  font-size: 0.6rem;
-  color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-  opacity: 0.6;
-}
-
-.phone-qr-status {
-  font-size: 0.6rem;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--accent);
-  min-height: 1em;
-}
-
-.phone-qr-active .phone-qr-code {
-  opacity: 0.4;
-}
-
-.phone-qr-active .phone-qr-label {
-  display: none;
-}
-
-.phone-orb {
-  position: fixed;
-  width: 16px;
-  height: 16px;
-  margin: -8px 0 0 -8px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 40%, var(--accent), transparent 70%);
-  box-shadow:
-    0 0 16px rgba(var(--accent-rgb), 0.4),
-    0 0 32px rgba(var(--accent-rgb), 0.15);
-  pointer-events: none;
-  z-index: 10002;
-  transition:
-    left 0.12s ease-out,
-    top 0.12s ease-out;
-}
-
-.phone-orb-flick {
-  animation: orb-pulse 0.6s ease;
-}
-
-@keyframes orb-pulse {
-  0% {
-    transform: scale(1);
-    box-shadow:
-      0 0 16px rgba(var(--accent-rgb), 0.4),
-      0 0 32px rgba(var(--accent-rgb), 0.15);
-  }
-  50% {
-    transform: scale(2);
-    box-shadow:
-      0 0 32px rgba(var(--accent-rgb), 0.6),
-      0 0 64px rgba(var(--accent-rgb), 0.3);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow:
-      0 0 16px rgba(var(--accent-rgb), 0.4),
-      0 0 32px rgba(var(--accent-rgb), 0.15);
-  }
-}
-
-/* ── The Beneath ─────────────────────────────────────────────────── */
-
-.beneath-layer {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  opacity: 0;
-  clip-path: polygon(100% 100%, 100% 100%, 100% 100%);
-  transition: clip-path 0.1s ease;
-}
-
-.beneath-layer.tearing {
-  opacity: 1;
-  clip-path: polygon(
-    100% 100%,
-    calc(100% - var(--tear, 0%)) 100%,
-    100% calc(100% - var(--tear, 0%))
-  );
-}
-
-.beneath-layer.healing {
-  transition: clip-path 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.beneath-layer.xray {
-  opacity: 1;
-  clip-path: circle(60px at var(--lens-x, 50%) var(--lens-y, 50%));
-}
-
-.beneath-svg {
-  width: 100%;
-  max-width: 840px;
-  height: 100%;
-}
-
-.beneath-curl {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 40px;
-  height: 40px;
-  z-index: 9999;
-  cursor: grab;
-  pointer-events: auto;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.beneath-curl::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 0 28px 28px;
-  border-color: transparent transparent rgba(var(--accent-rgb), 0.15) transparent;
-  transition:
-    border-width 0.3s ease,
-    opacity 0.3s ease;
-}
-
-.beneath-curl.near {
-  opacity: 1;
-}
-
-.beneath-curl.near::before {
-  border-width: 0 0 36px 36px;
-  border-color: transparent transparent rgba(var(--accent-rgb), 0.25) transparent;
-}
-
-.beneath-lens {
-  position: fixed;
-  width: 120px;
-  height: 120px;
-  margin: -60px 0 0 -60px;
-  border: 2px solid rgba(var(--accent-rgb), 0.3);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10001;
-  box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.1);
 }

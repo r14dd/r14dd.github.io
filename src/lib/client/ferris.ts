@@ -24,11 +24,13 @@ export const initFerris = () => {
   ferris.innerHTML = FERRIS_SVG;
   ferris.setAttribute('aria-hidden', 'true');
 
+  // Every offset stays positive: a negative one hangs the sprite over the
+  // section edge, where an ancestor's overflow clips it in half.
   let target;
   if (hour >= 6 && hour < 12) {
     target = document.querySelector('.terminal-window')?.closest('section');
     if (target) {
-      ferris.style.right = '-36px';
+      ferris.style.right = '8px';
       ferris.style.bottom = '24px';
     }
   } else if (hour >= 12 && hour < 18) {
@@ -40,7 +42,7 @@ export const initFerris = () => {
   } else {
     target = document.getElementById('recommendations');
     if (target) {
-      ferris.style.left = '-36px';
+      ferris.style.left = '8px';
       ferris.style.top = '72px';
       ferris.classList.add('ferris-wander');
     }

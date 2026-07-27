@@ -118,14 +118,18 @@ export const initCrackGlass = () => {
         pane.classList.remove('cracked', 'repairing');
         crew.remove();
       }
+      document.body.classList.remove('glass-shattered');
       glassActive = false;
     }, 2200);
   };
 
-  document.addEventListener('click', (e) => {
+  // Listen on pointerdown, not click. Rage-clicking is a burst of mousedowns;
+  // waiting for `click` loses events and lands after the browser has already
+  // turned the burst into a text selection.
+  document.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
     if (state.cmdOpen || state.projOpen || state.kbdOpen || state.findNavOpen) return;
     if (isInteractive(e.target)) return;
-    if (window.getSelection()?.toString().length > 0) return;
 
     const now = performance.now();
 
@@ -143,6 +147,10 @@ export const initCrackGlass = () => {
 
     if (clickLog.length >= MIN_CLICKS) {
       glassActive = true;
+      // A triple-click has by now selected a paragraph. Drop it and suppress
+      // further selection, so the burst reads as hitting glass, not dragging text.
+      window.getSelection()?.removeAllRanges();
+      document.body.classList.add('glass-shattered');
       addCrack(e.clientX, e.clientY);
       clickLog.length = 0;
       repairTimer = setTimeout(spawnCrew, REPAIR_DELAY);

@@ -9,20 +9,18 @@ name = "COUNTER"
 class_name = "VisitorCounter"
 
 [[durable_objects.bindings]]
-name = "RELAY"
-class_name = "SongRelay"
-
-[[durable_objects.bindings]]
 name = "MESSAGES"
 class_name = "MessageBox"
 
-[[durable_objects.bindings]]
-name = "ROOMS"
-class_name = "PhoneRoom"
-
 # The free plan requires every Durable Object namespace to be SQLite-backed.
-# VisitorCounter and SongRelay still use the KV storage API, which SQLite-backed
-# DOs support; only MessageBox touches state.storage.sql directly.
+# VisitorCounter still uses the KV storage API, which SQLite-backed DOs support;
+# only MessageBox touches state.storage.sql directly.
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["VisitorCounter", "SongRelay", "MessageBox", "PhoneRoom"]
+
+# The song relay and phone trick were cut. Migration tags are append-only, so v1
+# stays as it was written and the namespaces are torn down here instead.
+[[migrations]]
+tag = "v2"
+deleted_classes = ["SongRelay", "PhoneRoom"]

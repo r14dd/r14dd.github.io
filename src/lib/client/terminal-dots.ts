@@ -16,35 +16,38 @@ export const initTerminalDots = () => {
   sulk.textContent = '• • • fine.';
   dotsRow.appendChild(sulk);
 
+  const SQUASH_MS = 900;
+
   let collapsed = false;
   let expanded = false;
   let squashing = false;
 
+  const collapse = () => {
+    if (expanded) {
+      terminal.classList.remove('term-expanded');
+      expanded = false;
+    }
+    terminal.classList.add('term-collapsed');
+    collapsed = true;
+  };
+
+  // No artificial delay here. The old version waited 400ms before doing
+  // anything visible, which just read as an unresponsive click.
+  const reopen = () => {
+    terminal.classList.remove('term-collapsed');
+    collapsed = false;
+  };
+
   redDot.addEventListener('click', (e) => {
     e.stopPropagation();
     if (squashing) return;
-    if (collapsed) {
-      setTimeout(() => {
-        terminal.classList.remove('term-collapsed');
-        collapsed = false;
-      }, 400);
-    } else {
-      if (expanded) {
-        terminal.classList.remove('term-expanded');
-        expanded = false;
-      }
-      terminal.classList.add('term-collapsed');
-      collapsed = true;
-    }
+    collapsed ? reopen() : collapse();
   });
 
   terminal.addEventListener('click', (e) => {
     if (!collapsed) return;
     if (e.target === redDot || e.target === yellowDot || e.target === greenDot) return;
-    setTimeout(() => {
-      terminal.classList.remove('term-collapsed');
-      collapsed = false;
-    }, 400);
+    reopen();
   });
 
   yellowDot.addEventListener('click', (e) => {
@@ -52,19 +55,28 @@ export const initTerminalDots = () => {
     if (collapsed || squashing) return;
     squashing = true;
     terminal.classList.add('term-squashed');
-    terminal.addEventListener(
-      'animationend',
-      () => {
-        terminal.classList.remove('term-squashed');
-        squashing = false;
-      },
-      { once: true },
-    );
+
+    // animationend bubbles, so a descendant finishing its own animation used to
+    // clear the squash early — that was the inconsistency. Only the terminal's
+    // own animation counts, and a timer backstops a dropped event.
+    const done = () => {
+      if (!squashing) return;
+      terminal.classList.remove('term-squashed');
+      squashing = false;
+      terminal.removeEventListener('animationend', onEnd);
+    };
+    const onEnd = (ev) => {
+      if (ev.target !== terminal || ev.animationName !== 'squash-bounce') return;
+      done();
+    };
+    terminal.addEventListener('animationend', onEnd);
+    setTimeout(done, SQUASH_MS + 120);
   });
 
   greenDot.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (collapsed || squashing) return;
+    if (squashing) return;
+    if (collapsed) reopen();
     expanded = !expanded;
     terminal.classList.toggle('term-expanded', expanded);
   });

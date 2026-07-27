@@ -16,156 +16,6 @@ export class VisitorCounter {
   }
 }
 
-export class SongRelay {
-  constructor(state) {
-    this.state = state;
-  }
-
-  async fetch(request) {
-    if (request.method === 'GET') {
-      const song = await this.state.storage.get('song');
-      const ts = await this.state.storage.get('timestamp');
-      return new Response(JSON.stringify({ song: song || null, timestamp: ts || null }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (request.method === 'POST') {
-      const { title, artist } = await request.json();
-      if (!title || !artist) return new Response('Bad Request', { status: 400 });
-      await this.state.storage.put('song', { title, artist });
-      await this.state.storage.put('timestamp', Date.now());
-      return new Response(JSON.stringify({ ok: true }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response('Not Found', { status: 404 });
-  }
-}
-
-export class PhoneRoom {
-  constructor(state) {
-    this.state = state;
-    this.desktop = null;
-    this.phone = null;
-    this.lastActivity = Date.now();
-  }
-
-  async fetch(request) {
-    const url = new URL(request.url);
-    const role = url.searchParams.get('role');
-    const upgrade = request.headers.get('Upgrade');
-
-    if (!upgrade || upgrade !== 'websocket') {
-      return new Response(JSON.stringify({ hasDesktop: !!this.desktop, hasPhone: !!this.phone }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    const pair = new WebSocketPair();
-    const [client, server] = Object.values(pair);
-
-    if (role === 'desktop') {
-      if (this.desktop) {
-        server.accept();
-        server.send(JSON.stringify({ type: 'error', message: 'room occupied' }));
-        server.close(1000);
-        return new Response(null, { status: 101, webSocket: client });
-      }
-      this.desktop = server;
-      this.setupDesktop(server);
-    } else if (role === 'phone') {
-      if (this.phone) {
-        server.accept();
-        server.send(JSON.stringify({ type: 'error', message: "someone's already driving" }));
-        server.close(1000);
-        return new Response(null, { status: 101, webSocket: client });
-      }
-      this.phone = server;
-      this.setupPhone(server);
-    } else {
-      server.accept();
-      server.send(JSON.stringify({ type: 'error', message: 'invalid role' }));
-      server.close(1000);
-      return new Response(null, { status: 101, webSocket: client });
-    }
-
-    this.lastActivity = Date.now();
-    this.scheduleIdle();
-    return new Response(null, { status: 101, webSocket: client });
-  }
-
-  setupDesktop(ws) {
-    ws.accept();
-    ws.send(JSON.stringify({ type: 'connected', role: 'desktop' }));
-
-    ws.addEventListener('message', (e) => {
-      this.lastActivity = Date.now();
-      if (this.phone)
-        try {
-          this.phone.send(e.data);
-        } catch {}
-    });
-
-    ws.addEventListener('close', () => {
-      this.desktop = null;
-      if (this.phone)
-        try {
-          this.phone.send(JSON.stringify({ type: 'desktop-left' }));
-        } catch {}
-    });
-  }
-
-  setupPhone(ws) {
-    ws.accept();
-    ws.send(JSON.stringify({ type: 'connected', role: 'phone' }));
-    if (this.desktop) {
-      try {
-        this.desktop.send(JSON.stringify({ type: 'phone-joined' }));
-      } catch {}
-    }
-
-    ws.addEventListener('message', (e) => {
-      this.lastActivity = Date.now();
-      if (this.desktop)
-        try {
-          this.desktop.send(e.data);
-        } catch {}
-    });
-
-    ws.addEventListener('close', () => {
-      this.phone = null;
-      if (this.desktop)
-        try {
-          this.desktop.send(JSON.stringify({ type: 'phone-left' }));
-        } catch {}
-    });
-  }
-
-  scheduleIdle() {
-    if (this._idleAlarm) return;
-    this._idleAlarm = true;
-    setTimeout(() => {
-      this._idleAlarm = false;
-      if (Date.now() - this.lastActivity > 5 * 60 * 1000) {
-        if (this.desktop)
-          try {
-            this.desktop.close(1000, 'idle');
-          } catch {}
-        if (this.phone)
-          try {
-            this.phone.close(1000, 'idle');
-          } catch {}
-        this.desktop = null;
-        this.phone = null;
-      } else {
-        this.scheduleIdle();
-      }
-    }, 60 * 1000);
-  }
-}
-
 export class MessageBox {
   constructor(state) {
     this.state = state;
@@ -273,9 +123,6 @@ export default {
     if (path === '/visitor/increment' && request.method === 'POST') {
       const id = env.COUNTER.idFromName('global');
       res = await env.COUNTER.get(id).fetch(request);
-    } else if (path === '/relay' && (request.method === 'GET' || request.method === 'POST')) {
-      const id = env.RELAY.idFromName('global');
-      res = await env.RELAY.get(id).fetch(request);
     } else if (path === '/message' && request.method === 'POST') {
       const id = env.MESSAGES.idFromName('global');
       res = await env.MESSAGES.get(id).fetch(request);
@@ -286,11 +133,6 @@ export default {
       }
       const id = env.MESSAGES.idFromName('global');
       res = await env.MESSAGES.get(id).fetch(request);
-    } else if (path === '/room') {
-      const code = url.searchParams.get('code');
-      if (!code) return new Response('Bad Request', { status: 400, headers });
-      const id = env.ROOMS.idFromName(code);
-      return env.ROOMS.get(id).fetch(request);
     } else {
       return new Response('Not Found', { status: 404, headers });
     }
