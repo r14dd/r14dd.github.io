@@ -1,0 +1,265 @@
+---
+// Phone controller page — opened by scanning the phone trick QR code.
+// Reads room code from location.hash and connects via WebSocket.
+// Sends gyroscope/orientation data to the paired desktop tab.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>remote — riad.cc</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0e0f11;
+        --text: #e4e4e7;
+        --accent: #a78bfa;
+        --muted: #71717a;
+        --border: #27272a;
+      }
+
+      body {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        text-align: center;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: none;
+        overflow: hidden;
+      }
+
+      .remote-status {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      .remote-orb-area {
+        width: 80vw;
+        height: 50vh;
+        border: 1px dashed var(--border);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .remote-orb-hint {
+        font-size: 0.7rem;
+        color: var(--muted);
+        opacity: 0.5;
+      }
+
+      .remote-orb {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 40% 40%, var(--accent), transparent 70%);
+        box-shadow:
+          0 0 24px rgba(167, 139, 250, 0.4),
+          0 0 48px rgba(167, 139, 250, 0.15);
+        position: absolute;
+        transition: transform 0.1s ease-out;
+      }
+
+      .remote-flick-btn {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--accent);
+        font-family: inherit;
+        font-size: 0.8rem;
+        padding: 0.6rem 1.6rem;
+        border-radius: 999px;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        min-height: 44px;
+        min-width: 44px;
+      }
+
+      .remote-flick-btn:active {
+        background: rgba(167, 139, 250, 0.15);
+        border-color: var(--accent);
+      }
+
+      .remote-error {
+        color: #f87171;
+        font-size: 0.8rem;
+      }
+
+      .remote-branding {
+        position: fixed;
+        bottom: 1rem;
+        font-size: 0.6rem;
+        color: var(--muted);
+        opacity: 0.4;
+      }
+
+      .connected .remote-orb-area {
+        border-color: rgba(167, 139, 250, 0.25);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="remote-status" id="status">connecting...</div>
+    <div class="remote-orb-area" id="orb-area">
+      <div class="remote-orb-hint" id="hint">tilt your phone to move the orb</div>
+    </div>
+    <button class="remote-flick-btn" id="flick" disabled>flick</button>
+    <div class="remote-branding">riad.cc</div>
+
+    <script is:inline>
+      const API =
+        location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+          ? `ws://${location.hostname}:8787`
+          : 'wss://toy-api.riad-mrv.workers.dev';
+
+      const roomCode = location.hash.slice(1);
+      const statusEl = document.getElementById('status');
+      const orbArea = document.getElementById('orb-area');
+      const hintEl = document.getElementById('hint');
+      const flickBtn = document.getElementById('flick');
+
+      if (!roomCode) {
+        statusEl.textContent = 'no room code found';
+        statusEl.classList.add('remote-error');
+      } else {
+        connect();
+      }
+
+      function connect() {
+        const ws = new WebSocket(`${API}/room?code=${roomCode}&role=phone`);
+        let orb = null;
+
+        ws.onopen = () => {
+          statusEl.textContent = 'connected — tilt to move';
+          document.body.classList.add('connected');
+          flickBtn.disabled = false;
+
+          orb = document.createElement('div');
+          orb.className = 'remote-orb';
+          orbArea.appendChild(orb);
+          hintEl.style.display = 'none';
+
+          requestGyro();
+        };
+
+        ws.onmessage = (e) => {
+          try {
+            const msg = JSON.parse(e.data);
+            if (msg.type === 'error') {
+              statusEl.textContent = msg.message;
+              statusEl.classList.add('remote-error');
+              flickBtn.disabled = true;
+            } else if (msg.type === 'desktop-left') {
+              statusEl.textContent = 'desktop disconnected';
+              flickBtn.disabled = true;
+            }
+          } catch {}
+        };
+
+        ws.onclose = () => {
+          document.body.classList.remove('connected');
+          statusEl.textContent = 'disconnected';
+          flickBtn.disabled = true;
+          if (orb) {
+            orb.remove();
+            orb = null;
+          }
+        };
+
+        function requestGyro() {
+          if (
+            typeof DeviceOrientationEvent !== 'undefined' &&
+            typeof DeviceOrientationEvent.requestPermission === 'function'
+          ) {
+            DeviceOrientationEvent.requestPermission()
+              .then((perm) => {
+                if (perm === 'granted') startGyro(ws, orb);
+              })
+              .catch(() => {
+                statusEl.textContent = 'gyroscope permission denied';
+              });
+          } else {
+            startGyro(ws, orb);
+          }
+        }
+
+        let lastFlick = 0;
+        let prevGamma = 0;
+
+        function startGyro(ws, orb) {
+          let throttle = 0;
+
+          window.addEventListener('deviceorientation', (e) => {
+            const now = Date.now();
+            const beta = e.beta || 0;
+            const gamma = e.gamma || 0;
+
+            // Flick detection: sharp wrist rotation
+            const deltaG = Math.abs(gamma - prevGamma);
+            if (deltaG > 40 && now - lastFlick > 1000) {
+              lastFlick = now;
+              if (ws.readyState === 1) {
+                ws.send(JSON.stringify({ type: 'flick' }));
+              }
+            }
+            prevGamma = gamma;
+
+            // Local orb
+            if (orb) {
+              const areaRect = orbArea.getBoundingClientRect();
+              const x = Math.min(Math.max((gamma + 45) / 90, 0), 1) * areaRect.width;
+              const y = Math.min(Math.max((beta + 45) / 90, 0), 1) * areaRect.height;
+              orb.style.left = `${x - 24}px`;
+              orb.style.top = `${y - 24}px`;
+            }
+
+            // Throttle WS to ~30fps
+            if (now - throttle < 33) return;
+            throttle = now;
+
+            if (ws.readyState === 1) {
+              ws.send(
+                JSON.stringify({
+                  type: 'gyro',
+                  beta: Math.round(beta * 10) / 10,
+                  gamma: Math.round(gamma * 10) / 10,
+                }),
+              );
+            }
+          });
+        }
+
+        flickBtn.addEventListener('click', () => {
+          if (ws.readyState === 1) {
+            ws.send(JSON.stringify({ type: 'flick' }));
+            flickBtn.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+              flickBtn.style.transform = '';
+            }, 150);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

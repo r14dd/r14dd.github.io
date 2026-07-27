@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profiles } from '../data/profile-i18n';
+import '../styles/toys.css';
 import {
   buildExperience,
   buildProjects,
@@ -479,5 +480,36 @@ const structuredData = JSON.stringify({
 
     initAmbient();
     fetchBadges();
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const loadToys = () => {
+        const desktop = window.matchMedia('(pointer: fine)').matches;
+
+        // Wave 1 — universal
+        import('../lib/client/visitor-number').then((m) => m.initVisitorNumber());
+        import('../lib/client/ferris').then((m) => m.initFerris());
+
+        // Wave 1 — desktop only
+        if (desktop) {
+          import('../lib/client/crack-glass').then((m) => m.initCrackGlass());
+          import('../lib/client/terminal-dots').then((m) => m.initTerminalDots());
+        }
+
+        // Wave 2 — universal
+        import('../lib/client/song-relay').then((m) => m.initSongRelay());
+        import('../lib/client/paper-airplane').then((m) => m.initPaperAirplane());
+
+        // Wave 2 — desktop only
+        if (desktop) {
+          import('../lib/client/beneath').then((m) => m.initBeneath());
+        }
+
+        // Wave 3 — desktop only
+        if (desktop) {
+          import('../lib/client/phone-trick').then((m) => m.initPhoneTrick());
+        }
+      };
+      'requestIdleCallback' in window ? requestIdleCallback(loadToys) : setTimeout(loadToys, 1000);
+    }
   </script>
 </BaseLayout>

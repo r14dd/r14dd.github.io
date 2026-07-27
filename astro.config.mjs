@@ -9,7 +9,10 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) =>
-        !page.includes('/poll') && !page.includes('/lab') && !page.includes('/admin'),
+        !page.includes('/poll') &&
+        !page.includes('/lab') &&
+        !page.includes('/admin') &&
+        !page.includes('/remote'),
     }),
   ],
   build: {
