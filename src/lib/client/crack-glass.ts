@@ -13,6 +13,9 @@ export const initCrackGlass = () => {
 
   let pane = null;
   let svg = null;
+  // Each fracture is kept with the x it was struck at, so the repair sweep can
+  // heal them one by one as it reaches them instead of fading the lot at once.
+  const fractures = [];
 
   const isInteractive = (el) => {
     if (!el) return false;
@@ -91,6 +94,7 @@ export const initCrackGlass = () => {
     }
 
     svg.appendChild(g);
+    fractures.push({ el: g, x });
     pane.classList.add('cracked');
   };
 
@@ -100,27 +104,61 @@ export const initCrackGlass = () => {
 
     const crew = document.createElement('div');
     crew.className = 'repair-crew';
-
-    ['\u{1F527}', '\u{1F9F9}', '\u{1F624}'].forEach((ch, i) => {
+    ['\u{1F9F9}', '\u{1F527}'].forEach((ch, i) => {
       const w = document.createElement('span');
       w.className = 'repair-worker';
       w.textContent = ch;
-      w.style.animationDelay = `${i * 0.15}s`;
+      w.style.animationDelay = `${i * 0.12}s`;
       crew.appendChild(w);
     });
 
-    pane.appendChild(crew);
-    requestAnimationFrame(() => crew.classList.add('active'));
+    // A soft vertical band travelling with the crew — the visible edge between
+    // "still broken" on the right and "mended" on the left.
+    const wipe = document.createElement('div');
+    wipe.className = 'repair-wipe';
 
-    setTimeout(() => {
+    pane.appendChild(wipe);
+    pane.appendChild(crew);
+    crew.classList.add('active');
+
+    const START = -90;
+    const END = innerWidth + 90;
+    const SWEEP_MS = 1900;
+    const pending = fractures.slice().sort((a, b) => a.x - b.x);
+    let t0 = null;
+
+    const step = (ts) => {
+      if (t0 === null) t0 = ts;
+      const p = Math.min((ts - t0) / SWEEP_MS, 1);
+      // Ease out slightly so they arrive rather than teleport off-screen.
+      const x = START + (END - START) * (1 - Math.pow(1 - p, 1.6));
+
+      crew.style.transform = `translateX(${x}px)`;
+      wipe.style.transform = `translateX(${x}px)`;
+
+      // Heal every fracture the crew has now walked past.
+      while (pending.length && pending[0].x <= x) {
+        const f = pending.shift();
+        f.el.classList.add('crack-healed');
+      }
+
+      if (p < 1) {
+        requestAnimationFrame(step);
+        return;
+      }
+
       if (svg) svg.innerHTML = '';
+      fractures.length = 0;
       if (pane) {
         pane.classList.remove('cracked', 'repairing');
         crew.remove();
+        wipe.remove();
       }
       document.body.classList.remove('glass-shattered');
       glassActive = false;
-    }, 2200);
+    };
+
+    requestAnimationFrame(step);
   };
 
   // Listen on pointerdown, not click. Rage-clicking is a burst of mousedowns;

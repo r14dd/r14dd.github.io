@@ -40,24 +40,42 @@ html.light .crack-ring {
   stroke: rgba(0, 0, 0, 0.32);
 }
 
-.glass-pane.repairing .crack-line {
-  transition: opacity 1.2s ease;
+/* Each fracture clears only once the crew reaches it, so the repair reads as
+   cause and effect rather than an unrelated timed fade. */
+.crack-healed {
   opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+/* The moving boundary between broken and mended glass. */
+.repair-wipe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 130px;
+  margin-left: -65px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--accent-rgb), 0.05) 45%,
+    rgba(var(--accent-rgb), 0.11) 50%,
+    rgba(var(--accent-rgb), 0.05) 55%,
+    transparent 100%
+  );
 }
 
 .repair-crew {
   position: absolute;
-  bottom: 35%;
-  right: -60px;
+  bottom: 12%;
+  left: 0;
   display: flex;
-  gap: 10px;
-  font-size: 14px;
+  gap: 9px;
+  font-size: 15px;
   line-height: 1;
   pointer-events: none;
-}
-
-.repair-crew.active {
-  animation: crew-walk 2s linear forwards;
+  will-change: transform;
 }
 
 .repair-worker {
@@ -74,15 +92,6 @@ html.light .crack-ring {
 
 .repair-crew.active .repair-worker:nth-child(3) {
   animation-delay: 0.2s;
-}
-
-@keyframes crew-walk {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-100vw - 120px));
-  }
 }
 
 @keyframes worker-bob {
