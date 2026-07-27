@@ -316,6 +316,125 @@
         color: var(--muted);
       }
 
+      /* ── Paper airplanes ── */
+      .msg-card {
+        margin-top: 12px;
+      }
+      .msg-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .msg-count {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      #msg-gate {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      #msg-gate label {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+      }
+      #msg-gate input {
+        flex: 1 1 200px;
+        min-width: 0;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+      #msg-gate input:focus {
+        outline: 2px solid var(--blue);
+        outline-offset: 1px;
+      }
+      #msg-gate button {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 8px 14px;
+        cursor: pointer;
+        min-height: 34px;
+      }
+      #msg-gate button:hover {
+        border-color: var(--blue);
+      }
+      .msg-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .msg {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4px 12px;
+        padding: 12px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+      }
+      .msg-text {
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--text);
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        min-width: 0;
+      }
+      .msg-meta {
+        grid-column: 1 / -1;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .msg-contact {
+        color: var(--blue);
+        text-decoration: none;
+      }
+      .msg-contact:hover {
+        text-decoration: underline;
+      }
+      .msg-del {
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 11px;
+        padding: 4px 10px;
+        cursor: pointer;
+        align-self: start;
+        min-height: 28px;
+      }
+      .msg-del:hover {
+        color: var(--text);
+        border-color: var(--text-2);
+      }
+      .msg-empty {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+        margin: 14px 0 0;
+      }
+
       /* ── Tooltip ── */
       #tip {
         position: fixed;
@@ -488,6 +607,20 @@
           <div class="card"><h2>Browsers</h2><div class="rows" id="b-browsers"></div></div>
           <div class="card"><h2>Devices</h2><div class="rows" id="b-devices"></div></div>
         </div>
+
+        <div class="card msg-card">
+          <div class="msg-head">
+            <h2>Paper airplanes</h2>
+            <span class="msg-count" id="msg-count"></span>
+          </div>
+          <form id="msg-gate" hidden>
+            <label for="msg-key">toy-api admin key</label>
+            <input id="msg-key" type="password" autocomplete="off" />
+            <button type="submit">unlock</button>
+          </form>
+          <div class="msg-list" id="msg-list"></div>
+          <p class="msg-empty" id="msg-empty" hidden>No messages yet.</p>
+        </div>
       </main>
     </div>
 
@@ -549,6 +682,118 @@
         $('signout').addEventListener('click', function () {
           localStorage.removeItem(KEY_STORE);
           location.search = '';
+        });
+
+        // ── paper airplanes (toy-api) ──
+        // Separate worker from the analytics API, so it has its own key. We try
+        // the analytics key first: if both secrets are set to the same value the
+        // panel unlocks with no extra prompt.
+        var TOY_API = 'https://toy-api.riad-mrv.workers.dev';
+        var TOY_KEY_STORE = 'toy-admin-key';
+
+        function toyKey() {
+          return localStorage.getItem(TOY_KEY_STORE) || getKey();
+        }
+
+        function esc(s) {
+          return String(s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+          });
+        }
+
+        function fmtAgo(ts) {
+          var mins = Math.floor((Date.now() - ts) / 60000);
+          if (mins < 1) return 'just now';
+          if (mins < 60) return mins + 'm ago';
+          var hrs = Math.floor(mins / 60);
+          if (hrs < 24) return hrs + 'h ago';
+          return Math.floor(hrs / 24) + 'd ago';
+        }
+
+        function loadMessages() {
+          if (DEMO) {
+            $('msg-count').textContent = 'demo';
+            $('msg-empty').hidden = false;
+            return;
+          }
+          var key = toyKey();
+          if (!key) {
+            $('msg-gate').hidden = false;
+            return;
+          }
+          fetch(TOY_API + '/messages?key=' + encodeURIComponent(key))
+            .then(function (r) {
+              if (r.status === 401) {
+                $('msg-gate').hidden = false;
+                $('msg-count').textContent = 'locked';
+                return null;
+              }
+              return r.json();
+            })
+            .then(function (b) {
+              if (!b) return;
+              $('msg-gate').hidden = true;
+              renderMessages(b.messages || []);
+            })
+            .catch(function (e) {
+              $('msg-count').textContent = 'failed: ' + e.message;
+            });
+        }
+
+        function renderMessages(list) {
+          var box = $('msg-list');
+          box.textContent = '';
+          $('msg-count').textContent = list.length
+            ? list.length + (list.length === 1 ? ' message' : ' messages')
+            : '';
+          $('msg-empty').hidden = list.length > 0;
+
+          list.forEach(function (m) {
+            var el = document.createElement('div');
+            el.className = 'msg';
+
+            var contact = '';
+            if (m.contact) {
+              var c = String(m.contact);
+              var href = c.indexOf('@') > 0 && c.indexOf(' ') < 0 ? 'mailto:' + c : null;
+              contact = href
+                ? '<a class="msg-contact" href="' + esc(href) + '">' + esc(c) + '</a>'
+                : '<span class="msg-contact">' + esc(c) + '</span>';
+            }
+
+            el.innerHTML =
+              '<div class="msg-text">' +
+              esc(m.text) +
+              '</div>' +
+              '<button class="msg-del" type="button" aria-label="Delete message">delete</button>' +
+              '<div class="msg-meta"><span>' +
+              esc(fmtAgo(m.created_at)) +
+              '</span>' +
+              (contact ? '<span>' + contact + '</span>' : '') +
+              '</div>';
+
+            el.querySelector('.msg-del').addEventListener('click', function () {
+              fetch(TOY_API + '/messages?key=' + encodeURIComponent(toyKey()) + '&id=' + m.id, {
+                method: 'DELETE',
+              })
+                .then(function () {
+                  loadMessages();
+                })
+                .catch(function () {});
+            });
+
+            box.appendChild(el);
+          });
+        }
+
+        $('msg-gate').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var v = $('msg-key').value.trim();
+          if (!v) return;
+          localStorage.setItem(TOY_KEY_STORE, v);
+          $('msg-key').value = '';
+          $('msg-count').textContent = '';
+          loadMessages();
         });
 
         // ── data ──
@@ -682,6 +927,7 @@
         function render() {
           loading.hidden = true;
           dash.hidden = false;
+          loadMessages();
           $('t-visits').textContent = fmt(data.totals.visits);
           $('t-views').textContent = fmt(data.totals.views);
           var vit = data.vitals || {};
