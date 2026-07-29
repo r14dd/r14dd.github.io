@@ -1,7 +1,10 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { profiles } from '../data/profile-i18n';
-import '../styles/toys.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { profiles } from '../../data/profile-i18n';
+import '../../styles/toys.css';
+// Page-level: the Raft project modal mounts the live cluster here. Kept out
+// of BaseLayout so pages that can't host one don't inline the stylesheet.
+import '../../styles/raft.css';
 import {
   buildExperience,
   buildProjects,
@@ -10,22 +13,44 @@ import {
   buildSkills,
   buildRecommendations,
   buildConnect,
-} from '../lib/builders';
+} from '../../lib/builders';
 
-const profile = profiles.en;
+// One prerendered document per locale: / (en), /ru/, /az/. Before this, the
+// Russian and Azerbaijani versions only existed after a JS click, so no crawler
+// ever saw them and no link could point at one. The page body is untouched —
+// every section already renders through the shared builders, so serving a
+// different locale is a matter of which profile goes in.
+export function getStaticPaths() {
+  return Object.keys(profiles).map((lang) => ({
+    params: { lang: lang === 'en' ? undefined : lang },
+    props: { lang },
+  }));
+}
+
+const { lang } = Astro.props;
+const profile = profiles[lang];
+const LANG_ORDER = ['en', 'ru', 'az'];
+const LANG_LABELS: Record<string, string> = {
+  en: 'English',
+  ru: 'Русский',
+  az: 'Azərbaycanca',
+};
 // Mirror of the runtime wrapNum in applyLanguage — keep in sync.
 const wrapStatNum = (s: string) =>
   s.replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
-const metaTitle = `${profile.hero.name} — Portfolio`;
-const metaDescription =
-  'Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.';
+const metaTitle = `${profile.hero.name} — ${profile.labels.meta.titleSuffix}`;
+const metaDescription = profile.labels.meta.description;
+const canonical = lang === 'en' ? 'https://riad.cc' : `https://riad.cc/${lang}/`;
 const structuredData = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: profile.hero.name,
-  alternateName: ['Riad Muxtarov', 'r14dd'],
+  alternateName: ['Riad Mukhtarov', 'Riad Muxtarov', 'Риад Мухтаров', 'r14dd'].filter(
+    (n) => n !== profile.hero.name,
+  ),
   jobTitle: 'AI/Software Engineer',
-  url: 'https://riad.cc',
+  url: canonical,
+  inLanguage: lang,
   sameAs: [profile.links.linkedin, profile.links.github, 'https://crates.io/users/r14dd'],
   email: `mailto:${profile.email}`,
 });
@@ -35,10 +60,15 @@ const structuredData = JSON.stringify({
   metaTitle={metaTitle}
   metaDescription={metaDescription}
   structuredData={structuredData}
-  lang="en"
+  lang={lang}
+  localized={true}
 >
-  {/* EN only — RU/AZ are fetched from /i18n/<lang>.json on first switch. */}
-  <script type="application/json" id="i18n-data" set:html={JSON.stringify({ en: profiles.en })} />
+  {
+    /* Only the locale being served ships inline; the other two load from
+       /i18n/<lang>.json on first switch, keeping ~30KB of unused translation
+       off the critical path. */
+  }
+  <script type="application/json" id="i18n-data" set:html={JSON.stringify({ [lang]: profile })} />
 
   <div class="lang-switcher" aria-label="Controls">
     <button
@@ -82,27 +112,29 @@ const structuredData = JSON.stringify({
           <path d="M2.5 5.5h11M2.5 10.5h11"></path>
         </svg>
       </span>
-      <span class="lang-label" id="lang-current">English</span>
+      <span class="lang-label" id="lang-current">{LANG_LABELS[lang]}</span>
       <span class="lang-caret" aria-hidden="true">▾</span>
     </button>
+    {
+      /* Each entry is a real link to the prerendered locale, so the switcher
+         works with JS off and a crawler can follow it. The runtime handler
+         intercepts the click to swap in place instead of reloading. */
+    }
     <div class="lang-menu" id="lang-menu" role="menu" aria-label="Select language">
-      <button type="button" role="menuitemradio" aria-checked="true" data-lang="en">English</button>
-      <button type="button" role="menuitemradio" aria-checked="false" data-lang="ru">Русский</button
-      >
-      <button type="button" role="menuitemradio" aria-checked="false" data-lang="az"
-        >Azərbaycanca</button
-      >
+      {
+        LANG_ORDER.map((l) => (
+          <a
+            role="menuitemradio"
+            aria-checked={l === lang ? 'true' : 'false'}
+            data-lang={l}
+            hreflang={l}
+            href={l === 'en' ? '/' : `/${l}/`}
+          >
+            {LANG_LABELS[l]}
+          </a>
+        ))
+      }
     </div>
-  </div>
-
-  <div class="pull-indicator" id="pull-indicator" aria-hidden="true">
-    <svg
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.5"
-      stroke-linecap="round"><path d="M8 2v12M5 5l3-3 3 3"></path></svg
-    >
   </div>
 
   <nav class="side-nav" id="side-nav">
@@ -357,11 +389,6 @@ const structuredData = JSON.stringify({
         <span class="kbd-desc">This menu</span><span class="kbd-keys"><kbd>?</kbd></span>
       </div>
       <div class="kbd-row">
-        <span class="kbd-desc">Find in page</span><span class="kbd-keys"
-          ><kbd>⌘</kbd><kbd>F</kbd></span
-        >
-      </div>
-      <div class="kbd-row">
         <span class="kbd-desc">Jump to section</span><span class="kbd-keys"
           ><kbd>g</kbd><span class="kbd-then">then</span><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd
             >t</kbd
@@ -377,7 +404,6 @@ const structuredData = JSON.stringify({
     </div>
   </div>
 
-  <div class="easter-overlay" id="easter-overlay" aria-hidden="true"></div>
   <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
   <div class="find-nav-bar" id="find-nav-bar" aria-hidden="true">
     <button class="find-nav-btn" id="find-nav-prev" type="button" aria-label="Previous match"
@@ -431,24 +457,20 @@ const structuredData = JSON.stringify({
   </div>
 
   <script>
-    // Page orchestrator: every feature lives in src/lib/client/*; this script
-    // only calls their inits in the original top-to-bottom order, which
-    // preserves listener registration order (palette → shortcuts → konami on
-    // document keydown, mobile-nav → lang-menu on document click).
-    import * as sfx from '../lib/client/sfx';
-    import { initSpotify } from '../lib/client/spotify';
-    import { fetchBadges } from '../lib/client/badges';
-    import { initHeroReveal } from '../lib/client/hero-reveal';
-    import { initTerminalBoot, initTerminal } from '../lib/client/terminal';
-    import { initNav } from '../lib/client/nav';
-    import { initSimOverlay } from '../lib/client/sim-overlay';
-    import { initI18n } from '../lib/client/i18n-runtime';
-    import { initTheme } from '../lib/client/theme';
-    import { initCmdPalette } from '../lib/client/cmd-palette';
-    import { initShortcuts } from '../lib/client/shortcuts';
-    import { initProjectModal } from '../lib/client/project-modal';
-    import { initGestures } from '../lib/client/gestures';
-    import { initAmbient } from '../lib/client/ambient';
+    // Page orchestrator, split in two. Eager: only what the first viewport
+    // needs (hero reveal, terminal, nav, i18n, theme, the Spotify line).
+    // Deferred: palette, shortcuts, project modal, gestures, sim overlay,
+    // ambient — loaded right after `load`, or on the first interaction,
+    // whichever comes first. A ⌘K pressed before the chunk lands is buffered
+    // and replayed, so the palette answers the very first press.
+    import * as sfx from '../../lib/client/sfx';
+    import { initSpotify } from '../../lib/client/spotify';
+    import { fetchBadges } from '../../lib/client/badges';
+    import { initHeroReveal } from '../../lib/client/hero-reveal';
+    import { initTerminalBoot, initTerminal } from '../../lib/client/terminal';
+    import { initNav } from '../../lib/client/nav';
+    import { initI18n } from '../../lib/client/i18n-runtime';
+    import { initTheme } from '../../lib/client/theme';
 
     console.log(
       '%criad.cc%c — built with patience, discipline, hunger, focus.\n' +
@@ -465,35 +487,93 @@ const structuredData = JSON.stringify({
     initTerminal();
 
     initNav();
-    initSimOverlay();
     initI18n();
     sfx.init();
 
     initTheme();
 
-    initCmdPalette();
-    initShortcuts();
-    initProjectModal();
-    initGestures();
-
     initSpotify();
-
-    initAmbient();
     fetchBadges();
+
+    let deferredPromise: Promise<typeof import('../../lib/client/deferred')> | null = null;
+    const loadDeferred = () => {
+      deferredPromise ||= import('../../lib/client/deferred').then((m) => {
+        m.initDeferred();
+        window.removeEventListener('keydown', earlyKey, true);
+        // Replay, in order, every shortcut pressed while the chunk was still
+        // in flight. The listeners that own them are live now, so a synthetic
+        // keydown routes exactly like the original would have.
+        for (const init of buffered) document.dispatchEvent(new KeyboardEvent('keydown', init));
+        buffered.length = 0;
+        return m;
+      });
+      return deferredPromise;
+    };
+
+    // Every shortcut in the deferred chunk — ⌘K for the palette, and the ones
+    // initShortcuts owns — used to vanish if pressed before the chunk landed.
+    // Only ⌘K was buffered, so `?` and g-nav (both advertised in the shortcut
+    // overlay) silently did nothing for the first few hundred milliseconds.
+    const SHORTCUT_KEYS = new Set(['?', '\\', 'g']);
+    const G_KEYS = new Set(['e', 'p', 's', 't', 'd', 'c', 'm']);
+    const buffered: KeyboardEventInit[] = [];
+    let gArmed = false;
+
+    const earlyKey = (e: KeyboardEvent) => {
+      // A keystroke is interaction: pull the chunk in now rather than waiting
+      // for load. Pointer events already do this; the keyboard never did.
+      loadDeferred();
+      const el = document.activeElement;
+      const typing =
+        !!el &&
+        (el.tagName === 'INPUT' ||
+          el.tagName === 'TEXTAREA' ||
+          (el as HTMLElement).isContentEditable);
+      const key = e.key.toLowerCase();
+      const cmdK = (e.metaKey || e.ctrlKey) && key === 'k';
+      if (cmdK) {
+        // Must happen on the real event — a replayed one is too late to stop
+        // the browser's own ⌘K.
+        e.preventDefault();
+      } else if (typing || e.metaKey || e.ctrlKey || e.altKey) {
+        return;
+      } else if (!SHORTCUT_KEYS.has(e.key) && !(gArmed && G_KEYS.has(key))) {
+        return;
+      }
+      gArmed = key === 'g';
+      buffered.push({
+        key: e.key,
+        code: e.code,
+        metaKey: e.metaKey,
+        ctrlKey: e.ctrlKey,
+        shiftKey: e.shiftKey,
+        altKey: e.altKey,
+        bubbles: true,
+      });
+    };
+    window.addEventListener('keydown', earlyKey, true);
+    for (const ev of ['pointerdown', 'touchstart'])
+      window.addEventListener(ev, loadDeferred, { once: true, passive: true, capture: true });
+    if (document.readyState === 'complete') {
+      setTimeout(loadDeferred, 0);
+    } else {
+      window.addEventListener('load', () => setTimeout(loadDeferred, 0), { once: true });
+    }
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const loadToys = () => {
         const desktop = window.matchMedia('(pointer: fine)').matches;
 
         // Universal
-        import('../lib/client/visitor-number').then((m) => m.initVisitorNumber());
-        import('../lib/client/ferris').then((m) => m.initFerris());
-        import('../lib/client/paper-airplane').then((m) => m.initPaperAirplane());
+        import('../../lib/client/visitor-number').then((m) => m.initVisitorNumber());
+        import('../../lib/client/ferris').then((m) => m.initFerris());
+        import('../../lib/client/paper-airplane').then((m) => m.initPaperAirplane());
+        // The dots are ordinary tap targets — no reason they were desktop-only.
+        import('../../lib/client/terminal-dots').then((m) => m.initTerminalDots());
 
-        // Desktop only
+        // Desktop only: rage-clicking has no touch equivalent worth emulating.
         if (desktop) {
-          import('../lib/client/crack-glass').then((m) => m.initCrackGlass());
-          import('../lib/client/terminal-dots').then((m) => m.initTerminalDots());
+          import('../../lib/client/crack-glass').then((m) => m.initCrackGlass());
         }
       };
       'requestIdleCallback' in window ? requestIdleCallback(loadToys) : setTimeout(loadToys, 1000);

@@ -82,10 +82,14 @@ export const initTerminalBoot = () => {
   })();
 };
 
-// Interactive terminal — desktop only, after animation
+// Interactive terminal — every pointer type, after the boot animation.
+//
+// This was desktop-gated for a long time, which meant the single best thing on
+// the site was dark for every phone visitor. On touch it is typing-first: the
+// input is never auto-focused, and it renders at a genuine 16px (scaled back
+// down in CSS) so iOS doesn't zoom the viewport on focus.
 export const initTerminal = () => {
-  const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (!isDesktop) return;
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
   const esc = (s) =>
     typeof s === 'string'
@@ -166,6 +170,26 @@ export const initTerminal = () => {
   const fmtMs = (v) =>
     v == null ? '—' : v < 1000 ? Math.round(v) + ' ms' : (v / 1000).toFixed(2) + ' s';
   const fmtKb = (b) => (b ? (b / 1024).toFixed(1) + ' KB' : '—');
+  // Field p75 for the `perf` comparison column. Cached for the session, and a
+  // failure resolves to null rather than throwing — `perf` then prints the
+  // local-only table it always printed. A dead Worker costs a column, not the
+  // command.
+  let _fieldVitals;
+  const fetchFieldVitals = async () => {
+    if (_fieldVitals !== undefined) return _fieldVitals;
+    try {
+      const res = await fetch('https://analytics-api.riad-mrv.workers.dev/vitals', {
+        signal: AbortSignal.timeout(3000),
+      });
+      if (!res.ok) throw new Error('bad status');
+      const data = await res.json();
+      _fieldVitals = data && data.samples ? data : null;
+    } catch {
+      _fieldVitals = null;
+    }
+    return _fieldVitals;
+  };
+
   const readVitals = () => {
     const nav = performance.getEntriesByType('navigation')[0] || {};
     const res = performance.getEntriesByType('resource');
@@ -279,6 +303,7 @@ export const initTerminal = () => {
           tx('whoami · stats') + cmt('roles & quick numbers'),
           tx('projects · skills') + cmt('what I build'),
           tx('rrf · hash · xor') + cmt('real Rust, run live in WebAssembly'),
+          tx('raft') + cmt('live Raft consensus — crash the leader yourself'),
           tx('perf · where') + cmt('your Web Vitals & connection info'),
           tx('patent') + cmt('a real project run, replayed'),
           tx('offline') + cmt('enable/disable offline mode'),
@@ -355,6 +380,23 @@ export const initTerminal = () => {
           ? skills.map((s) => s.category + ': ' + skillItems(s).join(', '))
           : ['Rust · Python · Go · Tokio · FastAPI', 'Kafka · PostgreSQL · Docker · AWS'],
       }),
+      raft: () => {
+        // The live cluster lives in the Raft project modal (mountRaft). The
+        // modal machinery is in the deferred chunk — ensure it, then open.
+        import('./deferred')
+          .then(async (d) => {
+            d.initDeferred();
+            (await import('./project-modal')).openProjectByName('raft');
+          })
+          .catch(() => {});
+        return {
+          lines: [
+            'starting cluster… five nodes, real elections, real quorum.',
+            'click a node to crash it. partition the leader. watch the logs converge.',
+          ],
+          cls: 'muted',
+        };
+      },
       grep: (args, raw, stdin) => {
         const pat = raw.trim();
         if (!pat) return { lines: ['grep: missing pattern'], cls: 'err' };
@@ -535,23 +577,44 @@ export const initTerminal = () => {
         window.open(github, '_blank');
         return { html: tx('Opening github.com/r14dd...') };
       },
-      perf: () => {
+      perf: async () => {
         const v = readVitals();
-        return {
-          lines: [
-            'FCP   ' + fmtMs(v.fcp) + '      LCP   ' + fmtMs(v.lcp),
-            'TTFB  ' + fmtMs(v.ttfb) + '      CLS   ' + v.cls.toFixed(3),
-            'DCL   ' + fmtMs(v.dcl) + '      INP   ' + (v.inp != null ? fmtMs(v.inp) : '—'),
-            'transferred  ' +
-              fmtKb(v.bytes) +
-              '   ·   JS  ' +
-              fmtKb(v.jsBytes) +
-              '   ·   ' +
-              v.reqs +
-              ' requests',
-            '(measured in your browser — nothing sent anywhere)',
-          ],
-        };
+        // Field p75 across every real load of this site in the last 7 days,
+        // from Cloudflare Web Analytics via the analytics Worker. Aggregates
+        // only — three numbers and a sample count.
+        const field = await fetchFieldVitals();
+        const row = (label, mine, theirs) =>
+          label.padEnd(6) + String(mine).padStart(9) + String(theirs).padStart(13);
+        const lines = [
+          field ? row('', 'you', 'field p75') : 'measured in this browser',
+          row('FCP', fmtMs(v.fcp), field ? '—' : ''),
+          row('LCP', fmtMs(v.lcp), field ? fmtMs(field.lcpP75) : ''),
+          row('INP', v.inp != null ? fmtMs(v.inp) : '—', field ? fmtMs(field.inpP75) : ''),
+          row(
+            'CLS',
+            v.cls.toFixed(3),
+            field && field.clsP75 != null ? field.clsP75.toFixed(3) : '',
+          ),
+          row('TTFB', fmtMs(v.ttfb), field ? '—' : ''),
+          row('DCL', fmtMs(v.dcl), field ? '—' : ''),
+          '',
+          'transferred  ' +
+            fmtKb(v.bytes) +
+            '   ·   JS  ' +
+            fmtKb(v.jsBytes) +
+            '   ·   ' +
+            v.reqs +
+            ' requests',
+        ];
+        if (field && field.samples) {
+          lines.push(
+            'your column is measured in this browser and sent nowhere.',
+            'field p75 is ' + field.samples.toLocaleString() + ' real loads over 7 days.',
+          );
+        } else {
+          lines.push('(measured in your browser — nothing sent anywhere)');
+        }
+        return { lines };
       },
       where: async () => {
         const w = await collectWhere();
@@ -643,6 +706,10 @@ export const initTerminal = () => {
     input.className = 'term-input';
     input.setAttribute('autocomplete', 'off');
     input.setAttribute('spellcheck', 'false');
+    // Mobile keyboards otherwise capitalize and autocorrect commands into
+    // nonsense ("Ls", "cat" → "car") before they ever reach the parser.
+    input.setAttribute('autocapitalize', 'off');
+    input.setAttribute('autocorrect', 'off');
     input.setAttribute('placeholder', 'type help');
     input.setAttribute('aria-label', 'Terminal command input');
     inputLine.appendChild(input);
@@ -773,8 +840,23 @@ export const initTerminal = () => {
 
     const termWindow = termBody.closest('.terminal-window');
     termWindow?.addEventListener('click', (e) => {
-      if (e.target.tagName !== 'A') input.focus();
+      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+      // On touch, only the prompt line summons the keyboard. Focusing from
+      // anywhere in the window means every attempt to scroll the output
+      // throws a keyboard over the thing you were trying to read.
+      if (isTouch && !e.target.closest('#term-input-line')) return;
+      input.focus();
     });
+
+    // The keyboard covers the bottom ~45% of the viewport; without this the
+    // line you're typing ends up underneath it.
+    if (isTouch) {
+      input.addEventListener('focus', () => {
+        setTimeout(() => {
+          termWindow?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }, 300);
+      });
+    }
   };
 
   if (prefersReducedMotion) {

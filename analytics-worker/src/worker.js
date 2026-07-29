@@ -7,14 +7,23 @@
  * queries, and returns a compact normalized JSON summary.
  *
  *   GET /summary?range=24h|7d|30d   (Authorization: Bearer <ADMIN_KEY>)
+ *   GET /vitals                     (public, no auth)
  *
- * Responses are cached at the edge for 5 minutes per range — the GraphQL API
- * is rate-limited and the numbers only move that fast anyway. Auth is checked
- * before the cache so the key is always required.
+ * /vitals is deliberately public: it returns three aggregate p75 numbers and a
+ * sample count — no dimensions, no paths, no per-visitor anything — so the
+ * terminal's `perf` command can show a visitor how their own load compares to
+ * the field. Anything that could identify a visitor stays behind /summary.
+ *
+ * Responses are cached at the edge — 5 minutes for /summary, 30 for /vitals
+ * (a p75 over a week does not move faster than that, and the cache is what
+ * keeps a public endpoint from spending the GraphQL rate limit). /summary auth
+ * is checked before the cache so the key is always required.
  */
 
 const GRAPHQL_URL = 'https://api.cloudflare.com/client/v4/graphql';
 const CACHE_TTL_S = 300;
+const VITALS_CACHE_TTL_S = 1800;
+const VITALS_WINDOW_MS = 7 * 86400 * 1000;
 const RANGES = { '24h': 24 * 3600 * 1000, '7d': 7 * 86400 * 1000, '30d': 30 * 86400 * 1000 };
 
 // Constant-time secret comparison (Cloudflare Workers crypto.subtle extension).
@@ -86,6 +95,13 @@ function buildQuery(seriesDim) {
   }`;
 }
 
+// The RUM API returns timing quantiles in MICROseconds. Both consumers (the
+// /admin dashboard and the terminal's `perf`) work in milliseconds and grade
+// against Google's ms thresholds, so normalize once here rather than in each
+// caller — /admin was previously reading 696000µs as 696 seconds and marking a
+// healthy LCP "poor". CLS is unitless and passes through.
+const usToMs = (v) => (v == null ? null : v / 1000);
+
 const topN = (groups, n = 8) =>
   (groups || [])
     .map((g) => ({ label: g.dimensions.metric || '(none)', visits: g.sum.visits, views: g.count }))
@@ -156,8 +172,8 @@ async function fetchSummary(env, range) {
     },
     vitals: {
       samples: acc.vitals?.[0]?.count || 0,
-      lcpP75: vq?.largestContentfulPaintP75 ?? null,
-      inpP75: vq?.interactionToNextPaintP75 ?? null,
+      lcpP75: usToMs(vq?.largestContentfulPaintP75 ?? null),
+      inpP75: usToMs(vq?.interactionToNextPaintP75 ?? null),
       clsP75: vq?.cumulativeLayoutShiftP75 ?? null,
     },
     series: fillSeries(acc.series, from, to, hourly),
@@ -169,6 +185,59 @@ async function fetchSummary(env, range) {
   };
 }
 
+// Public field vitals: the same RUM dataset /summary reads, narrowed to the
+// three Core Web Vitals quantiles and a sample count. No dimensions are
+// requested, so there is nothing here that could describe an individual visit.
+async function fetchVitals(env) {
+  const to = Math.ceil(Date.now() / (3600 * 1000)) * 3600 * 1000;
+  const from = to - VITALS_WINDOW_MS;
+  const filters = [
+    { datetime_geq: new Date(from).toISOString() },
+    { datetime_lt: new Date(to).toISOString() },
+  ];
+  if (env.SITE_TAG) filters.push({ siteTag: env.SITE_TAG });
+
+  const query = `query FieldVitals($accountTag: string, $vfilter: AccountRumWebVitalsEventsAdaptiveGroupsFilter_InputObject) {
+    viewer {
+      accounts(filter: { accountTag: $accountTag }) {
+        vitals: rumWebVitalsEventsAdaptiveGroups(filter: $vfilter, limit: 1) {
+          count
+          quantiles {
+            largestContentfulPaintP75
+            interactionToNextPaintP75
+            cumulativeLayoutShiftP75
+          }
+        }
+      }
+    }
+  }`;
+
+  const res = await fetch(GRAPHQL_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.ANALYTICS_API_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query,
+      variables: { accountTag: env.ACCOUNT_TAG, vfilter: { AND: filters } },
+    }),
+  });
+  const body = await res.json();
+  if (!res.ok || body.errors?.length) {
+    throw new Error(body.errors?.[0]?.message || `GraphQL HTTP ${res.status}`);
+  }
+  const v = body.data?.viewer?.accounts?.[0]?.vitals?.[0];
+  const q = v?.quantiles;
+  return {
+    window: '7d',
+    samples: v?.count || 0,
+    lcpP75: usToMs(q?.largestContentfulPaintP75 ?? null),
+    inpP75: usToMs(q?.interactionToNextPaintP75 ?? null),
+    clsP75: q?.cumulativeLayoutShiftP75 ?? null,
+  };
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -176,8 +245,30 @@ export default {
 
     if (request.method === 'OPTIONS')
       return new Response(null, { status: 204, headers: corsHeaders });
-    if (request.method !== 'GET' || url.pathname !== '/summary') {
+    if (request.method !== 'GET' || !['/summary', '/vitals'].includes(url.pathname)) {
       return json({ error: 'not found' }, 404, corsHeaders);
+    }
+
+    if (url.pathname === '/vitals') {
+      const cacheKey = new Request('https://analytics-api.cache/vitals');
+      const cache = caches.default;
+      const hit = await cache.match(cacheKey);
+      if (hit) {
+        const cached = new Response(hit.body, hit);
+        Object.entries(corsHeaders).forEach(([k, v]) => cached.headers.set(k, v));
+        return cached;
+      }
+      try {
+        const res = json(await fetchVitals(env), 200, corsHeaders, {
+          'Cache-Control': `public, max-age=${VITALS_CACHE_TTL_S}`,
+        });
+        ctx.waitUntil(cache.put(cacheKey, res.clone()));
+        return res;
+      } catch (err) {
+        // The caller renders its local numbers alone on failure, so a 502 here
+        // costs a column, not the command.
+        return json({ error: String(err.message || err).slice(0, 200) }, 502, corsHeaders);
+      }
     }
 
     const auth = request.headers.get('Authorization') || '';

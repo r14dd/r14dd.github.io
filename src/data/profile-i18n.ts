@@ -55,6 +55,10 @@ type Labels = {
     recommendations: string;
   };
   heroEyebrow: string;
+  // Document title suffix and meta description per locale. /ru/ and /az/ are
+  // prerendered as real indexable pages, so a crawler that finds them must get
+  // the description in the language it is about to read — not the English one.
+  meta: { titleSuffix: string; description: string };
   timeGreetings: { morning: string; afternoon: string; evening: string; night: string };
   connectTagline: string;
   connectLocation: string;
@@ -119,6 +123,11 @@ export const profiles: Record<string, I18nProfile> = {
         recommendations: 'What colleagues say',
       },
       heroEyebrow: 'AI & Software Engineer · Baku, Azerbaijan',
+      meta: {
+        titleSuffix: 'Portfolio',
+        description:
+          'Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.',
+      },
       timeGreetings: {
         morning: 'Good morning from Baku',
         afternoon: 'Good afternoon from Baku',
@@ -433,6 +442,11 @@ export const profiles: Record<string, I18nProfile> = {
         recommendations: 'Отзывы коллег',
       },
       heroEyebrow: 'AI & Software инженер · Баку, Азербайджан',
+      meta: {
+        titleSuffix: 'Портфолио',
+        description:
+          'Риад Мухтаров — AI и software инженер, работает с Rust и Python. Строит распределённые системы в ABB, ранее преподавал информатику в SUNY Buffalo.',
+      },
       timeGreetings: {
         morning: 'Доброе утро из Баку',
         afternoon: 'Добрый день из Баку',
@@ -749,6 +763,11 @@ export const profiles: Record<string, I18nProfile> = {
         recommendations: 'Həmkarların rəyləri',
       },
       heroEyebrow: 'AI və Proqram Mühəndisi · Bakı, Azərbaycan',
+      meta: {
+        titleSuffix: 'Portfolio',
+        description:
+          'Riad Muxtarov — AI və proqram mühəndisi, Rust və Python ilə işləyir. ABB-də paylanmış sistemlər qurur, əvvəllər SUNY Buffalo-da informatika tədris edib.',
+      },
       timeGreetings: {
         morning: 'Bakıdan sabahınız xeyir',
         afternoon: 'Bakıdan günortanız xeyir',

@@ -2,7 +2,10 @@
   margin: 1.2rem 0 0;
   padding: 0.9rem 1.1rem;
   width: fit-content;
-  max-width: 480px;
+  /* Never wider than the column: fit-content + a fixed cap overflowed every
+     phone viewport (429px card on a 390px screen, silently clipped by the
+     body's overflow-x: clip). */
+  max-width: min(480px, 100%);
   border: 1px solid rgba(var(--accent-rgb), 0.15);
   border-radius: var(--radius-md);
   min-height: calc(20px + 1.8rem + 2px);

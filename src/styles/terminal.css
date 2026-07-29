@@ -152,6 +152,37 @@ html.light .term-input {
   opacity: 0.4;
 }
 
+/* iOS zooms the viewport whenever a focused input computes under 16px, and it
+   never zooms back — but the terminal is 12px, so a plain 16px input would
+   render what you type visibly larger than the output above it.
+
+   So it is genuinely 16px (the zoom heuristic reads computed font-size) and is
+   scaled back to 12px for display: 16 × 0.75 = 12, matching .terminal-window
+   exactly. Transforms don't affect computed font-size, so the zoom never
+   fires. The width compensates for the scale (1 / 0.75) so the caret can still
+   reach the right edge, and line-height:1 keeps the untransformed box from
+   making the prompt row taller than every other line.
+
+   Scoped to .terminal-window on purpose: /lab has its own terminal that reuses
+   the .term-input class at a different size, and an unscoped transform here
+   would shrink and overflow that one. */
+@media (pointer: coarse) {
+  .terminal-window .term-input {
+    font-size: 16px;
+    line-height: 1;
+    transform: scale(0.75);
+    transform-origin: left center;
+    width: 133.334%;
+  }
+
+  /* Baseline alignment is computed pre-transform, so the scaled text would sit
+     off the prompt's baseline. Centering is exact once both are the same
+     rendered size. */
+  .terminal-window #term-input-line {
+    align-items: center;
+  }
+}
+
 .term-output {
   color: var(--text-soft);
   white-space: pre-wrap;

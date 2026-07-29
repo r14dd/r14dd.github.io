@@ -211,14 +211,53 @@
   color-scheme: dark;
 }
 
+/* Time-aware accent. JS only stamps data-period on <html>; every value lives
+   here so the light theme's redirection can never be clobbered by an inline
+   style (that bug shipped: inline --accent writes beat html.light and light
+   mode ran on dark-tuned golds at 1.6:1 contrast). Afternoon is the default
+   :root/html.light palette above/below — it needs no attribute rule. */
+:root[data-period='night'] {
+  --accent: #8ca0d2;
+  --accent-rgb: 140, 160, 210;
+  --map-filter: grayscale(1) brightness(4) sepia(1) saturate(3) hue-rotate(185deg);
+  --map-filter-light: brightness(0.92) contrast(1.1) saturate(0.8) sepia(0.15) hue-rotate(185deg);
+}
+
+:root[data-period='morning'] {
+  --accent: #d2aa5a;
+  --accent-rgb: 210, 170, 90;
+}
+
+:root[data-period='evening'] {
+  --accent: #d28c50;
+  --accent-rgb: 210, 140, 80;
+  --map-filter: hue-rotate(345deg);
+  --map-filter-light: brightness(0.95) sepia(0.2) hue-rotate(345deg);
+}
+
+html.light[data-period='night'] {
+  --accent: #5a6ea0;
+  --accent-rgb: 90, 110, 160;
+}
+
+html.light[data-period='morning'] {
+  --accent: #8a7030;
+  --accent-rgb: 138, 112, 48;
+}
+
+html.light[data-period='evening'] {
+  --accent: #925c2e;
+  --accent-rgb: 146, 92, 46;
+}
+
 html.light {
   --bg: #ffffff;
   --bg-rgb: 255, 255, 255;
   --text: #1c1917;
   --text-soft: #3b3835;
   --muted: #6b6560;
-  --accent: var(--accent-light, #876c30);
-  --accent-rgb: var(--accent-light-rgb, 135, 108, 48);
+  --accent: #876c30;
+  --accent-rgb: 135, 108, 48;
   --border: rgba(0, 0, 0, 0.06);
   --surface: rgba(255, 255, 255, 0.7);
   --surface-solid: rgba(255, 255, 255, 0.85);
@@ -449,6 +488,38 @@ section[id] {
 
 section.section-revealed {
   opacity: 1;
+}
+
+/* Content must never depend on JavaScript to be readable. Everything below is
+   revealed by JS (section fades, timeline in-view states, the hero intro); when
+   scripts never run, the no-js class survives to render time and forces all of
+   it visible as plain HTML. */
+html.no-js section[id],
+html.no-js .scroll-tl-item,
+html.no-js .scroll-tl-bullets li,
+html.no-js .hero-eyebrow,
+html.no-js .hero-links {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Light surface can't afford the dark theme's alpha-tinted accents: even the
+   light-tuned golds fall to ~2.4:1 once multiplied by 0.55–0.7 alpha. Solid
+   accent here is 4.5:1+ in every period. */
+html.light .hero-eyebrow,
+html.light .sec-eyebrow,
+html.light .tl-org,
+html.light .scroll-tl-org,
+html.light .terminal-prompt,
+html.light .sim-legend,
+html.light .lab-eyebrow,
+html.light .lab-kicker {
+  color: var(--accent);
+}
+
+html.light .scroll-tl-item.in-view .scroll-tl-period {
+  color: var(--accent);
 }
 
 @keyframes hero-in {
@@ -777,12 +848,24 @@ h2 {
 /* Print: the homepage doubles as a résumé — strip interactive chrome and
    force a light, ink-friendly palette. */
 @media print {
+  /* :root[data-period] matches the period selectors' specificity so the
+     light-tuned ink accent wins over any time-of-day palette. Surfaces go
+     paper-white: the dark-theme rgba surfaces printed as gray slabs. */
   :root,
+  :root[data-period],
   html.light {
     --bg: #ffffff;
     --text: #111111;
     --text-soft: #333333;
     --muted: #555555;
+    --accent: #876c30;
+    --accent-rgb: 135, 108, 48;
+    --surface: transparent;
+    --surface-solid: #ffffff;
+    --surface-panel: #ffffff;
+    --border: rgba(0, 0, 0, 0.12);
+    --overlay: rgba(0, 0, 0, 0.04);
+    --overlay-strong: rgba(0, 0, 0, 0.08);
     --noise-opacity: 0;
   }
   body {
@@ -805,11 +888,12 @@ h2 {
   .find-nav-bar,
   .proj-backdrop,
   .proj-modal,
-  .pull-indicator,
   .mini-map,
   .sim-toggle,
   .sim-visual,
   .carousel-nav,
+  .ferris,
+  .reader-number,
   .toast {
     display: none !important;
   }
@@ -817,9 +901,27 @@ h2 {
     content-visibility: visible;
     margin-top: 1.5rem;
   }
+  /* Printing must not depend on how far the reader scrolled: force every
+     JS-revealed state visible, exactly like the no-js path. transition: none
+     matters — without it the forced opacity still eases from 0 and a fast
+     print snapshot catches it mid-fade. */
+  section[id],
   .scroll-tl-item,
-  .scroll-tl-bullets li {
+  .scroll-tl-bullets li,
+  .section-revealed ul li,
+  .hero-eyebrow,
+  .hero-links {
     opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  /* The hero name is gradient-clipped text with a transparent fill — printers
+     drop background gradients, which would print a blank name. */
+  .hero-word {
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    animation: none !important;
     transform: none !important;
   }
   .proj-card {

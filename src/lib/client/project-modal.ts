@@ -10,8 +10,30 @@ import { state } from './state';
 import { openSimOverlay } from './sim-overlay';
 
 export let closeProject = () => {};
+// Open a project modal by a fragment of its name — assigned in init. Lets the
+// terminal's `raft` command summon the live cluster without faking a card
+// click. Returns false when no project matches.
+export let openProjectByName = (_frag) => false;
 
 export const initProjectModal = () => {
+  // The Raft project's modal replaces its canned SVG sim with the real
+  // engine from /lab. Lazy-imported so raft code never loads unless that
+  // modal opens; destroyed on close so reopening can't stack rAF loops.
+  let destroyRaft = null;
+  const mountLiveRaft = (card) => {
+    const canned = card.querySelector('.sim-visual[data-sim="raft"]');
+    if (!canned) return;
+    const panel = document.createElement('div');
+    canned.replaceWith(panel);
+    import('./raft-lab').then((m) => {
+      // The modal may already be closed by the time the chunk arrives.
+      if (panel.isConnected) destroyRaft = m.mountRaft(panel);
+    });
+  };
+  const unmountLiveRaft = () => {
+    destroyRaft?.();
+    destroyRaft = null;
+  };
   const projBackdrop = document.getElementById('proj-backdrop');
   const projModal = document.getElementById('proj-modal');
   const projModalCard = document.getElementById('proj-modal-card');
@@ -64,6 +86,8 @@ export const initProjectModal = () => {
       ${bullets || badgeBullet ? `<ul class="project-bullets">${badgeBullet}${bullets}</ul>` : ''}
       ${sim}
     `;
+    unmountLiveRaft();
+    mountLiveRaft(projModalCard);
     const sv = projModalCard.querySelector('.sim-visual');
     if (sv) {
       sv.classList.add('active');
@@ -85,6 +109,7 @@ export const initProjectModal = () => {
   };
 
   const hideProjModal = () => {
+    unmountLiveRaft();
     sfx.whoosh(false);
     projBackdrop?.classList.remove('open');
     projModal?.classList.remove('open');
@@ -97,7 +122,7 @@ export const initProjectModal = () => {
 
   const openProject = (p, card) => {
     projLastCard = card;
-    if (!supportsVT || reduceMotion()) {
+    if (!card || !supportsVT || reduceMotion()) {
       populateProject(p);
       showProjModal();
       return;
@@ -130,6 +155,19 @@ export const initProjectModal = () => {
     t.finished.finally(() => {
       if (projLastCard) projLastCard.style.viewTransitionName = '';
     });
+  };
+
+  openProjectByName = (frag) => {
+    const q = String(frag).toLowerCase();
+    const p = (state.currentProfile?.projects || state.I18N.en?.projects || []).find((x) =>
+      x.name.toLowerCase().includes(q),
+    );
+    if (!p) return false;
+    const card = Array.from(document.querySelectorAll('#projects .proj-card')).find(
+      (c) => c.querySelector('h3')?.textContent?.trim() === p.name,
+    );
+    openProject(p, card || null);
+    return true;
   };
 
   const projectsSection = document.getElementById('projects');

@@ -2,9 +2,8 @@
   <img src="https://img.shields.io/badge/Astro-111827?style=for-the-badge&logo=astro&logoColor=white" alt="Astro" />
   <img src="https://img.shields.io/badge/TypeScript-111827?style=for-the-badge&logo=typescript&logoColor=3178C6" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Rust-111827?style=for-the-badge&logo=rust&logoColor=DEA584" alt="Rust" />
-  <img src="https://img.shields.io/badge/WebGL-111827?style=for-the-badge&logo=webgl&logoColor=990000" alt="WebGL" />
   <img src="https://img.shields.io/badge/WebAssembly-111827?style=for-the-badge&logo=webassembly&logoColor=654FF0" alt="WebAssembly" />
-  <img src="https://img.shields.io/badge/GSAP-111827?style=for-the-badge&logo=greensock&logoColor=88CE02" alt="GSAP" />
+  <img src="https://img.shields.io/badge/Cloudflare%20Workers-111827?style=for-the-badge&logo=cloudflare&logoColor=F38020" alt="Cloudflare Workers" />
 </p>
 
 # Riad Mukhtarov — Portfolio
@@ -17,16 +16,15 @@ Minimalist personal portfolio built to present backend engineering work with cla
 
 ## Highlights
 
-- **WebGL hero shader** — animated noise field behind the hero section, accent-colored, scroll-fading, theme-reactive
-- **GSAP ScrollTrigger** — scroll-driven section reveals, staggered card entrances, parallax depth on project cards
-- **Interactive terminal** — composable commands with pipes, tab-completion, history (`ls`, `cat`, `grep`, `head`, `tail`, `wc`, `man riad`, `neofetch`, `philosophy`)
+- **Interactive terminal** — composable commands with pipes, tab-completion, history (`ls`, `cat`, `grep`, `head`, `tail`, `wc`, `man riad`, `neofetch`, `philosophy`); fully usable on touch, not desktop-gated
 - **Rust → WebAssembly** — `rrf`, `hash`, `xor` commands lazy-load a prebuilt WASM binary for real in-browser compute
 - **Web Vitals CLI** — `perf` command shows live LCP/FCP/CLS/INP/TTFB/DCL via PerformanceObserver
 - **Edge/geo probing** — `where` command displays timezone, locale, connection info, round-trip latency
 - **Offline PWA** — `offline enable/disable` registers a root-scoped service worker (network-first navigations, stale-while-revalidate assets)
+- **Raft consensus, live** — a real Raft implementation (leader election, log replication, quorum commitment over a lossy simulated network) runs interactively on `/lab`; CI runs the same engine headless and asserts the paper's safety properties (Election Safety, Log Matching, State Machine Safety)
 - Dark + light theme toggle
 - Accent colors shift by time of day
-- Three languages: English, Russian, Azerbaijani
+- **Three languages, three real pages** — `/`, `/ru/`, `/az/` are each prerendered and indexable with their own `hreflang`, title and description; the in-page switcher swaps without a reload and pushes the matching URL. Both paths render through the same builders, so they cannot drift.
 - Command palette (⌘K) with search, section jumps, and actions
 - Spotify now-playing widget with vinyl art, progress bar, and history drawer
 - UI sound effects with mute toggle
@@ -39,21 +37,42 @@ Minimalist personal portfolio built to present backend engineering work with cla
 
 ## Tech Stack
 
-- **Framework:** Astro 7
+- **Framework:** Astro 7 (static output)
 - **Language:** TypeScript
 - **Styling:** Custom CSS (no framework)
-- **Animations:** GSAP + ScrollTrigger
-- **Graphics:** Raw WebGL (no Three.js)
-- **Compute:** Rust → WebAssembly (wasm-bindgen)
-- **Fonts:** Manrope · Cormorant Garamond · JetBrains Mono
-- **Spotify API:** Cloudflare Worker proxy
+- **Animations:** Hand-written CSS transitions driven by `IntersectionObserver` — no animation library
+- **Compute:** Rust → WebAssembly, raw `rustc --target wasm32-unknown-unknown` (843-byte artifact, committed; CI does not compile Rust)
+- **Fonts:** Manrope · Cormorant Garamond · JetBrains Mono, self-hosted with unicode-range subsetting
+- **Runtime dependencies:** 1 (`lenis`) — re-derived from `package.json` on every build by `scripts/check-claims.mjs`
+- **Backend:** 4 Cloudflare Workers (Spotify proxy, analytics proxy, poll, toys); the toy worker holds 2 Durable Objects
+
+## Backend
+
+| Worker             | Job                                                             |
+| ------------------ | --------------------------------------------------------------- |
+| `spotify-worker`   | Now-playing proxy; keeps the refresh token server-side          |
+| `analytics-worker` | Cloudflare Web Analytics GraphQL proxy for `/admin`             |
+| `poll-worker`      | Poll backend                                                    |
+| `toy-worker`       | Visitor counter + paper-airplane inbox (Durable Object, SQLite) |
+
+Each degrades silently: if a Worker is unreachable its widget disappears rather than erroring.
+
+## Claims are tested
+
+`npm run build` runs `scripts/check-claims.mjs`, which re-derives every number this README and
+`/colophon` state — runtime dependency count, page count, font bytes, WASM size, gzipped byte
+budgets, the feature-module and Worker counts above — from the actual `dist/` output and the tree,
+and fails the build on drift. It also fails if the docs start advertising technologies the site no
+longer uses.
 
 ## Project Structure
 
 ```
 src/
   layouts/BaseLayout.astro     # Global layout, CSS, cursor, section reveals
-  pages/index.astro            # Main page: markup, terminal, WebGL, GSAP
+  pages/[...lang]/index.astro  # Main page, prerendered per locale (/, /ru/, /az/)
+  lib/client/*.ts              # 30 hand-rolled feature modules, code-split
+  data/claims.ts               # Numbers the site states about itself
   pages/lab.astro              # Experimental sandbox page
   pages/404.astro              # Custom 404 page
   data/profile.ts              # Profile content + links

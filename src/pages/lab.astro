@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { profile } from '../data/profile';
 import { getBuildInfo } from '../lib/buildinfo';
+// Page-level, not in BaseLayout: with inlineStylesheets:'always' a layout
+// import would paste the whole raft stylesheet into 404, colophon and poll,
+// none of which can host a cluster. Only this page and the homepage can.
+import '../styles/raft.css';
 
 const build = getBuildInfo(8);
 const head = build.head;
@@ -57,6 +61,7 @@ const sections = [
   { id: 'colophon', n: '06', t: 'Colophon' },
   { id: 'offline', n: '07', t: 'Offline PWA' },
   { id: 'replay', n: '08', t: 'Project replay' },
+  { id: 'raft', n: '09', t: 'Raft, live' },
 ];
 
 const builtAtUtc = new Date(build.builtAt).toISOString().slice(0, 16).replace('T', ' ');
@@ -72,9 +77,9 @@ const builtAtUtc = new Date(build.builtAt).toISOString().slice(0, 16).replace('T
       <p class="lab-eyebrow">/lab · experimental</p>
       <h1 class="lab-title">The Lab</h1>
       <p class="lab-subtitle">
-        Every feature the principal panel greenlit, built here and actually working — none of it is
-        wired into the main site. Real Rust compiled to WebAssembly, live Web Vitals, real edge
-        timing, an offline service worker. Poke at all of it.
+        Every feature was built and proven here before any of it touched the main site. Real Rust
+        compiled to WebAssembly, live Web Vitals, real edge timing, an offline service worker, a
+        live Raft cluster. Poke at all of it.
       </p>
       <p class="lab-buildline">
         <span class="dot"></span>
@@ -340,6 +345,21 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
         </div>
         <div class="term-body" id="replay-body" role="log" aria-live="polite"></div>
       </div>
+    </section>
+
+    <!-- ── 09 · RAFT ───────────────────────────────────────────── -->
+    <section class="lab-section" id="raft">
+      <p class="lab-kicker">09 · the real thing</p>
+      <h2 class="lab-h">Raft consensus, running live</h2>
+      <p class="lab-desc">
+        A genuine Raft implementation — leader election, log replication, quorum commitment — over a
+        simulated lossy network, executing in your browser right now. Click a node to crash it.
+        Partition the leader away and watch the majority elect past it; heal, and the stale log gets
+        repaired. The same engine runs headless in the test suite, which asserts the paper's safety
+        properties (Election Safety, Log Matching, State Machine Safety) on every build.
+      </p>
+
+      <div id="raft-panel"></div>
     </section>
 
     <footer class="lab-foot">
@@ -1756,5 +1776,16 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
         for (const fn of lazy.values()) fn();
       }
     })();
+  </script>
+
+  <script>
+    import { initRaftLab } from '../lib/client/raft-lab';
+    // Idle-init: the cluster itself only ticks once its section scrolls into
+    // view (IntersectionObserver inside the module).
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => initRaftLab());
+    } else {
+      setTimeout(() => initRaftLab(), 300);
+    }
   </script>
 </BaseLayout>

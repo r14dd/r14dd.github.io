@@ -313,7 +313,10 @@ export const initCmdPalette = () => {
     ?.addEventListener('click', () => (state.cmdOpen ? closeCmd() : openCmd()));
 
   document.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key.toLowerCase() === 'f')) {
+    // ⌘K only. ⌘F used to be hijacked too; the browser's find is the
+    // visitor's, and the palette already surfaces on-page matches for anyone
+    // who searches through it.
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
       if (state.projOpen || state.kbdOpen) return;
       state.cmdOpen ? closeCmd() : openCmd();

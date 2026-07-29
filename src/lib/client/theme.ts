@@ -1,15 +1,9 @@
-// Night accent tint + the theme toggle with its view-transition wipe.
+// The theme toggle with its view-transition wipe. The accent itself is owned
+// by time-aware.ts (data-period on <html> + base.css) — nothing here may touch
+// accent custom properties.
 import * as sfx from './sfx';
 
 export const initTheme = () => {
-  {
-    const h = new Date().getHours();
-    if (h >= 0 && h < 5) {
-      document.documentElement.style.setProperty('--accent', '#a78bfa');
-      document.documentElement.style.setProperty('--accent-rgb', '167,139,250');
-    }
-  }
-
   const themeToggle = document.getElementById('theme-toggle');
   const themeIcon = themeToggle?.querySelector('.theme-icon');
   const updateThemeIcon = () => {

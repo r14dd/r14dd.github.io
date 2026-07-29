@@ -131,11 +131,31 @@ body.lang-switching .lang-switcher {
     transform 0.22s var(--ease-spring);
 }
 
-.lang-menu button {
+/* Without JS the toggle can't add .open, which would leave the locale links
+   present but unreachable. Hover/focus-within opens it instead — scoped to
+   .no-js so it can't fight the JS toggle (where the button keeps focus after
+   a click and would re-open the menu the click just closed). */
+html.no-js .lang-switcher:hover .lang-menu,
+html.no-js .lang-switcher:focus-within .lang-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+/* Entries are anchors to the prerendered locale routes (so the switcher works
+   with JS off and is crawlable); JS intercepts the click to swap in place. */
+.lang-menu button,
+.lang-menu a {
+  display: flex;
+  align-items: center;
   background: transparent;
   border: none;
   color: var(--text-soft);
   text-align: left;
+  text-decoration: none;
+  background-image: none;
+  cursor: pointer;
   padding: 0.6rem 0.65rem;
   min-height: 44px;
   border-radius: var(--radius-md);
@@ -145,7 +165,8 @@ body.lang-switching .lang-switcher {
     color 0.2s var(--ease-out);
 }
 
-.lang-menu button:hover {
+.lang-menu button:hover,
+.lang-menu a:hover {
   background: var(--overlay);
   color: var(--text);
 }

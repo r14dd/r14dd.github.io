@@ -1,13 +1,10 @@
 // @ts-nocheck — verbatim move of the (never type-checked) inline script.
 // Motion-gated extras: sim in-view activation, section-heading typing on
-// reveal, pull-to-refresh, modal swipe-dismiss, pinch-zoom on sims, and
-// the Konami easter egg. The whole block is skipped under reduced motion,
-// exactly as in the original script.
+// reveal, modal swipe-dismiss, and pinch-zoom on sims. The whole block is
+// skipped under reduced motion.
 import { prefersReducedMotion } from './motion';
-import { state } from './state';
 import { typed, typeH2 } from './reveal-fx';
 import { closeProject } from './project-modal';
-import { showToast } from './toast';
 
 export const initGestures = () => {
   if (!prefersReducedMotion) {
@@ -41,71 +38,26 @@ export const initGestures = () => {
     }
 
     document.querySelectorAll('section[id]').forEach((sec) => {
+      const typeOnce = () => {
+        const h2 = sec.querySelector('h2');
+        if (h2 && !typed.has(h2)) {
+          typed.add(h2);
+          typeH2(h2);
+        }
+      };
+      // This module loads on idle — a section already revealed before we
+      // attached will never mutate again, so handle it now.
+      if (sec.classList.contains('section-revealed')) {
+        typeOnce();
+        return;
+      }
       new MutationObserver((_, obs) => {
         if (sec.classList.contains('section-revealed')) {
-          const h2 = sec.querySelector('h2');
-          if (h2 && !typed.has(h2)) {
-            typed.add(h2);
-            typeH2(h2);
-          }
+          typeOnce();
           obs.disconnect();
         }
       }).observe(sec, { attributes: true, attributeFilter: ['class'] });
     });
-
-    // Mobile: pull-to-refresh animation (visual only)
-    {
-      const pullEl = document.getElementById('pull-indicator');
-      if (pullEl && 'ontouchstart' in window) {
-        let pullStartY = 0,
-          pulling = false;
-        document.addEventListener(
-          'touchstart',
-          (e) => {
-            if (window.scrollY < 5 && !state.cmdOpen && !state.projOpen && !state.kbdOpen) {
-              pullStartY = e.touches[0].clientY;
-              pulling = true;
-            }
-          },
-          { passive: true },
-        );
-        let lastPullDy = 0;
-        document.addEventListener(
-          'touchmove',
-          (e) => {
-            if (!pulling) return;
-            const dy = e.touches[0].clientY - pullStartY;
-            lastPullDy = dy;
-            if (dy > 40 && dy < 200) {
-              pullEl.classList.add('visible');
-              // transform, not top: layout properties during an active touch
-              // gesture force layout per touchmove.
-              pullEl.style.transform = `translate(-50%, ${Math.min(dy * 0.3, 48) - 16}px)`;
-              pullEl.style.opacity = Math.min((dy - 40) / 80, 1);
-            } else if (dy <= 0) {
-              pullEl.classList.remove('visible');
-              pulling = false;
-            }
-          },
-          { passive: true },
-        );
-        const endPull = () => {
-          if (!pulling) return;
-          pulling = false;
-          if (lastPullDy >= 120 && pullEl.classList.contains('visible')) {
-            pullEl.classList.add('refreshing');
-            setTimeout(() => location.reload(), 500);
-          } else {
-            pullEl.classList.remove('visible');
-            pullEl.style.opacity = '';
-            pullEl.style.transform = '';
-          }
-          lastPullDy = 0;
-        };
-        document.addEventListener('touchend', endPull, { passive: true });
-        document.addEventListener('touchcancel', endPull, { passive: true });
-      }
-    }
 
     // Mobile: swipe down on bottom-sheet project modal to dismiss
     {
@@ -211,66 +163,6 @@ export const initGestures = () => {
         modalEl.addEventListener('touchend', endZoom, { passive: true });
         modalEl.addEventListener('touchcancel', endZoom, { passive: true });
       }
-    }
-
-    // Easter egg: Konami code (desktop) + triple-tap logo (mobile)
-    {
-      const KONAMI = [
-        'ArrowUp',
-        'ArrowUp',
-        'ArrowDown',
-        'ArrowDown',
-        'ArrowLeft',
-        'ArrowRight',
-        'ArrowLeft',
-        'ArrowRight',
-        'b',
-        'a',
-      ];
-      let konamiIdx = 0;
-      const easterOverlay = document.getElementById('easter-overlay');
-
-      const triggerEasterEgg = () => {
-        if (!easterOverlay) return;
-        easterOverlay.innerHTML = '';
-        easterOverlay.classList.add('active');
-        const chars =
-          'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
-        const colCount = Math.floor(window.innerWidth / 20);
-        for (let i = 0; i < colCount; i++) {
-          const col = document.createElement('div');
-          col.className = 'matrix-col';
-          col.style.left = i * 20 + Math.random() * 6 + 'px';
-          col.style.animationDuration = 2 + Math.random() * 3 + 's';
-          col.style.animationDelay = Math.random() * 2 + 's';
-          let str = '';
-          const len = 8 + Math.floor(Math.random() * 16);
-          for (let j = 0; j < len; j++) str += chars[Math.floor(Math.random() * chars.length)];
-          col.textContent = str;
-          easterOverlay.appendChild(col);
-        }
-        if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
-        showToast('You found the secret');
-        setTimeout(() => {
-          easterOverlay.classList.remove('active');
-          setTimeout(() => {
-            easterOverlay.innerHTML = '';
-          }, 500);
-        }, 5000);
-      };
-
-      document.addEventListener('keydown', (e) => {
-        if (state.cmdOpen || state.projOpen || state.kbdOpen) return;
-        if (e.key === KONAMI[konamiIdx]) {
-          konamiIdx++;
-          if (konamiIdx === KONAMI.length) {
-            konamiIdx = 0;
-            triggerEasterEgg();
-          }
-        } else {
-          konamiIdx = e.key === KONAMI[0] ? 1 : 0;
-        }
-      });
     }
   }
 };

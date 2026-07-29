@@ -98,7 +98,7 @@ main > section:first-of-type {
   display: none;
   gap: 0.4rem;
   margin-top: 0.6rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .hero-links a {
@@ -169,24 +169,6 @@ main > section:first-of-type {
   }
 }
 
-.hero-tagline {
-  margin: 0.6rem 0 0;
-  color: var(--text);
-  font-size: 1.05rem;
-  max-width: 560px;
-  line-height: 1.75;
-  transition: opacity 0.2s ease;
-}
-
-body.lang-switching .hero-tagline {
-  opacity: 0;
-}
-
-.hero-tagline.secondary {
-  margin-top: 0.25rem;
-  color: var(--muted);
-}
-
 .hero-about {
   margin: 1rem 0 0;
   color: var(--text-soft);
@@ -220,13 +202,6 @@ body.lang-switching .hero-tagline {
 
 body.lang-switching .hero-about {
   opacity: 0;
-}
-
-.hero-cta {
-  margin-top: 1rem;
-  display: flex;
-  gap: 0.8rem;
-  flex-wrap: wrap;
 }
 
 .cta-btn {
@@ -297,7 +272,18 @@ body.lang-switching .hero-about {
   .hero-links {
     display: flex;
   }
-  .hero-cta {
+}
+
+/* All four link pills stay on one line: tighten them instead of wrapping. */
+@media (max-width: 520px) {
+  .hero-links {
+    gap: 0.3rem;
+  }
+  .hero-links a {
+    padding: 0.55rem 0.6rem;
+    font-size: 0.78rem;
+  }
+  .hero-links .cta-icon {
     display: none;
   }
 }
@@ -305,6 +291,10 @@ body.lang-switching .hero-about {
 @media (max-width: 360px) {
   .hero-about {
     font-size: 0.88rem;
+  }
+  .hero-links a {
+    padding: 0.5rem 0.45rem;
+    font-size: 0.72rem;
   }
 }
 

@@ -137,6 +137,45 @@ html.light .crack-ring {
   transform: scale(0.85);
 }
 
+/* The dots are 9px of deliberate window-chrome mimicry — fine under a mouse,
+   far too small for a thumb now that they ship on touch. Each gets an
+   invisible ~43px-tall target instead, sized to the space that is actually
+   free rather than to a round number:
+
+   · Upward it borrows the terminal window's 0.9rem of padding — nothing
+     interactive lives up there. Downward it stops just short of the first
+     output line: a symmetric 44px box would have swallowed taps meant for the
+     terminal body, which is a worse bug than the one being fixed. 40px tall
+     is what the available space honestly allows.
+   · The row's gap widens to 14px on touch so neighbouring targets can't cover
+     each other's centres. The dots themselves stay 9px.
+
+   Scoped to .terminal-window for the same reason terminal.css scopes its touch
+   input sizing: /lab runs its own terminal that reuses these class names, and
+   a bare .terminal-dots rule would respace a row whose dots aren't interactive
+   and need no target. */
+@media (pointer: coarse) {
+  .terminal-window .terminal-dots {
+    gap: 14px;
+    padding-bottom: 12px;
+    margin-bottom: 0.3rem;
+  }
+
+  .terminal-window .dot-interactive {
+    position: relative;
+  }
+
+  .terminal-window .dot-interactive::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    width: 22px;
+    top: -16px;
+    bottom: -15px;
+    transform: translateX(-50%);
+  }
+}
+
 .terminal-sulk {
   display: none;
   margin-left: auto;

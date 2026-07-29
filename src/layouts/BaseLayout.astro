@@ -12,9 +12,24 @@ const {
   structuredData = '',
   lang = 'en',
   noindex = false,
+  // Set by the homepage, which is prerendered once per locale. Pages that
+  // exist in English only (lab, colophon, poll…) leave it off and get no
+  // alternates, which is the honest signal.
+  localized = false,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+// og:locale wants a full locale tag, not a bare language code.
+const OG_LOCALES: Record<string, string> = { en: 'en_US', ru: 'ru_RU', az: 'az_AZ' };
+
+// hreflang alternates. x-default points at English: it is the fallback for a
+// crawler whose user has no matching locale.
+const ALT_LOCALES = ['en', 'ru', 'az'];
+const localePath = (l: string) => (l === 'en' ? '/' : `/${l}/`);
+const alternates = localized
+  ? ALT_LOCALES.map((l) => ({ lang: l, href: new URL(localePath(l), Astro.site).href }))
+  : [];
 
 import '../styles/base.css';
 import '../styles/hero.css';
@@ -31,7 +46,7 @@ import '../styles/ui.css';
 ---
 
 <!doctype html>
-<html lang={lang} translate="no">
+<html lang={lang} class="no-js" translate="no">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -53,13 +68,19 @@ import '../styles/ui.css';
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Riad Mukhtarov — portfolio preview card" />
     <meta property="og:site_name" content="Riad Mukhtarov" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={OG_LOCALES[lang] || 'en_US'} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={metaTitle} />
     <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={metaImage} />
     <meta name="twitter:image:alt" content="Riad Mukhtarov — portfolio preview card" />
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    {
+      alternates.length > 0 && (
+        <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
+      )
+    }
     {structuredData && <script type="application/ld+json" set:html={structuredData} />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -70,6 +91,8 @@ import '../styles/ui.css';
     <link rel="manifest" href="/site.webmanifest" />
     <meta id="theme-color-meta" name="theme-color" content="#050505" />
     <script is:inline>
+      // Dropped before first paint, so no-JS fallback styling never flashes.
+      document.documentElement.classList.remove('no-js');
       const _theme = localStorage.getItem('portfolio-theme');
       if (_theme === 'light') {
         document.documentElement.classList.add('light');
@@ -136,14 +159,18 @@ import '../styles/ui.css';
         }
       });
 
+      // Fresh loads start at the top — unless the URL names a section. A hash
+      // is the visitor's stated destination (a shared /#projects link, a
+      // bookmark); resetting it here silently broke every deep link the site
+      // itself mints via pushState.
       window.addEventListener('pageshow', (e) => {
-        if (e.persisted) {
+        if (e.persisted && !location.hash) {
           window.scrollTo(0, 0);
         }
       });
 
       window.addEventListener('load', () => {
-        window.scrollTo(0, 0);
+        if (!location.hash) window.scrollTo(0, 0);
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         document.body.classList.add('intro-done');
         if (prefersReduced) {
