@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('writing', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// The date is absent from the page on purpose but belongs in the structured
+// data, where it is a fact for a crawler rather than a staleness signal for a
+// reader.
+const structuredData = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: post.data.title,
+  description: post.data.summary,
+  datePublished: post.data.published.toISOString(),
+  author: { '@type': 'Person', name: 'Riad Mukhtarov', url: 'https://riad.cc' },
+  mainEntityOfPage: `https://riad.cc/writing/${post.id}/`,
+});
+---
+
+<BaseLayout
+  metaTitle={`${post.data.title} — Riad Mukhtarov`}
+  metaDescription={post.data.summary}
+  structuredData={structuredData}
+  lang="en"
+>
+  <main class="content" id="main-content">
+    <section style="opacity:1">
+      <a href="/writing/" class="post-back">← Writing</a>
+      <article>
+        <h1 class="post-title">{post.data.title}</h1>
+        <div class="post-body">
+          <Content />
+        </div>
+      </article>
+    </section>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  .post-back {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+  .post-back:hover {
+    color: var(--accent);
+  }
+
+  .post-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 2.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    max-width: 22ch;
+  }
+
+  .post-body {
+    max-width: 66ch;
+  }
+
+  .post-body p {
+    font-size: var(--text-sm);
+    color: var(--text-soft);
+    line-height: 1.8;
+    margin: 0 0 1.4rem;
+  }
+
+  .post-body h2 {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 3rem 0 0.9rem;
+  }
+
+  .post-body strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .post-body a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(var(--accent-rgb), 0.3);
+  }
+  .post-body a:hover {
+    border-bottom-color: var(--accent);
+  }
+
+  /* Inline code only — the :not() keeps this off code inside a fenced block,
+     which pre already styles. */
+  .post-body :not(pre) > code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.85em;
+    color: var(--accent);
+    background: rgba(var(--accent-rgb), 0.08);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  .post-body pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    margin: 0 0 1.6rem;
+  }
+
+  .post-body pre code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
+  .post-body blockquote {
+    margin: 0 0 1.6rem;
+    padding-left: 1.1rem;
+    border-left: 2px solid rgba(var(--accent-rgb), 0.35);
+  }
+  .post-body blockquote p {
+    margin: 0;
+    font-style: italic;
+    color: var(--text);
+  }
+</style>

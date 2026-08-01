@@ -16,9 +16,11 @@ export const claims = {
   runtimeDeps: ['lenis'],
   buildOnlyDeps: ['astro', '@astrojs/sitemap'],
 
-  // exact — HTML documents emitted into dist/. Eight, not six: the homepage is
-  // prerendered once per locale (/, /ru/, /az/).
-  pages: 8,
+  // exact — HTML documents emitted into dist/. More than the nav suggests: the
+  // homepage is prerendered once per locale (/, /ru/, /az/), and each piece of
+  // writing is its own page. rss.xml is an endpoint, not a document, so it
+  // isn't counted here.
+  pages: 10,
 
   // exact — self-hosted woff2 faces and their combined weight
   fontFiles: 12,

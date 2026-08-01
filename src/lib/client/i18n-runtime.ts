@@ -149,6 +149,11 @@ export const initI18n = () => {
         links[3].textContent = data.labels.links.resume;
         links[3].setAttribute('href', data.links.resume);
       }
+      // By id, not by index: the rest of this block is positional, so anything
+      // appended here would silently take the label of whatever sat at its
+      // index before.
+      const writingLink = document.getElementById('side-link-writing');
+      if (writingLink) writingLink.textContent = data.labels.links.writing;
     }
 
     if (window._spotifyData) renderSpotify(window._spotifyData);

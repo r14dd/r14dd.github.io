@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Curated, not chronological — see src/content.config.ts for why.
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  metaTitle="Writing — Riad Mukhtarov"
+  metaDescription="Notes on building systems that stay honest — LLM verdicts, consensus, and the machinery underneath."
+  lang="en"
+>
+  <main class="content" id="main-content">
+    <section style="opacity:1">
+      <a href="/" class="writing-back">← Back</a>
+      <h1 class="writing-title">Writing</h1>
+      <p class="writing-lead">
+        Notes on the parts of a system that have to stay honest when nobody is checking.
+      </p>
+
+      <ul class="writing-list">
+        {
+          posts.map((post) => (
+            <li class="writing-item">
+              <a href={`/writing/${post.id}/`} class="writing-link">
+                <h2 class="writing-item-title">{post.data.title}</h2>
+                <p class="writing-item-summary">{post.data.summary}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="writing-feed">
+        <a href="/rss.xml">RSS</a>
+      </p>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .writing-back {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--muted);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+  .writing-back:hover {
+    color: var(--accent);
+  }
+
+  .writing-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .writing-lead {
+    font-size: var(--text-md);
+    color: var(--text-soft);
+    margin: 0 0 3.5rem;
+    max-width: 50ch;
+  }
+
+  .writing-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .writing-item + .writing-item {
+    margin-top: 2.25rem;
+  }
+
+  .writing-link {
+    display: block;
+    text-decoration: none;
+    max-width: 62ch;
+  }
+
+  .writing-item-title {
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 0.4rem;
+    line-height: 1.35;
+    transition: color 0.2s;
+  }
+  .writing-link:hover .writing-item-title,
+  .writing-link:focus-visible .writing-item-title {
+    color: var(--accent);
+  }
+
+  .writing-item-summary {
+    font-size: var(--text-sm);
+    color: var(--text-soft);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .writing-feed {
+    margin-top: 4rem;
+  }
+  .writing-feed a {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .writing-feed a:hover {
+    color: var(--accent);
+  }
+</style>

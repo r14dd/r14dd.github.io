@@ -75,6 +75,12 @@ import '../styles/ui.css';
     <meta name="twitter:image" content={metaImage} />
     <meta name="twitter:image:alt" content="Riad Mukhtarov — portfolio preview card" />
     <link rel="canonical" href={canonicalUrl} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Riad Mukhtarov — Writing"
+      href="/rss.xml"
+    />
     {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
     {
       alternates.length > 0 && (

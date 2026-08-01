@@ -31,6 +31,7 @@ type Labels = {
     connect: string;
   };
   links: {
+    writing: string;
     resume: string;
     linkedin: string;
     github: string;
@@ -99,6 +100,7 @@ export const profiles: Record<string, I18nProfile> = {
         connect: 'Connect',
       },
       links: {
+        writing: 'Writing',
         resume: 'Resume',
         linkedin: 'LinkedIn',
         github: 'GitHub',
@@ -418,6 +420,7 @@ export const profiles: Record<string, I18nProfile> = {
         connect: 'Связь',
       },
       links: {
+        writing: 'Статьи',
         resume: 'Резюме',
         linkedin: 'LinkedIn',
         github: 'GitHub',
@@ -739,6 +742,7 @@ export const profiles: Record<string, I18nProfile> = {
         connect: 'Əlaqə',
       },
       links: {
+        writing: 'Yazılar',
         resume: 'CV',
         linkedin: 'LinkedIn',
         github: 'GitHub',
