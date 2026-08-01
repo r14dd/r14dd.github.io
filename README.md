@@ -8,7 +8,7 @@
 
 # Riad Mukhtarov — Portfolio
 
-Minimalist personal portfolio built to present backend engineering work with clarity and focus.
+Minimalist personal portfolio built to present AI and software engineering work with clarity and focus.
 
 ## Live
 

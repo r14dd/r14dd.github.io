@@ -265,7 +265,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Построил мульти-ретриверный ансамбль с Reciprocal Rank Fusion и кворумной фильтрацией',
           'Реализовал обработку перекрывающихся чанков с 50% шагом для предотвращения потери ответов на границах',
           'Добавил параллельное создание эмбеддингов с кэшированием для оптимизации холодного старта',
-          'Кластеризовал доказательства через центроиды косинусного сходства для кворумного голосования по дедуплицированным семантическим группам',
+          'Кластеризовал доказательства через центроиды косинусного сходства, чтобы кворумное голосование работало по семантическим группам, а не по отдельным фрагментам',
         ],
       },
       almostaykhan: {
@@ -586,7 +586,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Reciprocal Rank Fusion skorinqi və kvorum filtrasiyası ilə multi-retriver ansambl qurdum',
           'Sərhəd bölünmə cavablarının qarşısını almaq üçün 50% addımlı üst-üstə düşən chunk emalı tətbiq etdim',
           'Soyuq başlanğıc performansını optimallaşdırmaq üçün keşləmə ilə paralel embedding əlavə etdim',
-          'Kvorum səsverməsinin deduplikasiya edilmiş semantik qruplar üzərində işləməsi üçün kosinus oxşarlığı sentroidləri ilə sübutları klasterləşdirdim',
+          'Kvorum səsverməsinin ayrı-ayrı fraqmentlər deyil, semantik qruplar üzərində işləməsi üçün kosinus oxşarlığı sentroidləri ilə sübutları klasterləşdirdim',
         ],
       },
       almostaykhan: {

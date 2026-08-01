@@ -171,11 +171,12 @@ export const profile: Profile = {
         'Built multi-retriever ensemble with Reciprocal Rank Fusion scoring and quorum filtering',
         'Implemented overlapping chunk processing with 50% stride to prevent boundary-split answers',
         'Added parallel embedding with caching to optimize cold-start performance',
-        'Clustered evidence via cosine-similarity centroids so the quorum vote operates on deduplicated semantic groups',
+        'Clustered evidence via cosine-similarity centroids so the quorum vote operates on semantic groups rather than raw chunks',
       ],
       links: {
         crates: 'https://crates.io/crates/quorumrag',
         docs: 'https://docs.rs/quorumrag',
+        github: 'https://github.com/r14dd/quorumRAG.rs',
       },
     },
     {
