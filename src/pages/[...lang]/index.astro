@@ -137,6 +137,16 @@ const structuredData = JSON.stringify({
     </div>
   </div>
 
+  <div class="pull-indicator" id="pull-indicator" aria-hidden="true">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"><path d="M8 2v12M5 5l3-3 3 3"></path></svg
+    >
+  </div>
+
   <nav class="side-nav" id="side-nav">
     <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
@@ -404,6 +414,7 @@ const structuredData = JSON.stringify({
     </div>
   </div>
 
+  <div class="easter-overlay" id="easter-overlay" aria-hidden="true"></div>
   <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
   <div class="find-nav-bar" id="find-nav-bar" aria-hidden="true">
     <button class="find-nav-btn" id="find-nav-prev" type="button" aria-label="Previous match"
