@@ -66,9 +66,15 @@ with a dead refresh token.
 `npm run check:workers` probes all four. `.github/workflows/health.yml` runs it twice a day, and a
 red run is an email.
 
-Deploying a Worker is manual (`npx wrangler deploy --cwd <worker-dir>`) — CI has never run
-`wrangler` and still doesn't. The probe reports a Worker whose deployed script predates this repo
-as `STALE`, which is the only signal anywhere that an edit here was never shipped.
+Workers used to deploy by hand, and one of them silently didn't for weeks — the probe found a
+deployed script older than its source here. `.github/workflows/deploy-workers.yml` closes that
+gap: a push to `main` touching any `*-worker/` directory reconciles all four (not just the one
+that changed), then re-probes them. It needs one repository secret, `CLOUDFLARE_API_TOKEN`,
+scoped to Workers Scripts:Edit; the account id is not a secret and is set in the workflow.
+
+The probe still reports a Worker whose deployed script predates this repo as `STALE`. That now
+means a deploy failed or something changed a Worker from outside this repo, rather than that
+somebody forgot.
 
 ## Claims are tested
 

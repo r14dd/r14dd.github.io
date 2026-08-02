@@ -1,0 +1,90 @@
+name: Deploy Workers
+
+# The four Cloudflare Workers used to ship by hand, and one of them quietly
+# didn't: the deployed spotify-now-playing script predated its source here by
+# weeks, serving code nobody could read, and nothing said so until the health
+# probe went looking for it. Editing a Worker in this repo now deploys it.
+#
+# Every run reconciles all four, not only the directory that changed. Drift has
+# more than one cause — a deploy that failed halfway, an edit made in the
+# dashboard, a branch that never landed — and reconciling the whole set is the
+# only version of this that actually holds. `workflow_dispatch` does the same
+# on demand, without a commit.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*-worker/**'
+      - '.github/workflows/deploy-workers.yml'
+  workflow_dispatch:
+
+# Deploys queue instead of cancelling. A half-cancelled `wrangler deploy` is
+# precisely the ambiguity this workflow exists to remove.
+concurrency:
+  group: deploy-workers
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  # Not a secret, and deliberately not one: the same account tag is committed
+  # in analytics-worker/wrangler.toml and sits in every dashboard URL. Naming
+  # it here means the API token can be scoped to Workers Scripts:Edit alone —
+  # with the account already known, wrangler never has to list them.
+  CLOUDFLARE_ACCOUNT_ID: 90a4414f4f6490a4c4584ca4a1d9f189
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      # One Worker failing to deploy must not leave the other three unshipped.
+      fail-fast: false
+      matrix:
+        dir: [spotify-worker, analytics-worker, poll-worker, toy-worker]
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # An unset token otherwise surfaces as a wrangler authentication error,
+      # which reads like a revoked credential rather than a missing one.
+      - name: Require the deploy token
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Repository secret CLOUDFLARE_API_TOKEN is not set. Create a Cloudflare API token scoped to Account -> Workers Scripts:Edit, then add it under Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+      # Same major as the `wrangler` devDependency the worker directories pin,
+      # fetched once per job rather than installed into four lockfiles. The
+      # Workers bundle no dependencies of their own, so there is nothing else
+      # to install.
+      - name: Deploy ${{ matrix.dir }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx -y wrangler@4 deploy --cwd ${{ matrix.dir }}
+
+  # Deploying and believing you deployed are different things — the drift this
+  # workflow fixes was invisible for exactly that reason. Ask the live Workers.
+  verify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # check-workers.mjs never retries, on purpose: a retry blurs a flaky
+      # Worker into a healthy one. So the wait belongs here, where a new
+      # version is genuinely still propagating, rather than in the probe.
+      - name: Let the new versions propagate
+        run: sleep 20
+
+      - run: node scripts/check-workers.mjs

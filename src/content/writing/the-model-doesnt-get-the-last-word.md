@@ -1,7 +1,7 @@
 ---
 title: "The model doesn't get the last word"
 summary: 'A language model writes the verdict in my prior-art CLI. It is structurally incapable of telling me the coast is clear when it is not — and that guarantee lives in the type system, not the prompt.'
-order: 1
+order: 2
 published: 2026-08-01
 ---
 

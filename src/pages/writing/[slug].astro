@@ -88,9 +88,43 @@ const structuredData = JSON.stringify({
     margin: 3rem 0 0.9rem;
   }
 
+  /* Quieter than h2 on purpose: h2 is the eyebrow that breaks the piece into
+     parts, h3 only groups paragraphs inside one. Two uppercase mono headings
+     stacked would compete. */
+  .post-body h3 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text);
+    margin: 2.2rem 0 0.8rem;
+  }
+
   .post-body strong {
     color: var(--text);
     font-weight: 600;
+  }
+
+  .post-body ul {
+    margin: 0 0 1.4rem;
+    padding-left: 1.2rem;
+    list-style: none;
+  }
+  .post-body li {
+    position: relative;
+    font-size: var(--text-sm);
+    color: var(--text-soft);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+  }
+  /* A hairline instead of a bullet — the list should read as prose that
+     happens to be indented. */
+  .post-body li::before {
+    content: '';
+    position: absolute;
+    left: -1.2rem;
+    top: 0.85em;
+    width: 6px;
+    height: 1px;
+    background: var(--muted);
   }
 
   .post-body a {
@@ -126,6 +160,37 @@ const structuredData = JSON.stringify({
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 0.78rem;
     line-height: 1.7;
+  }
+
+  /* Hairline rules only. A table that needs columns is already the busiest
+     thing on the page; a full grid of borders would make it the loudest too. */
+  .post-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 1.6rem;
+    font-size: var(--text-sm);
+    color: var(--text-soft);
+  }
+  .post-body th {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0 0.9rem 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .post-body td {
+    padding: 0.6rem 0.9rem 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+    vertical-align: top;
+  }
+  .post-body th:last-child,
+  .post-body td:last-child {
+    padding-right: 0;
   }
 
   .post-body blockquote {

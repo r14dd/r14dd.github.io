@@ -75,6 +75,68 @@ test.describe('reduced-motion path (deterministic)', () => {
     await expect(page.locator('#find-nav-bar')).not.toHaveClass(/open/);
   });
 
+  // Find rewrites the page's text nodes in place. Closing the palette has to
+  // put them back exactly — same words, and merged back into single text
+  // nodes rather than left as the shrapnel of a split.
+  test('palette find leaves the page as it found it', async ({ page }) => {
+    const adjacentTextNodes = () =>
+      page.evaluate(() => {
+        const w = document.createTreeWalker(
+          document.getElementById('main-content') || document.body,
+          NodeFilter.SHOW_TEXT,
+        );
+        let n,
+          pairs = 0;
+        while ((n = w.nextNode())) if (n.nextSibling?.nodeType === Node.TEXT_NODE) pairs++;
+        return pairs;
+      });
+
+    expect(await adjacentTextNodes()).toBe(0); // baseline: the served HTML is already merged
+
+    await page.keyboard.press('ControlOrMeta+k');
+    await page.locator('#cmd-input').fill('Rust');
+    await expect(page.locator('mark.search-highlight').first()).toBeAttached();
+
+    // Hold live references to the marked elements, so the comparison ignores
+    // whatever the async widgets are doing elsewhere on the page.
+    const before = await page.evaluate(() => {
+      const parents = [
+        ...new Set(
+          [...document.querySelectorAll('mark.search-highlight')]
+            .map((m) => m.parentElement)
+            .filter((p): p is HTMLElement => p !== null),
+        ),
+      ];
+      (window as unknown as { __findParents: HTMLElement[] }).__findParents = parents;
+      return parents.map((p) => p.textContent);
+    });
+    expect(before.length).toBeGreaterThan(0);
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('mark.search-highlight')).toHaveCount(0);
+    const after = await page.evaluate(() =>
+      (window as unknown as { __findParents: HTMLElement[] }).__findParents.map(
+        (p) => p.textContent,
+      ),
+    );
+    expect(after).toEqual(before);
+    expect(await adjacentTextNodes()).toBe(0); // normalize() ran on every touched parent
+  });
+
+  // Typing past a word that matches nothing short-circuits the page walk. The
+  // shortcut has to expire the moment the query stops extending the dead end.
+  test('palette find recovers from a dead-end query', async ({ page }) => {
+    const matchItem = page.locator('.cmd-item', { hasText: /match(es)? on page/ });
+    await page.keyboard.press('ControlOrMeta+k');
+    await page.locator('#cmd-input').fill('zqzq');
+    await expect(matchItem).toHaveCount(0);
+    await page.locator('#cmd-input').fill('zqzqx');
+    await expect(matchItem).toHaveCount(0);
+    await expect(page.locator('mark.search-highlight')).toHaveCount(0);
+    await page.locator('#cmd-input').fill('Rust');
+    await expect(matchItem).toBeVisible();
+  });
+
   test('project modal opens from card and closes on Escape', async ({ page }) => {
     const card = page.locator('#projects .proj-card').first();
     await card.scrollIntoViewIfNeeded();

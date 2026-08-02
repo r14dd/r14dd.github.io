@@ -20,7 +20,7 @@ export const claims = {
   // homepage is prerendered once per locale (/, /ru/, /az/), and each piece of
   // writing is its own page. rss.xml is an endpoint, not a document, so it
   // isn't counted here.
-  pages: 10,
+  pages: 11,
 
   // exact — self-hosted woff2 faces and their combined weight
   fontFiles: 12,

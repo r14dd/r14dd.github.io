@@ -229,12 +229,25 @@ export const initCmdPalette = () => {
   let pageMarkQuery = null;
   let pageMarkCount = 0;
   let pageMarkTimer = null;
+  // Shortest query known to match nothing. Anything typed on top of it cannot
+  // match either — "quantumm" can only be rarer than "quantum" — so the walk is
+  // skipped entirely. Typing past a dead end is where the old code worked
+  // hardest for a guaranteed zero.
+  let emptyQuery = null;
   const schedulePageMarks = (q) => {
     if (q === pageMarkQuery) return;
     clearTimeout(pageMarkTimer);
     pageMarkTimer = setTimeout(() => {
+      if (emptyQuery && q.startsWith(emptyQuery)) {
+        pageMarkCount = 0; // no marks exist to clear: the pass that set emptyQuery made none
+      } else if (q.length >= 2) {
+        pageMarkCount = highlightPage(q);
+        emptyQuery = pageMarkCount ? null : q;
+      } else {
+        clearPageMarks();
+        pageMarkCount = 0;
+      }
       // clearPageMarks (inside highlightPage) resets pageMarkQuery — set it after.
-      pageMarkCount = q.length >= 2 ? highlightPage(q) : (clearPageMarks(), 0);
       pageMarkQuery = q;
       if (state.cmdOpen && cmdInput && cmdInput.value.trim() === q) renderCmd(cmdInput.value, true);
     }, 120);
@@ -367,17 +380,24 @@ export const initCmdPalette = () => {
   let findIdx = 0;
   let findCommitting = false;
 
+  // normalize() walks a parent's whole child list, so calling it per mark made
+  // a paragraph with a dozen hits re-walk itself a dozen times. Merging text
+  // nodes is order-independent — one pass per parent, after the replacements,
+  // lands the same DOM.
   const clearPageMarks = () => {
+    const touched = new Set();
     pageMarks.forEach((m) => {
       const p = m.parentNode;
       if (p) {
         p.replaceChild(document.createTextNode(m.textContent), m);
-        p.normalize();
+        touched.add(p);
       }
     });
+    touched.forEach((p) => p.normalize());
     pageMarks = [];
     pageMarkQuery = null;
     pageMarkCount = 0;
+    emptyQuery = null;
   };
 
   const highlightPage = (q) => {
@@ -404,15 +424,15 @@ export const initCmdPalette = () => {
     while ((node = walker.nextNode())) nodes.push(node);
     nodes.forEach((tn) => {
       const text = tn.textContent;
-      if (!re.test(text)) {
-        re.lastIndex = 0;
-        return;
-      }
+      // One scan, not two: the old code ran test() and then exec()'d the same
+      // string from the top. Most nodes never match, and the ones that do paid
+      // for the privilege twice.
       re.lastIndex = 0;
+      let m = re.exec(text);
+      if (!m) return;
       const frag = document.createDocumentFragment();
-      let last = 0,
-        m;
-      while ((m = re.exec(text)) !== null) {
+      let last = 0;
+      do {
         if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
         const mark = document.createElement('mark');
         mark.className = 'search-highlight';
@@ -420,7 +440,7 @@ export const initCmdPalette = () => {
         frag.appendChild(mark);
         pageMarks.push(mark);
         last = re.lastIndex;
-      }
+      } while ((m = re.exec(text)) !== null);
       if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
       tn.parentNode.replaceChild(frag, tn);
     });

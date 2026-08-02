@@ -1,9 +1,12 @@
 name: Worker health
 
-# The four Cloudflare Workers are deployed by hand — this repo's CI has never
-# run `wrangler` and does not now. Nothing on the site reports when one dies,
+# Nothing on the site reports when one of the four Cloudflare Workers dies,
 # because every widget that depends on them fails soft on purpose. This is the
 # only thing that will tell anyone.
+#
+# deploy-workers.yml now ships them, so a STALE verdict here no longer means
+# "somebody forgot" — it means a deploy failed, or something changed a Worker
+# from outside this repo.
 #
 # A failed scheduled run emails the repo owner. That email is the entire point.
 on:
