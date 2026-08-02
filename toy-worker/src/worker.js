@@ -4,6 +4,15 @@ export class VisitorCounter {
   }
 
   async fetch(request) {
+    // GET reads without incrementing. The health probe needs to prove the
+    // binding and the storage work, and it runs on a schedule — it must not
+    // inflate the visitor number every time it does.
+    if (request.method === 'GET') {
+      const count = (await this.state.storage.get('count')) || 0;
+      return new Response(JSON.stringify({ number: count }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
     if (request.method !== 'POST') {
       return new Response('Method Not Allowed', { status: 405 });
     }
@@ -62,6 +71,15 @@ export class MessageBox {
     }
 
     if (request.method === 'GET') {
+      // Count-only mode for the health probe. The message list is admin-gated
+      // upstream and carries visitor contact details; /health is public, so it
+      // gets a number and nothing else.
+      if (new URL(request.url).searchParams.get('count') === '1') {
+        const row = this.sql.exec('SELECT COUNT(*) as n FROM messages').one();
+        return new Response(JSON.stringify({ count: row.n }), {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
       const messages = this.sql
         .exec(
           'SELECT id, text, contact, created_at FROM messages ORDER BY created_at DESC LIMIT 50',
@@ -119,6 +137,41 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
     let res;
+
+    // Liveness probe for scripts/check-workers.mjs. Reaches into both Durable
+    // Objects read-only, because the failure worth catching is a deploy that
+    // drops a binding or a migration that leaves a namespace unusable — the
+    // worker script itself would still answer, and every widget that depends
+    // on it fails soft, so nothing on the site would say a word.
+    if (path === '/health' && request.method === 'GET') {
+      try {
+        const counter = await env.COUNTER.get(env.COUNTER.idFromName('global')).fetch(
+          new Request('https://do/health', { method: 'GET' }),
+        );
+        const box = await env.MESSAGES.get(env.MESSAGES.idFromName('global')).fetch(
+          new Request('https://do/health?count=1', { method: 'GET' }),
+        );
+        const ok = counter.ok && box.ok;
+        return new Response(
+          JSON.stringify({
+            ok,
+            check: 'durable-objects',
+            counter: counter.status,
+            messages: box.status,
+          }),
+          { status: ok ? 200 : 503, headers: { ...headers, 'Content-Type': 'application/json' } },
+        );
+      } catch (e) {
+        return new Response(
+          JSON.stringify({
+            ok: false,
+            check: 'durable-objects',
+            error: String(e.message || e).slice(0, 200),
+          }),
+          { status: 503, headers: { ...headers, 'Content-Type': 'application/json' } },
+        );
+      }
+    }
 
     if (path === '/visitor/increment' && request.method === 'POST') {
       const id = env.COUNTER.idFromName('global');

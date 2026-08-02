@@ -123,6 +123,25 @@ export default {
     }
 
     try {
+      // GET /health — liveness probe for scripts/check-workers.mjs.
+      //
+      // Deliberately does NOT round-trip through a Durable Object: naming a
+      // probe session would mint a namespace entry that then exists forever,
+      // and this account's DO config is fragile enough (free-tier
+      // new_sqlite_classes only) that leaving litter in it is not worth the
+      // extra coverage. Checking the binding is present catches the realistic
+      // failure — a deploy that drops or renames it — without persisting
+      // anything.
+      if (method === 'GET' && url.pathname === '/health') {
+        const bound = typeof env.POLL_ROOM?.idFromName === 'function';
+        return json(
+          { ok: bound, check: 'durable-object-binding', binding: bound ? 'POLL_ROOM' : null },
+          origin,
+          env,
+          bound ? 200 : 503,
+        );
+      }
+
       // POST /vote {session, choice, voterId}
       if (method === 'POST' && url.pathname === '/vote') {
         const body = await request.json().catch(() => null);

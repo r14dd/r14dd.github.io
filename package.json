@@ -12,6 +12,7 @@
     "format:check": "prettier --check .",
     "astro": "astro",
     "check": "astro check",
+    "check:workers": "node scripts/check-workers.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {

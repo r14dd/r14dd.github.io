@@ -8,6 +8,7 @@
  *
  *   GET /summary?range=24h|7d|30d   (Authorization: Bearer <ADMIN_KEY>)
  *   GET /vitals                     (public, no auth)
+ *   GET /health                     (public, no auth — uncached token check)
  *
  * /vitals is deliberately public: it returns three aggregate p75 numbers and a
  * sample count — no dimensions, no paths, no per-visitor anything — so the
@@ -245,8 +246,33 @@ export default {
 
     if (request.method === 'OPTIONS')
       return new Response(null, { status: 204, headers: corsHeaders });
-    if (request.method !== 'GET' || !['/summary', '/vitals'].includes(url.pathname)) {
+    if (request.method !== 'GET' || !['/summary', '/vitals', '/health'].includes(url.pathname)) {
       return json({ error: 'not found' }, 404, corsHeaders);
+    }
+
+    // Liveness probe for scripts/check-workers.mjs. Deliberately NOT edge-
+    // cached the way /vitals is: a cached 200 can outlive a revoked API token
+    // by half an hour, and a monitor that reports green for thirty minutes
+    // after the thing dies is the exact blindness this endpoint exists to fix.
+    // One GraphQL call per probe, a handful of probes a day.
+    if (url.pathname === '/health') {
+      const noStore = { 'Cache-Control': 'no-store' };
+      try {
+        const v = await fetchVitals(env);
+        return json(
+          { ok: true, check: 'graphql-token', samples: v.samples },
+          200,
+          corsHeaders,
+          noStore,
+        );
+      } catch (err) {
+        return json(
+          { ok: false, check: 'graphql-token', error: String(err.message || err).slice(0, 200) },
+          503,
+          corsHeaders,
+          noStore,
+        );
+      }
     }
 
     if (url.pathname === '/vitals') {

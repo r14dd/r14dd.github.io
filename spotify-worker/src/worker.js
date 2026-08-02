@@ -55,6 +55,33 @@ export default {
       return new Response(null, { headers: cors(origin) });
     }
 
+    // Liveness probe for scripts/check-workers.mjs. A status check on / is
+    // worthless here: when the refresh token dies, the catch below still
+    // serves 200 with whatever was last cached, so the widget freezes on an
+    // old track and every external signal stays green. This path asks the one
+    // question that actually fails — can we still get a token?
+    //
+    // getAccessToken short-circuits on a token it already holds, so a warm
+    // isolate can answer ok for up to an hour after the refresh token is
+    // revoked. That is deliberate: forcing a live refresh on every hit would
+    // hand anyone a lever on Spotify's token endpoint. Probes are hours apart
+    // and isolates rarely survive that long, so in practice most probes do a
+    // real refresh.
+    if (request.method === 'GET' && url.pathname === '/health') {
+      try {
+        await getAccessToken(env);
+        return Response.json(
+          { ok: true, check: 'spotify-token', kv: Boolean(env.LAST_PLAYED) },
+          { headers: cors(origin) },
+        );
+      } catch (e) {
+        return Response.json(
+          { ok: false, check: 'spotify-token', error: String(e.message || e).slice(0, 200) },
+          { status: 503, headers: cors(origin) },
+        );
+      }
+    }
+
     if (request.method !== 'GET' || (url.pathname !== '/' && url.pathname !== '')) {
       return new Response('Not Found', { status: 404, headers: cors(origin) });
     }

@@ -1,0 +1,37 @@
+name: Worker health
+
+# The four Cloudflare Workers are deployed by hand — this repo's CI has never
+# run `wrangler` and does not now. Nothing on the site reports when one dies,
+# because every widget that depends on them fails soft on purpose. This is the
+# only thing that will tell anyone.
+#
+# A failed scheduled run emails the repo owner. That email is the entire point.
+on:
+  schedule:
+    # 07:00 and 19:00 UTC. GitHub disables scheduled workflows after 60 days
+    # with no repository activity — if the checks ever go quiet for two months,
+    # that is why, and any push re-enables them.
+    - cron: '0 7,19 * * *'
+  workflow_dispatch:
+
+# Never let a probe run pile up behind a slow one.
+concurrency:
+  group: worker-health
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # No `npm ci` — the script has no dependencies, so this stays a
+      # ten-second job that can run often without costing anything.
+      - run: node scripts/check-workers.mjs

@@ -55,7 +55,20 @@ Minimalist personal portfolio built to present AI and software engineering work 
 | `poll-worker`      | Poll backend                                                    |
 | `toy-worker`       | Visitor counter + paper-airplane inbox (Durable Object, SQLite) |
 
-Each degrades silently: if a Worker is unreachable its widget disappears rather than erroring.
+Each degrades silently: if a Worker is unreachable its widget disappears rather than erroring. That
+is right for a visitor and blind for the owner — nothing on the site would ever say a Worker died.
+So every Worker also answers `GET /health`, and each one exercises its real dependency rather than
+merely proving the script is deployed: the Spotify token exchange, the Cloudflare Analytics API
+token (uncached, unlike `/vitals`), the Durable Object bindings. A 200 from the public endpoint
+proves much less than it looks like it does — the Spotify proxy returns cached JSON quite happily
+with a dead refresh token.
+
+`npm run check:workers` probes all four. `.github/workflows/health.yml` runs it twice a day, and a
+red run is an email.
+
+Deploying a Worker is manual (`npx wrangler deploy --cwd <worker-dir>`) — CI has never run
+`wrangler` and still doesn't. The probe reports a Worker whose deployed script predates this repo
+as `STALE`, which is the only signal anywhere that an edit here was never shipped.
 
 ## Claims are tested
 
