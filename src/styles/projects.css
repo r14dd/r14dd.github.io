@@ -113,7 +113,14 @@
     transition:
       border-color 0.25s var(--ease-out),
       background 0.25s var(--ease-out),
-      transform 0.2s var(--ease-spring);
+      transform 0.2s var(--ease-spring),
+      opacity 0.3s var(--ease-out);
+  }
+  .proj-grid:hover .proj-card {
+    opacity: 0.55;
+  }
+  .proj-grid:hover .proj-card:hover {
+    opacity: 1;
   }
 }
 
