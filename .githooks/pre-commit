@@ -1,0 +1,57 @@
+#!/bin/sh
+# Format staged files before they become a commit.
+#
+# This exists because `prettier --check` is step 3 of the build job, ahead of
+# build and tests: one unformatted file fails CI, the Pages deploy never runs,
+# and riad.cc quietly serves the previous build while the repo looks fine.
+# That happened twice. Catching it here costs a second; catching it in CI costs
+# a stale site until someone notices.
+#
+# Auto-fixes rather than rejecting, so there is never a reason to reach for
+# --no-verify. A hook people routinely bypass is not a hook.
+
+set -e
+
+PRETTIER="./node_modules/.bin/prettier"
+[ -x "$PRETTIER" ] || exit 0 # no install yet — don't block the commit
+
+# Only the staged files prettier actually handles.
+staged=$(git diff --cached --name-only --diff-filter=ACMR |
+	grep -Ei '\.(js|mjs|cjs|ts|tsx|astro|css|json|md|ya?ml|html)$' || true)
+[ -n "$staged" ] || exit 0
+
+# Keep only paths that still exist (a rename can stage a path that's gone).
+existing=""
+for f in $staged; do
+	[ -f "$f" ] && existing="$existing $f"
+done
+[ -n "$existing" ] || exit 0
+
+# shellcheck disable=SC2086
+if "$PRETTIER" --check $existing >/dev/null 2>&1; then
+	exit 0
+fi
+
+# Something needs formatting. A partially staged file can't be auto-fixed and
+# re-added without dragging in the unstaged half, so stop and say so instead of
+# silently committing work that was deliberately held back.
+unstaged=$(git diff --name-only)
+partial=""
+for f in $existing; do
+	for u in $unstaged; do
+		[ "$f" = "$u" ] && partial="$partial $f"
+	done
+done
+
+if [ -n "$partial" ]; then
+	echo "pre-commit: these files need formatting but are only partially staged:" >&2
+	for f in $partial; do echo "  $f" >&2; done
+	echo "Run 'npm run format', then re-stage the parts you want." >&2
+	exit 1
+fi
+
+# shellcheck disable=SC2086
+"$PRETTIER" --write $existing >/dev/null
+# shellcheck disable=SC2086
+git add $existing
+echo "pre-commit: formatted and re-staged$existing"

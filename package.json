@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || exit 0",
     "dev": "astro dev",
     "build": "astro build",
     "postbuild": "node scripts/check-claims.mjs",
