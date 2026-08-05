@@ -249,3 +249,73 @@ test.describe('terminal dots are thumb-sized on touch', () => {
     await expect(page.locator('.terminal-window')).toHaveClass(/term-collapsed/);
   });
 });
+
+test.describe('crack the glass needs five hits, fast', () => {
+  // The toys load on requestIdleCallback, so wait for a sibling toy's own DOM
+  // to appear rather than sleeping a guessed number of milliseconds.
+  const toysLoaded = (page: Page) =>
+    page.locator('.ferris').waitFor({ state: 'attached', timeout: 15_000 });
+
+  // The egg ignores anything interactive. Find a point that genuinely isn't,
+  // instead of hardcoding coordinates that drift with every layout change.
+  const deadSpot = (page: Page) =>
+    page.evaluate(() => {
+      const sel =
+        'a, button, input, textarea, select, label, [contenteditable], [role="button"], [role="menuitemradio"], .terminal-body, .terminal-dots, .cmd-palette, .proj-modal, .kbd-overlay, .lang-menu, .mobile-nav-menu, .sim-visual, .theme-toggle, .lang-toggle, .cmd-trigger, .side-nav, .side-links, .hero-links, .connect-links, .find-nav-bar, .ferris';
+      for (let y = 120; y < innerHeight - 40; y += 20) {
+        for (let x = 200; x < innerWidth - 200; x += 40) {
+          const el = document.elementFromPoint(x, y);
+          if (el && !el.closest(sel)) return { x, y };
+        }
+      }
+      return null;
+    });
+
+  const burst = async (page: Page, n: number, gapMs: number) => {
+    const spot = await deadSpot(page);
+    expect(spot, 'no inert point on the page to click').not.toBeNull();
+    for (let i = 0; i < n; i++) {
+      // Nudge x each time so the burst is not collapsed into a dblclick.
+      await page.mouse.click(spot!.x + i, spot!.y);
+      if (gapMs) await page.waitForTimeout(gapMs);
+    }
+  };
+
+  // Read the class the instant the burst ends. A retrying matcher is useless
+  // here: the repair crew clears `glass-shattered` a few seconds later, so
+  // `expect(body).not.toHaveClass(...)` passes even when the glass DID break.
+  const shatteredNow = (page: Page) =>
+    page.evaluate(() => document.body.classList.contains('glass-shattered'));
+
+  test('four fast clicks leave the glass intact', async ({ page }) => {
+    await page.goto('/');
+    await ready(page);
+    await toysLoaded(page);
+    await burst(page, 4, 60);
+    expect(await shatteredNow(page)).toBe(false);
+    // `.ferris` proves the toy batch ran, not that crack-glass's own dynamic
+    // import resolved — without this the assertion above passes just as well
+    // when no listener is attached at all. One more click, still inside the
+    // window, so a dead listener fails the test instead of greening it.
+    await burst(page, 1, 0);
+    expect(await shatteredNow(page)).toBe(true);
+  });
+
+  test('the fifth fast click cracks it', async ({ page }) => {
+    await page.goto('/');
+    await ready(page);
+    await toysLoaded(page);
+    await burst(page, 5, 60);
+    expect(await shatteredNow(page)).toBe(true);
+    await expect(page.locator('.glass-pane.cracked')).toBeVisible();
+  });
+
+  test('five clicks slower than the window do not count', async ({ page }) => {
+    await page.goto('/');
+    await ready(page);
+    await toysLoaded(page);
+    // 4 gaps x 400ms = 1.6s, past CLICK_WINDOW — deliberate clicking, not rage.
+    await burst(page, 5, 400);
+    expect(await shatteredNow(page)).toBe(false);
+  });
+});

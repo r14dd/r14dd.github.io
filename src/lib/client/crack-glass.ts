@@ -2,8 +2,10 @@
 import { state } from './state';
 
 export const initCrackGlass = () => {
-  const CLICK_WINDOW = 700;
-  const MIN_CLICKS = 3;
+  // Five hits, but at the same rate three used to need (~4.3/sec) — widening the
+  // window with the count keeps the gesture "rage", not "fast enough to be luck".
+  const CLICK_WINDOW = 1200;
+  const MIN_CLICKS = 5;
   const REPAIR_DELAY = 2500;
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -235,8 +237,9 @@ export const initCrackGlass = () => {
 
     if (clickLog.length >= MIN_CLICKS) {
       glassActive = true;
-      // A triple-click has by now selected a paragraph. Drop it and suppress
-      // further selection, so the burst reads as hitting glass, not dragging text.
+      // The burst has by now triple-clicked a paragraph into selection. Drop it
+      // and suppress further selection, so this reads as hitting glass, not
+      // dragging text.
       window.getSelection()?.removeAllRanges();
       document.body.classList.add('glass-shattered');
       addCrack(e.clientX, e.clientY);
