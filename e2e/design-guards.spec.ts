@@ -8,6 +8,22 @@ import { test, expect, type Page } from 'playwright/test';
 const ready = (page: Page) =>
   page.waitForFunction(() => document.documentElement.dataset.jsReady === '1');
 
+// Everything crack-the-glass refuses to treat as a hit. Kept verbatim from the
+// egg's own `isInteractive`, so a point that passes here is a point it accepts.
+const INERT =
+  'a, button, input, textarea, select, label, [contenteditable], [role="button"], [role="menuitemradio"], .terminal-body, .terminal-dots, .cmd-palette, .proj-modal, .kbd-overlay, .lang-menu, .mobile-nav-menu, .sim-visual, .theme-toggle, .lang-toggle, .cmd-trigger, .side-nav, .side-links, .hero-links, .connect-links, .find-nav-bar, .ferris';
+
+// The toys load on requestIdleCallback, so wait for a sibling toy's own DOM to
+// appear rather than sleeping a guessed number of milliseconds.
+const toysLoaded = (page: Page) =>
+  page.locator('.ferris').waitFor({ state: 'attached', timeout: 15_000 });
+
+// Read the class the instant the burst ends. A retrying matcher is useless
+// here: the repair crew clears `glass-shattered` a few seconds later, so
+// `expect(body).not.toHaveClass(...)` passes even when the glass DID break.
+const shatteredNow = (page: Page) =>
+  page.evaluate(() => document.body.classList.contains('glass-shattered'));
+
 test('a shared /#projects link lands on the projects section', async ({ page }) => {
   await page.goto('/#projects');
   // The load-time scroll reset used to stomp this to scrollY = 0.
@@ -250,27 +266,23 @@ test.describe('terminal dots are thumb-sized on touch', () => {
   });
 });
 
-test.describe('crack the glass needs five hits, fast', () => {
-  // The toys load on requestIdleCallback, so wait for a sibling toy's own DOM
-  // to appear rather than sleeping a guessed number of milliseconds.
-  const toysLoaded = (page: Page) =>
-    page.locator('.ferris').waitFor({ state: 'attached', timeout: 15_000 });
-
-  // The egg ignores anything interactive. Find a point that genuinely isn't,
-  // instead of hardcoding coordinates that drift with every layout change.
-  const deadSpot = (page: Page) =>
-    page.evaluate(() => {
-      const sel =
-        'a, button, input, textarea, select, label, [contenteditable], [role="button"], [role="menuitemradio"], .terminal-body, .terminal-dots, .cmd-palette, .proj-modal, .kbd-overlay, .lang-menu, .mobile-nav-menu, .sim-visual, .theme-toggle, .lang-toggle, .cmd-trigger, .side-nav, .side-links, .hero-links, .connect-links, .find-nav-bar, .ferris';
-      for (let y = 120; y < innerHeight - 40; y += 20) {
-        for (let x = 200; x < innerWidth - 200; x += 40) {
-          const el = document.elementFromPoint(x, y);
-          if (el && !el.closest(sel)) return { x, y };
-        }
+// The egg ignores anything interactive. Find points that genuinely aren't,
+// instead of hardcoding coordinates that drift with every layout change.
+const deadSpots = (page: Page) =>
+  page.evaluate((sel) => {
+    const out: { x: number; y: number }[] = [];
+    for (let y = 120; y < innerHeight - 40; y += 20) {
+      for (let x = 200; x < innerWidth - 200; x += 40) {
+        const el = document.elementFromPoint(x, y);
+        if (el && !el.closest(sel)) out.push({ x, y });
       }
-      return null;
-    });
+    }
+    return out;
+  }, INERT);
 
+const deadSpot = async (page: Page) => (await deadSpots(page))[0] ?? null;
+
+test.describe('crack the glass needs five hits, fast', () => {
   const burst = async (page: Page, n: number, gapMs: number) => {
     const spot = await deadSpot(page);
     expect(spot, 'no inert point on the page to click').not.toBeNull();
@@ -280,12 +292,6 @@ test.describe('crack the glass needs five hits, fast', () => {
       if (gapMs) await page.waitForTimeout(gapMs);
     }
   };
-
-  // Read the class the instant the burst ends. A retrying matcher is useless
-  // here: the repair crew clears `glass-shattered` a few seconds later, so
-  // `expect(body).not.toHaveClass(...)` passes even when the glass DID break.
-  const shatteredNow = (page: Page) =>
-    page.evaluate(() => document.body.classList.contains('glass-shattered'));
 
   test('four fast clicks leave the glass intact', async ({ page }) => {
     await page.goto('/');
@@ -317,5 +323,100 @@ test.describe('crack the glass needs five hits, fast', () => {
     // 4 gaps x 400ms = 1.6s, past CLICK_WINDOW — deliberate clicking, not rage.
     await burst(page, 5, 400);
     expect(await shatteredNow(page)).toBe(false);
+  });
+});
+
+test.describe('the repair crew is one crew, and it visits every break', () => {
+  test('a hit landing mid-walk joins the job instead of dispatching a second crew', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await ready(page);
+    await toysLoaded(page);
+
+    const spots = await deadSpots(page);
+    expect(spots.length, 'no inert points on the page to click').toBeGreaterThan(20);
+    const at = (f: number) => spots[Math.floor((spots.length - 1) * f)];
+
+    // Watch the pane from before the first hit: how many crews ever exist at
+    // once, and whether every fracture is healed rather than silently wiped.
+    await page.evaluate(() => {
+      const p = { maxCrews: 0, crewsMade: 0, cracks: 0, healed: new Set<Element>() };
+      (window as unknown as { __crew: typeof p }).__crew = p;
+      new MutationObserver((muts) => {
+        p.maxCrews = Math.max(p.maxCrews, document.querySelectorAll('.repair-crew').length);
+        for (const m of muts) {
+          for (const n of m.addedNodes) {
+            if (!(n instanceof Element)) continue;
+            if (n.classList.contains('repair-crew')) p.crewsMade++;
+            // Each impact appends exactly one <g>; its lines are built while
+            // it's still detached, so they never reach this observer.
+            if (n.tagName === 'g') p.cracks++;
+          }
+          if (
+            m.type === 'attributes' &&
+            m.target instanceof Element &&
+            m.target.classList.contains('crack-healed')
+          )
+            p.healed.add(m.target);
+        }
+      }).observe(document.body, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+    });
+
+    // Break it, then spread the damage so the crew has a walk long enough to
+    // interrupt. Every click here lands on a genuinely inert point.
+    const a = at(0.05);
+    for (let i = 0; i < 5; i++) await page.mouse.click(a.x + i, a.y);
+    expect(await shatteredNow(page)).toBe(true);
+    const b = at(0.45);
+    const c = at(0.95);
+    for (const s of [b, c, { x: b.x, y: c.y }, { x: c.x, y: b.y }])
+      await page.mouse.click(s.x, s.y);
+
+    // Wait for the crew to actually be walking, then hit the glass again.
+    await page.locator('.repair-crew').first().waitFor({ state: 'attached', timeout: 10_000 });
+    await page.waitForTimeout(400);
+    await page.mouse.click(at(0.25).x, at(0.65).y);
+
+    // The job finishes: no crew left, no cracks left, glass whole again.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(() => ({
+            crews: document.querySelectorAll('.repair-crew').length,
+            shattered: document.body.classList.contains('glass-shattered'),
+          })),
+        { timeout: 25_000 },
+      )
+      .toEqual({ crews: 0, shattered: false });
+
+    const seen = await page.evaluate(() => {
+      const p = (
+        window as unknown as {
+          __crew: { maxCrews: number; crewsMade: number; cracks: number; healed: Set<Element> };
+        }
+      ).__crew;
+      return {
+        maxCrews: p.maxCrews,
+        crewsMade: p.crewsMade,
+        cracks: p.cracks,
+        healed: p.healed.size,
+      };
+    });
+
+    // Two crews on screen means one wiped the glass out from under the other.
+    expect(seen.maxCrews, 'more than one repair crew existed at once').toBe(1);
+    expect(seen.crewsMade, 'a second crew was dispatched').toBe(1);
+    // The whole conceit is that a crack clears only once someone walks to it.
+    // The hit made mid-walk counts too — it must not vanish unvisited.
+    // 6 impacts: the break itself (the first four clicks only count, they don't
+    // crack), the four spread hits, and the one landing mid-walk.
+    expect(seen.cracks).toBe(6);
+    expect(seen.healed, 'a fracture disappeared without being repaired').toBe(seen.cracks);
   });
 });

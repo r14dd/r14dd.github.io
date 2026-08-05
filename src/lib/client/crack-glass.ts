@@ -10,6 +10,7 @@ export const initCrackGlass = () => {
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
   let glassActive = false;
+  let crewOnFloor = false;
   let repairTimer = null;
   const clickLog = [];
 
@@ -137,7 +138,12 @@ export const initCrackGlass = () => {
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   const spawnCrew = async () => {
-    if (!pane) return;
+    // One crew, and only when there is something to fix. Hits landing mid-walk
+    // re-arm the timer, so without this a second crew gets dispatched on top of
+    // the first — two crews on screen, and whichever finishes first wipes the
+    // glass out from under the other.
+    if (!pane || crewOnFloor || !fractures.length) return;
+    crewOnFloor = true;
     pane.classList.add('repairing');
 
     const crew = document.createElement('div');
@@ -151,57 +157,79 @@ export const initCrackGlass = () => {
     });
     pane.appendChild(crew);
 
-    const stops = clusterImpacts();
     const place = (x, y) => {
       crew.style.transform = `translate(${x}px, ${y}px)`;
     };
 
     // Walk in from whichever side edge is closest to the first break.
-    let cur = { x: stops.length && stops[0].x > innerWidth / 2 ? innerWidth + 80 : -80, y: 0 };
-    cur.y = stops.length ? stops[0].y : innerHeight / 2;
+    const entry = clusterImpacts();
+    let cur = { x: entry[0].x > innerWidth / 2 ? innerWidth + 80 : -80, y: entry[0].y };
     place(cur.x, cur.y);
 
-    const PATCH_MS = stops.length > 3 ? 150 : 230;
+    // Keep working until the floor is actually clear. A break made while the
+    // crew is out joins this same job rather than being wiped unvisited, so the
+    // rule holds: no crack disappears until someone has walked to it.
+    for (;;) {
+      while (fractures.length) {
+        const stops = clusterImpacts();
+        const PATCH_MS = stops.length > 3 ? 150 : 230;
 
-    // Visit the nearest remaining break each time, so the path never criss-crosses.
-    const remaining = stops.slice();
-    while (remaining.length) {
-      let bi = 0;
-      let bd = Infinity;
-      remaining.forEach((s, i) => {
-        const dist = Math.hypot(s.x - cur.x, s.y - cur.y);
-        if (dist < bd) {
-          bd = dist;
-          bi = i;
+        // Visit the nearest remaining break each time, so the path never criss-crosses.
+        while (stops.length) {
+          let bi = 0;
+          let bd = Infinity;
+          stops.forEach((s, i) => {
+            const dist = Math.hypot(s.x - cur.x, s.y - cur.y);
+            if (dist < bd) {
+              bd = dist;
+              bi = i;
+            }
+          });
+          const stop = stops.splice(bi, 1)[0];
+
+          const from = { ...cur };
+          await tween(Math.min(Math.max(bd / 1.4, 220), 560), (p) => {
+            place(from.x + (stop.x - from.x) * p, from.y + (stop.y - from.y) * p);
+          });
+          cur = { x: stop.x, y: stop.y };
+
+          // Patch this break, here, before moving on.
+          crew.classList.add('fixing');
+          const patch = document.createElement('div');
+          patch.className = 'repair-patch';
+          patch.style.left = `${stop.x}px`;
+          patch.style.top = `${stop.y}px`;
+          pane.appendChild(patch);
+
+          await wait(PATCH_MS);
+          stop.items.forEach((f) => {
+            f.el.classList.add('crack-healed');
+            const at = fractures.indexOf(f);
+            if (at !== -1) fractures.splice(at, 1);
+          });
+          await wait(PATCH_MS);
+          crew.classList.remove('fixing');
+          setTimeout(() => patch.remove(), 500);
         }
-      });
-      const stop = remaining.splice(bi, 1)[0];
+      }
 
+      // Job done — walk off the nearest edge.
+      const exitX = cur.x > innerWidth / 2 ? innerWidth + 90 : -90;
       const from = { ...cur };
-      await tween(Math.min(Math.max(bd / 1.4, 220), 560), (p) => {
-        place(from.x + (stop.x - from.x) * p, from.y + (stop.y - from.y) * p);
-      });
-      cur = { x: stop.x, y: stop.y };
+      await tween(460, (p) => place(from.x + (exitX - from.x) * p, from.y));
+      cur = { x: exitX, y: from.y };
 
-      // Patch this break, here, before moving on.
-      crew.classList.add('fixing');
-      const patch = document.createElement('div');
-      patch.className = 'repair-patch';
-      patch.style.left = `${stop.x}px`;
-      patch.style.top = `${stop.y}px`;
-      pane.appendChild(patch);
-
-      await wait(PATCH_MS);
-      stop.items.forEach((f) => f.el.classList.add('crack-healed'));
-      await wait(PATCH_MS);
-      crew.classList.remove('fixing');
-      setTimeout(() => patch.remove(), 500);
+      // Hit on the way out? Turn around.
+      if (!fractures.length) break;
     }
 
-    // Job done — walk off the nearest edge.
-    const exitX = cur.x > innerWidth / 2 ? innerWidth + 90 : -90;
-    const from = { ...cur };
-    await tween(460, (p) => place(from.x + (exitX - from.x) * p, from.y));
+    // Nothing is pending now, so a timer still armed from a mid-walk hit would
+    // only dispatch a crew onto an empty floor — or onto a fresh break it never
+    // saw start.
+    if (repairTimer) {
+      clearTimeout(repairTimer);
+      repairTimer = null;
+    }
 
     if (svg) svg.innerHTML = '';
     fractures.length = 0;
@@ -211,6 +239,7 @@ export const initCrackGlass = () => {
     }
     document.body.classList.remove('glass-shattered');
     glassActive = false;
+    crewOnFloor = false;
   };
 
   // Listen on pointerdown, not click. Rage-clicking is a burst of mousedowns;
