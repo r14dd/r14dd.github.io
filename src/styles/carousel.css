@@ -5,10 +5,18 @@
   }
 }
 
+/* The card lifts 2px on hover, and it sits flush against the top of two nested
+   clipping boxes: this one, and the scroller inside it — `overflow-x: auto`
+   forces `overflow-y` to `auto`, so that scroller clips vertically too. With no
+   headroom the lift pushed the card's 1px top border past both clip edges and
+   the line simply disappeared, leaving only the corner arcs. Both boxes need the
+   room; the negative margin cancels the padding, so nothing actually moves. */
 .testi-wrap {
   position: relative;
   overflow: hidden;
   max-width: 100%;
+  padding-top: 0.25rem;
+  margin-top: -0.25rem;
 }
 
 .testi-scroll {
@@ -18,6 +26,8 @@
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  padding-top: 0.25rem;
+  margin-top: -0.25rem;
   padding-bottom: 0.25rem;
 }
 

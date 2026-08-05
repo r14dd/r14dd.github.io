@@ -420,3 +420,64 @@ test.describe('the repair crew is one crew, and it visits every break', () => {
     expect(seen.healed, 'a fracture disappeared without being repaired').toBe(seen.cracks);
   });
 });
+
+test.describe('the testimonial card keeps its border when it lifts', () => {
+  // The card lifts on hover inside two nested clipping boxes: `.testi-wrap`
+  // (overflow: hidden) and `.testi-scroll`, whose `overflow-x: auto` forces
+  // `overflow-y: auto`. It once sat flush against both, so the lift pushed its
+  // 1px top border past the clip edge and the line vanished, leaving only the
+  // corner arcs. The headroom has to be at least as deep as the lift.
+  test('there is more headroom above the card than the hover lift consumes', async ({ page }) => {
+    await page.goto('/');
+    await ready(page);
+    await page.locator('.testi-wrap').scrollIntoViewIfNeeded();
+
+    const geom = await page.evaluate(() => {
+      // Read the lift straight out of the stylesheet, so deepening it without
+      // adding headroom fails here rather than shipping a clipped border.
+      let lift = 0;
+      const walk = (rules: CSSRuleList) => {
+        for (const r of rules) {
+          if (r instanceof CSSMediaRule) walk(r.cssRules);
+          else if (r instanceof CSSStyleRule && r.selectorText.includes('.testi-card:hover')) {
+            const m = /translateY\((-?[\d.]+)px\)/.exec(r.style.transform);
+            if (m) lift = Math.max(lift, Math.abs(parseFloat(m[1])));
+          }
+        }
+      };
+      for (const sheet of document.styleSheets) {
+        try {
+          walk(sheet.cssRules);
+        } catch {
+          /* cross-origin sheet — nothing of ours lives there */
+        }
+      }
+
+      const card = [...document.querySelectorAll('.testi-card')].find((c) => {
+        const b = c.getBoundingClientRect();
+        return b.left >= -2 && b.left < innerWidth;
+      }) as HTMLElement;
+      const top = card.getBoundingClientRect().top;
+
+      // Smallest gap between the card top and any clipping ancestor's edge.
+      let slack = Infinity;
+      let tightest = '';
+      for (let p = card.parentElement; p && p !== document.body; p = p.parentElement) {
+        const cs = getComputedStyle(p);
+        if (cs.overflowX === 'visible' && cs.overflowY === 'visible') continue;
+        const gap = top - p.getBoundingClientRect().top;
+        if (gap < slack) {
+          slack = gap;
+          tightest = `${p.tagName}.${String(p.className).split(' ')[0]}`;
+        }
+      }
+      return { lift, slack, tightest };
+    });
+
+    expect(geom.lift, 'no hover lift found — has the rule moved?').toBeGreaterThan(0);
+    expect(
+      geom.slack,
+      `only ${geom.slack}px above the card inside ${geom.tightest}, but hover lifts it ${geom.lift}px — the top border gets clipped`,
+    ).toBeGreaterThanOrEqual(geom.lift);
+  });
+});
