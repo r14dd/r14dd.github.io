@@ -23,6 +23,9 @@ export const initTheme = () => {
       document.documentElement.classList.toggle('light');
       localStorage.setItem('portfolio-theme', willBeLight ? 'light' : 'dark');
       updateThemeIcon();
+      // Belongs here, not on the early-return path: the wipe branch used to skip
+      // it, so on desktop the browser chrome stayed dark behind a light page.
+      themeColorMeta?.setAttribute('content', newBg);
     };
     const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (
@@ -31,7 +34,6 @@ export const initTheme = () => {
       isMobile
     ) {
       doToggle();
-      if (themeColorMeta) themeColorMeta.setAttribute('content', newBg);
       return;
     }
     const rect = themeToggle.getBoundingClientRect();
@@ -46,12 +48,22 @@ export const initTheme = () => {
       document.documentElement.animate(
         { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
         {
-          duration: 900,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          // The wipe is a circle, so the edge sweeps slowest exactly where it has
+          // the most ground left to cover — the far corner. The old pairing
+          // (900ms, cubic-bezier(0.4, 0, 0.2, 1)) spent 387ms of that on the last
+          // 15% of the radius: the corner crawled, and the page sat under the
+          // transition layer, unresponsive, for ~300ms after it looked finished.
+          // Half the duration and a curve with a shorter tail: the corner now
+          // takes ~140ms, and the wipe ends when it looks like it ended.
+          duration: 520,
+          easing: 'cubic-bezier(0.4, 0, 0.6, 1)',
           pseudoElement: '::view-transition-new(root)',
         },
       );
     });
+    // A second toggle mid-wipe skips the first transition, rejecting `ready`.
+    // That is a normal outcome, not an error — the theme has already flipped.
+    transition.ready.catch(() => {});
   });
   updateThemeIcon();
 };

@@ -3,6 +3,21 @@ let muted = localStorage.getItem('portfolio-muted') === '1';
 
 export function init() {
   if (muted) document.body.classList.add('sound-muted');
+  // Building an AudioContext costs ~100ms of main thread, and whichever effect
+  // fired first used to pay it. That was usually the theme toggle, which spent
+  // the freeze on the very frame its wipe was starting. Build it while the page
+  // is idle instead: a context may be constructed without a user gesture, it
+  // just starts suspended, and getCtx() resumes it on first use.
+  if (muted) return;
+  const warm = () => {
+    try {
+      makeCtx();
+    } catch {
+      // No Web Audio here — every sfx call will no-op the same way it did before.
+    }
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 3000 });
+  else setTimeout(warm, 1200);
 }
 
 export function toggleMute() {
@@ -12,10 +27,15 @@ export function toggleMute() {
   if (!muted) click();
 }
 
-function getCtx() {
+function makeCtx() {
   if (!ctx) ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-  if (ctx.state === 'suspended') ctx.resume();
   return ctx;
+}
+
+function getCtx() {
+  const c = makeCtx();
+  if (c.state === 'suspended') c.resume();
+  return c;
 }
 
 export function tap() {
