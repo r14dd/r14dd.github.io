@@ -273,36 +273,34 @@ html.light {
   color-scheme: light;
 }
 
-/* The theme wave. theme.ts pins every block to the palette it is already
-   wearing, flips the theme, and releases the blocks one at a time on a timer,
-   adding this class for exactly one toggle — so colours roll across the page
-   from the button outwards instead of a circle being wiped over the top of it.
+/* The theme crossfade. theme.ts adds this class for exactly one toggle and the
+   whole page changes together — no order, no origin, nothing travelling.
 
-   Ground before figure: the surface a thing sits on reaches its new colour in
-   little over half the time the thing itself takes. Run them together and the
-   two cross in the middle — dark text over a still-dark page, unreadable for a
-   beat. Letting the ground arrive first means the worst moment is grey text on
-   white, which is merely soft.
+   Ground before figure is the single exception, and it is not a sequence you
+   can watch: the background lands a little before the text does. On one shared
+   curve the two cross in the middle at the same grey and the words vanish for a
+   beat; pulling the ground ahead makes that crossing early and steep, so the
+   worst moment is soft grey text on white.
+
+   No transition-delay anywhere, deliberately. Nothing here needs one now, and a
+   delay on a descendant is re-armed every frame the inherited palette changes
+   under it — the text creeps a few percent and then hangs.
 
    `!important` because a card's own hover transition is more specific than this
-   selector and would otherwise snap that card while its neighbours faded. */
-/* Every one of these starts the moment its element is released and not a frame
-   later: theme.ts staggers the wave with timers, deliberately. A transition-delay
-   here would be re-armed on every frame the inherited palette changes under it,
-   and the text would creep a few percent and then hang until the wave ended. */
+   selector and would otherwise snap that card while the page around it faded. */
 html.theme-morphing,
 html.theme-morphing body,
 html.theme-morphing body *,
 html.theme-morphing body *::before,
 html.theme-morphing body *::after {
   transition:
-    background-color var(--tint-ground-ms, 170ms) var(--ease-out),
-    border-color var(--tint-ms, 300ms) var(--ease-out),
-    color var(--tint-ms, 300ms) var(--ease-out),
-    fill var(--tint-ms, 300ms) var(--ease-out),
-    stroke var(--tint-ms, 300ms) var(--ease-out),
-    box-shadow var(--tint-ms, 300ms) var(--ease-out),
-    outline-color var(--tint-ms, 300ms) var(--ease-out) !important;
+    background-color var(--tint-ground-ms, 150ms) var(--ease-out),
+    border-color var(--tint-ms, 240ms) var(--ease-out),
+    color var(--tint-ms, 240ms) var(--ease-out),
+    fill var(--tint-ms, 240ms) var(--ease-out),
+    stroke var(--tint-ms, 240ms) var(--ease-out),
+    box-shadow var(--tint-ms, 240ms) var(--ease-out),
+    outline-color var(--tint-ms, 240ms) var(--ease-out) !important;
 }
 
 * {
