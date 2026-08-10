@@ -273,6 +273,38 @@ html.light {
   color-scheme: light;
 }
 
+/* The theme wave. theme.ts pins every block to the palette it is already
+   wearing, flips the theme, and releases the blocks one at a time on a timer,
+   adding this class for exactly one toggle — so colours roll across the page
+   from the button outwards instead of a circle being wiped over the top of it.
+
+   Ground before figure: the surface a thing sits on reaches its new colour in
+   little over half the time the thing itself takes. Run them together and the
+   two cross in the middle — dark text over a still-dark page, unreadable for a
+   beat. Letting the ground arrive first means the worst moment is grey text on
+   white, which is merely soft.
+
+   `!important` because a card's own hover transition is more specific than this
+   selector and would otherwise snap that card while its neighbours faded. */
+/* Every one of these starts the moment its element is released and not a frame
+   later: theme.ts staggers the wave with timers, deliberately. A transition-delay
+   here would be re-armed on every frame the inherited palette changes under it,
+   and the text would creep a few percent and then hang until the wave ended. */
+html.theme-morphing,
+html.theme-morphing body,
+html.theme-morphing body *,
+html.theme-morphing body *::before,
+html.theme-morphing body *::after {
+  transition:
+    background-color var(--tint-ground-ms, 170ms) var(--ease-out),
+    border-color var(--tint-ms, 300ms) var(--ease-out),
+    color var(--tint-ms, 300ms) var(--ease-out),
+    fill var(--tint-ms, 300ms) var(--ease-out),
+    stroke var(--tint-ms, 300ms) var(--ease-out),
+    box-shadow var(--tint-ms, 300ms) var(--ease-out),
+    outline-color var(--tint-ms, 300ms) var(--ease-out) !important;
+}
+
 * {
   box-sizing: border-box;
 }
