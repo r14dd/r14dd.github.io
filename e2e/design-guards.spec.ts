@@ -282,13 +282,51 @@ const deadSpots = (page: Page) =>
 
 const deadSpot = async (page: Page) => (await deadSpots(page))[0] ?? null;
 
+// The page keeps moving after first paint: the Spotify line, the visitor
+// number and the GitHub/crates badge counts all arrive over the network, and
+// the badges land inside project cards, which are full of links. Sample the
+// grid before they arrive and a point that was empty is a link by the time it
+// is clicked — the egg ignores links, so the hit silently never happens. Pin
+// the responses so the layout stops moving under the sampler.
+const pinLiveContent = async (page: Page) => {
+  const json = (body: unknown) => ({
+    contentType: 'application/json',
+    body: JSON.stringify(body),
+  });
+  await page.route('**/spotify-now-playing.riad-mrv.workers.dev/**', (r) =>
+    r.fulfill(json({ playing: false })),
+  );
+  await page.route('**/toy-api.riad-mrv.workers.dev/**', (r) => r.fulfill(json({ number: 1234 })));
+  await page.route('**/api.github.com/repos/**', (r) => r.fulfill(json({ stargazers_count: 12 })));
+  await page.route('**/crates.io/api/v1/crates/**', (r) =>
+    r.fulfill(json({ crate: { downloads: 3400 } })),
+  );
+};
+
+// Sampling a point and clicking it are two different moments. Check the point
+// again in the moment of the click, so a hit the egg would refuse fails here,
+// loudly, instead of going missing from a count one assertion later.
+const hit = async (page: Page, x: number, y: number) => {
+  const inert = await page.evaluate(
+    ({ px, py, sel }) => {
+      const el = document.elementFromPoint(px, py);
+      return !!el && !el.closest(sel);
+    },
+    { px: x, py: y, sel: INERT },
+  );
+  expect(inert, `(${x}, ${y}) stopped being inert before the click landed`).toBe(true);
+  await page.mouse.click(x, y);
+};
+
 test.describe('crack the glass needs five hits, fast', () => {
+  test.beforeEach(({ page }) => pinLiveContent(page));
+
   const burst = async (page: Page, n: number, gapMs: number) => {
     const spot = await deadSpot(page);
     expect(spot, 'no inert point on the page to click').not.toBeNull();
     for (let i = 0; i < n; i++) {
       // Nudge x each time so the burst is not collapsed into a dblclick.
-      await page.mouse.click(spot!.x + i, spot!.y);
+      await hit(page, spot!.x + i, spot!.y);
       if (gapMs) await page.waitForTimeout(gapMs);
     }
   };
@@ -327,6 +365,8 @@ test.describe('crack the glass needs five hits, fast', () => {
 });
 
 test.describe('the repair crew is one crew, and it visits every break', () => {
+  test.beforeEach(({ page }) => pinLiveContent(page));
+
   test('a hit landing mid-walk joins the job instead of dispatching a second crew', async ({
     page,
   }) => {
@@ -369,19 +409,22 @@ test.describe('the repair crew is one crew, and it visits every break', () => {
     });
 
     // Break it, then spread the damage so the crew has a walk long enough to
-    // interrupt. Every click here lands on a genuinely inert point.
+    // interrupt. Every stop is a point the sampler itself handed back: pairing
+    // the x of one dead spot with the y of another names a point nobody ever
+    // checked, and on a layout that wraps differently that point is a link.
     const a = at(0.05);
-    for (let i = 0; i < 5; i++) await page.mouse.click(a.x + i, a.y);
+    for (let i = 0; i < 5; i++) await hit(page, a.x + i, a.y);
     expect(await shatteredNow(page)).toBe(true);
-    const b = at(0.45);
-    const c = at(0.95);
-    for (const s of [b, c, { x: b.x, y: c.y }, { x: c.x, y: b.y }])
-      await page.mouse.click(s.x, s.y);
+    for (const f of [0.3, 0.45, 0.7, 0.95]) {
+      const s = at(f);
+      await hit(page, s.x, s.y);
+    }
 
     // Wait for the crew to actually be walking, then hit the glass again.
     await page.locator('.repair-crew').first().waitFor({ state: 'attached', timeout: 10_000 });
     await page.waitForTimeout(400);
-    await page.mouse.click(at(0.25).x, at(0.65).y);
+    const midWalk = at(0.6);
+    await hit(page, midWalk.x, midWalk.y);
 
     // The job finishes: no crew left, no cracks left, glass whole again.
     await expect
