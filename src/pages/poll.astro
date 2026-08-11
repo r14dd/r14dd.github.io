@@ -395,6 +395,33 @@ import Analytics from '../components/Analytics.astro';
 
     <script is:inline>
       (function () {
+        // Private-mode Safari (and blocked-storage webviews — exactly the phones
+        // a QR code on a slide gets scanned by) throws just reading localStorage.
+        // Fall back to an in-memory store so a vote this session still works and
+        // still de-dupes; it just won't survive a reload.
+        var mem = {};
+        function lsGet(key) {
+          try {
+            return localStorage.getItem(key);
+          } catch {
+            return Object.prototype.hasOwnProperty.call(mem, key) ? mem[key] : null;
+          }
+        }
+        function lsSet(key, value) {
+          try {
+            localStorage.setItem(key, value);
+          } catch {
+            mem[key] = value;
+          }
+        }
+        function lsRemove(key) {
+          try {
+            localStorage.removeItem(key);
+          } catch {
+            delete mem[key];
+          }
+        }
+
         var params = new URLSearchParams(location.search);
         var session = params.get('s');
 
@@ -427,10 +454,8 @@ import Analytics from '../components/Analytics.astro';
         }
 
         var voterId =
-          localStorage.getItem('poll-voter') ||
-          (crypto.randomUUID && crypto.randomUUID()) ||
-          fallbackUuid();
-        localStorage.setItem('poll-voter', voterId);
+          lsGet('poll-voter') || (crypto.randomUUID && crypto.randomUUID()) || fallbackUuid();
+        lsSet('poll-voter', voterId);
 
         var statusEl = document.getElementById('status');
         var promptEl = document.getElementById('prompt');
@@ -453,7 +478,7 @@ import Analytics from '../components/Analytics.astro';
         var storedGen = null; // last seen generation (re-vote detector)
 
         function getVoted() {
-          return votedKey ? localStorage.getItem(votedKey) : null;
+          return votedKey ? lsGet(votedKey) : null;
         }
 
         function setStatus(msg, tone) {
@@ -499,7 +524,7 @@ import Analytics from '../components/Analytics.astro';
               // Already voted (lost-response recovery) — treat as success.
               if (r.status === 409) {
                 var c409 = r.data.choice || choice;
-                localStorage.setItem(votedKey, c409);
+                lsSet(votedKey, c409);
                 syncButtons();
                 setStatus('Already counted — you chose ' + c409 + '.', 'ok');
                 return;
@@ -526,7 +551,7 @@ import Analytics from '../components/Analytics.astro';
                   return;
                 }
                 var c = r.data.choice || choice;
-                localStorage.setItem(votedKey, c);
+                lsSet(votedKey, c);
                 syncButtons();
                 setStatus('Vote recorded — you chose ' + c + '.', 'ok');
                 return;
@@ -598,7 +623,7 @@ import Analytics from '../components/Analytics.astro';
                 // New round — clear our vote and reset to votable.
                 storedGen = gen;
                 roundLocked = false;
-                if (votedKey) localStorage.removeItem(votedKey);
+                if (votedKey) lsRemove(votedKey);
                 pollOpen = open;
                 syncButtons();
                 setStatus(

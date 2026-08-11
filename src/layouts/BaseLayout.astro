@@ -4,6 +4,7 @@ import CursorDot from '../components/CursorDot.astro';
 import ScrollLine from '../components/ScrollLine.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
+import { profiles } from '../data/profile-i18n';
 
 const {
   metaTitle = 'Riad Mukhtarov — Portfolio',
@@ -19,6 +20,10 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+// Pages outside [...lang] (lab, colophon, poll…) leave `lang` at its 'en'
+// default, so this always resolves — every profile carries a chrome block.
+const skipToContentLabel = (profiles[lang] ?? profiles.en).labels.chrome.skipToContent;
 
 // og:locale wants a full locale tag, not a bare language code.
 const OG_LOCALES: Record<string, string> = { en: 'en_US', ru: 'ru_RU', az: 'az_AZ' };
@@ -136,7 +141,7 @@ import '../styles/ui.css';
         }
       </style></noscript
     >
-    <a href="#main-content" class="skip-link">Skip to content</a>
+    <a href="#main-content" class="skip-link">{skipToContentLabel}</a>
     <PageLoader />
     <CursorDot />
     <ScrollLine />
@@ -211,6 +216,6 @@ import '../styles/ui.css';
       });
     </script>
 
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

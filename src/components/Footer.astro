@@ -1,6 +1,18 @@
+---
+import { profiles } from '../data/profile-i18n';
+
+// Pages outside [...lang] (lab, colophon, poll…) leave `lang` at its 'en'
+// default, so this always resolves — every profile carries the same labels.
+const { lang = 'en' } = Astro.props;
+const profile = profiles[lang] ?? profiles.en;
+---
+
 <footer>
-  &copy; 2026 Riad Mukhtarov. All rights reserved. &middot; <a
-    href="/writing/"
-    class="footer-colophon-link">Writing</a
-  > &middot; <a href="/colophon/" class="footer-colophon-link">Colophon</a>
+  &copy; 2026 Riad Mukhtarov. <span id="footer-rights">{profile.labels.chrome.footerRights}</span>{
+    ' · '
+  }<a href="/writing/" id="footer-writing-link" class="footer-colophon-link"
+    >{profile.labels.links.writing}</a
+  >{' · '}<a href="/colophon/" id="footer-colophon-link" class="footer-colophon-link"
+    >{profile.labels.chrome.footerColophon}</a
+  >
 </footer>

@@ -629,13 +629,35 @@
     <script is:inline>
       (function () {
         'use strict';
+        // Private mode (or a blocked-storage embed) throws on any localStorage
+        // call. Falling back to an in-memory store keeps the dashboard usable
+        // for the session — the key just won't survive a reload.
+        var mem = {};
+        function lsGet(key) {
+          try {
+            return localStorage.getItem(key);
+          } catch {
+            return Object.prototype.hasOwnProperty.call(mem, key) ? mem[key] : null;
+          }
+        }
+        function lsSet(key, value) {
+          try {
+            localStorage.setItem(key, value);
+          } catch {
+            mem[key] = value;
+          }
+        }
+        function lsRemove(key) {
+          try {
+            localStorage.removeItem(key);
+          } catch {
+            delete mem[key];
+          }
+        }
+
         // Whoever opens the admin dashboard is the owner: flag this browser so
         // the site-wide beacon bootstrap never counts their visits again.
-        try {
-          localStorage.setItem('riad-notrack', '1');
-        } catch {
-          /* private mode: nothing to flag */
-        }
+        lsSet('riad-notrack', '1');
         var API = 'https://analytics-api.riad-mrv.workers.dev';
         var KEY_STORE = 'admin-key';
         var DEMO = new URLSearchParams(location.search).has('demo');
@@ -666,7 +688,7 @@
 
         // ── auth gate ──
         function getKey() {
-          return localStorage.getItem(KEY_STORE) || '';
+          return lsGet(KEY_STORE) || '';
         }
         function askKey(msg) {
           gate.hidden = false;
@@ -675,12 +697,12 @@
         }
         $('gate-form').addEventListener('submit', function (e) {
           e.preventDefault();
-          localStorage.setItem(KEY_STORE, $('gate-key').value.trim());
+          lsSet(KEY_STORE, $('gate-key').value.trim());
           gate.hidden = true;
           load();
         });
         $('signout').addEventListener('click', function () {
-          localStorage.removeItem(KEY_STORE);
+          lsRemove(KEY_STORE);
           location.search = '';
         });
 
@@ -692,7 +714,7 @@
         var TOY_KEY_STORE = 'toy-admin-key';
 
         function toyKey() {
-          return localStorage.getItem(TOY_KEY_STORE) || getKey();
+          return lsGet(TOY_KEY_STORE) || getKey();
         }
 
         function esc(s) {
@@ -790,7 +812,7 @@
           e.preventDefault();
           var v = $('msg-key').value.trim();
           if (!v) return;
-          localStorage.setItem(TOY_KEY_STORE, v);
+          lsSet(TOY_KEY_STORE, v);
           $('msg-key').value = '';
           $('msg-count').textContent = '';
           loadMessages();
@@ -858,7 +880,7 @@
           })
             .then(function (r) {
               if (r.status === 401) {
-                localStorage.removeItem(KEY_STORE);
+                lsRemove(KEY_STORE);
                 loading.hidden = true;
                 askKey('wrong key');
                 return null;

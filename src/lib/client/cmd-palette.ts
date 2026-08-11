@@ -33,71 +33,83 @@ export const initCmdPalette = () => {
   };
 
   const getCommands = () => {
-    const nav = state.currentProfile?.labels?.nav || state.I18N.en.labels.nav;
-    const projects = (state.currentProfile?.projects || state.I18N.en.projects || []).map((p) => ({
-      group: 'Projects',
+    // state.currentProfile is set synchronously by initI18n before any of this
+    // can run, so it's the correct locale on /ru/ and /az/ too — falling back
+    // to state.I18N.en here would throw, since only the served locale ships
+    // inline and the others load lazily.
+    const nav = state.currentProfile?.labels?.nav || {};
+    const chrome = state.currentProfile?.labels?.chrome || {};
+    const projects = (state.currentProfile?.projects || []).map((p) => ({
+      group: chrome.projectsGroup || 'Projects',
       label: p.name,
       icon: 'project',
       action: () => flashProject(p.name),
     }));
     return [
       {
-        group: 'Navigate',
+        group: chrome.navigateGroup || 'Navigate',
         label: nav.education,
         icon: 'nav',
         action: () => scrollCmd('education'),
       },
       {
-        group: 'Navigate',
+        group: chrome.navigateGroup || 'Navigate',
         label: nav.experience,
         icon: 'nav',
         action: () => scrollCmd('experience'),
       },
       {
-        group: 'Navigate',
+        group: chrome.navigateGroup || 'Navigate',
         label: nav.projects,
         icon: 'nav',
         action: () => scrollCmd('projects'),
       },
       {
-        group: 'Navigate',
+        group: chrome.navigateGroup || 'Navigate',
         label: nav.teaching,
         icon: 'nav',
         action: () => scrollCmd('teaching'),
       },
-      { group: 'Navigate', label: nav.skills, icon: 'nav', action: () => scrollCmd('skills') },
       {
-        group: 'Navigate',
+        group: chrome.navigateGroup || 'Navigate',
+        label: nav.skills,
+        icon: 'nav',
+        action: () => scrollCmd('skills'),
+      },
+      {
+        group: chrome.navigateGroup || 'Navigate',
         label: nav.recommendations,
         icon: 'nav',
         action: () => scrollCmd('recommendations'),
       },
-      { group: 'Navigate', label: nav.connect, icon: 'nav', action: () => scrollCmd('connect') },
+      {
+        group: chrome.navigateGroup || 'Navigate',
+        label: nav.connect,
+        icon: 'nav',
+        action: () => scrollCmd('connect'),
+      },
       ...projects,
       {
-        group: 'Links',
+        group: chrome.linksGroup || 'Links',
         label: 'LinkedIn',
         icon: 'link',
         action: () => {
-          window.open(
-            state.currentProfile?.links?.linkedin || state.I18N.en.links.linkedin,
-            '_blank',
-          );
+          window.open(state.currentProfile?.links?.linkedin, '_blank');
           closeCmd();
         },
       },
       {
-        group: 'Links',
+        group: chrome.linksGroup || 'Links',
         label: 'GitHub',
         icon: 'link',
         action: () => {
-          window.open(state.currentProfile?.links?.github || state.I18N.en.links.github, '_blank');
+          window.open(state.currentProfile?.links?.github, '_blank');
           closeCmd();
         },
       },
       {
-        group: 'Actions',
-        label: 'Toggle theme',
+        group: chrome.actionsGroup || 'Actions',
+        label: chrome.toggleTheme || 'Toggle theme',
         icon: 'action',
         action: () => {
           document.getElementById('theme-toggle')?.click();
@@ -105,8 +117,8 @@ export const initCmdPalette = () => {
         },
       },
       {
-        group: 'Actions',
-        label: 'Toggle sound',
+        group: chrome.actionsGroup || 'Actions',
+        label: chrome.toggleSound || 'Toggle sound',
         icon: 'action',
         action: () => {
           sfx.toggleMute();
@@ -114,19 +126,19 @@ export const initCmdPalette = () => {
         },
       },
       {
-        group: 'Actions',
-        label: 'Copy email',
+        group: chrome.actionsGroup || 'Actions',
+        label: chrome.copyEmail || 'Copy email',
         icon: 'action',
         action: () => {
           navigator.clipboard
             ?.writeText(state.currentProfile?.email || '')
-            .then(() => showToast('Email copied'));
+            .then(() => showToast(chrome.emailCopied || 'Email copied'));
           closeCmd();
         },
       },
       {
-        group: 'Actions',
-        label: 'Keyboard shortcuts',
+        group: chrome.actionsGroup || 'Actions',
+        label: chrome.keyboardShortcutsLabel || 'Keyboard shortcuts',
         icon: 'action',
         action: () => {
           closeCmd();
@@ -271,10 +283,21 @@ export const initCmdPalette = () => {
         .sort((a, b) => b.s - a.s)
         .map((x) => x.c);
       if (matchCount > 0) {
+        const chrome = state.currentProfile?.labels?.chrome || {};
+        // English keeps its own singular/plural branch instead of the
+        // {count} template — a fixed phrase there would read "1 matches".
+        const lang = document.documentElement.lang || 'en';
+        const matchLabel =
+          lang === 'en'
+            ? `${matchCount} match${matchCount === 1 ? '' : 'es'} on page`
+            : (chrome.matchesOnPage || '{count} matches on page').replace(
+                '{count}',
+                String(matchCount),
+              );
         cmdFiltered = [
           {
-            label: `${matchCount} match${matchCount === 1 ? '' : 'es'} on page`,
-            group: 'Find',
+            label: matchLabel,
+            group: chrome.findGroup || 'Find',
             icon: 'find',
             action: commitFind,
           },

@@ -2,6 +2,7 @@
 // <html> + base.css) — nothing here may touch accent custom properties.
 import * as sfx from './sfx';
 import { setItem } from './storage';
+import { state } from './state';
 
 // One crossfade for the whole page, all of it at once. Two earlier versions
 // tried to make the change travel — a circle wiped outwards from the button, and
@@ -20,6 +21,18 @@ const GROUND_MS = 150;
 // makes them snap, which is exactly the tell to avoid.
 const SETTLE_MS = 60;
 
+// Exported so i18n-runtime can re-stamp the label after a language switch —
+// the icon doesn't need it (⌘/☀️ read the same everywhere), only the words do.
+export const syncThemeAriaLabel = () => {
+  const themeToggle = document.getElementById('theme-toggle');
+  const isLight = document.documentElement.classList.contains('light');
+  const chrome = state.currentProfile?.labels?.chrome;
+  const label = isLight
+    ? (chrome?.switchToDarkMode ?? 'Switch to dark mode')
+    : (chrome?.switchToLightMode ?? 'Switch to light mode');
+  themeToggle?.setAttribute('aria-label', label);
+};
+
 export const initTheme = () => {
   const themeToggle = document.getElementById('theme-toggle');
   const themeIcon = themeToggle?.querySelector('.theme-icon');
@@ -27,10 +40,7 @@ export const initTheme = () => {
   const updateThemeIcon = () => {
     const isLight = root.classList.contains('light');
     if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
-    themeToggle?.setAttribute(
-      'aria-label',
-      isLight ? 'Switch to dark mode' : 'Switch to light mode',
-    );
+    syncThemeAriaLabel();
   };
 
   let settle: ReturnType<typeof setTimeout> | undefined;

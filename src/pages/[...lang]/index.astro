@@ -70,12 +70,12 @@ const structuredData = JSON.stringify({
   }
   <script type="application/json" id="i18n-data" set:html={JSON.stringify({ [lang]: profile })} />
 
-  <div class="lang-switcher" aria-label="Controls">
+  <div class="lang-switcher" aria-label={profile.labels.chrome.controls}>
     <button
       class="cmd-trigger"
       id="cmd-trigger"
       type="button"
-      aria-label="Open command palette (⌘K)"
+      aria-label={profile.labels.chrome.openCommandPalette}
     >
       <span class="cmd-trigger-label">⌘K</span>
       <svg
@@ -88,7 +88,12 @@ const structuredData = JSON.stringify({
         ><circle cx="6.5" cy="6.5" r="4.5"></circle><path d="M10 10l3 3"></path></svg
       >
     </button>
-    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode">
+    <button
+      class="theme-toggle"
+      id="theme-toggle"
+      type="button"
+      aria-label={profile.labels.chrome.switchToLightMode}
+    >
       <span class="theme-icon" aria-hidden="true">☀️</span>
     </button>
     <button
@@ -120,7 +125,12 @@ const structuredData = JSON.stringify({
          works with JS off and a crawler can follow it. The runtime handler
          intercepts the click to swap in place instead of reloading. */
     }
-    <div class="lang-menu" id="lang-menu" role="menu" aria-label="Select language">
+    <div
+      class="lang-menu"
+      id="lang-menu"
+      role="menu"
+      aria-label={profile.labels.chrome.selectLanguage}
+    >
       {
         LANG_ORDER.map((l) => (
           <a
@@ -163,7 +173,7 @@ const structuredData = JSON.stringify({
       >{profile.labels.links.linkedin}</a
     >
     <a href={profile.links.github} target="_blank" rel="noopener">{profile.labels.links.github}</a>
-    <a href={`mailto:${profile.email}`}>Email</a>
+    <a href={`mailto:${profile.email}`}>{profile.labels.links.email}</a>
     <a href={profile.links.resume} target="_blank" rel="noopener">{profile.labels.links.resume}</a>
     <a href="/writing/" id="side-link-writing">{profile.labels.links.writing}</a>
   </aside>
@@ -174,7 +184,11 @@ const structuredData = JSON.stringify({
       <h1 id="hero-name">{profile.hero.name}</h1>
       <p class="hero-about" id="hero-about">{profile.about}</p>
 
-      <div class="terminal-window" aria-label="Current work terminal">
+      <div
+        class="terminal-window"
+        id="terminal-window"
+        aria-label={profile.labels.chrome.currentWorkTerminal}
+      >
         <div class="terminal-dots" aria-hidden="true">
           <span class="dot dot-red"></span>
           <span class="dot dot-yellow"></span>
@@ -243,7 +257,7 @@ const structuredData = JSON.stringify({
             stroke-linejoin="round"
             ><rect x="2" y="4" width="20" height="16" rx="2"></rect><path
               d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg
-          >Email</a
+          >{profile.labels.links.email}</a
         >
         <a href={profile.links.resume} target="_blank" rel="noopener"
           ><svg
@@ -314,7 +328,7 @@ const structuredData = JSON.stringify({
     </section>
   </main>
 
-  <nav class="mobile-nav" id="mobile-nav" aria-label="Section navigation">
+  <nav class="mobile-nav" id="mobile-nav" aria-label={profile.labels.chrome.sectionNavigation}>
     <button class="mobile-nav-pill" id="mobile-nav-pill" type="button">
       <span class="mobile-nav-label" id="mobile-nav-label"></span>
       <span class="mobile-nav-caret">&#9662;</span>
@@ -338,7 +352,7 @@ const structuredData = JSON.stringify({
     id="cmd-palette"
     role="dialog"
     aria-modal="true"
-    aria-label="Command palette"
+    aria-label={profile.labels.chrome.commandPaletteLabel}
     aria-hidden="true"
   >
     <div class="cmd-input-wrap">
@@ -356,10 +370,10 @@ const structuredData = JSON.stringify({
         type="text"
         class="cmd-input"
         id="cmd-input"
-        placeholder="Search or jump to..."
+        placeholder={profile.labels.chrome.commandSearchPlaceholder}
         autocomplete="off"
         spellcheck="false"
-        aria-label="Command search"
+        aria-label={profile.labels.chrome.commandSearch}
         role="combobox"
         aria-expanded="false"
         aria-controls="cmd-results"
@@ -369,10 +383,18 @@ const structuredData = JSON.stringify({
     </div>
     <div class="cmd-results" id="cmd-results" role="listbox" data-lenis-prevent></div>
     <div class="cmd-footer">
-      <span class="cmd-footer-hint"><span class="cmd-kbd">↑↓</span> navigate</span>
-      <span class="cmd-footer-hint"><span class="cmd-kbd">↵</span> select</span>
-      <span class="cmd-footer-hint"><span class="cmd-kbd">?</span> shortcuts</span>
-      <span class="cmd-footer-hint"><span class="cmd-kbd">ESC</span> close</span>
+      <span class="cmd-footer-hint" id="cmd-hint-navigate"
+        ><span class="cmd-kbd">↑↓</span> {profile.labels.chrome.cmdHintNavigate}</span
+      >
+      <span class="cmd-footer-hint" id="cmd-hint-select"
+        ><span class="cmd-kbd">↵</span> {profile.labels.chrome.cmdHintSelect}</span
+      >
+      <span class="cmd-footer-hint" id="cmd-hint-shortcuts"
+        ><span class="cmd-kbd">?</span> {profile.labels.chrome.cmdHintShortcuts}</span
+      >
+      <span class="cmd-footer-hint" id="cmd-hint-close"
+        ><span class="cmd-kbd">ESC</span> {profile.labels.chrome.cmdHintClose}</span
+      >
     </div>
   </div>
 
@@ -382,35 +404,47 @@ const structuredData = JSON.stringify({
     id="kbd-overlay"
     role="dialog"
     aria-modal="true"
-    aria-label="Keyboard shortcuts"
+    aria-label={profile.labels.chrome.keyboardShortcutsLabel}
     aria-hidden="true"
     tabindex="-1"
   >
     <div class="kbd-head">
-      <span>Keyboard shortcuts</span>
+      <span id="kbd-head-title">{profile.labels.chrome.keyboardShortcutsLabel}</span>
       <span class="cmd-kbd">ESC</span>
     </div>
     <div class="kbd-grid">
       <div class="kbd-row">
-        <span class="kbd-desc">Command palette</span><span class="kbd-keys"
-          ><kbd>⌘</kbd><kbd>K</kbd></span
+        <span class="kbd-desc" id="kbd-desc-palette"
+          >{profile.labels.chrome.commandPaletteLabel}</span
+        ><span class="kbd-keys"><kbd>⌘</kbd><kbd>K</kbd></span>
+      </div>
+      <div class="kbd-row">
+        <span class="kbd-desc" id="kbd-desc-menu">{profile.labels.chrome.thisMenu}</span><span
+          class="kbd-keys"><kbd>?</kbd></span
         >
       </div>
       <div class="kbd-row">
-        <span class="kbd-desc">This menu</span><span class="kbd-keys"><kbd>?</kbd></span>
-      </div>
-      <div class="kbd-row">
-        <span class="kbd-desc">Jump to section</span><span class="kbd-keys"
-          ><kbd>g</kbd><span class="kbd-then">then</span><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd
-            >t</kbd
-          ><kbd>d</kbd><kbd>m</kbd><kbd>c</kbd></span
+        <span class="kbd-desc" id="kbd-desc-jump">{profile.labels.chrome.jumpToSection}</span><span
+          class="kbd-keys"
+          ><kbd>g</kbd><span class="kbd-then" id="kbd-then-word">{profile.labels.chrome.then}</span
+          ><kbd>e</kbd><kbd>p</kbd><kbd>s</kbd><kbd>t</kbd><kbd>d</kbd><kbd>m</kbd><kbd>c</kbd
+          ></span
         >
       </div>
       <div class="kbd-row">
-        <span class="kbd-desc">Toggle theme</span><span class="kbd-keys"><kbd>\</kbd></span>
+        <span class="kbd-desc" id="kbd-desc-theme">{profile.labels.chrome.toggleTheme}</span><span
+          class="kbd-keys"><kbd>\</kbd></span
+        >
       </div>
       <div class="kbd-row">
-        <span class="kbd-desc">Close overlays</span><span class="kbd-keys"><kbd>esc</kbd></span>
+        <span class="kbd-desc" id="kbd-desc-close-overlays"
+          >{profile.labels.chrome.closeOverlays}</span
+        ><span class="kbd-keys"><kbd>esc</kbd></span>
+      </div>
+      <div class="kbd-row">
+        <span class="kbd-desc" id="kbd-desc-leave-terminal"
+          >{profile.labels.chrome.leaveTerminalInput}</span
+        ><span class="kbd-keys"><kbd>esc</kbd></span>
       </div>
     </div>
   </div>
@@ -418,7 +452,11 @@ const structuredData = JSON.stringify({
   <div class="easter-overlay" id="easter-overlay" aria-hidden="true"></div>
   <div class="proj-backdrop" id="proj-backdrop" aria-hidden="true"></div>
   <div class="find-nav-bar" id="find-nav-bar" aria-hidden="true">
-    <button class="find-nav-btn" id="find-nav-prev" type="button" aria-label="Previous match"
+    <button
+      class="find-nav-btn"
+      id="find-nav-prev"
+      type="button"
+      aria-label={profile.labels.chrome.previousMatch}
       ><svg
         viewBox="0 0 16 16"
         fill="none"
@@ -428,7 +466,11 @@ const structuredData = JSON.stringify({
       ></button
     >
     <span class="find-nav-count" id="find-nav-count" aria-live="polite"></span>
-    <button class="find-nav-btn" id="find-nav-next" type="button" aria-label="Next match"
+    <button
+      class="find-nav-btn"
+      id="find-nav-next"
+      type="button"
+      aria-label={profile.labels.chrome.nextMatch}
       ><svg
         viewBox="0 0 16 16"
         fill="none"
@@ -437,7 +479,11 @@ const structuredData = JSON.stringify({
         stroke-linecap="round"><path d="M6 11l4-4-4-4"></path></svg
       ></button
     >
-    <button class="find-nav-close" id="find-nav-close" type="button" aria-label="Close"
+    <button
+      class="find-nav-close"
+      id="find-nav-close"
+      type="button"
+      aria-label={profile.labels.chrome.closeLabel}
       ><svg
         viewBox="0 0 16 16"
         fill="none"
@@ -453,10 +499,15 @@ const structuredData = JSON.stringify({
     id="proj-modal"
     role="dialog"
     aria-modal="true"
-    aria-label="Project detail"
+    aria-label={profile.labels.chrome.projectDetail}
     aria-hidden="true"
   >
-    <button class="proj-close" id="proj-close" type="button" aria-label="Close project detail">
+    <button
+      class="proj-close"
+      id="proj-close"
+      type="button"
+      aria-label={profile.labels.chrome.closeProjectDetail}
+    >
       <svg
         viewBox="0 0 16 16"
         fill="none"

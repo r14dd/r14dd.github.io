@@ -151,7 +151,7 @@ export function initCarousel() {
     { signal },
   );
 
-  const wrap = scroll.closest('[aria-roledescription="carousel"]');
+  const wrap = scroll.closest('.testi-wrap');
   if (wrap) {
     wrap.addEventListener(
       'keydown',

@@ -28,6 +28,7 @@ import { weightReveal } from './hero-reveal';
 import { typeH2 } from './reveal-fx';
 import { navLinks, mobileMenuLinks, setActiveLink, refreshActiveLink } from './nav';
 import { getItem, setItem } from './storage';
+import { syncThemeAriaLabel } from './theme';
 
 export const initI18n = () => {
   const i18nEl = document.getElementById('i18n-data');
@@ -78,6 +79,58 @@ export const initI18n = () => {
     window._termProfile = data;
     document.documentElement.lang = lang;
     if (langCurrent) langCurrent.textContent = languageLabels[lang] || 'English';
+
+    // The site's own chrome: none of it renders through the section builders
+    // below, so a language switch has to re-stamp every static aria-label,
+    // placeholder and overlay string by hand.
+    const chrome = data.labels.chrome;
+    const skipLink = document.querySelector('.skip-link');
+    if (skipLink) skipLink.textContent = chrome.skipToContent;
+    document.querySelector('.lang-switcher')?.setAttribute('aria-label', chrome.controls);
+    document.getElementById('cmd-trigger')?.setAttribute('aria-label', chrome.openCommandPalette);
+    syncThemeAriaLabel();
+    document.getElementById('lang-menu')?.setAttribute('aria-label', chrome.selectLanguage);
+    document
+      .getElementById('terminal-window')
+      ?.setAttribute('aria-label', chrome.currentWorkTerminal);
+    document.getElementById('mobile-nav')?.setAttribute('aria-label', chrome.sectionNavigation);
+    const cmdInputEl = document.getElementById('cmd-input');
+    if (cmdInputEl) {
+      cmdInputEl.setAttribute('placeholder', chrome.commandSearchPlaceholder);
+      cmdInputEl.setAttribute('aria-label', chrome.commandSearch);
+    }
+    document.getElementById('cmd-palette')?.setAttribute('aria-label', chrome.commandPaletteLabel);
+    const setText = (id, text) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    };
+    const setHint = (id, kbdHtml, text) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `${kbdHtml} ${text}`;
+    };
+    setHint('cmd-hint-navigate', '<span class="cmd-kbd">↑↓</span>', chrome.cmdHintNavigate);
+    setHint('cmd-hint-select', '<span class="cmd-kbd">↵</span>', chrome.cmdHintSelect);
+    setHint('cmd-hint-shortcuts', '<span class="cmd-kbd">?</span>', chrome.cmdHintShortcuts);
+    setHint('cmd-hint-close', '<span class="cmd-kbd">ESC</span>', chrome.cmdHintClose);
+    document
+      .getElementById('kbd-overlay')
+      ?.setAttribute('aria-label', chrome.keyboardShortcutsLabel);
+    setText('kbd-head-title', chrome.keyboardShortcutsLabel);
+    setText('kbd-desc-palette', chrome.commandPaletteLabel);
+    setText('kbd-desc-menu', chrome.thisMenu);
+    setText('kbd-desc-jump', chrome.jumpToSection);
+    setText('kbd-then-word', chrome.then);
+    setText('kbd-desc-theme', chrome.toggleTheme);
+    setText('kbd-desc-close-overlays', chrome.closeOverlays);
+    setText('kbd-desc-leave-terminal', chrome.leaveTerminalInput);
+    document.getElementById('find-nav-prev')?.setAttribute('aria-label', chrome.previousMatch);
+    document.getElementById('find-nav-next')?.setAttribute('aria-label', chrome.nextMatch);
+    document.getElementById('find-nav-close')?.setAttribute('aria-label', chrome.closeLabel);
+    document.getElementById('proj-modal')?.setAttribute('aria-label', chrome.projectDetail);
+    document.getElementById('proj-close')?.setAttribute('aria-label', chrome.closeProjectDetail);
+    setText('footer-rights', chrome.footerRights);
+    setText('footer-writing-link', data.labels.links.writing);
+    setText('footer-colophon-link', chrome.footerColophon);
 
     const heroTitle = document.querySelector('main section h1');
     const heroLinks = document.querySelector('.hero-links');
@@ -133,6 +186,7 @@ export const initI18n = () => {
         setLinkLabel(links[1], data.labels.links.github);
         links[1].setAttribute('href', data.links.github);
       }
+      if (links[2]) setLinkLabel(links[2], data.labels.links.email);
       if (links[3]) {
         setLinkLabel(links[3], data.labels.links.resume);
         links[3].setAttribute('href', data.links.resume);
@@ -146,6 +200,7 @@ export const initI18n = () => {
       const links = sideLinks.querySelectorAll('a');
       if (links[0]) links[0].textContent = data.labels.links.linkedin;
       if (links[1]) links[1].textContent = data.labels.links.github;
+      if (links[2]) links[2].textContent = data.labels.links.email;
       if (links[3]) {
         links[3].textContent = data.labels.links.resume;
         links[3].setAttribute('href', data.links.resume);

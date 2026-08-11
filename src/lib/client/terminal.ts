@@ -711,7 +711,10 @@ export const initTerminal = () => {
     input.setAttribute('autocapitalize', 'off');
     input.setAttribute('autocorrect', 'off');
     input.setAttribute('placeholder', 'type help');
-    input.setAttribute('aria-label', 'Terminal command input');
+    input.setAttribute(
+      'aria-label',
+      window._termProfile?.labels?.chrome?.terminalCommandInput || 'Terminal command input',
+    );
     inputLine.appendChild(input);
 
     const addRow = (html, cls?) => {

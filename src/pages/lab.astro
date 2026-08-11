@@ -1472,14 +1472,19 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
             histIdx++;
             input.value = history[histIdx] || '';
           }
-        } else if (e.key === 'Tab') {
-          e.preventDefault();
+        } else if (e.key === 'Tab' && !e.shiftKey) {
+          // Only steal Tab when there's something to complete — an empty input
+          // has nothing to offer, so let focus move on rather than trap it here.
           const cur = input.value.trim();
-          if (cur && !cur.includes(' ')) {
+          if (!cur) return;
+          e.preventDefault();
+          if (!cur.includes(' ')) {
             const names = Object.keys(COMMANDS).filter((c) => c.startsWith(cur.toLowerCase()));
             if (names.length === 1) input.value = names[0] + ' ';
             else if (names.length > 1) out(names.join('   '), 'muted');
           }
+        } else if (e.key === 'Escape') {
+          input.blur();
         }
       });
       document.getElementById('term-chips').addEventListener('click', (e) => {

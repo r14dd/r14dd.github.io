@@ -76,6 +76,61 @@ type Labels = {
     stat2: string;
     stat3: string;
   };
+  // The site's own chrome — overlays, aria-labels, the command palette, the
+  // footer. Everything here is control vocabulary, not Riad's prose, but a
+  // screen reader on /ru/ or /az/ reads it just as loudly as the content.
+  chrome: {
+    skipToContent: string;
+    controls: string;
+    openCommandPalette: string;
+    selectLanguage: string;
+    currentWorkTerminal: string;
+    terminalCommandInput: string;
+    sectionNavigation: string;
+    commandSearchPlaceholder: string;
+    commandSearch: string;
+    commandPaletteLabel: string;
+    navigateGroup: string;
+    projectsGroup: string;
+    linksGroup: string;
+    actionsGroup: string;
+    findGroup: string;
+    toggleTheme: string;
+    toggleSound: string;
+    copyEmail: string;
+    emailCopied: string;
+    keyboardShortcutsLabel: string;
+    // {count} — filled in at render time, not a printf spec.
+    matchesOnPage: string;
+    cmdHintNavigate: string;
+    cmdHintSelect: string;
+    cmdHintShortcuts: string;
+    cmdHintClose: string;
+    thisMenu: string;
+    jumpToSection: string;
+    // The "g then e" connective inside the jump-to-section shortcut row.
+    then: string;
+    closeOverlays: string;
+    leaveTerminalInput: string;
+    previousMatch: string;
+    nextMatch: string;
+    closeLabel: string;
+    projectDetail: string;
+    closeProjectDetail: string;
+    studentRecommendations: string;
+    // {name}
+    linkedinProfileOf: string;
+    prevSlide: string;
+    nextSlide: string;
+    // {current}, {total}
+    slideOf: string;
+    switchToLightMode: string;
+    switchToDarkMode: string;
+    footerRights: string;
+    footerColophon: string;
+    carouselRole: string;
+    slideRole: string;
+  };
 };
 
 type EducationInfo = {
@@ -162,6 +217,54 @@ export const profiles: Record<string, I18nProfile> = {
         stat1: '2K+ students taught',
         stat2: '5+ teams led',
         stat3: '4+ yrs shipping',
+      },
+      chrome: {
+        skipToContent: 'Skip to content',
+        controls: 'Controls',
+        openCommandPalette: 'Open command palette (⌘K)',
+        selectLanguage: 'Select language',
+        currentWorkTerminal: 'Current work terminal',
+        terminalCommandInput: 'Terminal command input',
+        sectionNavigation: 'Section navigation',
+        commandSearchPlaceholder: 'Search or jump to...',
+        commandSearch: 'Command search',
+        commandPaletteLabel: 'Command palette',
+        navigateGroup: 'Navigate',
+        projectsGroup: 'Projects',
+        linksGroup: 'Links',
+        actionsGroup: 'Actions',
+        findGroup: 'Find',
+        toggleTheme: 'Toggle theme',
+        toggleSound: 'Toggle sound',
+        copyEmail: 'Copy email',
+        emailCopied: 'Email copied',
+        keyboardShortcutsLabel: 'Keyboard shortcuts',
+        matchesOnPage: '{count} matches on page',
+        cmdHintNavigate: 'navigate',
+        cmdHintSelect: 'select',
+        cmdHintShortcuts: 'shortcuts',
+        cmdHintClose: 'close',
+        thisMenu: 'This menu',
+        jumpToSection: 'Jump to section',
+        then: 'then',
+        closeOverlays: 'Close overlays',
+        leaveTerminalInput: 'Leave terminal input',
+        previousMatch: 'Previous match',
+        nextMatch: 'Next match',
+        closeLabel: 'Close',
+        projectDetail: 'Project detail',
+        closeProjectDetail: 'Close project detail',
+        studentRecommendations: 'Student recommendations',
+        linkedinProfileOf: '{name} on LinkedIn',
+        prevSlide: 'Previous',
+        nextSlide: 'Next',
+        slideOf: '{current} of {total}',
+        switchToLightMode: 'Switch to light mode',
+        switchToDarkMode: 'Switch to dark mode',
+        footerRights: 'All rights reserved.',
+        footerColophon: 'Colophon',
+        carouselRole: 'carousel',
+        slideRole: 'slide',
       },
     },
     education: {
@@ -482,6 +585,54 @@ export const profiles: Record<string, I18nProfile> = {
         stat1: '2000+ студентов обучено',
         stat2: '5+ команд',
         stat3: '4+ года в разработке',
+      },
+      chrome: {
+        skipToContent: 'Перейти к содержимому',
+        controls: 'Управление',
+        openCommandPalette: 'Открыть командную палитру (⌘K)',
+        selectLanguage: 'Выбрать язык',
+        currentWorkTerminal: 'Терминал текущей работы',
+        terminalCommandInput: 'Поле ввода команд терминала',
+        sectionNavigation: 'Навигация по разделам',
+        commandSearchPlaceholder: 'Поиск или переход...',
+        commandSearch: 'Поиск команд',
+        commandPaletteLabel: 'Командная палитра',
+        navigateGroup: 'Навигация',
+        projectsGroup: 'Проекты',
+        linksGroup: 'Ссылки',
+        actionsGroup: 'Действия',
+        findGroup: 'Поиск',
+        toggleTheme: 'Сменить тему',
+        toggleSound: 'Вкл/выкл звук',
+        copyEmail: 'Скопировать эл. почту',
+        emailCopied: 'Эл. почта скопирована',
+        keyboardShortcutsLabel: 'Горячие клавиши',
+        matchesOnPage: 'Совпадений на странице: {count}',
+        cmdHintNavigate: 'навигация',
+        cmdHintSelect: 'выбрать',
+        cmdHintShortcuts: 'горячие клавиши',
+        cmdHintClose: 'закрыть',
+        thisMenu: 'Это меню',
+        jumpToSection: 'Перейти к разделу',
+        then: 'затем',
+        closeOverlays: 'Закрыть окна',
+        leaveTerminalInput: 'Выйти из поля ввода терминала',
+        previousMatch: 'Предыдущее совпадение',
+        nextMatch: 'Следующее совпадение',
+        closeLabel: 'Закрыть',
+        projectDetail: 'Детали проекта',
+        closeProjectDetail: 'Закрыть детали проекта',
+        studentRecommendations: 'Рекомендации',
+        linkedinProfileOf: '{name} в LinkedIn',
+        prevSlide: 'Назад',
+        nextSlide: 'Вперёд',
+        slideOf: '{current} из {total}',
+        switchToLightMode: 'Включить светлую тему',
+        switchToDarkMode: 'Включить тёмную тему',
+        footerRights: 'Все права защищены.',
+        footerColophon: 'Колофон',
+        carouselRole: 'карусель',
+        slideRole: 'слайд',
       },
     },
     education: {
@@ -804,6 +955,54 @@ export const profiles: Record<string, I18nProfile> = {
         stat1: '2000+ tələbə tədris edilib',
         stat2: '5+ komanda',
         stat3: '4+ il təcrübə',
+      },
+      chrome: {
+        skipToContent: 'Məzmuna keç',
+        controls: 'İdarəetmə',
+        openCommandPalette: 'Əmr paletini aç (⌘K)',
+        selectLanguage: 'Dili seç',
+        currentWorkTerminal: 'Cari iş terminalı',
+        terminalCommandInput: 'Terminal əmr sahəsi',
+        sectionNavigation: 'Bölmə naviqasiyası',
+        commandSearchPlaceholder: 'Axtar və ya keç...',
+        commandSearch: 'Əmr axtarışı',
+        commandPaletteLabel: 'Əmr paleti',
+        navigateGroup: 'Naviqasiya',
+        projectsGroup: 'Layihələr',
+        linksGroup: 'Keçidlər',
+        actionsGroup: 'Əməliyyatlar',
+        findGroup: 'Axtarış',
+        toggleTheme: 'Temanı dəyiş',
+        toggleSound: 'Səsi aç/bağla',
+        copyEmail: 'E-poçtu kopyala',
+        emailCopied: 'E-poçt kopyalandı',
+        keyboardShortcutsLabel: 'Klaviatura qısayolları',
+        matchesOnPage: 'Səhifədə uyğunluq: {count}',
+        cmdHintNavigate: 'naviqasiya',
+        cmdHintSelect: 'seç',
+        cmdHintShortcuts: 'qısayollar',
+        cmdHintClose: 'bağla',
+        thisMenu: 'Bu menyu',
+        jumpToSection: 'Bölməyə keç',
+        then: 'sonra',
+        closeOverlays: 'Pəncərəni bağla',
+        leaveTerminalInput: 'Terminal sahəsindən çıx',
+        previousMatch: 'Əvvəlki uyğunluq',
+        nextMatch: 'Növbəti uyğunluq',
+        closeLabel: 'Bağla',
+        projectDetail: 'Layihə təfərrüatı',
+        closeProjectDetail: 'Layihə təfərrüatını bağla',
+        studentRecommendations: 'Tövsiyələr',
+        linkedinProfileOf: '{name} — LinkedIn profili',
+        prevSlide: 'Əvvəlki',
+        nextSlide: 'Növbəti',
+        slideOf: '{current} / {total}',
+        switchToLightMode: 'İşıqlı temaya keç',
+        switchToDarkMode: 'Qaranlıq temaya keç',
+        footerRights: 'Bütün hüquqlar qorunur.',
+        footerColophon: 'Kolofon',
+        carouselRole: 'karusel',
+        slideRole: 'slayd',
       },
     },
     education: {

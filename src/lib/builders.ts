@@ -450,7 +450,7 @@ export const buildRecommendations = (data: I18nProfile): string => {
   return `
         <div class="sec-eyebrow">${esc(data.labels.eyebrows.recommendations)}</div>
         <h2 class="sec-title">${esc(data.labels.headings.recommendations)}</h2>
-        <div class="testi-wrap" role="group" aria-roledescription="carousel" aria-label="Student recommendations">
+        <div class="testi-wrap" role="group" aria-roledescription="${esc(data.labels.chrome.carouselRole)}" aria-label="${esc(data.labels.chrome.studentRecommendations)}">
           <div class="testi-scroll" id="testi-scroll" aria-live="off">
             ${data.testimonials
               .map((t, i) => {
@@ -458,14 +458,21 @@ export const buildRecommendations = (data: I18nProfile): string => {
                 const role = t.headTA
                   ? data.labels.headTARole || 'Head Teaching Assistant'
                   : data.labels.taRole || 'Teaching Assistant';
+                const slideLabel = data.labels.chrome.slideOf
+                  .replace('{current}', String(i + 1))
+                  .replace('{total}', String(data.testimonials.length));
+                const linkedinLabel = data.labels.chrome.linkedinProfileOf.replace(
+                  '{name}',
+                  t.name,
+                );
                 return `
-                <div class="testi-card" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${data.testimonials.length}">
+                <div class="testi-card" role="group" aria-roledescription="${esc(data.labels.chrome.slideRole)}" aria-label="${esc(slideLabel)}">
                   <span class="testi-mark">&ldquo;</span>
                   <p class="testi-quote">${esc(t.quote)}</p>
                   <div class="testi-author">
                     <div class="testi-avatar">${esc(initials)}</div>
                     <div>
-                      <div class="testi-name">${esc(t.name)}${t.linkedin ? `<a class="testi-linkedin" href="${esc(t.linkedin)}" target="_blank" rel="noopener" aria-label="${esc(t.name)} on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>` : ''}</div>
+                      <div class="testi-name">${esc(t.name)}${t.linkedin ? `<a class="testi-linkedin" href="${esc(t.linkedin)}" target="_blank" rel="noopener" aria-label="${esc(linkedinLabel)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>` : ''}</div>
                       <div class="testi-role">${esc(t.title)}</div>
                       <div class="testi-course">${esc(t.course)} &mdash; ${esc(role)}</div>
                     </div>
@@ -475,11 +482,11 @@ export const buildRecommendations = (data: I18nProfile): string => {
               .join('')}
           </div>
           <div class="carousel-nav">
-            <button class="car-btn" id="prev-btn" type="button" aria-label="Previous">
+            <button class="car-btn" id="prev-btn" type="button" aria-label="${esc(data.labels.chrome.prevSlide)}">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 3L6 8l4 5"/></svg>
             </button>
             <div class="car-dots" id="car-dots"></div>
-            <button class="car-btn" id="next-btn" type="button" aria-label="Next">
+            <button class="car-btn" id="next-btn" type="button" aria-label="${esc(data.labels.chrome.nextSlide)}">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3l4 5-4 5"/></svg>
             </button>
           </div>
