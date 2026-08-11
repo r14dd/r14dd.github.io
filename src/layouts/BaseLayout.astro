@@ -99,7 +99,15 @@ import '../styles/ui.css';
     <script is:inline>
       // Dropped before first paint, so no-JS fallback styling never flashes.
       document.documentElement.classList.remove('no-js');
-      const _theme = localStorage.getItem('portfolio-theme');
+      // Private-mode Safari (and some blocked-storage webviews) throws just
+      // reading this — a SecurityError, not a missing key. Left bare, that
+      // throw used to stop this script cold: no-js was already removed above,
+      // so the page looked like it booted while everything after this line —
+      // theme, scroll restoration — silently never ran.
+      let _theme = null;
+      try {
+        _theme = localStorage.getItem('portfolio-theme');
+      } catch {}
       if (_theme === 'light') {
         document.documentElement.classList.add('light');
         document.getElementById('theme-color-meta')?.setAttribute('content', '#ffffff');

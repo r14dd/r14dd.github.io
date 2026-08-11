@@ -28,7 +28,10 @@ import Analytics from '../components/Analytics.astro';
       }
     </style>
     <script>
-      if (localStorage.getItem('portfolio-theme') === 'light') {
+      import { getItem } from '../lib/client/storage';
+      // Safari Private Browsing throws reading localStorage itself — go through
+      // the shared shim so a blocked store just means dark/English, not a dead script.
+      if (getItem('portfolio-theme') === 'light') {
         document.documentElement.classList.add('light');
         document.getElementById('theme-color-meta')?.setAttribute('content', '#ffffff');
       }
@@ -124,8 +127,8 @@ import Analytics from '../components/Analytics.astro';
     <p class="msg" id="msg">My site has only one page, how in the world did you end up here?</p>
     <a class="back" href="/" id="back-link">Back to portfolio</a>
     <script>
-      const lang =
-        localStorage.getItem('portfolio-lang') || navigator.language?.slice(0, 2) || 'en';
+      import { getItem } from '../lib/client/storage';
+      const lang = getItem('portfolio-lang') || navigator.language?.slice(0, 2) || 'en';
       const msgs: Record<string, { msg: string; back: string }> = {
         ru: {
           msg: 'На моем сайте всего одна страница, как ты умудрился оказаться тут?',

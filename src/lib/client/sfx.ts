@@ -1,5 +1,7 @@
+import { getItem, setItem } from './storage';
+
 let ctx: AudioContext | null = null;
-let muted = localStorage.getItem('portfolio-muted') === '1';
+let muted = getItem('portfolio-muted') === '1';
 
 export function init() {
   if (muted) document.body.classList.add('sound-muted');
@@ -22,7 +24,7 @@ export function init() {
 
 export function toggleMute() {
   muted = !muted;
-  localStorage.setItem('portfolio-muted', muted ? '1' : '0');
+  setItem('portfolio-muted', muted ? '1' : '0');
   document.body.classList.toggle('sound-muted', muted);
   if (!muted) click();
 }

@@ -827,14 +827,25 @@ export const initTerminal = () => {
           histIdx++;
           input.value = histIdx < hist.length ? hist[histIdx] || '' : '';
         }
-      } else if (e.key === 'Tab') {
-        e.preventDefault();
+      } else if (e.key === 'Tab' && !e.shiftKey) {
+        // Only steal Tab when there's something to complete — an empty input
+        // has nothing to offer, so let focus move on rather than trap it here.
+        // Shift+Tab is never a completion gesture, so it always falls through
+        // to native focus movement (backwards out of the field).
         const cur = input.value.trim();
-        if (cur && !cur.includes(' ')) {
+        if (!cur) return;
+        e.preventDefault();
+        if (!cur.includes(' ')) {
           const names = Object.keys(getCommands()).filter((c) => c.startsWith(cur.toLowerCase()));
           if (names.length === 1) input.value = names[0] + ' ';
           else if (names.length > 1) render({ lines: [names.join('   ')], cls: 'muted' });
         }
+      } else if (e.key === 'Escape') {
+        // Neither global handler reacts here: shortcuts.ts ignores keydowns
+        // while an input is focused, and cmd-palette.ts's Escape branch is
+        // gated on the palette being open. So this is the only way out of
+        // the terminal by keyboard.
+        input.blur();
       }
     });
 

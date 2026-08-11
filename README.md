@@ -90,7 +90,7 @@ longer uses.
 src/
   layouts/BaseLayout.astro     # Global layout, CSS, cursor, section reveals
   pages/[...lang]/index.astro  # Main page, prerendered per locale (/, /ru/, /az/)
-  lib/client/*.ts              # 30 hand-rolled feature modules, code-split
+  lib/client/*.ts              # 31 hand-rolled feature modules, code-split
   data/claims.ts               # Numbers the site states about itself
   pages/lab.astro              # Experimental sandbox page
   pages/404.astro              # Custom 404 page

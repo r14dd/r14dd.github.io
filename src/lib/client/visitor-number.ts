@@ -1,10 +1,12 @@
 // @ts-nocheck
+import { getItem, setItem } from './storage';
+
 const WORKER_URL = 'https://toy-api.riad-mrv.workers.dev';
 const STORAGE_KEY = 'riad-reader-number';
 const NOTRACK_KEY = 'riad-notrack';
 
 export const initVisitorNumber = () => {
-  if (localStorage.getItem(NOTRACK_KEY)) return;
+  if (getItem(NOTRACK_KEY)) return;
 
   const footer = document.querySelector('footer');
   if (!footer) return;
@@ -13,7 +15,7 @@ export const initVisitorNumber = () => {
   el.className = 'reader-number';
   footer.appendChild(el);
 
-  const cached = localStorage.getItem(STORAGE_KEY);
+  const cached = getItem(STORAGE_KEY);
   if (cached) {
     show(el, Number(cached));
     return;
@@ -23,7 +25,7 @@ export const initVisitorNumber = () => {
     .then((r) => (r.ok ? r.json() : null))
     .then((data) => {
       if (!data?.number) return;
-      localStorage.setItem(STORAGE_KEY, String(data.number));
+      setItem(STORAGE_KEY, String(data.number));
       show(el, data.number);
     })
     .catch(() => el.remove());

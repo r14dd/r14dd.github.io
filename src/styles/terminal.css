@@ -143,6 +143,23 @@ html.light .terminal-cmd {
   caret-color: var(--accent);
 }
 
+/* The site-wide focus ring (base.css) is sized for buttons and cards; at
+   terminal scale, with the prompt sitting flush against the input, its
+   3px offset and rounded corners read as a stray rectangle rather than
+   a cursor. Tighter and squarer keeps it legible without fighting the
+   monospace box it lives in.
+
+   Inset rather than outset: the input line is often the last row of
+   .terminal-body (overflow-y: auto, scrolled to bottom), sitting flush
+   against its clip edge with no room below. An outset ring gets its
+   bottom edge cut off there — same failure mode base.css already works
+   around for .proj-card/.car-btn on the section containment boundary. */
+.term-input:focus-visible {
+  outline: 1px solid rgba(var(--accent-rgb), 0.5);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
 html.light .term-input {
   color: #4a4a4a;
 }

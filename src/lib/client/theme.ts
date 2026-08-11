@@ -1,6 +1,7 @@
 // The theme toggle. The accent itself is owned by time-aware.ts (data-period on
 // <html> + base.css) — nothing here may touch accent custom properties.
 import * as sfx from './sfx';
+import { setItem } from './storage';
 
 // One crossfade for the whole page, all of it at once. Two earlier versions
 // tried to make the change travel — a circle wiped outwards from the button, and
@@ -40,7 +41,7 @@ export const initTheme = () => {
     const themeColorMeta = document.getElementById('theme-color-meta');
     const doToggle = () => {
       root.classList.toggle('light');
-      localStorage.setItem('portfolio-theme', willBeLight ? 'light' : 'dark');
+      setItem('portfolio-theme', willBeLight ? 'light' : 'dark');
       updateThemeIcon();
       // Belongs here, not on the early-return path: the animated branch used to
       // skip it, so on desktop the browser chrome stayed dark behind a light page.

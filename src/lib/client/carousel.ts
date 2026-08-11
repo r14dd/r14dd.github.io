@@ -21,12 +21,24 @@ export function initCarousel() {
   const count = realCards.length;
   if (count < 2) return;
 
+  // Clones are aria-hidden but that doesn't pull them out of the tab order —
+  // keyboard users would still land on a link a screen reader was told
+  // doesn't exist. Pin every focusable node inside to -1 (not `inert`: the
+  // clones sit at the visible loop edges and still need to be clickable).
+  const detabify = (clone: HTMLElement) => {
+    clone
+      .querySelectorAll('a[href], button, input, select, textarea, [tabindex]')
+      .forEach((el) => el.setAttribute('tabindex', '-1'));
+  };
+
   const firstClone = realCards[0].cloneNode(true) as HTMLElement;
   const lastClone = realCards[count - 1].cloneNode(true) as HTMLElement;
   firstClone.setAttribute('aria-hidden', 'true');
   lastClone.setAttribute('aria-hidden', 'true');
   firstClone.classList.add('clone');
   lastClone.classList.add('clone');
+  detabify(firstClone);
+  detabify(lastClone);
   scroll.appendChild(firstClone);
   scroll.insertBefore(lastClone, realCards[0]);
 

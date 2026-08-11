@@ -27,6 +27,7 @@ import { state } from './state';
 import { weightReveal } from './hero-reveal';
 import { typeH2 } from './reveal-fx';
 import { navLinks, mobileMenuLinks, setActiveLink, refreshActiveLink } from './nav';
+import { getItem, setItem } from './storage';
 
 export const initI18n = () => {
   const i18nEl = document.getElementById('i18n-data');
@@ -253,7 +254,7 @@ export const initI18n = () => {
         langToggle?.setAttribute('aria-expanded', 'false');
         return;
       }
-      localStorage.setItem('portfolio-lang', lang);
+      setItem('portfolio-lang', lang);
       langMenu
         .querySelectorAll('[role="menuitemradio"]')
         .forEach((b) => b.setAttribute('aria-checked', b === btn ? 'true' : 'false'));
@@ -300,9 +301,9 @@ export const initI18n = () => {
   // saved preference. On / the saved preference still wins.
   const urlLang = (location.pathname.match(/^\/(ru|az)(\/|$)/) || [])[1];
   if (urlLang) {
-    localStorage.setItem('portfolio-lang', urlLang);
+    setItem('portfolio-lang', urlLang);
   }
-  const initialLang = urlLang || localStorage.getItem('portfolio-lang') || 'en';
+  const initialLang = urlLang || getItem('portfolio-lang') || 'en';
 
   // Already correct on the server — don't re-render the page we just painted.
   if (initialLang === ssrLang) {
