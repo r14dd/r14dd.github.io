@@ -147,7 +147,11 @@
 .testi-course {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
-  color: rgba(var(--accent-rgb), 0.55);
+  /* Full accent, not the translucent version used for borders/backgrounds:
+     at 0.55 alpha this line sat under 2.4:1 against the card everywhere, in
+     both themes and all four periods. Solid accent clears 4.5:1 with room
+     to spare (worst case is light/morning at 4.73:1). */
+  color: var(--accent);
   margin-top: 0.1rem;
 }
 

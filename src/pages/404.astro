@@ -50,8 +50,11 @@ import Analytics from '../components/Analytics.astro';
         --bg: #ffffff;
         --text: #1a1a1a;
         --muted: #777777;
-        --accent: #a8863d;
-        --accent-rgb: 168, 134, 61;
+        /* Darker than the old #a8863d, same gold — that one measured 3.42:1
+           against white and this is the only link off the page. Matches the
+           site's own light-mode default accent, which already clears 4.5:1. */
+        --accent: #876c30;
+        --accent-rgb: 135, 108, 48;
         --noise-opacity: 0.02;
       }
       * {
