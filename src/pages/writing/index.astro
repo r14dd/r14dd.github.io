@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
 import { getCollection } from 'astro:content';
 
 // Curated, not chronological — see src/content.config.ts for why.
@@ -13,6 +14,7 @@ const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
   metaDescription="Notes on building systems that stay honest — LLM verdicts, consensus, and the machinery underneath."
   lang="en"
 >
+  <ThemeToggle />
   <main class="content" id="main-content">
     <section style="opacity:1">
       <a href="/" class="writing-back">← Back</a>

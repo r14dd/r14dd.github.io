@@ -1,0 +1,25 @@
+---
+// The home page's theme toggle, on its own for the pages that have no
+// language switcher or command palette next to it. Same id, same class, so
+// theme.ts, the keyboard shortcut and the styles in navigation.css all apply
+// unchanged.
+import { profiles } from '../data/profile-i18n';
+
+const chrome = profiles.en.labels.chrome;
+---
+
+<div class="lang-switcher" aria-label={chrome.controls}>
+  <button
+    class="theme-toggle"
+    id="theme-toggle"
+    type="button"
+    aria-label={chrome.switchToLightMode}
+  >
+    <span class="theme-icon" aria-hidden="true">☀️</span>
+  </button>
+</div>
+
+<script>
+  import { initTheme } from '../lib/client/theme';
+  initTheme();
+</script>

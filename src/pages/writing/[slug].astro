@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -30,6 +31,7 @@ const structuredData = JSON.stringify({
   structuredData={structuredData}
   lang="en"
 >
+  <ThemeToggle />
   <main class="content" id="main-content">
     <section style="opacity:1">
       <a href="/writing/" class="post-back">← Writing</a>
