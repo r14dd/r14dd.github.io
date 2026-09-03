@@ -467,3 +467,83 @@ body.proj-lock {
   animation: none;
   mix-blend-mode: normal;
 }
+
+/* Project tiering. Exactly one card is featured — it runs the full grid width
+   and reads at display size; everything else is a compact index entry whose
+   bullets sit behind a disclosure (the modal carries them too). */
+.proj-card-feature {
+  border-color: rgba(var(--accent-rgb), 0.18);
+  padding: 1.1rem 1rem 1.2rem;
+}
+
+html.light .proj-card-feature {
+  border-color: rgba(var(--accent-rgb), 0.22);
+}
+
+.proj-card-feature .proj-name {
+  font-size: 1.2rem;
+  letter-spacing: -0.015em;
+}
+
+.proj-card-feature .proj-impact {
+  font-size: 1.02rem;
+  line-height: 1.62;
+  color: var(--text);
+  max-width: 62ch;
+  margin-bottom: 0.7rem;
+}
+
+.proj-card-feature .feat-bullets li {
+  font-size: 0.89rem;
+}
+
+.feat-more {
+  margin-top: 0.45rem;
+}
+
+.feat-more > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  list-style: none;
+  cursor: pointer;
+  padding: 0.35rem 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  color: var(--text-soft);
+  transition: color 0.2s var(--ease-out);
+}
+
+.feat-more > summary::-webkit-details-marker {
+  display: none;
+}
+
+.feat-more > summary::after {
+  content: '';
+  width: 0.34rem;
+  height: 0.34rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s var(--ease-out);
+}
+
+.feat-more[open] > summary::after {
+  transform: translateY(1px) rotate(-135deg);
+}
+
+.feat-more > summary:hover,
+.feat-more > summary:focus-visible {
+  color: var(--accent);
+}
+
+.feat-more .feat-bullets {
+  margin: 0.35rem 0 0.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feat-more > summary::after {
+    transition: none;
+  }
+}

@@ -221,6 +221,13 @@ const structuredData = JSON.stringify({
             <span class="term-stat" id="term-stat3"
               ><Fragment set:html={wrapStatNum(profile.labels.terminal.stat3)} /></span
             >
+            <span class="term-colophon-wrap"
+              ><span class="term-stat-sep">·</span><a
+                class="term-colophon"
+                id="term-colophon-link"
+                href="/colophon/">{profile.labels.chrome.footerColophon}</a
+              ></span
+            >
           </div>
           <div class="terminal-line" id="term-input-line">
             <span class="terminal-prompt">→</span>

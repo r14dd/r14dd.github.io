@@ -166,6 +166,8 @@ export const initI18n = () => {
     if (ts1) ts1.innerHTML = wrapNum(t.stat1);
     if (ts2) ts2.innerHTML = wrapNum(t.stat2);
     if (ts3) ts3.innerHTML = wrapNum(t.stat3);
+    const tcl = document.getElementById('term-colophon-link');
+    if (tcl) tcl.textContent = data.labels.chrome.footerColophon;
     if (heroLinks) {
       const links = heroLinks.querySelectorAll('a');
       // Replace only the text node so the inline SVG icon survives re-render

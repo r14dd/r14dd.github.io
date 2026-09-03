@@ -230,3 +230,28 @@ html.light .term-input {
     font-size: 0.75rem;
   }
 }
+
+/* The stats line makes claims; the colophon is where they are counted. It sits
+   with them rather than only in the footer, where nobody was looking. */
+.term-colophon-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.term-colophon {
+  color: var(--text-soft);
+  text-decoration: none;
+  background-image: none;
+  border-bottom: 1px dotted rgba(var(--accent-rgb), 0.4);
+  transition:
+    color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out);
+}
+
+.term-colophon:hover,
+.term-colophon:focus-visible {
+  color: var(--accent);
+  border-bottom-color: currentColor;
+}

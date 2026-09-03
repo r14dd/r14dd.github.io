@@ -330,7 +330,10 @@ export const initTerminal = () => {
             wrapNum(t.stat2 || '5+ teams led') +
             '</span><span class="term-stat-sep">·</span><span class="term-stat">' +
             wrapNum(t.stat3 || '4+ yrs shipping') +
-            '</span></span>',
+            '</span><span class="term-colophon-wrap"><span class="term-stat-sep">·</span>' +
+            '<a class="term-colophon" href="/colophon/">' +
+            esc(p.labels?.chrome?.footerColophon || 'Colophon') +
+            '</a></span></span>',
         };
       },
       ls: (args) => {

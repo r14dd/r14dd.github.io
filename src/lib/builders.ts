@@ -304,10 +304,20 @@ export const buildProjects = (data: I18nProfile): string => {
       )
       .join(' ');
     const badgeBullet = badges ? `<li class="badge-bullet">${badges}</li>` : '';
-    const bullets =
-      p.bullets.length || badgeBullet
-        ? `<ul class="feat-bullets">${badgeBullet}${p.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>`
-        : '';
+    // One project carries the section. The patent runs full width with its
+    // bullets open; every other card stays compact — impact first, the detail
+    // one click away (the modal has it too, this is just the cheaper path).
+    const isFeature = p.name.startsWith('patent');
+    const bulletItems = p.bullets.map((b) => `<li>${esc(b)}</li>`).join('');
+    const detail = isFeature
+      ? bulletItems || badgeBullet
+        ? `<ul class="feat-bullets">${badgeBullet}${bulletItems}</ul>`
+        : ''
+      : `${badgeBullet ? `<ul class="feat-bullets">${badgeBullet}</ul>` : ''}${
+          bulletItems
+            ? `<details class="feat-more"><summary>${esc(data.labels.projectDetails)}</summary><ul class="feat-bullets">${bulletItems}</ul></details>`
+            : ''
+        }`;
     const gh = p.links?.github
       ? `<a class="feat-gh" href="${p.links.github}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>`
       : '';
@@ -318,13 +328,12 @@ export const buildProjects = (data: I18nProfile): string => {
       ? `<a class="feat-gh" href="${p.links.docs}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 1A1.5 1.5 0 0 0 2 2.5v11A1.5 1.5 0 0 0 3.5 15H13a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3.5zM3 2.5a.5.5 0 0 1 .5-.5H13v9H3.5a1.5 1.5 0 0 0-.5.085V2.5zM3.5 12H13v2H3.5a.5.5 0 0 1 0-1zM5 4h6v1H5V4zm0 2.5h6v1H5v-1z"/></svg>docs.rs</a>`
       : '';
     const sim = hasSim(p.name);
-    const isWide = p.name.startsWith('patent');
     const simLabel = p.name.split('—')[0].trim();
     const simBtn = sim
       ? `<button class="sim-toggle" type="button" aria-label="${esc(data.labels.simulate)} — ${esc(simLabel)}"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>${esc(data.labels.simulate)}</button>`
       : '';
     const simSvg = sim ? buildProjectSim(p, data.labels.simLegends) : '';
-    return `<div class="proj-card${sim ? ' has-sim' : ''}${isWide ? ' proj-card-wide' : ''}" role="button" tabindex="0" data-project="${esc(p.name)}">
+    return `<div class="proj-card${sim ? ' has-sim' : ''}${isFeature ? ' proj-card-wide proj-card-feature' : ''}" role="button" tabindex="0" data-project="${esc(p.name)}">
           <div class="proj-card-head">
             <h3 class="proj-name">${esc(p.name)}</h3>
             <div class="proj-card-actions">
@@ -332,8 +341,9 @@ export const buildProjects = (data: I18nProfile): string => {
             </div>
           </div>
           <div class="proj-card-text">
+            ${impact}
             <div class="feat-pills">${pills}</div>
-            ${impact}${bullets}
+            ${detail}
           </div>
           ${simSvg}
         </div>`;

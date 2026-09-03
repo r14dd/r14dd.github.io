@@ -81,8 +81,8 @@ export const initProjectModal = () => {
         <h3>${escData(p.name)}</h3>
       </div>
       ${actions}
-      <div class="project-tech-pills">${tech}</div>
       ${p.impact ? `<div class="project-impact">${escData(stripImpact(p.impact))}</div>` : ''}
+      <div class="project-tech-pills">${tech}</div>
       ${bullets || badgeBullet ? `<ul class="project-bullets">${badgeBullet}${bullets}</ul>` : ''}
       ${sim}
     `;
@@ -179,7 +179,9 @@ export const initProjectModal = () => {
       openSimOverlay(card);
       return;
     }
-    if (e.target.closest('a, button')) return;
+    // A compact card's <details> is inside the role="button" card; without
+    // this the disclosure click also opens the modal it was meant to avoid.
+    if (e.target.closest('a, button, summary')) return;
     const sel = window.getSelection?.();
     if (sel && sel.toString().length > 0) return;
     const title = card.querySelector('h3')?.textContent?.trim();
@@ -192,6 +194,7 @@ export const initProjectModal = () => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     const card = e.target.closest?.('.proj-card');
     if (!card || !projectsSection.contains(card)) return;
+    if (e.target.closest?.('summary')) return;
     e.preventDefault();
     const title = card.querySelector('h3')?.textContent?.trim();
     const p = (state.currentProfile?.projects || state.I18N.en.projects || []).find(

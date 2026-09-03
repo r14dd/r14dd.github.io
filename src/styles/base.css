@@ -398,6 +398,16 @@ body {
   margin: 0 auto;
 }
 
+/* Above the breakpoint where the fixed side rails appear, the column grows
+   only as fast as the gutters can afford it: 400px of viewport is reserved so
+   .side-nav and .side-links get a lane of their own instead of hovering a few
+   pixels off the text. Below 1170px the rails are hidden and 840 still rules. */
+@media (min-width: 1170px) {
+  .content {
+    max-width: clamp(840px, calc(100vw - 400px), 980px);
+  }
+}
+
 body.lang-switching .content {
   opacity: 0;
   pointer-events: none;
