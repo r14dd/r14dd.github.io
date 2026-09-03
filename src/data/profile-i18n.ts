@@ -66,6 +66,7 @@ type Labels = {
   taRole: string;
   headTARole: string;
   simulate: string;
+  projectDetails: string;
   simLegends: { raft: string; kademlia: string; redis: string };
   teachingRows: { tools: string; topics: string };
   skillCategories: Record<string, string>;
@@ -181,7 +182,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       heroEyebrow: 'AI & Software Engineer · Baku, Azerbaijan',
       meta: {
-        titleSuffix: 'Portfolio',
+        titleSuffix: 'AI & Software Engineer, Baku',
         description:
           'Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.',
       },
@@ -196,6 +197,7 @@ export const profiles: Record<string, I18nProfile> = {
       taRole: 'Teaching Assistant',
       headTARole: 'Head Teaching Assistant',
       simulate: 'Simulate',
+      projectDetails: 'Details',
       simLegends: {
         raft: 'Leader replicates log entries via AppendEntries RPC',
         kademlia: 'Iterative FIND_NODE lookup converges via XOR distance',
@@ -549,7 +551,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       heroEyebrow: 'AI & Software инженер · Баку, Азербайджан',
       meta: {
-        titleSuffix: 'Портфолио',
+        titleSuffix: 'AI & Software инженер, Баку',
         description:
           'Риад Мухтаров — AI и software инженер, работает с Rust и Python. Строит распределённые системы в ABB, ранее преподавал информатику в SUNY Buffalo.',
       },
@@ -564,6 +566,7 @@ export const profiles: Record<string, I18nProfile> = {
       taRole: 'Ассистент преподавателя',
       headTARole: 'Старший ассистент преподавателя',
       simulate: 'Симуляция',
+      projectDetails: 'Подробнее',
       simLegends: {
         raft: 'Лидер реплицирует записи лога через AppendEntries RPC',
         kademlia: 'Итеративный поиск FIND_NODE сходится по XOR-расстоянию',
@@ -919,7 +922,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
       heroEyebrow: 'AI və Proqram Mühəndisi · Bakı, Azərbaycan',
       meta: {
-        titleSuffix: 'Portfolio',
+        titleSuffix: 'AI və Proqram Mühəndisi, Bakı',
         description:
           'Riad Muxtarov — AI və proqram mühəndisi, Rust və Python ilə işləyir. ABB-də paylanmış sistemlər qurur, əvvəllər SUNY Buffalo-da informatika tədris edib.',
       },
@@ -934,6 +937,7 @@ export const profiles: Record<string, I18nProfile> = {
       taRole: 'Tədris assistenti',
       headTARole: 'Baş tədris assistenti',
       simulate: 'Simulyasiya',
+      projectDetails: 'Ətraflı',
       simLegends: {
         raft: 'Lider log qeydlərini AppendEntries RPC ilə replikasiya edir',
         kademlia: 'İterativ FIND_NODE axtarışı XOR məsafəsi ilə hədəfə yaxınlaşır',

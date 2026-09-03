@@ -147,8 +147,12 @@ const structuredData = JSON.stringify({
     border-radius: 3px;
   }
 
+  /* Shiki emits --shiki-light / --shiki-dark per token and no colour of its
+     own (defaultColor: false), so the block follows the site's theme class
+     instead of carrying a hard-coded palette. The !important on background
+     overrides the inline style Shiki still writes on the pre. */
   .post-body pre {
-    background: var(--surface);
+    background: var(--surface) !important;
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 1rem 1.1rem;
@@ -156,10 +160,24 @@ const structuredData = JSON.stringify({
     margin: 0 0 1.6rem;
   }
 
+  /* base.css styles every code element as an inline chip; inside a pre that
+     chip wraps each line box. Reset it. */
   .post-body pre code {
+    display: block;
+    background: none;
+    border: 0;
+    padding: 0;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 0.78rem;
     line-height: 1.7;
+    color: var(--text);
+  }
+
+  .post-body pre span {
+    color: var(--shiki-dark);
+  }
+  html.light .post-body pre span {
+    color: var(--shiki-light);
   }
 
   /* Hairline rules only. A table that needs columns is already the busiest
