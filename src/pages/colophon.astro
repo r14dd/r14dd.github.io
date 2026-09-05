@@ -1,11 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { claims, kb } from '../data/claims';
+import { getBuildInfo } from '../lib/buildinfo';
 
 // Numbers come from src/data/claims.ts and are re-verified against the real
 // dist/ output by scripts/check-claims.mjs after every build. If this page
 // says it, the build proved it.
 const deps = claims.runtimeDeps;
+const build = getBuildInfo(5);
+const REPO = 'https://github.com/r14dd/r14dd.github.io';
 ---
 
 <BaseLayout
@@ -74,8 +77,9 @@ const deps = claims.runtimeDeps;
         <h2>Theming</h2>
         <p>
           Dark and light themes via CSS custom properties. The accent color shifts by time of day in
-          the Baku timezone — five periods from night violet through morning gold to evening amber.
-          The theme toggle uses the View Transitions API for a circular clip-path wipe on desktop.
+          the Baku timezone — five periods from night violet through morning gold to evening amber,
+          stamped on every page before first paint. The theme toggle is one page-wide crossfade,
+          nothing travels; the social preview card is rendered per language at build time.
         </p>
       </div>
 
@@ -147,12 +151,72 @@ const deps = claims.runtimeDeps;
       </div>
 
       <div class="colophon-section">
+        <h2>Resume</h2>
+        <p>
+          The resume is a page — <code>/resume/</code>, in all three languages — rendered from the
+          same profile data as everything else, so it cannot fall behind the site. On screen it uses
+          the print metrics, so what you see is the sheet that comes out; anything past one page is
+          hidden unless you ask for everything. The PDF is typeset with LaTeX in CI from the same
+          data and stamped with the commit it came from. It is never committed.
+        </p>
+      </div>
+
+      <div class="colophon-section">
+        <h2>Testing</h2>
+        <p>
+          Playwright end-to-end tests run on every deploy and gate the artifact upload. Beyond the
+          usual smoke — terminal pipes, palette, shortcuts — they are design guards: light-theme
+          contrast measured against AA, phone viewports that must not overflow, printing from any
+          scroll position, and the Raft safety properties. A weekly job crawls the live site and
+          reports any link that stopped resolving.
+        </p>
+      </div>
+
+      <div class="colophon-section">
+        <h2>Writing</h2>
+        <p>
+          Posts are Markdown in the repo, rendered to <code>/writing/</code> with a hand-rolled RSS feed.
+          Code blocks follow the theme.
+        </p>
+      </div>
+
+      <div class="colophon-section">
+        <h2>Wayfinding</h2>
+        <p>
+          <kbd>⌘K</kbd> opens a command palette, <kbd>?</kbd> the shortcut sheet, and a first visit offers
+          a short tour that picks its route by who you say you are. All of it loads after the page is
+          already usable.
+        </p>
+      </div>
+
+      <div class="colophon-section">
         <h2>PWA</h2>
         <p>
           Optional offline mode via a root-scoped service worker (network-first for navigations,
           stale-while-revalidate for assets). Enabled/disabled through the terminal: <code
             >offline enable</code
           >.
+        </p>
+      </div>
+
+      <div class="colophon-section">
+        <h2>Recent commits</h2>
+        <ul class="colophon-commits">
+          {
+            build.commits.map((c) => (
+              <li>
+                <a href={`${REPO}/commit/${c.hash}`} target="_blank" rel="noopener">
+                  {c.short}
+                </a>
+                <span>{c.subject}</span>
+                <time datetime={c.date}>{c.relative}</time>
+              </li>
+            ))
+          }
+        </ul>
+        <p>
+          Built from <code>{build.branch}</code>, {build.count} commits in.{' '}
+          <a href={REPO} target="_blank" rel="noopener">The whole history is public.</a>
         </p>
       </div>
 
@@ -224,6 +288,50 @@ const deps = claims.runtimeDeps;
   .colophon-section strong {
     color: var(--text);
     font-weight: 600;
+  }
+
+  .colophon-section kbd {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.8em;
+    color: var(--accent);
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 0.05em 0.35em;
+  }
+
+  .colophon-commits {
+    list-style: none;
+    margin: 0 0 0.8rem;
+    padding: 0;
+    max-width: 65ch;
+  }
+  .colophon-commits li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.8rem;
+    align-items: baseline;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(var(--accent-rgb), 0.08);
+    font-size: var(--text-sm);
+    color: var(--text-soft);
+  }
+  .colophon-commits a {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 0.8em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .colophon-commits a:hover {
+    text-decoration: underline;
+  }
+  .colophon-commits time {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .colophon-section p a {
+    color: var(--accent);
   }
 
   .colophon-coy {
