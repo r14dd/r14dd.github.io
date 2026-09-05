@@ -635,7 +635,6 @@ const structuredData = JSON.stringify({
         const desktop = window.matchMedia('(pointer: fine)').matches;
 
         // Universal
-        import('../../lib/client/visitor-number').then((m) => m.initVisitorNumber());
         import('../../lib/client/ferris').then((m) => m.initFerris());
         import('../../lib/client/paper-airplane').then((m) => m.initPaperAirplane());
         // The dots are ordinary tap targets — no reason they were desktop-only.

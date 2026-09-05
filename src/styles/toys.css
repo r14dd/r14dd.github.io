@@ -306,22 +306,6 @@ html.light .crack-ring {
   }
 }
 
-/* ── Visitor Number ───────────────────────────────────────────────── */
-
-.reader-number {
-  display: none;
-  margin-top: 0.5rem;
-  font-size: 0.7rem;
-  color: var(--muted);
-  opacity: 0.6;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.02em;
-}
-
-.reader-number.visible {
-  display: block;
-}
-
 /* ── Paper Airplane ──────────────────────────────────────────────── */
 
 .airplane-trigger {

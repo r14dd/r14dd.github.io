@@ -48,12 +48,12 @@ Minimalist personal portfolio built to present AI and software engineering work 
 
 ## Backend
 
-| Worker             | Job                                                             |
-| ------------------ | --------------------------------------------------------------- |
-| `spotify-worker`   | Now-playing proxy; keeps the refresh token server-side          |
-| `analytics-worker` | Cloudflare Web Analytics GraphQL proxy for `/admin`             |
-| `poll-worker`      | Poll backend                                                    |
-| `toy-worker`       | Visitor counter + paper-airplane inbox (Durable Object, SQLite) |
+| Worker             | Job                                                    |
+| ------------------ | ------------------------------------------------------ |
+| `spotify-worker`   | Now-playing proxy; keeps the refresh token server-side |
+| `analytics-worker` | Cloudflare Web Analytics GraphQL proxy for `/admin`    |
+| `poll-worker`      | Poll backend                                           |
+| `toy-worker`       | Paper-airplane inbox (Durable Object, SQLite)          |
 
 Each degrades silently: if a Worker is unreachable its widget disappears rather than erroring. That
 is right for a visitor and blind for the owner — nothing on the site would ever say a Worker died.
@@ -90,7 +90,7 @@ longer uses.
 src/
   layouts/BaseLayout.astro     # Global layout, CSS, cursor, section reveals
   pages/[...lang]/index.astro  # Main page, prerendered per locale (/, /ru/, /az/)
-  lib/client/*.ts              # 31 hand-rolled feature modules, code-split
+  lib/client/*.ts              # 30 hand-rolled feature modules, code-split
   data/claims.ts               # Numbers the site states about itself
   pages/lab.astro              # Experimental sandbox page
   pages/404.astro              # Custom 404 page
