@@ -4,13 +4,7 @@
 // as inline styles was a shipped bug: inline custom properties out-specify the
 // html.light redirection, so light mode ran on dark-tuned accents and failed
 // AA wholesale.
-const periods = [
-  { key: 'night', from: 0, to: 6 },
-  { key: 'morning', from: 6, to: 12 },
-  { key: 'afternoon', from: 12, to: 17 },
-  { key: 'evening', from: 17, to: 21 },
-  { key: 'night', from: 21, to: 24 },
-];
+import { PERIODS as periods } from '../periods';
 
 export function getPeriod() {
   const h = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Baku' })).getHours();

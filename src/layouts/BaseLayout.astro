@@ -5,6 +5,7 @@ import ScrollLine from '../components/ScrollLine.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
 import { profiles } from '../data/profile-i18n';
+import { PERIODS } from '../lib/periods';
 
 const {
   metaTitle = 'Riad Mukhtarov — Portfolio',
@@ -118,6 +119,17 @@ import '../styles/ui.css';
         document.getElementById('theme-color-meta')?.setAttribute('content', '#ffffff');
       }
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    </script>
+    <script is:inline define:vars={{ periods: PERIODS }}>
+      // Time-of-day accent, keyed to Baku's clock, on every page — not only
+      // the home page, whose runtime re-stamps it with the greeting.
+      try {
+        const h = new Date(
+          new Date().toLocaleString('en-US', { timeZone: 'Asia/Baku' }),
+        ).getHours();
+        const p = periods.find((x) => h >= x.from && h < x.to);
+        if (p) document.documentElement.dataset.period = p.key;
+      } catch {}
     </script>
 
     <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
