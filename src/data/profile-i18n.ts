@@ -350,7 +350,7 @@ export const profiles: Record<string, I18nProfile> = {
           'CLI, который принимает описание dev-tool идеи на простом языке, ищет по open-source реестрам существующие реализации, ранжирует совпадения локальными эмбеддингами и формирует вердикт через LLM.',
         date: 'Июн 2026',
         bullets: [
-          'Построил конкурентные адаптеры для crates.io, npm, PyPI, GitHub, Go, Maven, NuGet, RubyGems, Docker Hub, VS Code Marketplace и Hacker News',
+          'Построил конкурентные адаптеры для 11 реестров: от crates.io, npm и PyPI до Docker Hub и Hacker News',
           'Спроектировал систему вердиктов с ограниченной областью — никогда не утверждает отсутствие, только сообщает о найденном в проверенных источниках',
           'Добавил интерактивный ratatui TUI с детальным просмотром, открытием браузера и структурированным JSON-выводом для CI-пайплайнов',
         ],
@@ -728,7 +728,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Sadə dildə dev-tool ideyası qəbul edən, open-source reyestrlərində mövcud implementasiyaları axtaran, uyğunluqları lokal embedding-lərlə sıralayan və LLM vasitəsilə əhatəli vərdict yazan CLI.',
         date: 'İyun 2026',
         bullets: [
-          'crates.io, npm, PyPI, GitHub, Go, Maven, NuGet, RubyGems, Docker Hub, VS Code Marketplace və Hacker News üçün paralel mənbə adapterləri qurdum',
+          'crates.io, npm və PyPI‑dən Docker Hub və Hacker News‑a qədər 11 reyestr üçün paralel mənbə adapterləri qurdum',
           'Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli vərdict sistemi qurdum',
           'Detallı baxış, brauzer açma və CI pipeline-ları üçün strukturlaşdırılmış JSON çıxışı olan interaktiv ratatui TUI əlavə etdim',
         ],

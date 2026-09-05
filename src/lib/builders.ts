@@ -77,6 +77,20 @@ export const skillLogoMap: Record<string, string> = {
   Git: '/logos/si-git.svg',
   Django: '/logos/si-django.svg',
   Trello: '/logos/si-trello.svg',
+  'Node.js': '/logos/si-nodedotjs.svg',
+  MCP: '/logos/si-modelcontextprotocol.svg',
+  'Deep Agents': '/logos/si-langchain.svg',
+  Langfuse: '/logos/langfuse.svg',
+  'OpenAI API': '/logos/openai.svg',
+  'Anthropic API': '/logos/si-anthropic.svg',
+  Gemini: '/logos/si-googlegemini.svg',
+  'Server-Sent Events': '/logos/sse.svg',
+  LDAP: '/logos/ldap.svg',
+  'Linux namespaces & cgroups': '/logos/si-linux.svg',
+  'seccomp-BPF': '/logos/si-linux.svg',
+  OpenTelemetry: '/logos/si-opentelemetry.svg',
+  Playwright: '/logos/si-playwright.svg',
+  Jest: '/logos/si-jest.svg',
 };
 
 // All profile data is interpolated into HTML strings — escape it uniformly.

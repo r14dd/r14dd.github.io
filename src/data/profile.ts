@@ -97,7 +97,7 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Feb 2026 – Present',
       bullets: [
-        'Coordinating website renewal, internal platform improvements, and new technology solutions to support organizational operations',
+        'Coordinating the website renewal, internal platform improvements, and new technology rollouts',
         'Leading the development team on the public website and member-facing tools',
         'Owning the organization’s domains, hosting, email and access management',
       ],
@@ -148,7 +148,7 @@ export const profile: Profile = {
         'CLI that takes a plain-English dev-tool idea, searches open-source registries for existing implementations, ranks matches with local embeddings, and writes a scoped verdict via LLM.',
       date: 'Jun 2026',
       bullets: [
-        'Built concurrent source adapters for crates.io, npm, PyPI, GitHub, Go, Maven, NuGet, RubyGems, Docker Hub, VS Code Marketplace, and Hacker News',
+        'Built concurrent source adapters for 11 registries, from crates.io, npm and PyPI to Docker Hub and Hacker News',
         'Designed integrity-scoped verdict system that never asserts absence — only reports what was found in sources checked',
         'Added interactive ratatui TUI with detail view, browser open, and structured JSON output for CI pipelines',
       ],
@@ -200,7 +200,7 @@ export const profile: Profile = {
         "RAG chatbot answering questions exclusively from ABB Bank's public content with multilingual support and strict context-only guardrails.",
       date: 'May 2026',
       bullets: [
-        'Built a two-service RAG pipeline (API gateway + QA service) scraping, chunking, and indexing ABB Bank pages via FAISS',
+        'Built a two-service RAG pipeline (gateway + QA) that scrapes, chunks, and indexes bank pages via FAISS',
         'Implemented multilingual support across Azerbaijani, English, and Russian with prompt injection blocking',
         "Applied distance-gated out-of-scope detection to prevent hallucination — returns 'Bunu bilmirəm' for off-topic queries",
         'Added SQLite observability and Chart.js query analytics dashboard for monitoring chatbot usage',

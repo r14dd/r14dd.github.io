@@ -32,18 +32,20 @@ const esc = (s) =>
   String(s)
     .replace(/[\\{}]/g, (c) => `\\${c}`)
     .replace(/[&%$#_]/g, (c) => `\\${c}`)
-    .replace(/~/g, '\\textasciitilde{}')
+    .replace(/~/g, '$\\sim$')
     .replace(/\^/g, '\\textasciicircum{}');
 
 const bullets = (items) =>
   items.length
-    ? `\\begin{tight}\n${items.map((b) => `  \\item ${esc(b)}`).join('\n')}\n\\end{tight}`
+    ? `\\resumeItemListStart\n${items.map((b) => `  \\resumeItem{${esc(b)}}`).join('\n')}\n\\resumeItemListEnd`
     : '';
 
+// Four roles, three bullets each: the page fits by cutting, not shrinking.
 const experience = p.experience
+  .slice(0, 4)
   .map(
     (e) =>
-      `\\entry{${esc(e.role)}}{${esc(e.period)}}{${esc(e.org)}}{${esc(e.location)}}\n${bullets(e.bullets.slice(0, 3))}`,
+      `\\resumeSubheading{${esc(e.role)}}{${esc(e.period)}}{${esc(e.org)}}{${esc(e.location)}}\n${bullets(e.bullets.slice(0, 3))}`,
   )
   .join('\n');
 
@@ -59,54 +61,96 @@ const projects = p.resume.projects
       .filter(([k]) => k !== 'demo')
       .map(
         ([k, url]) =>
-          `\\href{${url}}{${esc(k === 'crates' ? 'crates.io' : k === 'github' ? 'GitHub' : 'docs.rs')}}`,
+          `\\href{${url}}{\\textit{${esc(k === 'crates' ? 'crates.io' : k === 'github' ? 'GitHub' : 'docs.rs')}}}`,
       )
       .join(' ');
-    const head = `${esc(pr.name)}${links ? ` \\lnk{${links}}` : ''} \\tech{${esc(pr.tech.join(', '))}}`;
-    return `\\project{${head}}{${esc(pr.date ?? '')}}\n${bullets(pr.bullets.slice(0, 2))}`;
+    const head = `\\textbf{${esc(pr.name)}} ${links}${links ? ' ' : ''}$|$ \\emph{${esc(pr.tech.join(', '))}}`;
+    return `\\resumeProjectHeading{${head}}{${esc(pr.date ?? '')}}\n${bullets(pr.bullets.slice(0, 2))}`;
   })
   .join('\n');
 
 const skills = p.skills
-  .map((s) => `\\textbf{${esc(s.category)}:} ${esc(s.groups.flatMap((g) => g.items).join(', '))}`)
-  .join('\\\\\n');
+  .map((s) => `\\textbf{${esc(s.category)}}{: ${esc(s.groups.flatMap((g) => g.items).join(', '))}}`)
+  .join(' \\\\\n');
 
 const [eduDates, eduPlace] = p.education.meta.split(' · ');
-const education = `\\entry{${esc(p.education.title)}}{${esc(eduDates)}}{${esc(p.education.bullets.join(' '))}}{${esc(eduPlace)}}`;
+const education = `\\resumeSubheading{${esc(p.education.title)}}{${esc(eduDates)}}{${esc(p.education.bullets.join(' '))}}{${esc(eduPlace)}}`;
 
 const site = 'https://riad.cc';
-const tex = String.raw`\documentclass[10pt,letterpaper]{article}
-\usepackage[margin=0.5in]{geometry}
-\usepackage{fontspec}
-\setmainfont{texgyretermes}[Extension=.otf,UprightFont=*-regular,BoldFont=*-bold,ItalicFont=*-italic,BoldItalicFont=*-bolditalic]
-\usepackage{enumitem}
+const phoneHref = `tel:${p.resume.phone.replace(/[^+\d]/g, '')}`;
+
+// The preamble is the one from resume.tex (Jake Gutierrez's template, MIT),
+// with the pdfTeX-only glyph-to-unicode lines replaced by fontspec since
+// tectonic drives XeTeX. XCharter is the bundle's Charter.
+const tex = String.raw`\documentclass[letterpaper,11pt]{article}
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
 \usepackage{titlesec}
-\usepackage[hidelinks]{hyperref}
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{accent}{HTML}{A8863D}
+\usepackage{enumitem}
+\usepackage[colorlinks=true, urlcolor=accent, linkcolor=accent]{hyperref}
+\usepackage{fancyhdr}
 \usepackage{tabularx}
-\pagestyle{empty}
-\setlength{\parindent}{0pt}
-\setlength{\tabcolsep}{0pt}
-\titleformat{\section}{\large\scshape\raggedright}{}{0em}{}[\titlerule]
-\titlespacing*{\section}{0pt}{5pt}{2pt}
-\newlist{tight}{itemize}{1}
-\setlist[tight]{label=\textbullet,leftmargin=1.2em,itemsep=0pt,topsep=1pt,parsep=0pt}
-\newcommand{\entry}[4]{\vspace{2pt}\begin{tabularx}{\textwidth}{X r}\textbf{#1} & #2\\ #3 & #4\end{tabularx}}
-\newcommand{\project}[2]{\vspace{2pt}\begin{tabularx}{\textwidth}{X r}\textbf{#1} & #2\end{tabularx}}
-\newcommand{\lnk}[1]{{\small #1}}
-\newcommand{\tech}[1]{{\small\textit{#1}}}
+\usepackage{fontspec}
+\setmainfont{XCharter}[Extension=.otf,UprightFont=*-Roman,BoldFont=*-Bold,ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic]
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.0in}
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\titleformat{\section}{\vspace{-4pt}\scshape\raggedright\large\color{accent}}{}{0em}{}[\color{accent}\titlerule \vspace{-5pt}]
+\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-2pt}}}}
+\newcommand{\resumeSubheading}[4]{\vspace{-2pt}\item
+  \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & #2 \\
+    \textit{\small#3} & \textit{\small #4} \\
+  \end{tabular*}\vspace{-7pt}}
+\newcommand{\resumeProjectHeading}[2]{\item
+  \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+    \small#1 & #2 \\
+  \end{tabular*}\vspace{-7pt}}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 \begin{document}
 \begin{center}
-{\LARGE\scshape ${esc(p.hero.name)}}\\[3pt]
-${esc(p.resume.phone)} \textbar{} \href{mailto:${p.email}}{${esc(p.email)}} \textbar{} \href{${p.links.linkedin}}{LinkedIn} \textbar{} \href{${p.links.github}}{GitHub} \textbar{} \href{${site}}{riad.cc}
+  \textbf{\Huge \scshape \textcolor{accent}{${esc(p.hero.name)}}} \\ \vspace{1pt}
+  \small \href{${phoneHref}}{\underline{${esc(p.resume.phone)}}} $|$
+  \href{mailto:${p.email}}{\underline{${esc(p.email)}}} $|$
+  \href{${p.links.linkedin}}{\underline{LinkedIn}} $|$
+  \href{${p.links.github}}{\underline{GitHub}} $|$
+  \href{${site}}{\underline{riad.cc}}
 \end{center}
 \section{Experience}
+\resumeSubHeadingListStart
 ${experience}
+\resumeSubHeadingListEnd
 \section{Education}
+\resumeSubHeadingListStart
 ${education}
+\resumeSubHeadingListEnd
 \section{Projects}
+\resumeSubHeadingListStart
 ${projects}
+\resumeSubHeadingListEnd
 \section{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}]
+\small{\item{
 ${skills}
+}}
+\end{itemize}
 \end{document}
 `;
 
