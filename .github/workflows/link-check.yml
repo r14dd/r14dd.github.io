@@ -1,0 +1,38 @@
+name: Link check
+
+# Runs against the live site, not a build. There is no `tectonic`, no
+# `npm ci`, nothing to install — the script has zero dependencies — and a
+# local `astro build` would only prove the HTML generates correctly. It says
+# nothing about whether a link on it still resolves, and the deployed site is
+# what a reader actually clicks.
+#
+# A failed scheduled run emails the repo owner. That email is the entire
+# point.
+on:
+  schedule:
+    # Monday 08:00 UTC. GitHub disables scheduled workflows after 60 days
+    # with no repository activity — if the checks ever go quiet, that is why,
+    # and any push re-enables them.
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+# Never let a crawl pile up behind a slow one.
+concurrency:
+  group: link-check
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # No `npm ci` — the script has no dependencies.
+      - run: node scripts/check-links.mjs
