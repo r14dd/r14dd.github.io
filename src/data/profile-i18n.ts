@@ -129,6 +129,14 @@ type Labels = {
     switchToDarkMode: string;
     footerRights: string;
     footerColophon: string;
+    // /resume: the toolbar above the sheet.
+    resumePrint: string;
+    resumePdf: string;
+    resumeBuiltFrom: string;
+    resumeBack: string;
+    resumeFull: string;
+    resumeOnePage: string;
+    resumePageEnd: string;
     carouselRole: string;
     slideRole: string;
   };
@@ -265,6 +273,13 @@ export const profiles: Record<string, I18nProfile> = {
         switchToDarkMode: 'Switch to dark mode',
         footerRights: 'All rights reserved.',
         footerColophon: 'Colophon',
+        resumePrint: 'Print',
+        resumePdf: 'Download PDF',
+        resumeBuiltFrom: 'built from',
+        resumeBack: 'riad.cc',
+        resumeFull: 'Everything',
+        resumeOnePage: 'One page',
+        resumePageEnd: 'the printed page ends here',
         carouselRole: 'carousel',
         slideRole: 'slide',
       },
@@ -277,6 +292,7 @@ export const profiles: Record<string, I18nProfile> = {
   },
   ru: {
     ...profile,
+    links: { ...profile.links, resume: '/ru/resume/' },
     hero: {
       ...profile.hero,
       name: 'Риад Мухтаров',
@@ -641,6 +657,13 @@ export const profiles: Record<string, I18nProfile> = {
         switchToDarkMode: 'Включить тёмную тему',
         footerRights: 'Все права защищены.',
         footerColophon: 'Колофон',
+        resumePrint: 'Печать',
+        resumePdf: 'Скачать PDF',
+        resumeBuiltFrom: 'собрано из',
+        resumeBack: 'riad.cc',
+        resumeFull: 'Всё',
+        resumeOnePage: 'Одна страница',
+        resumePageEnd: 'здесь заканчивается печатная страница',
         carouselRole: 'карусель',
         slideRole: 'слайд',
       },
@@ -655,6 +678,7 @@ export const profiles: Record<string, I18nProfile> = {
   },
   az: {
     ...profile,
+    links: { ...profile.links, resume: '/az/resume/' },
     hero: {
       ...profile.hero,
       name: 'Riad Muxtarov',
@@ -1019,6 +1043,13 @@ export const profiles: Record<string, I18nProfile> = {
         switchToDarkMode: 'Qaranlıq temaya keç',
         footerRights: 'Bütün hüquqlar qorunur.',
         footerColophon: 'Kolofon',
+        resumePrint: 'Çap et',
+        resumePdf: 'PDF yüklə',
+        resumeBuiltFrom: 'mənbə',
+        resumeBack: 'riad.cc',
+        resumeFull: 'Hamısı',
+        resumeOnePage: 'Bir səhifə',
+        resumePageEnd: 'çap səhifəsi burada bitir',
         carouselRole: 'karusel',
         slideRole: 'slayd',
       },

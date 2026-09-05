@@ -1,0 +1,560 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { profiles } from '../../data/profile-i18n';
+import { getBuildInfo } from '../../lib/buildinfo';
+
+// The résumé as a sheet of paper, in every language the site speaks. The same
+// cut rules as scripts/build-resume.mjs decide what fits on the sheet (four
+// roles, three bullets each; three projects, two bullets each), so this page
+// and the PDF are the same document. Print it (⌘P) and the desk around the
+// sheet disappears; what comes out is the sheet, one page, in your language.
+export function getStaticPaths() {
+  return Object.keys(profiles).map((lang) => ({
+    params: { lang: lang === 'en' ? undefined : lang },
+    props: { lang },
+  }));
+}
+
+const { lang } = Astro.props;
+const p = profiles[lang];
+const L = p.labels;
+const build = getBuildInfo(1);
+const builtOn = build.builtAt.slice(0, 10);
+const commitUrl = build.head
+  ? `https://github.com/r14dd/r14dd.github.io/commit/${build.head.hash}`
+  : '';
+
+const LANGS = ['en', 'ru', 'az'];
+const resumePath = (l: string) => (l === 'en' ? '/resume/' : `/${l}/resume/`);
+const homePath = lang === 'en' ? '/' : `/${lang}/`;
+
+// Everything is rendered; what the one-page cut drops is flagged `cut` and
+// hidden until the reader asks for the whole story (?full). Print always cuts.
+const roles = p.experience.map((e, i) => ({
+  ...e,
+  cut: i >= 4,
+  bullets: e.bullets.map((text, j) => ({ text, cut: j >= 3 })),
+}));
+const byId = new Map(p.projects.map((pr) => [pr.id, pr]));
+for (const id of p.resume.projects) {
+  if (!byId.has(id)) throw new Error(`resume: unknown project "${id}"`);
+}
+const rest = p.projects.filter((pr) => !p.resume.projects.includes(pr.id));
+const projects = [...p.resume.projects.map((id) => byId.get(id)!), ...rest].map((pr, i) => {
+  const links = Object.entries(pr.links ?? {})
+    .filter(([k]) => k !== 'demo')
+    .map(([k, url]) => ({
+      url,
+      label: k === 'crates' ? 'crates.io' : k === 'github' ? 'GitHub' : 'docs.rs',
+    }));
+  return {
+    ...pr,
+    links,
+    cut: i >= p.resume.projects.length,
+    bullets: pr.bullets.map((text, j) => ({ text, cut: j >= 2 })),
+  };
+});
+const [eduDates, eduPlace] = p.education.meta.split(' · ');
+
+const metaTitle = `${p.hero.name} — ${L.links.resume}`;
+const canonical = `https://riad.cc${resumePath(lang)}`;
+---
+
+<BaseLayout
+  metaTitle={metaTitle}
+  metaDescription={L.meta.description}
+  lang={lang}
+  localized={false}
+>
+  <main class="desk" id="main-content">
+    <nav class="desk-bar" aria-label={L.chrome.controls}>
+      <a class="desk-back" href={homePath}>← {L.chrome.resumeBack}</a>
+      <div class="desk-langs" aria-label={L.chrome.selectLanguage}>
+        {
+          LANGS.map((l) => (
+            <a href={resumePath(l)} aria-current={l === lang ? 'page' : undefined}>
+              {l}
+            </a>
+          ))
+        }
+      </div>
+      <div class="desk-actions">
+        <button
+          type="button"
+          id="toggle-full"
+          class="desk-action"
+          aria-pressed="false"
+          data-full={L.chrome.resumeFull}
+          data-one={L.chrome.resumeOnePage}>{L.chrome.resumeFull}</button
+        >
+        <button type="button" id="print-resume" class="desk-action">
+          {L.chrome.resumePrint}<kbd>⌘P</kbd>
+        </button>
+        <a class="desk-action" href="/resume.pdf" download>{L.chrome.resumePdf}</a>
+      </div>
+    </nav>
+
+    <article class="sheet" lang={lang} data-page-end={L.chrome.resumePageEnd}>
+      <header class="sheet-head">
+        <h1>{p.hero.name}</h1>
+        <p class="sheet-contact">
+          <a href={`tel:${p.resume.phone.replace(/[^+\d]/g, '')}`}>{p.resume.phone}</a>
+          <a href={`mailto:${p.email}`}>{p.email}</a>
+          <a href={p.links.linkedin}>LinkedIn</a>
+          <a href={p.links.github}>GitHub</a>
+          <a href={canonical}>riad.cc</a>
+        </p>
+      </header>
+
+      <section class="sheet-section">
+        <h2>{L.headings.experience}</h2>
+        {
+          roles.map((e) => (
+            <div class="entry" data-cut={e.cut || undefined}>
+              <div class="entry-row">
+                <strong>{e.role}</strong>
+                <span class="entry-when">{e.period}</span>
+              </div>
+              <div class="entry-row entry-sub">
+                <em>{e.org}</em>
+                <em>{e.location}</em>
+              </div>
+              <ul>
+                {e.bullets.map((b) => (
+                  <li data-cut={b.cut || undefined}>{b.text}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="sheet-section">
+        <h2>{L.headings.education}</h2>
+        <div class="entry">
+          <div class="entry-row">
+            <strong>{p.education.title}</strong>
+            <span class="entry-when">{eduDates}</span>
+          </div>
+          <div class="entry-row entry-sub">
+            <em>{p.education.bullets.join(' ')}</em>
+            <em>{eduPlace}</em>
+          </div>
+        </div>
+      </section>
+
+      <section class="sheet-section">
+        <h2>{L.headings.projects}</h2>
+        {
+          projects.map((pr) => (
+            <div class="entry" data-cut={pr.cut || undefined}>
+              <div class="entry-row">
+                <span class="entry-project">
+                  <strong>{pr.name}</strong>
+                  {pr.links.map((l) => (
+                    <a href={l.url}>{l.label}</a>
+                  ))}
+                  <span class="entry-tech">{pr.tech.join(', ')}</span>
+                </span>
+                <span class="entry-when">{pr.date}</span>
+              </div>
+              <ul>
+                {pr.bullets.map((b) => (
+                  <li data-cut={b.cut || undefined}>{b.text}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="sheet-section">
+        <h2>{L.headings.skills}</h2>
+        <dl class="sheet-skills">
+          {
+            p.skills.map((s) => (
+              <div>
+                <dt>{L.skillCategories[s.category] ?? s.category}</dt>
+                <dd>{s.groups.flatMap((g) => g.items).join(', ')}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      <footer class="sheet-stamp">
+        {L.chrome.resumeBuiltFrom}{' '}
+        <a href={homePath}>riad.cc</a>
+        {
+          build.head && (
+            <>
+              <span aria-hidden="true">·</span>
+              <a href={commitUrl} title={build.head.subject}>
+                {build.head.short}
+              </a>
+            </>
+          )
+        }
+        <span aria-hidden="true">·</span>
+        <time datetime={build.builtAt}>{builtOn}</time>
+      </footer>
+    </article>
+  </main>
+</BaseLayout>
+
+<script>
+  document.getElementById('print-resume')?.addEventListener('click', () => window.print());
+
+  // ?full shows every role, bullet and project on the same sheet. The URL
+  // carries the state so the long version can be linked to.
+  const sheet = document.querySelector('.sheet');
+  const toggle = document.getElementById('toggle-full');
+  if (sheet && toggle) {
+    let full = new URLSearchParams(location.search).has('full');
+    const apply = () => {
+      sheet.classList.toggle('full', full);
+      toggle.textContent = full ? toggle.dataset.one! : toggle.dataset.full!;
+      toggle.setAttribute('aria-pressed', String(full));
+    };
+    apply();
+    toggle.addEventListener('click', () => {
+      full = !full;
+      apply();
+      const url = new URL(location.href);
+      url.search = full ? '?full' : '';
+      history.replaceState(null, '', url);
+    });
+  }
+</script>
+
+<style>
+  /* The desk: dark, quiet, and only there to hold the sheet. */
+  .desk {
+    min-height: 100vh;
+    padding: 2.5rem 1rem 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .desk-bar {
+    width: min(8.5in, 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .desk-bar a,
+  .desk-action {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .desk-bar a:hover,
+  .desk-action:hover {
+    color: var(--text);
+  }
+  .desk-langs {
+    display: flex;
+    gap: 0.9rem;
+    text-transform: uppercase;
+  }
+  .desk-langs a[aria-current] {
+    color: var(--accent);
+  }
+  .desk-actions {
+    display: flex;
+    gap: 1.1rem;
+    align-items: center;
+  }
+  .desk-action {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+  .desk-action kbd {
+    font: inherit;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+  }
+
+  /* The sheet: US letter, paper white regardless of theme, the site's gold as
+     ink accent. Fixed physical units so screen and print are the same object. */
+  .sheet {
+    --paper: #fbfaf6;
+    --ink: #141414;
+    --ink-soft: #3a3a3a;
+    --gold: #9a7a35;
+    position: relative;
+    width: min(8.5in, 100%);
+    min-height: 11in;
+    box-sizing: border-box;
+    padding: 0.35in 0.5in;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Manrope', system-ui, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.3;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.35) inset,
+      0 30px 60px -20px var(--shadow-strong),
+      0 0 0 1px rgba(0, 0, 0, 0.35);
+    animation: sheet-in 0.7s var(--ease-spring) both;
+  }
+  @keyframes sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sheet {
+      animation: none;
+    }
+  }
+  /* Where the printed page ends. The sheet is laid out with the print
+     metrics, so this sits exactly 11in down; overflow clips it while the
+     content fits, and it only surfaces once something would spill. */
+  .sheet::after {
+    content: attr(data-page-end);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 11in;
+    padding: 2px 0.5in 0 0;
+    border-top: 1px dashed rgba(154, 122, 53, 0.55);
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 6.5pt;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    pointer-events: none;
+  }
+  .sheet:not(.full) [data-cut] {
+    display: none;
+  }
+  .sheet a {
+    color: var(--gold);
+    text-decoration: none;
+    background-image: none;
+  }
+  /* base.css colors strong/em/li for the dark page; the sheet is paper. */
+  .sheet strong {
+    color: var(--ink);
+  }
+  .sheet em {
+    color: var(--ink-soft);
+  }
+  .sheet li {
+    margin: 0;
+    color: var(--ink);
+  }
+  .sheet-head {
+    text-align: center;
+    margin-bottom: 0.25in;
+  }
+  .sheet-head h1 {
+    margin: 0;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 27pt;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    font-variant: small-caps;
+    color: var(--gold);
+  }
+  .sheet-contact {
+    margin: 0.5em 0 0;
+    font-size: 8.5pt;
+    color: var(--ink-soft);
+  }
+  .sheet-contact a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: rgba(154, 122, 53, 0.5);
+  }
+  .sheet-contact a + a::before {
+    content: '|';
+    margin: 0 0.5em;
+    color: var(--ink-soft);
+  }
+  .sheet-section + .sheet-section {
+    margin-top: 0.09in;
+  }
+  .sheet-section h2 {
+    margin: 0 0 0.06in;
+    padding-bottom: 1px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: 13.5pt;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    font-variant: small-caps;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+  }
+  .entry + .entry {
+    margin-top: 0.07in;
+  }
+  .entry-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .entry-row strong {
+    font-weight: 700;
+  }
+  .entry-sub {
+    font-size: 9pt;
+    color: var(--ink-soft);
+  }
+  .entry-when {
+    flex: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5pt;
+    color: var(--ink-soft);
+  }
+  .entry-project a {
+    font-style: italic;
+    margin-left: 0.4em;
+  }
+  .entry-tech {
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+  .entry-tech::before {
+    content: '|';
+    font-style: normal;
+    margin: 0 0.45em;
+  }
+  .sheet ul {
+    margin: 0.02in 0 0;
+    padding-left: 1.1em;
+    list-style: none;
+  }
+  .sheet li {
+    position: relative;
+    font-size: 9pt;
+  }
+  .sheet li::before {
+    content: '•';
+    position: absolute;
+    left: -0.85em;
+    color: var(--ink-soft);
+  }
+  .sheet-skills {
+    margin: 0;
+  }
+  .sheet-skills div {
+    font-size: 9pt;
+  }
+  /* Russian runs about a tenth longer than English; keep it on one sheet. */
+  .sheet:lang(ru) li,
+  .sheet:lang(ru) .sheet-skills div {
+    font-size: 8.7pt;
+  }
+  .sheet-skills dt {
+    display: inline;
+    font-weight: 700;
+  }
+  .sheet-skills dt::after {
+    content: ': ';
+  }
+  .sheet-skills dd {
+    display: inline;
+    margin: 0;
+  }
+  .sheet-stamp {
+    margin-top: 0.12in;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7pt;
+    letter-spacing: 0.06em;
+    color: #8a8a8a;
+  }
+  .sheet-stamp a {
+    color: inherit;
+  }
+  .sheet-stamp a:hover {
+    color: var(--gold);
+  }
+  .sheet-stamp span {
+    margin: 0 0.3em;
+  }
+
+  @media (max-width: 640px) {
+    .desk {
+      padding: 1.25rem 0.75rem 3rem;
+    }
+    .desk-bar {
+      flex-wrap: wrap;
+    }
+    .sheet {
+      min-height: 0;
+      padding: 0.4in 0.35in;
+    }
+    .sheet::after {
+      display: none;
+    }
+    .entry-row {
+      flex-wrap: wrap;
+      gap: 0 0.6rem;
+    }
+  }
+
+  /* ⌘P: the desk goes away, the sheet becomes the page. Sizes are already in
+     points and inches, so the printed sheet matches the one on screen. */
+  @media print {
+    /* Margins live on the sheet, not on @page: browsers that ignore @page
+       or remember a "Margins: none" choice in the dialog would otherwise
+       print the text flush to the paper edge. */
+    @page {
+      size: letter;
+      margin: 0;
+    }
+    :global(html),
+    :global(body) {
+      background: #fff !important;
+    }
+    :global(.skip-link),
+    :global(body > footer) {
+      display: none !important;
+    }
+    [data-cut],
+    .sheet::after {
+      display: none !important;
+    }
+    .desk {
+      min-height: 0;
+      padding: 0;
+      display: block;
+    }
+    .desk-bar {
+      display: none;
+    }
+    .sheet {
+      width: auto;
+      min-height: 0;
+      overflow: visible;
+      background: #fff;
+      box-shadow: none;
+      animation: none;
+    }
+    .entry,
+    .sheet-section h2 {
+      break-inside: avoid;
+    }
+  }
+</style>

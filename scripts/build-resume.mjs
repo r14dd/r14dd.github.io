@@ -77,6 +77,19 @@ const [eduDates, eduPlace] = p.education.meta.split(' · ');
 const education = `\\resumeSubheading{${esc(p.education.title)}}{${esc(eduDates)}}{${esc(p.education.bullets.join(' '))}}{${esc(eduPlace)}}`;
 
 const site = 'https://riad.cc';
+const sha = (() => {
+  try {
+    return execFileSync('git', ['rev-parse', '--short', 'HEAD'], {
+      cwd: root,
+      encoding: 'utf8',
+    }).trim();
+  } catch {
+    return '';
+  }
+})();
+const stamp = ['riad.cc/resume', sha, new Date().toISOString().slice(0, 10)]
+  .filter(Boolean)
+  .join(' · ');
 const phoneHref = `tel:${p.resume.phone.replace(/[^+\d]/g, '')}`;
 
 // The preamble is the one from resume.tex (Jake Gutierrez's template, MIT),
@@ -96,7 +109,7 @@ const tex = String.raw`\documentclass[letterpaper,11pt]{article}
 \setmainfont{XCharter}[Extension=.otf,UprightFont=*-Roman,BoldFont=*-Bold,ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic]
 \pagestyle{fancy}
 \fancyhf{}
-\fancyfoot{}
+\fancyfoot[C]{\raisebox{-14pt}{\tiny\color{gray}\href{${site}/resume/}{${esc(stamp)}}}}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 \addtolength{\oddsidemargin}{-0.5in}
