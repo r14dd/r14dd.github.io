@@ -260,7 +260,7 @@ export const initTerminal = () => {
     const p = window._termProfile || {};
     const email = p.email || 'riad@riad.cc';
     const github = p.links?.github || 'https://github.com/r14dd';
-    const resume = p.links?.resume || '/resume.pdf';
+    const resume = p.links?.resume || '/resume/';
     const t = p.labels?.terminal || {};
     const projects = p.projects || [];
     const skills = p.skills || [];
@@ -268,6 +268,38 @@ export const initTerminal = () => {
     const tx = (s) => '<span class="terminal-text">' + esc(s) + '</span>';
     const cmt = (s) => '<span class="terminal-comment">' + esc(s) + '</span>';
     const skillItems = (s) => (s.groups ? s.groups.flatMap((g) => g.items || []) : s.items || []);
+    // The one-page cut: same rules as scripts/build-resume.mjs and
+    // resume.astro — four roles (three bullets each), the resume.projects
+    // ids in order (two bullets each), education title+meta, every skill.
+    const resumeText = () => {
+      const education = p.education || {};
+      const resumeMeta = p.resume || {};
+      const byId = new Map(projects.map((pr) => [pr.id, pr]));
+      const out = [p.hero?.name || 'Riad Mukhtarov'];
+      out.push([resumeMeta.phone, email].filter(Boolean).join(' · '));
+      out.push('');
+      out.push('EXPERIENCE');
+      experience.slice(0, 4).forEach((e) => {
+        out.push(e.role + ' — ' + e.org + ', ' + e.period);
+        (e.bullets || []).slice(0, 3).forEach((b) => out.push('  • ' + b));
+      });
+      out.push('');
+      out.push('EDUCATION');
+      if (education.title) out.push(education.title);
+      if (education.meta) out.push(education.meta);
+      out.push('');
+      out.push('PROJECTS');
+      (resumeMeta.projects || []).forEach((id) => {
+        const pr = byId.get(id);
+        if (!pr) return;
+        out.push(pr.name);
+        (pr.bullets || []).slice(0, 2).forEach((b) => out.push('  • ' + b));
+      });
+      out.push('');
+      out.push('SKILLS');
+      skills.forEach((s) => out.push(s.category + ': ' + skillItems(s).join(', ')));
+      return out;
+    };
     const philo = () => ({
       lines: [
         'The through-line:',
@@ -311,7 +343,7 @@ export const initTerminal = () => {
           tx('philosophy') + cmt('the through-line'),
           tx('reading · quote') + cmt('Remarque & Cole'),
           tx('deps') + cmt('what this runs on'),
-          tx('contact · resume · github') + cmt('reach me'),
+          tx('contact · resume · github · open') + cmt('reach me'),
           tx('fortune · neofetch') + cmt('for fun'),
           tx('clear') + cmt('clear the screen'),
         ],
@@ -338,7 +370,7 @@ export const initTerminal = () => {
       },
       ls: (args) => {
         const w = (args[0] || '').replace(/^\//, '').toLowerCase();
-        if (!w) return { lines: ['projects/   skills/   experience/   about'] };
+        if (!w) return { lines: ['projects/   skills/   experience/   about   resume'] };
         if (w.startsWith('project')) return { lines: projects.map((x) => x.name) };
         if (w.startsWith('skill')) return { lines: skills.map((s) => s.category) };
         if (w.startsWith('exp')) return { lines: experience.map((e) => e.role + ' — ' + e.org) };
@@ -347,8 +379,11 @@ export const initTerminal = () => {
       },
       cat: (args) => {
         const q = args.join(' ').toLowerCase().trim();
-        if (!q) return { lines: ['usage: cat <project|about>'], cls: 'muted' };
+        if (!q) return { lines: ['usage: cat <project|about|resume>'], cls: 'muted' };
         if (q === 'about') return { lines: [('Riad ' + (p.about || '')).trim()] };
+        if (q === 'resume') return { lines: resumeText() };
+        if (q === 'resume.pdf')
+          return { lines: ['resume.pdf is binary. try: open resume.pdf'], cls: 'muted' };
         const x = projects.find(
           (pr) =>
             pr.name.toLowerCase().includes(q) ||
@@ -459,7 +494,7 @@ export const initTerminal = () => {
             '     ' + (t.role2 || 'Head of IT @ EYP AZ'),
             '',
             'SEE ALSO',
-            '     ls(1), cat(1), grep(1), philosophy(1), perf(1), patent(1)',
+            '     ls(1), cat(1), grep(1), open(1), philosophy(1), perf(1), patent(1)',
           ],
         };
       },
@@ -572,13 +607,33 @@ export const initTerminal = () => {
       }),
       vim: () => ({ lines: ["Entering vim… kidding. (:q!) You're free."], cls: 'muted' }),
       contact: () => ({ html: tx(email) }),
-      resume: () => {
-        window.open(resume, '_blank');
-        return { html: tx('Opening resume...') };
+      resume: (args) => {
+        const sub = (args[0] || '').toLowerCase();
+        if (sub === '--pdf' || sub === 'pdf') {
+          window.open('/resume.pdf', '_blank');
+          return { html: tx('Opening /resume.pdf…') };
+        }
+        location.href = resume;
+        return { html: tx('Opening ' + resume + '…') };
       },
       github: () => {
         window.open(github, '_blank');
         return { html: tx('Opening github.com/r14dd...') };
+      },
+      open: (args) => {
+        const w = (args[0] || '').toLowerCase();
+        if (w === 'resume') {
+          location.href = resume;
+          return { html: tx('Opening ' + resume + '…') };
+        }
+        if (w === 'resume.pdf') {
+          window.open('/resume.pdf', '_blank');
+          return { html: tx('Opening /resume.pdf…') };
+        }
+        return {
+          lines: ['open: ' + (args[0] || '') + ': not found. try: open resume'],
+          cls: 'err',
+        };
       },
       perf: async () => {
         const v = readVitals();
