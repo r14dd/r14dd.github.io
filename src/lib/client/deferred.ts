@@ -12,6 +12,7 @@ import { initShortcuts } from './shortcuts';
 import { initProjectModal } from './project-modal';
 import { initGestures } from './gestures';
 import { initAmbient } from './ambient';
+import { initTour } from './tour';
 
 let done = false;
 
@@ -24,5 +25,6 @@ export const initDeferred = () => {
   initProjectModal();
   initGestures();
   initAmbient();
+  initTour();
   document.documentElement.dataset.jsReady = '1';
 };

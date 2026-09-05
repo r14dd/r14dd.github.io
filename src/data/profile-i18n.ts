@@ -140,6 +140,19 @@ type Labels = {
     carouselRole: string;
     slideRole: string;
   };
+  // The first-visit tour. Steps are keyed by the section they light up; the
+  // route through them depends on who the visitor says they are.
+  tour: {
+    cta: string;
+    title: string;
+    question: string;
+    roles: { hiring: string; engineer: string; curious: string };
+    skip: string;
+    back: string;
+    next: string;
+    done: string;
+    steps: Record<string, { title: string; text: string; link?: string; linkLabel?: string }>;
+  };
 };
 
 type EducationInfo = {
@@ -282,6 +295,58 @@ export const profiles: Record<string, I18nProfile> = {
         resumePageEnd: 'the printed page ends here',
         carouselRole: 'carousel',
         slideRole: 'slide',
+      },
+      tour: {
+        cta: 'New here? Take the tour',
+        title: 'A short tour',
+        question: 'What brings you here?',
+        roles: { hiring: "I'm hiring", engineer: "I'm an engineer", curious: 'Just looking' },
+        skip: 'Skip',
+        back: 'Back',
+        next: 'Next',
+        done: 'Done',
+        steps: {
+          terminal: {
+            title: 'A terminal, for real',
+            text: 'Type help. It runs commands and pipes, and a little Rust compiled to WebAssembly.',
+          },
+          experience: {
+            title: 'Where I have worked',
+            text: 'Most recent first. The day job is an LLM agent platform for a bank, and the sandbox it runs in.',
+          },
+          projects: {
+            title: 'Things I built',
+            text: 'Open a card for the details. The Raft one runs a real consensus cluster in your browser.',
+          },
+          skills: {
+            title: 'What I work with',
+            text: 'Grouped by layer. Every logo is a tool I have shipped with, not a word cloud.',
+          },
+          teaching: {
+            title: 'Teaching',
+            text: 'Two years as head teaching assistant for data structures at Buffalo.',
+          },
+          recommendations: {
+            title: 'In other words',
+            text: 'From professors and people I have worked with.',
+          },
+          connect: {
+            title: 'Say hello',
+            text: 'Email, GitHub, LinkedIn. Or throw a paper airplane; it lands in my inbox.',
+          },
+          resume: {
+            title: 'The one-page version',
+            text: 'The resume is a page on this site. It prints to one sheet, in three languages.',
+            link: '/resume/',
+            linkLabel: 'Open the resume',
+          },
+          more: {
+            title: 'There is more',
+            text: 'Writing, a colophon on how this site is built, and a lab of experiments. Press ? for the shortcuts.',
+            link: '/writing/',
+            linkLabel: 'Read the writing',
+          },
+        },
       },
     },
     education: {
@@ -666,6 +731,58 @@ export const profiles: Record<string, I18nProfile> = {
         resumePageEnd: 'здесь заканчивается печатная страница',
         carouselRole: 'карусель',
         slideRole: 'слайд',
+      },
+      tour: {
+        cta: 'Впервые здесь? Небольшая экскурсия',
+        title: 'Короткая экскурсия',
+        question: 'Что вас привело?',
+        roles: { hiring: 'Я нанимаю', engineer: 'Я инженер', curious: 'Просто смотрю' },
+        skip: 'Пропустить',
+        back: 'Назад',
+        next: 'Дальше',
+        done: 'Готово',
+        steps: {
+          terminal: {
+            title: 'Настоящий терминал',
+            text: 'Наберите help. Он выполняет команды и конвейеры, а немного Rust скомпилировано в WebAssembly.',
+          },
+          experience: {
+            title: 'Где я работал',
+            text: 'Сначала свежее. Основная работа — платформа LLM-агентов для банка и песочница, в которой они запускаются.',
+          },
+          projects: {
+            title: 'Что я построил',
+            text: 'Откройте карточку, чтобы увидеть детали. Проект Raft запускает настоящий кластер консенсуса прямо в браузере.',
+          },
+          skills: {
+            title: 'С чем я работаю',
+            text: 'Сгруппировано по слоям. Каждый логотип — инструмент, с которым я реально выпускал продукт.',
+          },
+          teaching: {
+            title: 'Преподавание',
+            text: 'Два года старшим ассистентом преподавателя по структурам данных в Буффало.',
+          },
+          recommendations: {
+            title: 'Чужими словами',
+            text: 'От профессоров и людей, с которыми я работал.',
+          },
+          connect: {
+            title: 'Напишите мне',
+            text: 'Эл. почта, GitHub, LinkedIn. Или запустите бумажный самолётик — он прилетит ко мне во входящие.',
+          },
+          resume: {
+            title: 'Версия на одну страницу',
+            text: 'Резюме — это страница на этом сайте. Печатается на одном листе, на трёх языках.',
+            link: '/ru/resume/',
+            linkLabel: 'Открыть резюме',
+          },
+          more: {
+            title: 'Это не всё',
+            text: 'Заметки, колофон о том, как устроен сайт, и лаборатория экспериментов. Нажмите ?, чтобы увидеть горячие клавиши.',
+            link: '/writing/',
+            linkLabel: 'Читать заметки',
+          },
+        },
       },
     },
     education: {
@@ -1052,6 +1169,58 @@ export const profiles: Record<string, I18nProfile> = {
         resumePageEnd: 'çap səhifəsi burada bitir',
         carouselRole: 'karusel',
         slideRole: 'slayd',
+      },
+      tour: {
+        cta: 'İlk dəfəsiniz? Qısa tur',
+        title: 'Qısa tur',
+        question: 'Sizi bura nə gətirib?',
+        roles: { hiring: 'İşə götürürəm', engineer: 'Mühəndisəm', curious: 'Sadəcə baxıram' },
+        skip: 'Keç',
+        back: 'Geri',
+        next: 'İrəli',
+        done: 'Hazır',
+        steps: {
+          terminal: {
+            title: 'Əsl terminal',
+            text: 'help yazın. Əmrləri və boru kəmərlərini icra edir, bir az Rust isə WebAssembly-yə kompilyasiya olunub.',
+          },
+          experience: {
+            title: 'Harada işləmişəm',
+            text: 'Ən yenisi əvvəldə. Əsas iş — bank üçün LLM agent platforması və onun işlədiyi sandbox.',
+          },
+          projects: {
+            title: 'Qurduqlarım',
+            text: 'Təfərrüat üçün kartı açın. Raft layihəsi brauzerinizdə əsl konsensus klasteri işlədir.',
+          },
+          skills: {
+            title: 'Nə ilə işləyirəm',
+            text: 'Qatlara görə qruplaşdırılıb. Hər loqo real məhsul çıxardığım alətdir.',
+          },
+          teaching: {
+            title: 'Tədris',
+            text: 'Buffalo-da verilənlər strukturları üzrə iki il baş müəllim köməkçisi.',
+          },
+          recommendations: {
+            title: 'Başqalarının sözü ilə',
+            text: 'Professorlardan və birgə işlədiyim insanlardan.',
+          },
+          connect: {
+            title: 'Salam deyin',
+            text: 'E-poçt, GitHub, LinkedIn. Ya da kağız təyyarə atın — birbaşa mənə çatır.',
+          },
+          resume: {
+            title: 'Bir səhifəlik versiya',
+            text: 'CV bu saytda bir səhifədir. Üç dildə bir vərəqə çap olunur.',
+            link: '/az/resume/',
+            linkLabel: 'CV-ni aç',
+          },
+          more: {
+            title: 'Davamı var',
+            text: 'Yazılar, saytın necə qurulduğu haqqında kolofon və eksperimentlər laboratoriyası. Qısayollar üçün ? basın.',
+            link: '/writing/',
+            linkLabel: 'Yazıları oxu',
+          },
+        },
       },
     },
     education: {

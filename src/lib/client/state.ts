@@ -9,6 +9,7 @@ export const state: {
   projOpen: boolean;
   kbdOpen: boolean;
   findNavOpen: boolean;
+  tourOpen: boolean;
 } = {
   I18N: {},
   currentProfile: null,
@@ -16,4 +17,5 @@ export const state: {
   projOpen: false,
   kbdOpen: false,
   findNavOpen: false,
+  tourOpen: false,
 };

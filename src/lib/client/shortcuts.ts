@@ -23,7 +23,7 @@ export const initShortcuts = () => {
   let gTimer;
 
   document.addEventListener('keydown', (e) => {
-    if (state.cmdOpen || isTypingTarget(document.activeElement)) return;
+    if (state.cmdOpen || state.tourOpen || isTypingTarget(document.activeElement)) return;
     if (state.projOpen) {
       if (e.key === 'Escape') {
         e.preventDefault();

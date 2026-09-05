@@ -247,7 +247,8 @@ export const initCrackGlass = () => {
   // turned the burst into a text selection.
   document.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
-    if (state.cmdOpen || state.projOpen || state.kbdOpen || state.findNavOpen) return;
+    if (state.cmdOpen || state.projOpen || state.kbdOpen || state.findNavOpen || state.tourOpen)
+      return;
     if (isInteractive(e.target)) return;
 
     const now = performance.now();

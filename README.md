@@ -76,6 +76,11 @@ The probe still reports a Worker whose deployed script predates this repo as `ST
 means a deploy failed or something changed a Worker from outside this repo, rather than that
 somebody forgot.
 
+`npm run check:links` crawls the live site — every page, every href and src on it — and checks
+that each unique link still resolves. `.github/workflows/link-check.yml` runs it weekly against
+`riad.cc` itself rather than a local build, since a build only proves the HTML generates and says
+nothing about whether a link on it still points anywhere.
+
 ## Claims are tested
 
 `npm run build` runs `scripts/check-claims.mjs`, which re-derives every number this README and
@@ -90,7 +95,7 @@ longer uses.
 src/
   layouts/BaseLayout.astro     # Global layout, CSS, cursor, section reveals
   pages/[...lang]/index.astro  # Main page, prerendered per locale (/, /ru/, /az/)
-  lib/client/*.ts              # 30 hand-rolled feature modules, code-split
+  lib/client/*.ts              # 31 hand-rolled feature modules, code-split
   data/claims.ts               # Numbers the site states about itself
   pages/lab.astro              # Experimental sandbox page
   pages/404.astro              # Custom 404 page
