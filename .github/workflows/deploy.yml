@@ -37,11 +37,14 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm run check
+
+      # Needed before the build itself: prebuild renders the OG share cards
+      # with Playwright chromium, and the e2e suite below reuses the same
+      # browser against the built dist via `astro preview`.
+      - run: npx playwright install --with-deps chromium
       - run: npm run build
 
-      # The e2e suite runs against the built dist via `astro preview`, and it
-      # gates the artifact upload: a red test never reaches Pages.
-      - run: npx playwright install --with-deps chromium
+      # Gates the artifact upload: a red test never reaches Pages.
       - run: npm run test:e2e
 
       - name: Upload Playwright report on failure

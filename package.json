@@ -5,7 +5,7 @@
   "scripts": {
     "prepare": "git config core.hooksPath .githooks || exit 0",
     "dev": "astro dev",
-    "prebuild": "node scripts/build-resume.mjs",
+    "prebuild": "node scripts/build-resume.mjs && node scripts/build-og.mjs",
     "build": "astro build",
     "postbuild": "node scripts/check-claims.mjs",
     "preview": "astro preview",
@@ -15,6 +15,7 @@
     "astro": "astro",
     "check": "astro check",
     "check:workers": "node scripts/check-workers.mjs",
+    "check:links": "node scripts/check-links.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {
