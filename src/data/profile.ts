@@ -54,6 +54,12 @@ export type Profile = {
     groups: { label: string; tier?: string; items: string[] }[];
   }[];
   testimonials: Testimonial[];
+  /** Resume-only facts. Everything else in the PDF comes from the fields above. */
+  resume: {
+    phone: string;
+    /** Project ids to include, in order. The site shows all projects; the PDF fits one page. */
+    projects: string[];
+  };
 };
 
 export const profile: Profile = {
@@ -78,7 +84,12 @@ export const profile: Profile = {
       org: 'ABB - International Bank of Azerbaijan',
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
-      bullets: [],
+      bullets: [
+        'Building an LLM agent platform on LangGraph, LangChain and FastAPI with an OpenAI-compatible streaming API',
+        'Engineering a kernel-enforced agent sandbox: user namespaces, pivot_root, cgroup v2 and seccomp-BPF filtering',
+        'Adding per-user capacity gating, daily token budgets, Postgres-checkpointed threads and HMAC-signed downloads',
+        'Building a weekly AI briefing pipeline: crawl, LLM search, story clustering, slide deck and Gemini podcast',
+      ],
     },
     {
       role: 'Head of IT',
@@ -87,6 +98,8 @@ export const profile: Profile = {
       period: 'Feb 2026 – Present',
       bullets: [
         'Coordinating website renewal, internal platform improvements, and new technology solutions to support organizational operations',
+        'Leading the development team on the public website and member-facing tools',
+        'Owning the organization’s domains, hosting, email and access management',
       ],
     },
     {
@@ -285,18 +298,36 @@ export const profile: Profile = {
   skills: [
     {
       category: 'Programming Languages',
-      groups: [{ label: '', items: ['Rust', 'Python', 'Go', 'C'] }],
+      groups: [{ label: '', items: ['Rust', 'Python', 'TypeScript', 'Go', 'C'] }],
     },
     {
       category: 'Backend & Runtimes',
-      groups: [{ label: '', items: ['Axum', 'Actix-web', 'Tokio', 'ratatui', 'FastAPI', 'Flask'] }],
+      groups: [
+        {
+          label: '',
+          items: ['Axum', 'Actix-web', 'Tokio', 'ratatui', 'FastAPI', 'Flask', 'Node.js'],
+        },
+      ],
     },
     {
       category: 'AI, ML & Agentic Systems',
       groups: [
         {
           label: '',
-          items: ['LangGraph', 'LangChain', 'FAISS', 'Ollama', 'LangSmith', 'NVIDIA OpenShell'],
+          items: [
+            'LangGraph',
+            'LangChain',
+            'MCP',
+            'Deep Agents',
+            'Langfuse',
+            'OpenAI API',
+            'Anthropic API',
+            'Gemini',
+            'FAISS',
+            'Ollama',
+            'LangSmith',
+            'NVIDIA OpenShell',
+          ],
         },
       ],
     },
@@ -311,6 +342,8 @@ export const profile: Profile = {
             'GraphQL',
             'WebSockets',
             'WebRTC',
+            'Server-Sent Events',
+            'LDAP',
             'Apache Kafka',
             'RabbitMQ',
           ],
@@ -336,15 +369,25 @@ export const profile: Profile = {
             'GitHub Actions',
             'GitLab CI/CD',
             'Linux',
+            'Linux namespaces & cgroups',
+            'seccomp-BPF',
+            'OpenTelemetry',
           ],
         },
       ],
     },
     {
       category: 'Testing & Quality Assurance',
-      groups: [{ label: '', items: ['Pytest', 'rstest', 'Selenium', 'Postman'] }],
+      groups: [
+        { label: '', items: ['Pytest', 'rstest', 'Playwright', 'Jest', 'Selenium', 'Postman'] },
+      ],
     },
   ],
+  resume: {
+    phone: '+994 (50) 899-8676',
+    projects: ['patent', 'quorumrag', 'almostaykhan'],
+  },
+
   testimonials: [
     {
       name: 'Oliver Kennedy',

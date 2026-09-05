@@ -5,6 +5,7 @@
   "scripts": {
     "prepare": "git config core.hooksPath .githooks || exit 0",
     "dev": "astro dev",
+    "prebuild": "node scripts/build-resume.mjs",
     "build": "astro build",
     "postbuild": "node scripts/check-claims.mjs",
     "preview": "astro preview",

@@ -27,6 +27,12 @@ jobs:
         with:
           node-version: 22
 
+      # The resume PDF is rendered from the profile data on every build.
+      - name: Install tectonic
+        run: |
+          curl -fsSL https://drop-sh.fullyjustified.net | sh
+          sudo mv tectonic /usr/local/bin/
+
       - run: npm ci
       - run: npm run lint
       - run: npm run format:check

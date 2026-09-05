@@ -289,7 +289,12 @@ export const profiles: Record<string, I18nProfile> = {
         org: 'ABB - International Bank of Azerbaijan',
         location: 'Баку, Азербайджан',
         period: 'Апр 2026 – Настоящее время',
-        bullets: [],
+        bullets: [
+          'Разработка платформы LLM‑агентов на LangGraph, LangChain и FastAPI с OpenAI‑совместимым потоковым API',
+          'Проектирование песочницы для агентов на уровне ядра: user namespaces, pivot_root, cgroup v2 и seccomp‑BPF',
+          'Внедрение лимитов нагрузки на пользователя, дневные бюджеты токенов, чекпоинты диалогов в Postgres и HMAC‑ссылки',
+          'Разработка пайплайна еженедельного AI‑дайджеста: сбор, LLM‑поиск, кластеризация, слайды и подкаст на Gemini',
+        ],
       },
       {
         role: 'Руководитель IT',
@@ -298,6 +303,8 @@ export const profiles: Record<string, I18nProfile> = {
         period: 'Фев 2026 – Настоящее время',
         bullets: [
           'Координация обновления веб‑сайта, улучшения внутренних платформ и внедрения новых технологических решений',
+          'Руководство командой разработки публичного сайта и инструментов для участников',
+          'Ведение доменов, хостинга, почты и управления доступом организации',
         ],
       },
       {
@@ -660,7 +667,12 @@ export const profiles: Record<string, I18nProfile> = {
         org: 'ABB - International Bank of Azerbaijan',
         location: 'Bakı, Azərbaycan',
         period: 'Apr 2026 – indiyə kimi',
-        bullets: [],
+        bullets: [
+          'LangGraph, LangChain və FastAPI üzərində OpenAI‑uyğun axın API ilə LLM agent platformasının qurulması',
+          'Nüvə səviyyəsində agent sandbox‑unun layihələndirilməsi: user namespace‑lər, pivot_root, cgroup v2 və seccomp‑BPF',
+          'İstifadəçi başına yük limitləri, gündəlik token büdcələri, Postgres‑də dialoq çekpointləri və HMAC‑imzalı linklərin tətbiqi',
+          'Həftəlik AI icmalı pipeline‑ının qurulması: toplama, LLM axtarışı, xəbər qruplaşdırması, slaydlar və Gemini podkast',
+        ],
       },
       {
         role: 'İT Rəhbəri',
@@ -669,6 +681,8 @@ export const profiles: Record<string, I18nProfile> = {
         period: 'Fev 2026 – indiyə kimi',
         bullets: [
           'Veb‑saytın yenilənməsi, daxili platformların təkmilləşdirilməsi və təşkilatın fəaliyyətini dəstəkləyən yeni texnoloji həllərin tətbiqi',
+          'İctimai sayt və üzvlər üçün alətlər üzərində tərtibatçı komandasına rəhbərlik',
+          'Təşkilatın domenləri, hostinqi, poçtu və giriş idarəetməsinin aparılması',
         ],
       },
       {
