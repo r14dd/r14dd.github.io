@@ -109,11 +109,13 @@ function extractLinks(html, pageUrl) {
 
 /** One HEAD, a GET fallback if the server won't answer HEAD, no retries. */
 async function checkUrl(url) {
+  // crates.io (and other SPAs behind a CDN) answer 404 to any request that
+  // does not say it wants HTML, so a bare probe reads as a dead link.
   const opts = (method) => ({
     method,
     redirect: 'follow',
     signal: AbortSignal.timeout(TIMEOUT_MS),
-    headers: { 'User-Agent': USER_AGENT },
+    headers: { 'User-Agent': USER_AGENT, Accept: 'text/html,*/*;q=0.8' },
   });
 
   try {
