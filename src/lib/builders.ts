@@ -39,6 +39,10 @@ export const skillLogoMap: Record<string, string> = {
   'REST APIs': '/logos/si-swagger.svg',
   GraphQL: '/logos/si-graphql.svg',
   WebSockets: '/logos/si-socketdotio.svg',
+  WebSocket: '/logos/si-socketdotio.svg',
+  Tauri: '/logos/si-tauri.svg',
+  ESP32: '/logos/si-espressif.svg',
+  Xsolla: '/logos/xsolla.png',
   WebRTC: '/logos/si-webrtc.svg',
   gRPC: '/logos/grpc.svg',
   'Apache Kafka': '/logos/si-apachekafka.svg',
@@ -314,24 +318,19 @@ export const buildProjects = (data: I18nProfile): string => {
     const badges = (p.badges || [])
       .map(
         (b) =>
-          `<span class="badge-stat proj-badge-live" data-badge-api="${esc(b.api || '')}"><a class="feat-gh" href="${esc(b.link || '#')}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${esc(b.pillLabel)}</a> ${esc(b.platform)}</span>`,
+          `<span class="badge-stat proj-badge-live" data-badge-api="${esc(b.api || '')}"><a class="badge-link" href="${esc(b.link || '#')}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${esc(b.pillLabel)}</a> ${esc(b.platform)}</span>`,
       )
-      .join(' ');
-    const badgeBullet = badges ? `<li class="badge-bullet">${badges}</li>` : '';
-    // One project carries the section. The patent runs full width with its
-    // bullets open; every other card stays compact — impact first, the detail
-    // one click away (the modal has it too, this is just the cheaper path).
-    const isFeature = p.name.startsWith('patent');
+      .join(' · ');
+    const badgeStats = badges ? `<p class="proj-stats">${badges}</p>` : '';
+    const isFeature = false;
     const bulletItems = p.bullets.map((b) => `<li>${esc(b)}</li>`).join('');
     const detail = isFeature
-      ? bulletItems || badgeBullet
-        ? `<ul class="feat-bullets">${badgeBullet}${bulletItems}</ul>`
+      ? bulletItems
+        ? `<ul class="feat-bullets">${bulletItems}</ul>`
         : ''
-      : `${badgeBullet ? `<ul class="feat-bullets">${badgeBullet}</ul>` : ''}${
-          bulletItems
-            ? `<details class="feat-more"><summary>${esc(data.labels.projectDetails)}</summary><ul class="feat-bullets">${bulletItems}</ul></details>`
-            : ''
-        }`;
+      : bulletItems
+        ? `<details class="feat-more"><summary>${esc(data.labels.projectDetails)}</summary><ul class="feat-bullets">${bulletItems}</ul></details>`
+        : '';
     const gh = p.links?.github
       ? `<a class="feat-gh" href="${p.links.github}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>`
       : '';
@@ -357,6 +356,7 @@ export const buildProjects = (data: I18nProfile): string => {
           <div class="proj-card-text">
             ${impact}
             <div class="feat-pills">${pills}</div>
+            ${badgeStats}
             ${detail}
           </div>
           ${simSvg}

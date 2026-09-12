@@ -425,6 +425,18 @@ export const profiles: Record<string, I18nProfile> = {
       },
     ],
     projects: translateProjects({
+      tappad: {
+        name: 'TapPad — Tap-to-Pay для десктопных игр',
+        impact:
+          'Прикладываешь карту к USB NFC-пэду, платишь прямо в окне игры, получаешь предмет: tap-to-pay для десктопных игр на базе Xsolla. Сделано на Xsolla Baku GameTech Hackathon командой из 5 человек.',
+        date: 'Сен 2026',
+        bullets: [
+          'Построил сервер на Rust (axum): лимиты трат по карте, создание заказов в песочнице Xsolla Pay Station, API-ключ только на сервере за трейтом PaymentProvider с реализациями Xsolla и Mock',
+          'Встроил чекаут Xsolla как iframe внутри десктопного игрового клиента на Tauri 2 с опросом статуса заказа до завершения',
+          'Связал прошивку ESP32 + RC522 NFC через Rust-мост serial-to-WebSocket с общим крейтом tappad-protocol и клиентскими SDK на Rust и JS',
+          '114 тестов на Rust, clippy pedantic, без unwrap/expect/panic вне тестов, CI с fmt, clippy и cargo audit',
+        ],
+      },
       patent: {
         name: 'patent',
         impact:
@@ -863,6 +875,18 @@ export const profiles: Record<string, I18nProfile> = {
       },
     ],
     projects: translateProjects({
+      tappad: {
+        name: 'TapPad — Masaüstü oyunlar üçün tap-to-pay',
+        impact:
+          'USB NFC pedinə kart toxundur, ödənişi oyun pəncərəsinin içində et, əşyanı al: Xsolla əsasında masaüstü oyunlar üçün tap-to-pay. Xsolla Baku GameTech Hackathon-da 5 nəfərlik komanda ilə hazırlanıb.',
+        date: 'Sen 2026',
+        bullets: [
+          'Rust (axum) serverini qurdum: kart üzrə xərcləmə limitləri, Xsolla Pay Station sandbox-ında sifariş yaradılması, API açarı yalnız server tərəfdə, Xsolla və Mock implementasiyalı PaymentProvider trait arxasında',
+          'Xsolla checkout-u Tauri 2 masaüstü oyun klientində iframe kimi inteqrasiya etdim, sifariş statusunu tamamlanana qədər sorğuladım',
+          'ESP32 + RC522 NFC proqram təminatını Rust serial-to-WebSocket körpüsü ilə Rust və JS klient SDK-larına malik ortaq tappad-protocol crate-inə bağladım',
+          '114 Rust testi, clippy pedantic, testlərdən kənarda unwrap/expect/panic yoxdur, fmt, clippy və cargo audit ilə CI',
+        ],
+      },
       patent: {
         name: 'patent',
         impact:

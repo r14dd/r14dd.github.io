@@ -191,8 +191,10 @@ html.light .proj-card {
   flex-wrap: wrap;
 }
 
-.badge-bullet {
-  display: list-item;
+.proj-stats {
+  font-size: var(--text-sm);
+  color: var(--text-soft);
+  margin: 0 0 0.5rem;
 }
 
 .badge-stat {
@@ -207,6 +209,18 @@ html.light .proj-card {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-weight: 500;
   color: var(--text);
+}
+
+.badge-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.badge-link:hover {
+  text-decoration: underline;
 }
 
 .proj-card .sim-visual {

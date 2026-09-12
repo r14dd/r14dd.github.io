@@ -141,6 +141,23 @@ export const profile: Profile = {
 
   projects: [
     {
+      id: 'tappad',
+      name: 'TapPad — Tap-to-Pay for Desktop Games',
+      tech: ['Rust', 'Tauri', 'ESP32', 'Xsolla', 'WebSocket'],
+      impact:
+        'Tap a card on a USB NFC pad, pay inside the game window, get the item: tap-to-pay for desktop games built on Xsolla. Built at the Xsolla Baku GameTech Hackathon with a 5-person team.',
+      date: 'Sep 2026',
+      bullets: [
+        'Built the Rust (axum) server: per-card spending limits, order creation against the Xsolla Pay Station sandbox, API key kept server-side behind a PaymentProvider trait with Xsolla and Mock implementations',
+        'Integrated Xsolla checkout as an iframe inside a Tauri 2 desktop game client, polling order status to completion',
+        'Wired ESP32 + RC522 NFC firmware through a Rust serial-to-WebSocket bridge into a shared tappad-protocol crate with Rust and JS client SDKs',
+        '114 Rust tests, clippy pedantic, no unwrap/expect/panic outside tests, CI running fmt, clippy, and cargo audit',
+      ],
+      links: {
+        github: 'https://github.com/xsolla-baku-gametech-hackathon/team-InlandEmpire',
+      },
+    },
+    {
       id: 'patent',
       name: 'patent',
       tech: ['Rust', 'Tokio', 'Ollama', 'ratatui', 'fastembed'],

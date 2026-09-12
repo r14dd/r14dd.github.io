@@ -68,10 +68,10 @@ export const initProjectModal = () => {
     const badgesHtml = (p.badges || [])
       .map(
         (b) =>
-          `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ''}"><a class="feat-gh" href="${b.link || '#'}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${b.pillLabel}</a> ${b.platform}</span>`,
+          `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ''}"><a class="badge-link" href="${b.link || '#'}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${b.pillLabel}</a> ${b.platform}</span>`,
       )
-      .join(' ');
-    const badgeBullet = badgesHtml ? `<li class="badge-bullet">${badgesHtml}</li>` : '';
+      .join(' · ');
+    const badgeStats = badgesHtml ? `<p class="proj-stats">${badgesHtml}</p>` : '';
     const actions =
       ghLink || cratesLink || docsLink
         ? `<div class="proj-card-actions proj-modal-actions">${ghLink}${cratesLink}${docsLink}</div>`
@@ -83,7 +83,8 @@ export const initProjectModal = () => {
       ${actions}
       ${p.impact ? `<div class="project-impact">${escData(stripImpact(p.impact))}</div>` : ''}
       <div class="project-tech-pills">${tech}</div>
-      ${bullets || badgeBullet ? `<ul class="project-bullets">${badgeBullet}${bullets}</ul>` : ''}
+      ${badgeStats}
+      ${bullets ? `<ul class="project-bullets">${bullets}</ul>` : ''}
       ${sim}
     `;
     unmountLiveRaft();
