@@ -1,5 +1,5 @@
 /**
- * analytics-api — Cloudflare Worker proxy for the riad.cc /admin dashboard.
+ * analytics-api: Cloudflare Worker proxy for the riad.cc /admin dashboard.
  *
  * The static /admin page cannot call the Cloudflare GraphQL Analytics API
  * directly (the API token would be public and the API has no browser CORS),
@@ -8,14 +8,14 @@
  *
  *   GET /summary?range=24h|7d|30d   (Authorization: Bearer <ADMIN_KEY>)
  *   GET /vitals                     (public, no auth)
- *   GET /health                     (public, no auth — uncached token check)
+ *   GET /health                     (public, no auth, uncached token check)
  *
  * /vitals is deliberately public: it returns three aggregate p75 numbers and a
- * sample count — no dimensions, no paths, no per-visitor anything — so the
+ * sample count (no dimensions, no paths, no per-visitor anything), so the
  * terminal's `perf` command can show a visitor how their own load compares to
  * the field. Anything that could identify a visitor stays behind /summary.
  *
- * Responses are cached at the edge — 5 minutes for /summary, 30 for /vitals
+ * Responses are cached at the edge: 5 minutes for /summary, 30 for /vitals
  * (a p75 over a week does not move faster than that, and the cache is what
  * keeps a public endpoint from spending the GraphQL rate limit). /summary auth
  * is checked before the cache so the key is always required.
@@ -99,7 +99,7 @@ function buildQuery(seriesDim) {
 // The RUM API returns timing quantiles in MICROseconds. Both consumers (the
 // /admin dashboard and the terminal's `perf`) work in milliseconds and grade
 // against Google's ms thresholds, so normalize once here rather than in each
-// caller — /admin was previously reading 696000µs as 696 seconds and marking a
+// caller: /admin was previously reading 696000µs as 696 seconds and marking a
 // healthy LCP "poor". CLS is unitless and passes through.
 const usToMs = (v) => (v == null ? null : v / 1000);
 
@@ -307,7 +307,7 @@ export default {
     if (!RANGES[range]) return json({ error: 'bad range' }, 400, corsHeaders);
 
     // Edge-cache per range (auth already passed). The cache key is a synthetic
-    // URL — the real request carries an Authorization header, which the Cache
+    // URL: the real request carries an Authorization header, which the Cache
     // API refuses to store.
     const cacheKey = new Request(`https://analytics-api.cache/summary?range=${range}`);
     const cache = caches.default;

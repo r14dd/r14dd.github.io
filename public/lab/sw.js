@@ -1,7 +1,7 @@
-/* /lab/sw.js — offline service worker for the lab page ONLY.
+/* /lab/sw.js: offline service worker for the lab page ONLY.
  *
  * Registered with the default scope of its own location (/lab/), so it can only
- * ever control /lab pages — the main site is never intercepted. Strategy:
+ * ever control /lab pages, the main site is never intercepted. Strategy:
  *   - navigations  -> network-first, fall back to cache (fresh content online,
  *                     still works offline). Never serves a stale shell online.
  *   - GET assets   -> stale-while-revalidate (instant, refreshes in background).

@@ -28,8 +28,8 @@ const badgeObserver = new IntersectionObserver(
 );
 
 export async function fetchBadges(root?: HTMLElement | null) {
-  // Each call renders fresh badge nodes (language switch replaces innerHTML) —
-  // drop observations of the now-detached previous generation.
+  // Each call renders fresh badge nodes (language switch replaces innerHTML),
+  // so drop observations of the now-detached previous generation.
   badgeObserver.disconnect();
   const badges = Array.from(
     (root || document).querySelectorAll('.proj-badge-live'),
@@ -47,7 +47,7 @@ export async function fetchBadges(root?: HTMLElement | null) {
     try {
       const res = await fetch(api, { signal: AbortSignal.timeout(5000) });
       if (!res.ok) {
-        countEl.textContent = '—';
+        countEl.textContent = '–';
         continue;
       }
       const data = await res.json();
@@ -59,7 +59,7 @@ export async function fetchBadges(root?: HTMLElement | null) {
         badgeObserver.observe(countEl);
       }
     } catch {
-      countEl.textContent = '—';
+      countEl.textContent = '–';
     }
   }
 }

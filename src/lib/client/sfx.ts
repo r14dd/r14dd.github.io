@@ -15,7 +15,7 @@ export function init() {
     try {
       makeCtx();
     } catch {
-      // No Web Audio here — every sfx call will no-op the same way it did before.
+      // No Web Audio here, so every sfx call will no-op the same way it did before.
     }
   };
   if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 3000 });

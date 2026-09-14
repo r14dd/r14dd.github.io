@@ -1,5 +1,5 @@
-/* A real Raft implementation — leader election, log replication, quorum
- * commitment — over a simulated network with latency, loss, crashes and
+/* A real Raft implementation (leader election, log replication, quorum
+ * commitment) over a simulated network with latency, loss, crashes and
  * partitions. Pure and deterministic: a seeded RNG and a virtual clock mean
  * the same seed always produces the same history, which is what lets the test
  * suite run minutes of cluster time and assert the paper's safety properties
@@ -44,7 +44,7 @@ export interface AppendResponseMsg {
   success: boolean;
   // On success: index of the last entry known replicated.
   matchIndex: number;
-  // On failure: the follower's last log index — the §5.3 fast-backoff hint.
+  // On failure: the follower's last log index, the §5.3 fast-backoff hint.
   // Without it, catching up a long-dead follower decrements nextIndex one
   // heartbeat at a time and takes ~one RTT per missing entry.
   hintIndex: number;
@@ -71,11 +71,11 @@ interface Node {
   id: number;
   alive: boolean;
   role: Role;
-  // ── Persistent state (Figure 2) — survives crash+restart ──
+  // ── Persistent state (Figure 2): survives crash+restart ──
   currentTerm: number;
   votedFor: number | null;
   log: LogEntry[]; // 1-indexed conceptually; log[0] unused sentinel
-  // ── Volatile state — reset on restart ──
+  // ── Volatile state: reset on restart ──
   commitIndex: number;
   lastApplied: number;
   applied: string[]; // the state machine: committed commands, in order
@@ -99,7 +99,7 @@ export interface ClusterOptions {
   lossRate?: number;
 }
 
-// mulberry32 — tiny, good-enough, deterministic.
+// mulberry32: tiny, good-enough, deterministic.
 function rng(seed: number) {
   let a = seed >>> 0;
   return () => {
@@ -228,7 +228,7 @@ export class RaftCluster {
   }
 
   leader(): number | null {
-    // Highest-term live leader — during a partition a deposed leader may
+    // Highest-term live leader: during a partition a deposed leader may
     // linger at a lower term; the real one is the one at the top term.
     let best: Node | null = null;
     for (const nd of this.nodes)
@@ -436,7 +436,7 @@ export class RaftCluster {
 
   private advanceCommit(nd: Node) {
     // Find the highest N > commitIndex replicated on a majority with
-    // log[N].term == currentTerm (§5.4.2 — never commit prior-term entries
+    // log[N].term == currentTerm (§5.4.2: never commit prior-term entries
     // by counting; they commit implicitly under a current-term entry).
     for (let N = nd.log.length - 1; N > nd.commitIndex; N--) {
       if (nd.log[N].term !== nd.currentTerm) break;

@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script.
+// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Trilingual runtime. Each locale has a prerendered route (/, /ru/, /az/), and
 // the one being served ships inline in #i18n-data; the other two load once from
 // the static /i18n endpoints on demand. applyLanguage re-renders every section
@@ -7,7 +7,7 @@
 //
 // Both paths exist on purpose. The prerendered routes are what a crawler sees
 // and what a shared link resolves to; the runtime swap is what a visitor gets
-// when they pick a language — instant, no reload — with history.pushState
+// when they pick a language (instant, no reload) with history.pushState
 // keeping the URL honest. They can't drift because both render through the
 // same builders.
 import {
@@ -69,7 +69,7 @@ export const initI18n = () => {
     try {
       data = await ensureLang(lang);
     } catch (err) {
-      // Fall back to the locale already on the page, not to English — on /ru/
+      // Fall back to the locale already on the page, not to English, because on /ru/
       // the English payload isn't inline and would be a second failed fetch.
       console.warn('i18n fetch failed, staying on ' + ssrLang, err);
       lang = ssrLang;
@@ -141,7 +141,7 @@ export const initI18n = () => {
       const isFirstAbout = !heroAbout.dataset.applied;
       heroAbout.dataset.applied = '1';
       if (isFirstAbout && lang === ssrLang) {
-        // SSR text is already visible — skip the word-gen animation to avoid hiding the LCP element
+        // SSR text is already visible, so skip the word-gen animation to avoid hiding the LCP element
       } else if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         heroAbout.innerHTML = data.about
           .split(' ')
@@ -299,7 +299,7 @@ export const initI18n = () => {
   langMenu?.querySelectorAll('[data-lang]').forEach((btn) => {
     btn.addEventListener('click', (event) => {
       // The entries are real links to /, /ru/, /az/ so they work without JS.
-      // With JS we swap in place instead — same markup either way, because
+      // With JS we swap in place instead, same markup either way, because
       // both paths render through the shared builders.
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.button > 0) return;
       event.preventDefault();
@@ -324,7 +324,7 @@ export const initI18n = () => {
       langSwitchTimer = setTimeout(async () => {
         await applyLanguage(lang);
         // The URL follows the swap, so the address bar, a copied link and the
-        // back button all agree with what's on screen — and each of those URLs
+        // back button all agree with what's on screen, and each of those URLs
         // is a real prerendered page if it's ever loaded cold.
         const target = localePath(document.documentElement.lang || lang);
         if (location.pathname !== target) {
@@ -352,8 +352,8 @@ export const initI18n = () => {
     if (lang !== (document.documentElement.lang || 'en')) applyLanguage(lang);
   });
 
-  // The URL is the strongest statement of intent: someone who opened /ru/ —
-  // from a search result, a shared link, a bookmark — gets Russian regardless
+  // The URL is the strongest statement of intent: someone who opened /ru/
+  // (from a search result, a shared link, a bookmark) gets Russian regardless
   // of what this browser picked last time, and that choice becomes the new
   // saved preference. On / the saved preference still wins.
   const urlLang = (location.pathname.match(/^\/(ru|az)(\/|$)/) || [])[1];
@@ -362,7 +362,7 @@ export const initI18n = () => {
   }
   const initialLang = urlLang || getItem('portfolio-lang') || 'en';
 
-  // Already correct on the server — don't re-render the page we just painted.
+  // Already correct on the server, so don't re-render the page we just painted.
   if (initialLang === ssrLang) {
     const btn = langMenu?.querySelector(`[data-lang="${ssrLang}"]`);
     langMenu

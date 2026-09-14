@@ -132,7 +132,7 @@ body.lang-switching .lang-switcher {
 }
 
 /* Without JS the toggle can't add .open, which would leave the locale links
-   present but unreachable. Hover/focus-within opens it instead — scoped to
+   present but unreachable. Hover/focus-within opens it instead, scoped to
    .no-js so it can't fight the JS toggle (where the button keeps focus after
    a click and would re-open the menu the click just closed). */
 html.no-js .lang-switcher:hover .lang-menu,
@@ -458,7 +458,7 @@ html.no-js .lang-switcher:focus-within .lang-menu {
 }
 
 /* Persistent fixed chrome pays backdrop-filter resampling on every scrolled
-   frame — on phones (where frames are most expensive and the pill is shown
+   frame: on phones (where frames are most expensive and the pill is shown
    *while* scrolling) trade the blur for a near-opaque panel. Transient
    surfaces (menus, palette, modal) keep their blur: they only cost while open. */
 @media (max-width: 768px) {

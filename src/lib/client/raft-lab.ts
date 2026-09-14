@@ -41,7 +41,7 @@ function el<K extends keyof HTMLElementTagNameMap>(
 
 export function mountRaft(root: HTMLElement): () => void {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // A random seed per mount — determinism matters for tests, not theater.
+  // A random seed per mount: determinism matters for tests, not theater.
   const cluster = new RaftCluster({ seed: (Math.random() * 2 ** 31) | 0 });
 
   const pos = (i: number) => {
@@ -106,7 +106,7 @@ export function mountRaft(root: HTMLElement): () => void {
     g.setAttribute('transform', `translate(${p.x} ${p.y})`);
     g.setAttribute('tabindex', '0');
     g.setAttribute('role', 'button');
-    g.setAttribute('aria-label', `Node ${i} — click to crash or restart`);
+    g.setAttribute('aria-label', `Node ${i}: click to crash or restart`);
     const circle = document.createElementNS(SVG_NS, 'circle');
     circle.setAttribute('r', '25');
     const name = document.createElementNS(SVG_NS, 'text');
@@ -154,7 +154,7 @@ export function mountRaft(root: HTMLElement): () => void {
 
   btnSubmit.addEventListener('click', () => {
     if (cluster.clientRequest() === null)
-      setEvent({ at: cluster.now, node: -1, text: 'no leader — command rejected, try again' });
+      setEvent({ at: cluster.now, node: -1, text: 'no leader: command rejected, try again' });
     render();
   });
   btnPartition.addEventListener('click', () => {
@@ -162,7 +162,7 @@ export function mountRaft(root: HTMLElement): () => void {
       cluster.partition([]);
     } else {
       const ld = cluster.leader();
-      // Isolate the leader plus one follower — a 2/3 minority split, so the
+      // Isolate the leader plus one follower: a 2/3 minority split, so the
       // old leader visibly keeps trying while the majority elects past it.
       const buddy = cluster.nodes.findIndex((nd) => nd.alive && nd.id !== ld);
       cluster.partition(ld === null ? [0, 1] : [ld, buddy === -1 ? (ld + 1) % cluster.n : buddy]);
@@ -190,7 +190,7 @@ export function mountRaft(root: HTMLElement): () => void {
     for (let i = 0; i < cluster.n; i++) {
       const nd = cluster.nodes[i];
       const v = nodeViews[i];
-      // Dead nodes drop their role class — a crashed ex-leader must not keep
+      // Dead nodes drop their role class: a crashed ex-leader must not keep
       // rendering as the leader. A live stale leader (minority side of a
       // partition) keeps is-leader on purpose: watching two nodes believe
       // they lead different terms is the demo. data-auth marks the single
@@ -201,7 +201,7 @@ export function mountRaft(root: HTMLElement): () => void {
       v.term.textContent = nd.alive ? `t${nd.currentTerm}` : '✕';
     }
 
-    // Traveling messages (skipped under reduced motion — the receive is what
+    // Traveling messages (skipped under reduced motion, the receive is what
     // matters, and the event line narrates it).
     if (!reduceMotion) {
       const live = new Set<number>();

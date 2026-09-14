@@ -1,7 +1,7 @@
 // The homepage's non-critical interaction layer, split out of the eager
 // orchestrator so the first paint parses only what the first viewport needs
 // (hero, terminal, nav, i18n, theme). Everything here loads right after the
-// load event — or immediately on the first interaction, whichever comes first.
+// load event, or immediately on the first interaction, whichever comes first.
 //
 // Init order matters and mirrors the original orchestrator exactly: palette →
 // shortcuts register on document keydown in that order, and gestures attaches

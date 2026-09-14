@@ -58,7 +58,7 @@ type Labels = {
   heroEyebrow: string;
   // Document title suffix and meta description per locale. /ru/ and /az/ are
   // prerendered as real indexable pages, so a crawler that finds them must get
-  // the description in the language it is about to read — not the English one.
+  // the description in the language it is about to read, not the English one.
   meta: { titleSuffix: string; description: string };
   timeGreetings: { morning: string; afternoon: string; evening: string; night: string };
   connectTagline: string;
@@ -77,7 +77,7 @@ type Labels = {
     stat2: string;
     stat3: string;
   };
-  // The site's own chrome — overlays, aria-labels, the command palette, the
+  // The site's own chrome: overlays, aria-labels, the command palette, the
   // footer. Everything here is control vocabulary, not Riad's prose, but a
   // screen reader on /ru/ or /az/ reads it just as loudly as the content.
   chrome: {
@@ -101,7 +101,7 @@ type Labels = {
     copyEmail: string;
     emailCopied: string;
     keyboardShortcutsLabel: string;
-    // {count} — filled in at render time, not a printf spec.
+    // {count}: filled in at render time, not a printf spec.
     matchesOnPage: string;
     cmdHintNavigate: string;
     cmdHintSelect: string;
@@ -205,7 +205,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI & Software Engineer, Baku',
         description:
-          'Riad Mukhtarov — AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.',
+          'Riad Mukhtarov: AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.',
       },
       timeGreetings: {
         morning: 'Good morning from Baku',
@@ -350,7 +350,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
     },
     education: {
-      title: 'State University of New York at Buffalo — BS in Computer Science',
+      title: 'State University of New York at Buffalo, BS in Computer Science',
       meta: 'Aug 2020 – May 2024 · Buffalo, New York',
       bullets: ["Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors"],
     },
@@ -401,7 +401,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'Старший ассистент преподавателя — Структуры данных',
+        role: 'Старший ассистент преподавателя: Структуры данных',
         org: 'State University of New York at Buffalo',
         location: 'Buffalo, NY',
         period: 'Авг 2022 – Май 2024',
@@ -426,7 +426,7 @@ export const profiles: Record<string, I18nProfile> = {
     ],
     projects: translateProjects({
       tappad: {
-        name: 'TapPad — Tap-to-Pay для десктопных игр',
+        name: 'TapPad: Tap-to-Pay для десктопных игр',
         impact:
           'Прикладываешь карту к USB NFC-пэду, платишь прямо в окне игры, получаешь предмет: tap-to-pay для десктопных игр на базе Xsolla. Сделано на Xsolla Baku GameTech Hackathon командой из 5 человек.',
         date: 'Сен 2026',
@@ -444,7 +444,7 @@ export const profiles: Record<string, I18nProfile> = {
         date: 'Июн 2026',
         bullets: [
           'Построил конкурентные адаптеры для 11 реестров: от crates.io, npm и PyPI до Docker Hub и Hacker News',
-          'Спроектировал систему вердиктов с ограниченной областью — никогда не утверждает отсутствие, только сообщает о найденном в проверенных источниках',
+          'Спроектировал систему вердиктов с ограниченной областью, которая никогда не утверждает отсутствие, а только сообщает о найденном в проверенных источниках',
           'Добавил интерактивный ratatui TUI с детальным просмотром, открытием браузера и структурированным JSON-выводом для CI-пайплайнов',
         ],
         badges: [
@@ -463,7 +463,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       quorumrag: {
-        name: 'QuorumRAG.rs — RAG на основе консенсуса',
+        name: 'QuorumRAG.rs: RAG на основе консенсуса',
         impact:
           'Мульти-ретриверный RAG с кворумной фильтрацией, требующей согласия между ретриверами перед выдачей результатов. Достигнут recall 95% против 70% baseline.',
         date: 'Май 2026',
@@ -476,19 +476,19 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       almostaykhan: {
-        name: 'almostAykhan — RAG чат-бот ABB Bank',
+        name: 'almostAykhan: RAG чат-бот ABB Bank',
         impact:
           'RAG чат-бот, отвечающий исключительно на основе публичного контента ABB Bank с мультиязычной поддержкой и строгими ограничениями контекста.',
         date: 'Май 2026',
         bullets: [
           'Построил двухсервисный RAG-пайплайн (API-шлюз + QA-сервис) со скрейпингом, чанкингом и индексацией через FAISS',
           'Реализовал мультиязычную поддержку (азербайджанский, английский, русский) с блокировкой prompt-инъекций',
-          'Применил distance-gate для обнаружения внеконтекстных запросов — возвращает «Bunu bilmirəm» при выходе за рамки',
+          'Применил distance-gate для обнаружения внеконтекстных запросов, возвращающий «Bunu bilmirəm» при выходе за рамки',
           'Добавил наблюдаемость через SQLite и дашборд аналитики запросов на Chart.js',
         ],
       },
       matchsentinel: {
-        name: 'MatchSentinel — Платформа мониторинга транзакций',
+        name: 'MatchSentinel: Платформа мониторинга транзакций',
         impact:
           'End-to-end pipeline мониторинга транзакций с event-driven скорингом, асинхронной обработкой через RabbitMQ и идемпотентной обработкой данных.',
         date: 'Янв 2026',
@@ -508,7 +508,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Реализовал выбор лидера с рандомизированными таймаутами и term-based логическими часами для предотвращения split vote',
           'Построил репликацию логов через AppendEntries RPC с проверками консистентности и кворумным подтверждением',
           'Обработал отказы узлов и сетевые разделения с толерантностью до ⌊n/2⌋ серверных сбоев',
-          'Обеспечил гарантии безопасности — избранные лидеры всегда содержат все ранее зафиксированные записи',
+          'Обеспечил гарантии безопасности: избранные лидеры всегда содержат все ранее зафиксированные записи',
           'Спроектировал кастомный RPC-фреймворк поверх UDP с Protobuf-сериализацией, ретрансмиссией и дедупликацией сообщений',
         ],
       },
@@ -570,7 +570,7 @@ export const profiles: Record<string, I18nProfile> = {
         course: 'Структуры данных',
         headTA: true,
         quote:
-          'Поставьте его на позицию Project Manager или Team Lead — я гарантирую, он проявит себя блестяще.',
+          'Поставьте его на позицию Project Manager или Team Lead, и я гарантирую, что он проявит себя блестяще.',
         linkedin: 'https://www.linkedin.com/in/oliver-kennedy-04602217/',
       },
       {
@@ -602,7 +602,7 @@ export const profiles: Record<string, I18nProfile> = {
         title: 'Ассистент-профессор кафедры компьютерных наук, University of Oklahoma',
         course: 'Основы компьютерных наук',
         quote:
-          'Риад — один из лучших людей, с которыми мне доводилось работать. Его способность объяснять сложные концепции людям с разным уровнем подготовки неизменно меня впечатляла.',
+          'Риад входит в число лучших людей, с которыми мне доводилось работать. Его способность объяснять сложные концепции людям с разным уровнем подготовки неизменно меня впечатляла.',
         linkedin: 'https://www.linkedin.com/in/sean-mackay-phd-784905140/',
       },
       {
@@ -653,7 +653,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI & Software инженер, Баку',
         description:
-          'Риад Мухтаров — AI и software инженер, работает с Rust и Python. Строит распределённые системы в ABB, ранее преподавал информатику в SUNY Buffalo.',
+          'Риад Мухтаров: AI и software инженер, работает с Rust и Python. Строит распределённые системы в ABB, ранее преподавал информатику в SUNY Buffalo.',
       },
       timeGreetings: {
         morning: 'Доброе утро из Баку',
@@ -760,7 +760,7 @@ export const profiles: Record<string, I18nProfile> = {
           },
           experience: {
             title: 'Где я работал',
-            text: 'Сначала свежее. Основная работа — платформа LLM-агентов для банка и песочница, в которой они запускаются.',
+            text: 'Сначала свежее. Основная работа: платформа LLM-агентов для банка и песочница, в которой они запускаются.',
           },
           projects: {
             title: 'Что я построил',
@@ -768,7 +768,7 @@ export const profiles: Record<string, I18nProfile> = {
           },
           skills: {
             title: 'С чем я работаю',
-            text: 'Сгруппировано по слоям. Каждый логотип — инструмент, с которым я реально выпускал продукт.',
+            text: 'Сгруппировано по слоям. Каждый логотип обозначает инструмент, с которым я реально выпускал продукт.',
           },
           teaching: {
             title: 'Преподавание',
@@ -780,11 +780,11 @@ export const profiles: Record<string, I18nProfile> = {
           },
           connect: {
             title: 'Напишите мне',
-            text: 'Эл. почта, GitHub, LinkedIn. Или запустите бумажный самолётик — он прилетит ко мне во входящие.',
+            text: 'Эл. почта, GitHub, LinkedIn. Или запустите бумажный самолётик: он прилетит ко мне во входящие.',
           },
           resume: {
             title: 'Версия на одну страницу',
-            text: 'Резюме — это страница на этом сайте. Печатается на одном листе, на трёх языках.',
+            text: 'Резюме представляет собой страницу на этом сайте. Печатается на одном листе, на трёх языках.',
             link: '/ru/resume/',
             linkLabel: 'Открыть резюме',
           },
@@ -798,7 +798,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
     },
     education: {
-      title: 'State University of New York at Buffalo — Бакалавр по направлению Компьютерные Науки',
+      title: 'State University of New York at Buffalo, Бакалавр по направлению Компьютерные Науки',
       meta: 'Авг 2020 – Май 2024 · Buffalo, NY',
       bullets: [
         'Награды: Премия старшего ассистента преподавателя, многократные отличия списка декана',
@@ -851,7 +851,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'Baş tədris assistenti — Məlumat strukturları',
+        role: 'Baş tədris assistenti: Məlumat strukturları',
         org: 'State University of New York at Buffalo',
         location: 'Buffalo, NY',
         period: 'Avq 2022 – May 2024',
@@ -876,7 +876,7 @@ export const profiles: Record<string, I18nProfile> = {
     ],
     projects: translateProjects({
       tappad: {
-        name: 'TapPad — Masaüstü oyunlar üçün tap-to-pay',
+        name: 'TapPad: Masaüstü oyunlar üçün tap-to-pay',
         impact:
           'USB NFC pedinə kart toxundur, ödənişi oyun pəncərəsinin içində et, əşyanı al: Xsolla əsasında masaüstü oyunlar üçün tap-to-pay. Xsolla Baku GameTech Hackathon-da 5 nəfərlik komanda ilə hazırlanıb.',
         date: 'Sen 2026',
@@ -913,7 +913,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       quorumrag: {
-        name: 'QuorumRAG.rs — Konsensus əsaslı RAG',
+        name: 'QuorumRAG.rs: Konsensus əsaslı RAG',
         impact:
           'Nəticələri təqdim etməzdən əvvəl retriverlər arası konsensus tələb edən kvorum filtrasiyalı multi-retriver RAG. Baseline 70%-ə qarşı 95% recall əldə edilib.',
         date: 'May 2026',
@@ -926,19 +926,19 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       almostaykhan: {
-        name: 'almostAykhan — ABB Bank RAG Chatbotu',
+        name: 'almostAykhan: ABB Bank RAG Chatbotu',
         impact:
           'ABB Bank-ın ictimai məzmunundan eksklüziv cavab verən çoxdilli dəstək və ciddi kontekst məhdudiyyətləri olan RAG chatbotu.',
         date: 'May 2026',
         bullets: [
           'FAISS vasitəsilə scraping, chunking və indeksləmə ilə iki xidmətli RAG pipeline qurdum (API gateway + QA xidməti)',
           'Prompt injection bloklama ilə Azərbaycan, İngilis və Rus dillərini dəstəklədim',
-          "Kontekst xaricindəki sorğuları aşkar etmək üçün distance-gate tətbiq etdim — 'Bunu bilmirəm' qaytarır",
+          "Kontekst xaricindəki sorğuları aşkar etmək üçün distance-gate tətbiq etdim, nəticədə 'Bunu bilmirəm' qaytarır",
           'SQLite müşahidə imkanı və Chart.js sorğu analitika dashboardu əlavə etdim',
         ],
       },
       matchsentinel: {
-        name: 'MatchSentinel — Tranzaksiya monitorinq platforması',
+        name: 'MatchSentinel: Tranzaksiya monitorinq platforması',
         impact:
           'Event-driven skorinq, RabbitMQ ilə asinxron emal və idempotent məlumat emalı ilə end-to-end tranzaksiya monitorinqi pipeline-ı.',
         date: 'Yan 2026',
@@ -1020,7 +1020,7 @@ export const profiles: Record<string, I18nProfile> = {
         course: 'Məlumat strukturları',
         headTA: true,
         quote:
-          'Onu Project Manager və ya Team Lead vəzifəsinə qoyun — zəmanət verirəm ki, parlayacaq.',
+          'Onu Project Manager və ya Team Lead vəzifəsinə qoyun, zəmanət verirəm ki, parlayacaq.',
         linkedin: 'https://www.linkedin.com/in/oliver-kennedy-04602217/',
       },
       {
@@ -1103,7 +1103,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI və Proqram Mühəndisi, Bakı',
         description:
-          'Riad Muxtarov — AI və proqram mühəndisi, Rust və Python ilə işləyir. ABB-də paylanmış sistemlər qurur, əvvəllər SUNY Buffalo-da informatika tədris edib.',
+          'Riad Muxtarov: AI və proqram mühəndisi, Rust və Python ilə işləyir. ABB-də paylanmış sistemlər qurur, əvvəllər SUNY Buffalo-da informatika tədris edib.',
       },
       timeGreetings: {
         morning: 'Bakıdan sabahınız xeyir',
@@ -1176,7 +1176,7 @@ export const profiles: Record<string, I18nProfile> = {
         projectDetail: 'Layihə təfərrüatı',
         closeProjectDetail: 'Layihə təfərrüatını bağla',
         studentRecommendations: 'Tövsiyələr',
-        linkedinProfileOf: '{name} — LinkedIn profili',
+        linkedinProfileOf: '{name}: LinkedIn profili',
         prevSlide: 'Əvvəlki',
         nextSlide: 'Növbəti',
         slideOf: '{current} / {total}',
@@ -1210,7 +1210,7 @@ export const profiles: Record<string, I18nProfile> = {
           },
           experience: {
             title: 'Harada işləmişəm',
-            text: 'Ən yenisi əvvəldə. Əsas iş — bank üçün LLM agent platforması və onun işlədiyi sandbox.',
+            text: 'Ən yenisi əvvəldə. Əsas iş: bank üçün LLM agent platforması və onun işlədiyi sandbox.',
           },
           projects: {
             title: 'Qurduqlarım',
@@ -1230,7 +1230,7 @@ export const profiles: Record<string, I18nProfile> = {
           },
           connect: {
             title: 'Salam deyin',
-            text: 'E-poçt, GitHub, LinkedIn. Ya da kağız təyyarə atın — birbaşa mənə çatır.',
+            text: 'E-poçt, GitHub, LinkedIn. Ya da kağız təyyarə atın, birbaşa mənə çatır.',
           },
           resume: {
             title: 'Bir səhifəlik versiya',
@@ -1248,7 +1248,7 @@ export const profiles: Record<string, I18nProfile> = {
       },
     },
     education: {
-      title: 'State University of New York at Buffalo — Kompüter Elmləri üzrə Bakalavr',
+      title: 'State University of New York at Buffalo, Kompüter Elmləri üzrə Bakalavr',
       meta: 'Avq 2020 – May 2024 · Buffalo, NY',
       bullets: [
         'Mükafatlar: Baş Tədris Assistenti Mükafatı, bir neçə dəfə Dekan siyahısına daxil edilmə',

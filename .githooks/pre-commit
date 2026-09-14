@@ -13,7 +13,7 @@
 set -e
 
 PRETTIER="./node_modules/.bin/prettier"
-[ -x "$PRETTIER" ] || exit 0 # no install yet — don't block the commit
+[ -x "$PRETTIER" ] || exit 0 # no install yet, don't block the commit
 
 # Only the staged files prettier actually handles.
 staged=$(git diff --cached --name-only --diff-filter=ACMR |
@@ -55,3 +55,9 @@ fi
 # shellcheck disable=SC2086
 git add $existing
 echo "pre-commit: formatted and re-staged$existing"
+
+# No em dashes, anywhere. Same check CI runs in `npm run lint`.
+node scripts/check-no-emdash.mjs >/dev/null || {
+	echo "pre-commit: em dash found; run 'node scripts/check-no-emdash.mjs' to see where" >&2
+	exit 1
+}

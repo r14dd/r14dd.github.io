@@ -17,7 +17,7 @@ import {
 
 // One prerendered document per locale: / (en), /ru/, /az/. Before this, the
 // Russian and Azerbaijani versions only existed after a JS click, so no crawler
-// ever saw them and no link could point at one. The page body is untouched —
+// ever saw them and no link could point at one. The page body is untouched:
 // every section already renders through the shared builders, so serving a
 // different locale is a matter of which profile goes in.
 export function getStaticPaths() {
@@ -35,10 +35,10 @@ const LANG_LABELS: Record<string, string> = {
   ru: 'Русский',
   az: 'Azərbaycanca',
 };
-// Mirror of the runtime wrapNum in applyLanguage — keep in sync.
+// Mirror of the runtime wrapNum in applyLanguage; keep in sync.
 const wrapStatNum = (s: string) =>
   s.replace(/^([\d.,+Kk]+)/, '<span class="term-stat-num">$1</span>');
-const metaTitle = `${profile.hero.name} — ${profile.labels.meta.titleSuffix}`;
+const metaTitle = `${profile.hero.name}: ${profile.labels.meta.titleSuffix}`;
 const metaDescription = profile.labels.meta.description;
 const canonical = lang === 'en' ? 'https://riad.cc' : `https://riad.cc/${lang}/`;
 const structuredData = JSON.stringify({
@@ -531,7 +531,7 @@ const structuredData = JSON.stringify({
     // Page orchestrator, split in two. Eager: only what the first viewport
     // needs (hero reveal, terminal, nav, i18n, theme, the Spotify line).
     // Deferred: palette, shortcuts, project modal, gestures, sim overlay,
-    // ambient — loaded right after `load`, or on the first interaction,
+    // ambient, loaded right after `load`, or on the first interaction,
     // whichever comes first. A ⌘K pressed before the chunk lands is buffered
     // and replayed, so the palette answers the very first press.
     import * as sfx from '../../lib/client/sfx';
@@ -544,9 +544,9 @@ const structuredData = JSON.stringify({
     import { initTheme } from '../../lib/client/theme';
 
     console.log(
-      '%criad.cc%c — built with patience, discipline, hunger, focus.\n' +
-        '"I am young, I am twenty years old; yet I know nothing of life but despair." — Remarque\n' +
-        '"No such thing as a life that\'s better than yours." — J. Cole',
+      '%criad.cc%c: built with patience, discipline, hunger, focus.\n' +
+        '"I am young, I am twenty years old; yet I know nothing of life but despair." (Remarque)\n' +
+        '"No such thing as a life that\'s better than yours." (J. Cole)',
       'font-weight:bold;font-size:14px;color:#818cf8',
       'font-size:12px;color:inherit',
     );
@@ -581,8 +581,8 @@ const structuredData = JSON.stringify({
       return deferredPromise;
     };
 
-    // Every shortcut in the deferred chunk — ⌘K for the palette, and the ones
-    // initShortcuts owns — used to vanish if pressed before the chunk landed.
+    // Every shortcut in the deferred chunk (⌘K for the palette, and the ones
+    // initShortcuts owns) used to vanish if pressed before the chunk landed.
     // Only ⌘K was buffered, so `?` and g-nav (both advertised in the shortcut
     // overlay) silently did nothing for the first few hundred milliseconds.
     const SHORTCUT_KEYS = new Set(['?', '\\', 'g']);
@@ -603,7 +603,7 @@ const structuredData = JSON.stringify({
       const key = e.key.toLowerCase();
       const cmdK = (e.metaKey || e.ctrlKey) && key === 'k';
       if (cmdK) {
-        // Must happen on the real event — a replayed one is too late to stop
+        // Must happen on the real event: a replayed one is too late to stop
         // the browser's own ⌘K.
         e.preventDefault();
       } else if (typing || e.metaKey || e.ctrlKey || e.altKey) {
@@ -638,7 +638,7 @@ const structuredData = JSON.stringify({
         // Universal
         import('../../lib/client/ferris').then((m) => m.initFerris());
         import('../../lib/client/paper-airplane').then((m) => m.initPaperAirplane());
-        // The dots are ordinary tap targets — no reason they were desktop-only.
+        // The dots are ordinary tap targets, no reason they were desktop-only.
         import('../../lib/client/terminal-dots').then((m) => m.initTerminalDots());
 
         // Desktop only: rage-clicking has no touch equivalent worth emulating.

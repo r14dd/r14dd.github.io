@@ -1,5 +1,5 @@
 /* Live Raft cluster (mountRaft in raft-lab.ts). Shared by /lab §09 and the
-   Raft project modal on the homepage — one stylesheet so the two mounts can't
+   Raft project modal on the homepage: one stylesheet so the two mounts can't
    drift. */
 
 .raft-panel {

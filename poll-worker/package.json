@@ -1,7 +1,7 @@
 {
   "name": "poll-api",
   "private": true,
-  "description": "Live classroom poll API — Cloudflare Worker + SQLite Durable Object",
+  "description": "Live classroom poll API: Cloudflare Worker + SQLite Durable Object",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy"

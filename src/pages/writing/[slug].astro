@@ -26,7 +26,7 @@ const structuredData = JSON.stringify({
 ---
 
 <BaseLayout
-  metaTitle={`${post.data.title} — Riad Mukhtarov`}
+  metaTitle={`${post.data.title}: Riad Mukhtarov`}
   metaDescription={post.data.summary}
   structuredData={structuredData}
   lang="en"
@@ -117,7 +117,7 @@ const structuredData = JSON.stringify({
     line-height: 1.8;
     margin-bottom: 0.5rem;
   }
-  /* A hairline instead of a bullet — the list should read as prose that
+  /* A hairline instead of a bullet: the list should read as prose that
      happens to be indented. */
   .post-body li::before {
     content: '';
@@ -138,7 +138,7 @@ const structuredData = JSON.stringify({
     border-bottom-color: var(--accent);
   }
 
-  /* Inline code only — the :not() keeps this off code inside a fenced block,
+  /* Inline code only: the :not() keeps this off code inside a fenced block,
      which pre already styles. */
   .post-body :not(pre) > code {
     font-family: 'JetBrains Mono', ui-monospace, monospace;

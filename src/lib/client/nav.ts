@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script.
+// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Section navigation: hash deep-links, side-nav active tracking, Lenis-aware
 // smooth anchor scrolling, the mobile nav pill, and the hero parallax that
 // shares the same rAF-throttled scroll handler.
@@ -29,7 +29,7 @@ export const initNav = () => {
   const mobileMenu = document.getElementById('mobile-nav-menu');
   mobileMenuLinks = mobileMenu ? Array.from(mobileMenu.querySelectorAll('a')) : [];
 
-  // Runs every scroll frame — DOM writes are gated on the active id actually
+  // Runs every scroll frame: DOM writes are gated on the active id actually
   // changing so a steady scroll doesn't mutate (and re-layout) per frame.
   let lastActiveId = null;
   setActiveLink = () => {

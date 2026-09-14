@@ -5,7 +5,7 @@ export class VisitorCounter {
 
   async fetch(request) {
     // GET reads without incrementing. The health probe needs to prove the
-    // binding and the storage work, and it runs on a schedule — it must not
+    // binding and the storage work, and it runs on a schedule, so it must not
     // inflate the visitor number every time it does.
     if (request.method === 'GET') {
       const count = (await this.state.storage.get('count')) || 0;
@@ -140,7 +140,7 @@ export default {
 
     // Liveness probe for scripts/check-workers.mjs. Reaches into both Durable
     // Objects read-only, because the failure worth catching is a deploy that
-    // drops a binding or a migration that leaves a namespace unusable — the
+    // drops a binding or a migration that leaves a namespace unusable, and the
     // worker script itself would still answer, and every widget that depends
     // on it fails soft, so nothing on the site would say a word.
     if (path === '/health' && request.method === 'GET') {

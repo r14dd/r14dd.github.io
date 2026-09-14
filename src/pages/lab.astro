@@ -11,7 +11,7 @@ const build = getBuildInfo(8);
 const head = build.head;
 const repoBlob = `https://github.com/r14dd/r14dd.github.io/blob/${head ? head.hash : 'main'}`;
 
-const metaTitle = 'Riad Mukhtarov — Lab';
+const metaTitle = 'Riad Mukhtarov: Lab';
 const metaDescription = "A working showcase of the portfolio's experimental features.";
 
 // Everything the client engine needs, serialized into a JSON script tag.
@@ -90,7 +90,7 @@ const builtAtUtc = new Date(build.builtAt).toISOString().slice(0, 16).replace('T
               {head.short}
             </a>
           ) : (
-            '—'
+            '–'
           )
         }
         {head ? ` · ${head.relative}` : ''}
@@ -121,7 +121,7 @@ const builtAtUtc = new Date(build.builtAt).toISOString().slice(0, 16).replace('T
       <div class="term" id="term">
         <div class="term-head">
           <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
-          <span class="term-title">riad@lab — zsh</span>
+          <span class="term-title">riad@lab: zsh</span>
         </div>
         <div
           class="term-body"
@@ -177,18 +177,18 @@ const builtAtUtc = new Date(build.builtAt).toISOString().slice(0, 16).replace('T
       <div class="wasm-grid">
         <pre
           class="code"
-          aria-label="Rust source"><code>{`// QuorumRAG.rs — Reciprocal Rank Fusion (the scoring core)
+          aria-label="Rust source"><code>{`// QuorumRAG.rs: Reciprocal Rank Fusion (the scoring core)
 pub fn rrf_term(k: i32, rank: i32) -> f64 {
     if rank <= 0 { 0.0 } else { 1.0 / ((k + rank) as f64) }
 }
 
-// Kademlia DHT — XOR distance metric + k-bucket index
+// Kademlia DHT: XOR distance metric + k-bucket index
 pub fn xor_distance(a: u32, b: u32) -> u32 { a ^ b }
 pub fn bucket_index(a: u32, b: u32) -> u32 {
     (a ^ b).leading_zeros()
 }
 
-// Content addressing — FNV-1a over a host-written buffer
+// Content addressing: FNV-1a over a host-written buffer
 pub fn fnv1a32(bytes: &[u8]) -> u32 {
     let mut h = 0x811c_9dc5u32;
     for &x in bytes { h ^= x as u32; h = h.wrapping_mul(0x0100_0193); }
@@ -197,35 +197,35 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
 
         <div class="wasm-runners">
           <div class="runner">
-            <label>RRF — fuse 3 retriever ranks <span class="hint">(k=60; 0 = absent)</span></label>
+            <label>RRF: fuse 3 retriever ranks <span class="hint">(k=60; 0 = absent)</span></label>
             <div class="runner-row">
               <input type="number" id="rrf-a" value="1" min="0" />
               <input type="number" id="rrf-b" value="2" min="0" />
               <input type="number" id="rrf-c" value="7" min="0" />
               <button type="button" id="rrf-run">fuse</button>
             </div>
-            <output id="rrf-out" class="runner-out">—</output>
+            <output id="rrf-out" class="runner-out">–</output>
           </div>
 
           <div class="runner">
-            <label>XOR distance — two node ids <span class="hint">(dec or 0x…)</span></label>
+            <label>XOR distance: two node ids <span class="hint">(dec or 0x…)</span></label>
             <div class="runner-row">
               <input type="text" id="xor-a" value="0xA1" />
               <input type="text" id="xor-b" value="0x0F" />
               <button type="button" id="xor-run">measure</button>
             </div>
-            <output id="xor-out" class="runner-out">—</output>
+            <output id="xor-out" class="runner-out">–</output>
           </div>
 
           <div class="runner">
-            <label>FNV-1a hash — any text</label>
+            <label>FNV-1a hash: any text</label>
             <div class="runner-row">
               <input type="text" id="hash-in" value="the implementation is the resume" />
               <button type="button" id="hash-run">hash</button>
             </div>
-            <output id="hash-out" class="runner-out">—</output>
+            <output id="hash-out" class="runner-out">–</output>
           </div>
-          <p class="wasm-status" id="wasm-status">module not yet loaded — runs on first use</p>
+          <p class="wasm-status" id="wasm-status">module not yet loaded (runs on first use)</p>
         </div>
       </div>
     </section>
@@ -235,8 +235,8 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
       <p class="lab-kicker">03 · isn't afraid of the numbers</p>
       <h2 class="lab-h">Your own Web Vitals, live</h2>
       <p class="lab-desc">
-        Measured in <i>your</i> browser this session via the Performance APIs — no analytics, nothing
-        leaves the page.
+        Measured in <i>your</i> browser this session via the Performance APIs: no analytics, nothing leaves
+        the page.
       </p>
       <div class="metric-grid" id="metric-grid"></div>
       <button type="button" class="ghost-btn" id="perf-refresh">re-measure</button>
@@ -248,7 +248,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
       <h2 class="lab-h">Where are you reading from?</h2>
       <p class="lab-desc">
         No IP lookup, no third party. Just what your browser already knows plus round-trips it
-        measures itself. (No mythical "Baku edge" — the truth is more interesting.)
+        measures itself. (No mythical "Baku edge": the truth is more interesting.)
       </p>
       <div class="kv" id="where-kv"></div>
     </section>
@@ -258,7 +258,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
       <p class="lab-kicker">05 · build-time provenance</p>
       <h2 class="lab-h"><code>git log</code>, baked at build</h2>
       <p class="lab-desc">
-        A GitHub Action could write this on every deploy. No live API, no token — the last commits
+        A GitHub Action could write this on every deploy. No live API, no token: the last commits
         are stamped into the page when it's built.
       </p>
       <div class="gitlog">
@@ -285,15 +285,15 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
       <h2 class="lab-h">Colophon</h2>
       <div class="colophon">
         <p>
-          Built with <b>Astro</b> and hand-written CSS — no UI framework, no Tailwind. Type is
+          Built with <b>Astro</b> and hand-written CSS: no UI framework, no Tailwind. Type is
           <b>Manrope</b>, <b>Cormorant Garamond</b>, and <b>JetBrains Mono</b>, self-hosted.
           Deployed as static files to <b>GitHub Pages</b>; the only server anywhere is one
           Cloudflare Worker proxying Spotify.
         </p>
         <p>
           The WebAssembly on this page is genuinely <code>rustc</code>-compiled from
-          <a href={`${repoBlob}/wasm/lab.rs`} target="_blank" rel="noopener">wasm/lab.rs</a> — 843 bytes,
-          no toolchain magic. This page sets <b>no cookies</b>; it uses
+          <a href={`${repoBlob}/wasm/lab.rs`} target="_blank" rel="noopener">wasm/lab.rs</a> (843 bytes,
+          no toolchain magic). This page sets <b>no cookies</b>; it uses
           <code>localStorage</code> only to remember your theme, mute, and terminal history.
         </p>
         <p class="colophon-sig">
@@ -307,7 +307,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
                 · built {builtAtUtc} UTC
               </>
             ) : (
-              '—'
+              '–'
             )
           }
         </p>
@@ -319,7 +319,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
       <p class="lab-kicker">07 · works on a plane</p>
       <h2 class="lab-h">Installable, offline-capable</h2>
       <p class="lab-desc">
-        A ~50-line service worker scoped to <code>/lab/</code> only — it can never touch the main site.
+        A ~50-line service worker scoped to <code>/lab/</code> only; it can never touch the main site.
         Enable it, then kill your network and reload: the lab still loads.
       </p>
       <div class="pwa-row">
@@ -332,7 +332,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
     <!-- ── 08 · PROJECT REPLAY ─────────────────────────────────── -->
     <section class="lab-section" id="replay">
       <p class="lab-kicker">08 · supporting proof</p>
-      <h2 class="lab-h"><code>patent</code> — a real run, replayed</h2>
+      <h2 class="lab-h"><code>patent</code>: a real run, replayed</h2>
       <p class="lab-desc">
         A scripted cast of the actual CLI doing its thing: fan out across registries, rank with
         local embeddings, write an integrity-scoped verdict.
@@ -340,7 +340,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
       <div class="term replay">
         <div class="term-head">
           <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
-          <span class="term-title">patent — demo</span>
+          <span class="term-title">patent: demo</span>
           <button type="button" class="replay-btn" id="replay-btn">▶ play</button>
         </div>
         <div class="term-body" id="replay-body" role="log" aria-live="polite"></div>
@@ -352,7 +352,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
       <p class="lab-kicker">09 · the real thing</p>
       <h2 class="lab-h">Raft consensus, running live</h2>
       <p class="lab-desc">
-        A genuine Raft implementation — leader election, log replication, quorum commitment — over a
+        A genuine Raft implementation (leader election, log replication, quorum commitment) over a
         simulated lossy network, executing in your browser right now. Click a node to crash it.
         Partition the leader away and watch the majority elect past it; heal, and the stale log gets
         repaired. The same engine runs headless in the test suite, which asserts the paper's safety
@@ -369,7 +369,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
   </div>
 
   <style is:global>
-    /* ============ /lab — scoped under .lab-page, global so JS-created nodes match ============ */
+    /* ============ /lab: scoped under .lab-page, global so JS-created nodes match ============ */
     .lab-page {
       max-width: 940px;
       margin: 0 auto;
@@ -1034,7 +1034,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
             instance = (await WebAssembly.instantiate(buf, {})).instance;
           }
           wasmExports = instance.exports;
-          setWasmStatus('✓ lab.wasm loaded — running in WebAssembly', true);
+          setWasmStatus('✓ lab.wasm loaded: running in WebAssembly', true);
           return wasmExports;
         })();
         return wasmLoading;
@@ -1094,13 +1094,13 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
 
       const PROMPT = '<span class="p">riad@lab</span>:<span style="color:#6ea8fe">~</span>$ ';
       const repo = DATA.repoBlob;
-      const projectLine = (p) => `${p.name} — ${p.impact} [${p.tech.join(', ')}]`;
+      const projectLine = (p) => `${p.name} · ${p.impact} [${p.tech.join(', ')}]`;
 
       const COMMANDS = {
         help() {
           return {
             lines: [
-              'Available commands — many compose with pipes (|):',
+              'Available commands, many compose with pipes (|):',
               '',
               '  ls [projects|skills|exp]   list things        cat <name>     show details',
               '  projects | grep rust       filter by keyword',
@@ -1128,7 +1128,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
           if (what.startsWith('skill'))
             return { lines: DATA.profile.skills.map((s) => s.category) };
           if (what.startsWith('exp'))
-            return { lines: DATA.profile.experience.map((e) => `${e.role} — ${e.org}`) };
+            return { lines: DATA.profile.experience.map((e) => `${e.role} at ${e.org}`) };
           if (what.startsWith('teach')) return { lines: DATA.profile.teaching.map((t) => t.title) };
           return { lines: [`ls: no such directory: ${what}`], cls: 'err' };
         },
@@ -1139,7 +1139,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
           const p = DATA.projects.find(
             (x) =>
               x.name.toLowerCase().includes(q) ||
-              q.includes(x.name.toLowerCase().split(/[ .—-]/)[0]),
+              q.includes(x.name.toLowerCase().split(/[ .:-]/)[0]),
           );
           if (!p) return { lines: [`cat: ${q}: not found. try: ls projects`], cls: 'err' };
           const lines = [
@@ -1168,7 +1168,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
           const pat = raw.trim();
           if (!pat) return { lines: ['grep: missing pattern'], cls: 'err' };
           if (!stdin)
-            return { lines: ['grep: reads stdin — try: projects | grep rust'], cls: 'err' };
+            return { lines: ['grep: reads stdin (try: projects | grep rust)'], cls: 'err' };
           const re = new RegExp(pat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
           const hits = stdin.filter((l) => re.test(l));
           return {
@@ -1241,9 +1241,9 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
         },
         src(args) {
           const topics = {
-            rrf: ['wasm/lab.rs', 'rrf_term — Reciprocal Rank Fusion (QuorumRAG)'],
-            xor: ['wasm/lab.rs', 'xor_distance / bucket_index — Kademlia DHT'],
-            hash: ['wasm/lab.rs', 'fnv1a32 — content addressing'],
+            rrf: ['wasm/lab.rs', 'rrf_term: Reciprocal Rank Fusion (QuorumRAG)'],
+            xor: ['wasm/lab.rs', 'xor_distance / bucket_index: Kademlia DHT'],
+            hash: ['wasm/lab.rs', 'fnv1a32: content addressing'],
             wasm: ['wasm/lab.rs', 'the whole module'],
             terminal: ['src/pages/lab.astro', 'this terminal engine'],
             sw: ['public/lab/sw.js', 'the offline service worker'],
@@ -1273,7 +1273,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
             lines: [
               'The through-line:',
               '',
-              '  patent      never asserts absence — it reports only what it',
+              '  patent      never asserts absence; it reports only what it',
               '              actually checked, in the sources it actually reached.',
               '  QuorumRAG   surfaces evidence only after independent retrievers',
               '              reach consensus. No quorum, no claim.',
@@ -1291,7 +1291,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
               'RIAD(1)                     Personal Manual                    RIAD(1)',
               '',
               'NAME',
-              '     riad — software & AI engineer; builds in Rust and Python',
+              '     riad: software & AI engineer; builds in Rust and Python',
               '',
               'SYNOPSIS',
               '     riad [--rust] [--python] [--distributed-systems] <hard-problem>',
@@ -1322,9 +1322,9 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
             lines: [
               `FCP   ${fmtMs(v.fcp)}      LCP   ${fmtMs(v.lcp)}`,
               `TTFB  ${fmtMs(v.ttfb)}      CLS   ${v.cls.toFixed(3)}`,
-              `DCL   ${fmtMs(v.dcl)}      INP   ${v.inp != null ? fmtMs(v.inp) : '—'}`,
+              `DCL   ${fmtMs(v.dcl)}      INP   ${v.inp != null ? fmtMs(v.inp) : '–'}`,
               `transferred  ${fmtKb(v.bytes)}   ·   JS  ${fmtKb(v.jsBytes)}   ·   ${v.reqs} requests`,
-              '(measured in your browser — nothing sent anywhere)',
+              '(measured in your browser, nothing sent anywhere)',
             ],
           };
         },
@@ -1404,7 +1404,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
           const { cmd, args, raw } = tokenize(stage);
           const fn = COMMANDS[cmd];
           if (!fn) {
-            out(`${esc(cmd)}: command not found — type <b>help</b>`, 'err');
+            out(`${esc(cmd)}: command not found; type <b>help</b>`, 'err');
             return;
           }
           let res;
@@ -1473,7 +1473,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
             input.value = history[histIdx] || '';
           }
         } else if (e.key === 'Tab' && !e.shiftKey) {
-          // Only steal Tab when there's something to complete — an empty input
+          // Only steal Tab when there's something to complete; an empty input
           // has nothing to offer, so let focus move on rather than trap it here.
           const cur = input.value.trim();
           if (!cur) return;
@@ -1500,7 +1500,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
 
       function boot() {
         const lines = [
-          ['lab-term 1.0 — a real shell over real data.', 'muted'],
+          ['lab-term 1.0: a real shell over real data.', 'muted'],
           ['wasm: rustc → wasm32-unknown-unknown (loads on first use)', 'muted'],
           [
             'type <b>help</b>, or click a chip below. pipes work: <b>projects | grep rust</b>',
@@ -1543,8 +1543,8 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
         };
       }
       const fmtMs = (v) =>
-        v == null ? '—' : v < 1000 ? Math.round(v) + ' ms' : (v / 1000).toFixed(2) + ' s';
-      const fmtKb = (b) => (b ? (b / 1024).toFixed(1) + ' KB' : '—');
+        v == null ? '–' : v < 1000 ? Math.round(v) + ' ms' : (v / 1000).toFixed(2) + ' s';
+      const fmtKb = (b) => (b ? (b / 1024).toFixed(1) + ' KB' : '–');
       function rate(metric, v) {
         if (v == null) return '';
         const t = {
@@ -1565,7 +1565,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
           ['LCP', fmtMs(v.lcp), rate('lcp', v.lcp)],
           ['FCP', fmtMs(v.fcp), rate('fcp', v.fcp)],
           ['CLS', v.cls.toFixed(3), rate('cls', v.cls)],
-          ['INP', v.inp != null ? fmtMs(v.inp) : '—', rate('inp', v.inp)],
+          ['INP', v.inp != null ? fmtMs(v.inp) : '–', rate('inp', v.inp)],
           ['TTFB', fmtMs(v.ttfb), rate('ttfb', v.ttfb)],
           ['DOMContentLoaded', fmtMs(v.dcl), ''],
           ['Transferred', fmtKb(v.bytes), ''],
@@ -1620,7 +1620,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
           const ms = await ping(url);
           rows.push([name + ' rtt', ms == null ? 'blocked' : Math.round(ms) + ' ms']);
         }
-        rows.push(['server involved', 'none — measured in your browser']);
+        rows.push(['server involved', 'none (measured in your browser)']);
         return rows;
       }
       function renderWhere() {
@@ -1690,7 +1690,7 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
           setSw('registering…', false);
           await navigator.serviceWorker.register('/lab/sw.js', { scope: '/lab/' });
           await navigator.serviceWorker.ready;
-          setSw('● offline-ready — kill your network and reload', true);
+          setSw('● offline-ready: kill your network and reload', true);
         } catch (e) {
           setSw('failed: ' + e.message, false);
         }
@@ -1722,10 +1722,10 @@ pub fn fnv1a32(bytes: &[u8]) -> u32 {
         ['▍ scoring with reciprocal rank fusion (k=60)…', 'muted', 360],
         ['', 'muted', 80],
         ['verdict: 2 strong overlaps found in the sources checked.', 'accent', 200],
-        ['  • cargo-deny      partial — license/advisory focus, not ranking', '', 120],
+        ['  • cargo-deny      partial: license/advisory focus, not ranking', '', 120],
         ['  • similar (×1)    closest match; see report', '', 120],
         ['', 'muted', 80],
-        ['note: integrity-scoped — reports only what was found where it looked.', 'muted', 160],
+        ['note: integrity-scoped; reports only what was found where it looked.', 'muted', 160],
         ['      never asserts absence.', 'muted', 160],
         ['', 'muted', 60],
         ['✓ done in 1.84s · JSON written to ./patent.json', 'ok', 0],

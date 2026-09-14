@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script.
+// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Quick-look sim overlay: clones a card's sim SVG full-screen for 3 seconds.
 // "Simulate" buttons are handled by a single delegated listener on the
 // #projects section (in the page orchestrator) so they survive every language
@@ -22,7 +22,7 @@ export const initSimOverlay = () => {
     const cloned = content.querySelector('.sim-visual');
     if (cloned) {
       cloned.classList.add('active');
-      // CSS can't stop SMIL — drop <animate> nodes under reduced motion.
+      // CSS can't stop SMIL, so drop <animate> nodes under reduced motion.
       if (prefersReducedMotion) cloned.querySelectorAll('animate').forEach((a) => a.remove());
     }
     simOverlay.classList.add('open');

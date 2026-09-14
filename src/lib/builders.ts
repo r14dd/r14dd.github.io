@@ -2,16 +2,16 @@
 //
 // Every content section (experience, projects, skills, teaching, education,
 // recommendations, connect) is rendered from these builders in TWO places:
-//   1. Build time — src/pages/index.astro frontmatter, via <Fragment set:html={...} />
+//   1. Build time: src/pages/index.astro frontmatter, via <Fragment set:html={...} />
 //      (the static, SEO / no-JS HTML).
-//   2. Runtime — the inline <script> in index.astro, on every language switch,
+//   2. Runtime: the inline <script> in index.astro, on every language switch,
 //      via section.innerHTML = build*(data).
 //
 // Before this module the two render paths were hand-duplicated (~400 lines that
 // could silently drift). Keeping them here guarantees they stay identical: add a
 // field to profile.ts once and both paths pick it up.
 //
-// These functions are pure string builders — no DOM, no browser APIs — so they
+// These functions are pure string builders (no DOM, no browser APIs), so they
 // run unchanged in Node (build) and the browser (runtime).
 
 import type { I18nProfile } from '../data/profile-i18n';
@@ -97,7 +97,7 @@ export const skillLogoMap: Record<string, string> = {
   Jest: '/logos/si-jest.svg',
 };
 
-// All profile data is interpolated into HTML strings — escape it uniformly.
+// All profile data is interpolated into HTML strings, so escape it uniformly.
 // Safe for both element content and double-quoted attribute values.
 export const esc = (s: string): string =>
   String(s)
@@ -318,7 +318,7 @@ export const buildProjects = (data: I18nProfile): string => {
     const badges = (p.badges || [])
       .map(
         (b) =>
-          `<span class="badge-stat proj-badge-live" data-badge-api="${esc(b.api || '')}"><a class="badge-link" href="${esc(b.link || '#')}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${esc(b.pillLabel)}</a> ${esc(b.platform)}</span>`,
+          `<span class="badge-stat proj-badge-live" data-badge-api="${esc(b.api || '')}"><a class="badge-link" href="${esc(b.link || '#')}" target="_blank" rel="noopener"><span class="badge-count">–</span> ${esc(b.pillLabel)}</a> ${esc(b.platform)}</span>`,
       )
       .join(' · ');
     const badgeStats = badges ? `<p class="proj-stats">${badges}</p>` : '';
@@ -341,9 +341,9 @@ export const buildProjects = (data: I18nProfile): string => {
       ? `<a class="feat-gh" href="${p.links.docs}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M3.5 1A1.5 1.5 0 0 0 2 2.5v11A1.5 1.5 0 0 0 3.5 15H13a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3.5zM3 2.5a.5.5 0 0 1 .5-.5H13v9H3.5a1.5 1.5 0 0 0-.5.085V2.5zM3.5 12H13v2H3.5a.5.5 0 0 1 0-1zM5 4h6v1H5V4zm0 2.5h6v1H5v-1z"/></svg>docs.rs</a>`
       : '';
     const sim = hasSim(p.name);
-    const simLabel = p.name.split('—')[0].trim();
+    const simLabel = p.name.split(':')[0].trim();
     const simBtn = sim
-      ? `<button class="sim-toggle" type="button" aria-label="${esc(data.labels.simulate)} — ${esc(simLabel)}"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>${esc(data.labels.simulate)}</button>`
+      ? `<button class="sim-toggle" type="button" aria-label="${esc(data.labels.simulate)}: ${esc(simLabel)}"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>${esc(data.labels.simulate)}</button>`
       : '';
     const simSvg = sim ? buildProjectSim(p, data.labels.simLegends) : '';
     return `<div class="proj-card${sim ? ' has-sim' : ''}${isFeature ? ' proj-card-wide proj-card-feature' : ''}" role="button" tabindex="0" data-project="${esc(p.name)}">

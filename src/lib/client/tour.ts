@@ -1,5 +1,5 @@
 // First-visit tour. A pill offers it once; `?tour` opens it on demand. The
-// visitor picks who they are and the route through the sections follows —
+// visitor picks who they are and the route through the sections follows:
 // a recruiter sees the work first, an engineer the terminal.
 import { prefersReducedMotion } from './motion';
 import { smoothScrollTo } from './nav';

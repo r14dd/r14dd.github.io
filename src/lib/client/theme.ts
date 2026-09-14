@@ -1,12 +1,12 @@
 // The theme toggle. The accent itself is owned by time-aware.ts (data-period on
-// <html> + base.css) — nothing here may touch accent custom properties.
+// <html> + base.css). Nothing here may touch accent custom properties.
 import * as sfx from './sfx';
 import { setItem } from './storage';
 import { state } from './state';
 
 // One crossfade for the whole page, all of it at once. Two earlier versions
-// tried to make the change travel — a circle wiped outwards from the button, and
-// then a wave that re-tinted block by block — and both read as odd for the same
+// tried to make the change travel (a circle wiped outwards from the button, and
+// then a wave that re-tinted block by block), and both read as odd for the same
 // reason: they asked you to watch a colour change go somewhere. A theme is not
 // an event with a location. The page is simply the other colour a quarter of a
 // second later, and the only thing to notice is that nothing flashed.
@@ -21,8 +21,8 @@ const GROUND_MS = 150;
 // makes them snap, which is exactly the tell to avoid.
 const SETTLE_MS = 60;
 
-// Exported so i18n-runtime can re-stamp the label after a language switch —
-// the icon doesn't need it (⌘/☀️ read the same everywhere), only the words do.
+// Exported so i18n-runtime can re-stamp the label after a language switch.
+// The icon doesn't need it (⌘/☀️ read the same everywhere), only the words do.
 export const syncThemeAriaLabel = () => {
   const themeToggle = document.getElementById('theme-toggle');
   const isLight = document.documentElement.classList.contains('light');

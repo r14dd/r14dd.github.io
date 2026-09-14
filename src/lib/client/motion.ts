@@ -1,4 +1,4 @@
-// Shared motion flags, evaluated once at import — the whole page treats
+// Shared motion flags, evaluated once at import: the whole page treats
 // reduced-motion as a load-time decision (matching the original inline
 // script, which captured it in one const at startup).
 export const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

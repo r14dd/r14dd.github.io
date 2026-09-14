@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { join, extname } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
-// fileURLToPath, not .pathname — the latter stays percent-encoded, so a repo
+// fileURLToPath, not .pathname: the latter stays percent-encoded, so a repo
 // living under a directory with a space or a non-ASCII character would send
 // every readFileSync below to a path that does not exist.
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -48,7 +48,7 @@ let files;
 try {
   files = walk(dist);
 } catch {
-  console.error('check-claims: dist/ not found — run `npm run build` first.');
+  console.error('check-claims: dist/ not found, run `npm run build` first.');
   process.exit(1);
 }
 
@@ -111,7 +111,7 @@ for (const rel of ['README.md', 'src/pages/colophon.astro', 'src/pages/lab.astro
 
 // ---- README numbers -------------------------------------------------------
 // The colophon imports claims.ts, so its numbers cannot drift. The README is
-// markdown and can't import anything, so it states its own — and did drift
+// markdown and can't import anything, so it states its own, and did drift
 // ("~27 feature modules" against 30 on disk). These are re-derived straight
 // from the tree rather than from claims.ts: nothing in the colophon says them.
 const readme = readFileSync(join(root, 'README.md'), 'utf8');
@@ -129,7 +129,7 @@ for (const [what, re, actual] of [
   ['README worker count', /\*\*Backend:\*\* (\d+) Cloudflare Workers/, workerDirs.length],
 ]) {
   const m = readme.match(re);
-  if (!m) fail(`${what} — no claim matching ${re.source}`, 'a stated number', 'nothing matched');
+  if (!m) fail(`${what}: no claim matching ${re.source}`, 'a stated number', 'nothing matched');
   else if (Number(m[1]) !== actual) fail(what, m[1], actual);
 }
 
@@ -137,11 +137,11 @@ for (const [what, re, actual] of [
 if (failures.length) {
   console.error(`\n  check-claims: ${failures.length} claim(s) no longer true\n`);
   for (const f of failures) console.error(`  ✗ ${f}\n`);
-  console.error('  Fix the site or fix src/data/claims.ts — but do not ship the lie.\n');
+  console.error('  Fix the site or fix src/data/claims.ts, but do not ship the lie.\n');
   process.exit(1);
 }
 console.log(
-  `  ✓ claims verified — ${runtime.length} runtime dep, ${pages} pages, ` +
+  `  ✓ claims verified: ${runtime.length} runtime dep, ${pages} pages, ` +
     `${fonts.length} fonts (${Math.round(fontBytes / 1024)}KB), ` +
     `html ${Math.round(homeGz / 1024)}KB gz, js ${Math.round(jsGz / 1024)}KB gz, ` +
     `README ${clientModules} modules / ${workerDirs.length} workers`,

@@ -7,7 +7,7 @@ import Analytics from '../components/Analytics.astro';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>404 — Page Not Found</title>
+    <title>404: Page Not Found</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <meta id="theme-color-meta" name="theme-color" content="#050505" />
@@ -29,7 +29,7 @@ import Analytics from '../components/Analytics.astro';
     </style>
     <script>
       import { getItem } from '../lib/client/storage';
-      // Safari Private Browsing throws reading localStorage itself — go through
+      // Safari Private Browsing throws reading localStorage itself; go through
       // the shared shim so a blocked store just means dark/English, not a dead script.
       if (getItem('portfolio-theme') === 'light') {
         document.documentElement.classList.add('light');
@@ -50,7 +50,7 @@ import Analytics from '../components/Analytics.astro';
         --bg: #ffffff;
         --text: #1a1a1a;
         --muted: #777777;
-        /* Darker than the old #a8863d, same gold — that one measured 3.42:1
+        /* Darker than the old #a8863d, same gold; that one measured 3.42:1
            against white and this is the only link off the page. Matches the
            site's own light-mode default accent, which already clears 4.5:1. */
         --accent: #876c30;

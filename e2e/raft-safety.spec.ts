@@ -1,5 +1,5 @@
 /* Safety properties from the Raft paper (§5.2, §5.3, §5.4), asserted against
- * the exact engine that runs on /lab — imported directly, executed headless.
+ * the exact engine that runs on /lab, imported directly, executed headless.
  * Each run pushes the cluster through minutes of simulated time under random
  * crashes, restarts and partitions. The seeds are fixed, so a failure here is
  * reproducible, not flaky.
@@ -53,7 +53,7 @@ function chaosRun(seed: number, seconds: number): RunResult {
     observe();
     const r = rand();
     if (r < 0.002) {
-      // Crash a random live node — but never drop below a majority of live
+      // Crash a random live node, but never drop below a majority of live
       // nodes, or the run just stalls instead of exercising anything.
       const live = cluster.nodes.filter((n) => n.alive);
       if (live.length > 3) cluster.crash(live[(rand() * live.length) | 0].id);
@@ -84,13 +84,13 @@ for (const seed of [7, 42, 1337]) {
   test(`raft safety properties hold under chaos (seed ${seed})`, () => {
     const { cluster, violations } = chaosRun(seed, 120);
 
-    // §5.2 Election Safety — at most one leader per term, checked every tick.
+    // §5.2 Election Safety: at most one leader per term, checked every tick.
     expect(violations).toEqual([]);
 
     // Liveness after healing: the settled cluster has exactly one leader.
     expect(cluster.leader()).not.toBeNull();
 
-    // §5.3 Log Matching — if two logs share (index, term), they are identical
+    // §5.3 Log Matching: if two logs share (index, term), they are identical
     // up through that index. Pairwise over full logs.
     for (const a of cluster.nodes)
       for (const b of cluster.nodes) {
@@ -106,7 +106,7 @@ for (const seed of [7, 42, 1337]) {
         }
       }
 
-    // §5.4.3 State Machine Safety — applied sequences are prefix-consistent
+    // §5.4.3 State Machine Safety: applied sequences are prefix-consistent
     // across every pair of nodes.
     for (const a of cluster.nodes)
       for (const b of cluster.nodes) {

@@ -10,11 +10,11 @@ Recruiters, hiring managers, and engineering peers evaluating Riad Mukhtarov for
 
 ## Product Purpose
 
-A single-page portfolio that demonstrates engineering craft through its own implementation. The site itself is the proof of work — every interaction, animation, and architectural choice is intentional. Success looks like: a visitor remembers this site a week later and can describe what made it different.
+A single-page portfolio that demonstrates engineering craft through its own implementation. The site itself is the proof of work: every interaction, animation, and architectural choice is intentional. Success looks like: a visitor remembers this site a week later and can describe what made it different.
 
 ## Brand Personality
 
-Precise, confident, restrained. Emil Kowalski / Linear school — every pixel earns its place. The complexity lives beneath a calm surface: time-aware theming, procedural audio, a working terminal emulator, i18n across three languages. The site doesn't announce these things; you discover them.
+Precise, confident, restrained. Emil Kowalski / Linear school: every pixel earns its place. The complexity lives beneath a calm surface: time-aware theming, procedural audio, a working terminal emulator, i18n across three languages. The site doesn't announce these things; you discover them.
 
 ## Anti-references
 
@@ -24,11 +24,11 @@ Precise, confident, restrained. Emil Kowalski / Linear school — every pixel ea
 
 ## Design Principles
 
-1. **Show, don't tell** — The portfolio's implementation IS the resume. A working terminal says more than a bullet point about CLI experience.
-2. **Discover, don't announce** — Features reward exploration (command palette, keyboard shortcuts, sound design) rather than demanding attention with tooltips and onboarding.
-3. **When in doubt, do less** — Remove before adding. If an element doesn't make the site meaningfully better, it doesn't ship.
-4. **Craft is the differentiator** — The gap between "good enough" and "precise" is where credibility lives. Easing curves, font choices, spacing rhythm — these details compound.
-5. **Substance over spectacle** — Every interactive element serves a purpose beyond delight. The terminal teaches; the i18n reflects real multilingual identity; time-aware theming reflects Baku.
+1. **Show, don't tell**: The portfolio's implementation IS the resume. A working terminal says more than a bullet point about CLI experience.
+2. **Discover, don't announce**: Features reward exploration (command palette, keyboard shortcuts, sound design) rather than demanding attention with tooltips and onboarding.
+3. **When in doubt, do less**: Remove before adding. If an element doesn't make the site meaningfully better, it doesn't ship.
+4. **Craft is the differentiator**: The gap between "good enough" and "precise" is where credibility lives. Easing curves, font choices, spacing rhythm: these details compound.
+5. **Substance over spectacle**: Every interactive element serves a purpose beyond delight. The terminal teaches; the i18n reflects real multilingual identity; time-aware theming reflects Baku.
 
 ## Accessibility & Inclusion
 

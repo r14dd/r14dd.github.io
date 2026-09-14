@@ -1,7 +1,7 @@
 {
   "name": "toy-api",
   "private": true,
-  "description": "Toy layer API — visitor counter, song relay baton, paper airplane messages",
+  "description": "Toy layer API: visitor counter, song relay baton, paper airplane messages",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy"

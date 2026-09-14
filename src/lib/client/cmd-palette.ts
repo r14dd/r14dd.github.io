@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script.
+// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Command palette (Cmd/Ctrl-K), keyboard-shortcuts overlay, and the unified
 // page-find: palette queries mark matches live; committing them opens the
 // find-nav bar. Open-state flags live in shared state so the shortcut layer
@@ -34,7 +34,7 @@ export const initCmdPalette = () => {
 
   const getCommands = () => {
     // state.currentProfile is set synchronously by initI18n before any of this
-    // can run, so it's the correct locale on /ru/ and /az/ too — falling back
+    // can run, so it's the correct locale on /ru/ and /az/ too, falling back
     // to state.I18N.en here would throw, since only the served locale ships
     // inline and the others load lazily.
     const nav = state.currentProfile?.labels?.nav || {};
@@ -236,13 +236,13 @@ export const initCmdPalette = () => {
   };
 
   // The full-page find-and-mark pass (TreeWalker + replaceChild per hit) is
-  // too heavy to run per keystroke — debounce it and re-render the palette
+  // too heavy to run per keystroke, so debounce it and re-render the palette
   // when the marks land. The command list itself stays synchronous.
   let pageMarkQuery = null;
   let pageMarkCount = 0;
   let pageMarkTimer = null;
   // Shortest query known to match nothing. Anything typed on top of it cannot
-  // match either — "quantumm" can only be rarer than "quantum" — so the walk is
+  // match either ("quantumm" can only be rarer than "quantum"), so the walk is
   // skipped entirely. Typing past a dead end is where the old code worked
   // hardest for a guaranteed zero.
   let emptyQuery = null;
@@ -259,7 +259,7 @@ export const initCmdPalette = () => {
         clearPageMarks();
         pageMarkCount = 0;
       }
-      // clearPageMarks (inside highlightPage) resets pageMarkQuery — set it after.
+      // clearPageMarks (inside highlightPage) resets pageMarkQuery: set it after.
       pageMarkQuery = q;
       if (state.cmdOpen && cmdInput && cmdInput.value.trim() === q) renderCmd(cmdInput.value, true);
     }, 120);
@@ -285,7 +285,7 @@ export const initCmdPalette = () => {
       if (matchCount > 0) {
         const chrome = state.currentProfile?.labels?.chrome || {};
         // English keeps its own singular/plural branch instead of the
-        // {count} template — a fixed phrase there would read "1 matches".
+        // {count} template: a fixed phrase there would read "1 matches".
         const lang = document.documentElement.lang || 'en';
         const matchLabel =
           lang === 'en'
@@ -310,10 +310,10 @@ export const initCmdPalette = () => {
     cmdHighlightIdx = 0;
     if (!cmdFiltered.length) {
       const emptyQuotes = [
-        '"Perhaps that is what makes life so precious." — Remarque',
-        '"No such thing as a life that\'s better than yours." — J. Cole',
-        '"I wanted peace and calm." — Remarque',
-        '"I\'m on my way." — J. Cole',
+        '"Perhaps that is what makes life so precious." (Remarque)',
+        '"No such thing as a life that\'s better than yours." (J. Cole)',
+        '"I wanted peace and calm." (Remarque)',
+        '"I\'m on my way." (J. Cole)',
       ];
       const eq = emptyQuotes[Math.floor(Math.random() * emptyQuotes.length)];
       cmdResultsEl.innerHTML =
@@ -398,14 +398,14 @@ export const initCmdPalette = () => {
   };
   kbdBackdrop?.addEventListener('click', closeKbd);
 
-  // Unified find — page marks shared between palette and find-nav
+  // Unified find: page marks shared between palette and find-nav
   let pageMarks = [];
   let findIdx = 0;
   let findCommitting = false;
 
   // normalize() walks a parent's whole child list, so calling it per mark made
   // a paragraph with a dozen hits re-walk itself a dozen times. Merging text
-  // nodes is order-independent — one pass per parent, after the replacements,
+  // nodes is order-independent, so one pass per parent, after the replacements,
   // lands the same DOM.
   const clearPageMarks = () => {
     const touched = new Set();

@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script;
+// @ts-nocheck: verbatim move of the (never type-checked) inline script;
 // typing it for strict TS would mean touching runtime logic. Separate task.
 // Ambient page behaviors: Baku clock, scroll-timeline in-view observer,
 // external-link exit pulse, and the connect-section arrival sync.
@@ -67,7 +67,7 @@ export const initAmbient = () => {
     });
   }
 
-  // ── CONNECT SECTION ARRIVAL — sync CTA pulse + map ping ──
+  // ── CONNECT SECTION ARRIVAL: sync CTA pulse + map ping ──
   {
     const connectEl = document.getElementById('connect');
     if (connectEl) {

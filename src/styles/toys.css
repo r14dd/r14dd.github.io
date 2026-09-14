@@ -9,7 +9,7 @@
 }
 
 /* While the glass is broken, further rage-clicks must not drag out a text
-   selection — the burst should read as hitting glass, not selecting a paragraph. */
+   selection, so the burst should read as hitting glass, not selecting a paragraph. */
 body.glass-shattered {
   user-select: none;
   -webkit-user-select: none;
@@ -137,12 +137,12 @@ html.light .crack-ring {
   transform: scale(0.85);
 }
 
-/* The dots are 9px of deliberate window-chrome mimicry — fine under a mouse,
+/* The dots are 9px of deliberate window-chrome mimicry: fine under a mouse,
    far too small for a thumb now that they ship on touch. Each gets an
    invisible ~43px-tall target instead, sized to the space that is actually
    free rather than to a round number:
 
-   · Upward it borrows the terminal window's 0.9rem of padding — nothing
+   · Upward it borrows the terminal window's 0.9rem of padding, and nothing
      interactive lives up there. Downward it stops just short of the first
      output line: a symmetric 44px box would have swallowed taps meant for the
      terminal body, which is a worse bug than the one being fixed. 40px tall

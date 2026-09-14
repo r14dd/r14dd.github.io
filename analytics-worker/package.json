@@ -1,7 +1,7 @@
 {
   "name": "analytics-api",
   "private": true,
-  "description": "Analytics proxy for the riad.cc /admin dashboard — Cloudflare Worker over the GraphQL RUM API",
+  "description": "Analytics proxy for the riad.cc /admin dashboard: Cloudflare Worker over the GraphQL RUM API",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy"

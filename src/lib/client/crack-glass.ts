@@ -2,7 +2,7 @@
 import { state } from './state';
 
 export const initCrackGlass = () => {
-  // Five hits, but at the same rate three used to need (~4.3/sec) — widening the
+  // Five hits, but at the same rate three used to need (~4.3/sec), widening the
   // window with the count keeps the gesture "rage", not "fast enough to be luck".
   const CLICK_WINDOW = 1200;
   const MIN_CLICKS = 5;
@@ -140,7 +140,7 @@ export const initCrackGlass = () => {
   const spawnCrew = async () => {
     // One crew, and only when there is something to fix. Hits landing mid-walk
     // re-arm the timer, so without this a second crew gets dispatched on top of
-    // the first — two crews on screen, and whichever finishes first wipes the
+    // the first: two crews on screen, and whichever finishes first wipes the
     // glass out from under the other.
     if (!pane || crewOnFloor || !fractures.length) return;
     crewOnFloor = true;
@@ -213,7 +213,7 @@ export const initCrackGlass = () => {
         }
       }
 
-      // Job done — walk off the nearest edge.
+      // Job done: walk off the nearest edge.
       const exitX = cur.x > innerWidth / 2 ? innerWidth + 90 : -90;
       const from = { ...cur };
       await tween(460, (p) => place(from.x + (exitX - from.x) * p, from.y));
@@ -224,7 +224,7 @@ export const initCrackGlass = () => {
     }
 
     // Nothing is pending now, so a timer still armed from a mid-walk hit would
-    // only dispatch a crew onto an empty floor — or onto a fresh break it never
+    // only dispatch a crew onto an empty floor, or onto a fresh break it never
     // saw start.
     if (repairTimer) {
       clearTimeout(repairTimer);

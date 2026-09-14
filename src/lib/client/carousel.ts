@@ -21,8 +21,8 @@ export function initCarousel() {
   const count = realCards.length;
   if (count < 2) return;
 
-  // Clones are aria-hidden but that doesn't pull them out of the tab order —
-  // keyboard users would still land on a link a screen reader was told
+  // Clones are aria-hidden but that doesn't pull them out of the tab order,
+  // so keyboard users would still land on a link a screen reader was told
   // doesn't exist. Pin every focusable node inside to -1 (not `inert`: the
   // clones sit at the visible loop edges and still need to be clickable).
   const detabify = (clone: HTMLElement) => {
@@ -212,7 +212,7 @@ export function initCarousel() {
   const recsSection = document.getElementById('recommendations');
   if (recsSection) {
     // initCarousel re-runs on every language switch against the persistent
-    // #recommendations element — disconnect the previous pair so stale
+    // #recommendations element: disconnect the previous pair so stale
     // closures (holding detached carousel nodes) stop firing.
     hintObs?.disconnect();
     autoObs?.disconnect();

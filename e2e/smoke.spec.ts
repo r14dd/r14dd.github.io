@@ -12,7 +12,7 @@ const track = (page: Page) => {
 };
 
 // The interaction layer (palette, modal, gestures) loads as a deferred chunk
-// right after `load`. Tests act immediately after navigation — humans don't —
+// right after `load`. Tests act immediately after navigation (humans don't),
 // so wait for the whole layer before exercising it.
 const ready = (page: Page) =>
   page.waitForFunction(() => document.documentElement.dataset.jsReady === '1');
@@ -76,7 +76,7 @@ test.describe('reduced-motion path (deterministic)', () => {
   });
 
   // Find rewrites the page's text nodes in place. Closing the palette has to
-  // put them back exactly — same words, and merged back into single text
+  // put them back exactly: same words, and merged back into single text
   // nodes rather than left as the shrapnel of a split.
   test('palette find leaves the page as it found it', async ({ page }) => {
     const adjacentTextNodes = () =>
@@ -169,7 +169,7 @@ test.describe('reduced-motion path (deterministic)', () => {
     await page.locator('#lang-menu [data-lang="ru"]').click();
     await expect(page.locator('#experience h2')).toContainText(/[А-Яа-я]/, { timeout: 10_000 });
     await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
-    // The swap is in-place, but the URL has to agree with what's on screen —
+    // The swap is in-place, but the URL has to agree with what's on screen,
     // a copied link must resolve to the language the copier was reading.
     await expect(page).toHaveURL(/\/ru\/$/);
     await page.locator('#lang-toggle').click();
@@ -218,7 +218,7 @@ test.describe('reduced-motion path (deterministic)', () => {
   });
 
   test('a cold load of /ru/ stays Russian and is fully interactive', async ({ page }) => {
-    // The saved preference is English — the URL must still win, or a shared
+    // The saved preference is English, but the URL must still win, or a shared
     // /ru/ link silently flips to English for anyone who visited before.
     await page.goto('/');
     await page.evaluate(() => localStorage.setItem('portfolio-lang', 'en'));
@@ -279,7 +279,7 @@ test.describe('prerendered locales (no JavaScript)', () => {
   test('the language switcher works without JavaScript', async ({ page }) => {
     await page.goto('/');
     // No JS means no .open class, so the menu is revealed by hover/focus-within
-    // on the switcher (html.no-js only). Hover first — the links are genuinely
+    // on the switcher (html.no-js only). Hover first: the links are genuinely
     // hidden until then, which is also what a sighted no-JS visitor sees.
     await page.locator('.lang-switcher').hover();
     await page.locator('#lang-menu a[data-lang="ru"]').click();
@@ -288,7 +288,7 @@ test.describe('prerendered locales (no JavaScript)', () => {
   });
 
   test('every content section is actually visible without JavaScript', async ({ page }) => {
-    // Playwright's toBeVisible() ignores opacity — this shipped as a blank
+    // Playwright's toBeVisible() ignores opacity: this shipped as a blank
     // page below the hero while the no-JS tests stayed green. Assert the
     // computed value, never the visibility heuristic.
     await page.goto('/');
@@ -330,7 +330,7 @@ test.describe('touch path (phone viewport)', () => {
 
   test('terminal is interactive and the chip row is gone', async ({ page }) => {
     await expect(page.locator('.term-input')).toBeVisible();
-    // The chip row was removed everywhere — the homepage terminal is
+    // The chip row was removed everywhere: the homepage terminal is
     // typing-only on every pointer type.
     await expect(page.locator('#term-chips')).toHaveCount(0);
   });
@@ -340,7 +340,7 @@ test.describe('touch path (phone viewport)', () => {
     await expect(links).toHaveCount(4);
     const tops = await links.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().top));
     for (const t of tops) expect(Math.abs(t - tops[0])).toBeLessThan(2);
-    // And they fit — no horizontal page scroll.
+    // And they fit: no horizontal page scroll.
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );
@@ -379,7 +379,7 @@ test.describe('touch path (phone viewport)', () => {
       const el = document.querySelector('.term-input') as HTMLElement;
       const term = document.querySelector('.terminal-window') as HTMLElement;
       const t = getComputedStyle(el).transform;
-      // matrix(a, b, c, d, tx, ty) — `a` is the horizontal scale.
+      // matrix(a, b, c, d, tx, ty): `a` is the horizontal scale.
       const scale = t === 'none' ? 1 : parseFloat(t.slice(7).split(',')[0]);
       return {
         computed: parseFloat(getComputedStyle(el).fontSize),

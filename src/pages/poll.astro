@@ -1,6 +1,6 @@
 ---
 // Standalone classroom-poll phone page (QR target).
-// Deliberately does NOT use BaseLayout — that inlines ~3000 lines of portfolio
+// Deliberately does NOT use BaseLayout: that inlines ~3000 lines of portfolio
 // CSS. We copy only the viewport meta, the three Manrope @font-face blocks and
 // the manrope-latin.woff2 preload, then force a calm dark theme to match riad.cc.
 // The page never learns the option text or vote counts: it only sends A/B/C/D.
@@ -190,7 +190,7 @@ import Analytics from '../components/Analytics.astro';
         color: var(--text-soft);
       }
 
-      /* Press feedback (mobile has no :hover — use :active). */
+      /* Press feedback (mobile has no :hover, use :active). */
       .poll-option:active:not(:disabled) {
         transform: scale(0.975);
         border-color: rgba(var(--accent-rgb), 0.55);
@@ -395,7 +395,7 @@ import Analytics from '../components/Analytics.astro';
 
     <script is:inline>
       (function () {
-        // Private-mode Safari (and blocked-storage webviews — exactly the phones
+        // Private-mode Safari (and blocked-storage webviews, exactly the phones
         // a QR code on a slide gets scanned by) throws just reading localStorage.
         // Fall back to an in-memory store so a vote this session still works and
         // still de-dupes; it just won't survive a reload.
@@ -425,14 +425,14 @@ import Analytics from '../components/Analytics.astro';
         var params = new URLSearchParams(location.search);
         var session = params.get('s');
 
-        // Worker base by hostname — must equal the prod value the slide engine uses.
+        // Worker base by hostname: must equal the prod value the slide engine uses.
         var WORKER =
           location.hostname === 'riad.cc'
             ? 'https://poll-api.riad-mrv.workers.dev'
             : 'http://' + location.hostname + ':8787';
 
         // LAN http (e.g. a phone hitting 192.168.x.x) is NOT a secure context, so
-        // crypto.randomUUID is undefined there — build a v4 UUID from getRandomValues.
+        // crypto.randomUUID is undefined there: build a v4 UUID from getRandomValues.
         function fallbackUuid() {
           var b = crypto.getRandomValues(new Uint8Array(16));
           b[6] = (b[6] & 0x0f) | 0x40;
@@ -521,18 +521,18 @@ import Analytics from '../components/Analytics.astro';
             .then(function (r) {
               inFlight = false;
 
-              // Already voted (lost-response recovery) — treat as success.
+              // Already voted (lost-response recovery): treat as success.
               if (r.status === 409) {
                 var c409 = r.data.choice || choice;
                 lsSet(votedKey, c409);
                 syncButtons();
-                setStatus('Already counted — you chose ' + c409 + '.', 'ok');
+                setStatus('Already counted: you chose ' + c409 + '.', 'ok');
                 return;
               }
 
               if (r.ok) {
                 // Voting closed: the worker returns 200 {ok:false, closed:true}.
-                // Don't record the vote or lock the student — let them vote when
+                // Don't record the vote or lock the student, let them vote when
                 // the instructor reopens the round.
                 if (r.data.closed || r.data.ok === false) {
                   pollOpen = false;
@@ -553,7 +553,7 @@ import Analytics from '../components/Analytics.astro';
                 var c = r.data.choice || choice;
                 lsSet(votedKey, c);
                 syncButtons();
-                setStatus('Vote recorded — you chose ' + c + '.', 'ok');
+                setStatus('Vote recorded: you chose ' + c + '.', 'ok');
                 return;
               }
 
@@ -565,15 +565,15 @@ import Analytics from '../components/Analytics.astro';
                 return;
               }
 
-              // Anything else — let them retry (idempotent via voterId).
+              // Anything else, let them retry (idempotent via voterId).
               syncButtons();
-              setStatus('Could not record that — tap to try again.', 'error');
+              setStatus('Could not record that, tap to try again.', 'error');
             })
             .catch(function () {
               // Timeout / network. Retrying is safe: the voterId de-dupes server-side.
               inFlight = false;
               syncButtons();
-              setStatus('Network hiccup — tap to try again.', 'error');
+              setStatus('Network hiccup, tap to try again.', 'error');
             });
         }
 
@@ -594,7 +594,7 @@ import Analytics from '../components/Analytics.astro';
           }
           if (!open) {
             syncButtons();
-            setStatus('Hang tight — voting isn’t open yet.');
+            setStatus('Hang tight, voting isn’t open yet.');
           } else if (!wasOpen) {
             syncButtons();
             setStatus('Tap your answer above.');
@@ -620,29 +620,29 @@ import Analytics from '../components/Analytics.astro';
               if (storedGen === null) {
                 storedGen = typeof gen === 'number' ? gen : 0;
               } else if (typeof gen === 'number' && gen > storedGen) {
-                // New round — clear our vote and reset to votable.
+                // New round: clear our vote and reset to votable.
                 storedGen = gen;
                 roundLocked = false;
                 if (votedKey) lsRemove(votedKey);
                 pollOpen = open;
                 syncButtons();
                 setStatus(
-                  open ? 'New round — tap your answer.' : 'Hang tight — voting isn’t open yet.',
+                  open ? 'New round, tap your answer.' : 'Hang tight, voting isn’t open yet.',
                 );
                 return;
               }
               applyOpenState(open);
             })
             .catch(function () {
-              /* transient — ignore, try again next tick */
+              /* transient: ignore, try again next tick */
             });
         }
 
         // ── Boot ──────────────────────────────────────────────────────────
-        // No ?s= in the URL — show a typed code entry for camera-less students.
+        // No ?s= in the URL: show a typed code entry for camera-less students.
         // Submitting navigates to ?s=<code>, which reloads this page with a
         // session and re-runs every code path below untouched. (A typed code
-        // carries no &n=, so all four option buttons show — an OK fallback.)
+        // carries no &n=, so all four option buttons show, an OK fallback.)
         if (!session) {
           var optionsEl = document.getElementById('options');
           var joinForm = document.getElementById('join');
@@ -674,7 +674,7 @@ import Analytics from '../components/Analytics.astro';
         var prior = getVoted();
         if (prior) {
           syncButtons();
-          setStatus('Vote recorded — you chose ' + prior + '.', 'ok');
+          setStatus('Vote recorded: you chose ' + prior + '.', 'ok');
         } else {
           syncButtons();
           setStatus('Tap your answer above.');

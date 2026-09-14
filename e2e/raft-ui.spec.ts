@@ -1,5 +1,5 @@
 /* Browser-level verification of /lab §09: the Raft cluster as a visitor
- * actually drives it — scroll it into view, watch an election, crash the
+ * actually drives it: scroll it into view, watch an election, crash the
  * leader, partition it away, heal, and check the logs converge. The engine's
  * correctness is proven headless in raft-safety.spec.ts; this file proves the
  * page wiring: visibility gating, click targets, and the rendered state.
@@ -92,7 +92,7 @@ test.describe('raft on /lab', () => {
     await expect(page.locator('#raft-panel .raft-partition')).toHaveText('partition leader');
     await page.locator('#raft-panel .raft-submit').click();
     // After healing, exactly one leader remains and every node's log has the
-    // same committed length — the stale minority got repaired.
+    // same committed length: the stale minority got repaired.
     await expect
       .poll(
         async () =>
@@ -125,7 +125,7 @@ test.describe('raft on /lab', () => {
     await expect(page.locator('#proj-modal-card .raft-node[data-auth="1"]')).toHaveCount(1, {
       timeout: 20000,
     });
-    // Close and reopen — teardown must not leave a dead panel or a second loop.
+    // Close and reopen: teardown must not leave a dead panel or a second loop.
     await page.locator('#proj-close').click();
     await expect(page.locator('#proj-modal')).not.toHaveClass(/open/);
     await card.click();

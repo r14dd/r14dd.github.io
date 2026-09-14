@@ -199,7 +199,7 @@ try {
   browser = await chromium.launch();
 } catch {
   console.error(
-    'build-og: no Playwright chromium browser found — run `npx playwright install chromium`.',
+    'build-og: no Playwright chromium browser found, run `npx playwright install chromium`.',
   );
   process.exit(1);
 }

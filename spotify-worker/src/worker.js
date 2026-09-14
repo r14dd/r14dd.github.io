@@ -59,7 +59,7 @@ export default {
     // worthless here: when the refresh token dies, the catch below still
     // serves 200 with whatever was last cached, so the widget freezes on an
     // old track and every external signal stays green. This path asks the one
-    // question that actually fails — can we still get a token?
+    // question that actually fails: can we still get a token?
     //
     // getAccessToken short-circuits on a token it already holds, so a warm
     // isolate can answer ok for up to an hour after the refresh token is

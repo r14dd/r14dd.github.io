@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script;
+// @ts-nocheck: verbatim move of the (never type-checked) inline script;
 // typing it for strict TS would mean touching runtime logic. Separate task.
 // The hero terminal: boot-typing animation (initTerminalBoot) and the
 // interactive desktop-only shell (initTerminal). Command data comes from
@@ -82,7 +82,7 @@ export const initTerminalBoot = () => {
   })();
 };
 
-// Interactive terminal — every pointer type, after the boot animation.
+// Interactive terminal: every pointer type, after the boot animation.
 //
 // This was desktop-gated for a long time, which meant the single best thing on
 // the site was dark for every phone visitor. On touch it is typing-first: the
@@ -120,7 +120,7 @@ export const initTerminal = () => {
   let histIdx = hist.length;
   const bootT = performance.now();
 
-  // Rust → WebAssembly (public/lab/lab.wasm) — lazy-loaded on first rrf/hash/xor.
+  // Rust → WebAssembly (public/lab/lab.wasm): lazy-loaded on first rrf/hash/xor.
   let wasmExports = null,
     wasmLoading = null;
   const loadWasm = () => {
@@ -168,10 +168,10 @@ export const initTerminal = () => {
   };
 
   const fmtMs = (v) =>
-    v == null ? '—' : v < 1000 ? Math.round(v) + ' ms' : (v / 1000).toFixed(2) + ' s';
-  const fmtKb = (b) => (b ? (b / 1024).toFixed(1) + ' KB' : '—');
+    v == null ? '–' : v < 1000 ? Math.round(v) + ' ms' : (v / 1000).toFixed(2) + ' s';
+  const fmtKb = (b) => (b ? (b / 1024).toFixed(1) + ' KB' : '–');
   // Field p75 for the `perf` comparison column. Cached for the session, and a
-  // failure resolves to null rather than throwing — `perf` then prints the
+  // failure resolves to null rather than throwing: `perf` then prints the
   // local-only table it always printed. A dead Worker costs a column, not the
   // command.
   let _fieldVitals;
@@ -252,7 +252,7 @@ export const initTerminal = () => {
       const ms = await probePing(url);
       rows.push([name + ' rtt', ms == null ? 'blocked' : Math.round(ms) + ' ms']);
     }
-    rows.push(['server involved', 'none — measured in your browser']);
+    rows.push(['server involved', 'none, measured in your browser']);
     return rows;
   };
 
@@ -269,7 +269,7 @@ export const initTerminal = () => {
     const cmt = (s) => '<span class="terminal-comment">' + esc(s) + '</span>';
     const skillItems = (s) => (s.groups ? s.groups.flatMap((g) => g.items || []) : s.items || []);
     // The one-page cut: same rules as scripts/build-resume.mjs and
-    // resume.astro — four roles (three bullets each), the resume.projects
+    // resume.astro: four roles (three bullets each), the resume.projects
     // ids in order (two bullets each), education title+meta, every skill.
     const resumeText = () => {
       const education = p.education || {};
@@ -280,7 +280,7 @@ export const initTerminal = () => {
       out.push('');
       out.push('EXPERIENCE');
       experience.slice(0, 4).forEach((e) => {
-        out.push(e.role + ' — ' + e.org + ', ' + e.period);
+        out.push(e.role + ' – ' + e.org + ', ' + e.period);
         (e.bullets || []).slice(0, 3).forEach((b) => out.push('  • ' + b));
       });
       out.push('');
@@ -304,7 +304,7 @@ export const initTerminal = () => {
       lines: [
         'The through-line:',
         '',
-        '  patent      never asserts absence — it reports only what it',
+        '  patent      never asserts absence: it reports only what it',
         '              actually checked, in the sources it reached.',
         '  QuorumRAG   surfaces evidence only after independent retrievers',
         '              reach consensus. No quorum, no claim.',
@@ -313,29 +313,29 @@ export const initTerminal = () => {
       ],
     });
     const REMARKS = [
-      '"I am young, I am twenty years old; yet I know nothing of life but despair, death, fear." — All Quiet on the Western Front',
-      '"But perhaps that is what makes life so precious — that it can be lost." — Three Comrades',
-      '"The world has enough people who know how to die. What it needs is people who know how to live." — Three Comrades',
-      '"I did not want to think so much. I wanted peace and calm." — All Quiet on the Western Front',
-      '"We are forlorn like children, and experienced like old men." — All Quiet on the Western Front',
+      '"I am young, I am twenty years old; yet I know nothing of life but despair, death, fear." (All Quiet on the Western Front)',
+      '"But perhaps that is what makes life so precious, that it can be lost." (Three Comrades)',
+      '"The world has enough people who know how to die. What it needs is people who know how to live." (Three Comrades)',
+      '"I did not want to think so much. I wanted peace and calm." (All Quiet on the Western Front)',
+      '"We are forlorn like children, and experienced like old men." (All Quiet on the Western Front)',
     ];
     const COLE_LINES = [
-      '"No such thing as a life that\'s better than yours." — Love Yourz',
-      '"Fool me one time, shame on you. Fool me twice, can\'t put the blame on you." — No Role Modelz',
-      "\"If they don't know your dreams, they can't shoot 'em down.\" — Apparently",
-      '"Always gon\' be a bigger house somewhere, but n***a feel me, long as the people in that motherf***er love you dearly." — Love Yourz',
-      '"I\'m on my way, I know I\'m gonna get there some day." — The Climb Back',
+      '"No such thing as a life that\'s better than yours." (Love Yourz)',
+      '"Fool me one time, shame on you. Fool me twice, can\'t put the blame on you." (No Role Modelz)',
+      "\"If they don't know your dreams, they can't shoot 'em down.\" (Apparently)",
+      '"Always gon\' be a bigger house somewhere, but n***a feel me, long as the people in that motherf***er love you dearly." (Love Yourz)',
+      '"I\'m on my way, I know I\'m gonna get there some day." (The Climb Back)',
     ];
     let quoteIdx = 0;
 
     return {
       help: () => ({
         rich: [
-          tx('ls · cat · grep') + cmt('explore — try: projects | grep rust'),
+          tx('ls · cat · grep') + cmt('explore, try: projects | grep rust'),
           tx('whoami · stats') + cmt('roles & quick numbers'),
           tx('projects · skills') + cmt('what I build'),
           tx('rrf · hash · xor') + cmt('real Rust, run live in WebAssembly'),
-          tx('raft') + cmt('live Raft consensus — crash the leader yourself'),
+          tx('raft') + cmt('live Raft consensus, crash the leader yourself'),
           tx('perf · where') + cmt('your Web Vitals & connection info'),
           tx('patent') + cmt('a real project run, replayed'),
           tx('offline') + cmt('enable/disable offline mode'),
@@ -373,7 +373,7 @@ export const initTerminal = () => {
         if (!w) return { lines: ['projects/   skills/   experience/   about   resume'] };
         if (w.startsWith('project')) return { lines: projects.map((x) => x.name) };
         if (w.startsWith('skill')) return { lines: skills.map((s) => s.category) };
-        if (w.startsWith('exp')) return { lines: experience.map((e) => e.role + ' — ' + e.org) };
+        if (w.startsWith('exp')) return { lines: experience.map((e) => e.role + ' – ' + e.org) };
         if (w.startsWith('about')) return { lines: [('Riad ' + (p.about || '')).trim()] };
         return { lines: ['ls: no such directory: ' + w], cls: 'err' };
       },
@@ -387,7 +387,7 @@ export const initTerminal = () => {
         const x = projects.find(
           (pr) =>
             pr.name.toLowerCase().includes(q) ||
-            q.includes(pr.name.toLowerCase().split(/[ .—-]/)[0]),
+            q.includes(pr.name.toLowerCase().split(/[ .-]/)[0]),
         );
         if (!x) return { lines: ['cat: ' + q + ': not found. try: ls projects'], cls: 'err' };
         const out = [x.name];
@@ -408,7 +408,7 @@ export const initTerminal = () => {
         return {
           lines: projects.length
             ? projects.map(
-                (x) => x.name + (x.tech && x.tech.length ? ' — ' + x.tech.join(', ') : ''),
+                (x) => x.name + (x.tech && x.tech.length ? ' – ' + x.tech.join(', ') : ''),
               )
             : ['No projects loaded.'],
         };
@@ -420,7 +420,7 @@ export const initTerminal = () => {
       }),
       raft: () => {
         // The live cluster lives in the Raft project modal (mountRaft). The
-        // modal machinery is in the deferred chunk — ensure it, then open.
+        // modal machinery is in the deferred chunk, ensure it, then open.
         import('./deferred')
           .then(async (d) => {
             d.initDeferred();
@@ -438,8 +438,7 @@ export const initTerminal = () => {
       grep: (args, raw, stdin) => {
         const pat = raw.trim();
         if (!pat) return { lines: ['grep: missing pattern'], cls: 'err' };
-        if (!stdin)
-          return { lines: ['grep: reads a pipe — try: projects | grep rust'], cls: 'err' };
+        if (!stdin) return { lines: ['grep: reads a pipe, try: projects | grep rust'], cls: 'err' };
         let re;
         try {
           re = new RegExp(pat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
@@ -479,7 +478,7 @@ export const initTerminal = () => {
             'RIAD(1)            Personal Manual            RIAD(1)',
             '',
             'NAME',
-            '     riad — software & AI engineer; Rust and Python',
+            '     riad - software & AI engineer; Rust and Python',
             '',
             'SYNOPSIS',
             '     riad [--rust] [--python] [--distributed] <problem>',
@@ -557,7 +556,7 @@ export const initTerminal = () => {
             '  roles  ' + (t.role1 || 'AI Engineer @ ABB'),
             '  langs  ' + langs.join(' · '),
             '  stack  Tokio · FastAPI · Kafka · Postgres · Docker',
-            '  shell  hero-term — type help',
+            '  shell  hero-term: type help',
           ],
         };
       },
@@ -582,8 +581,8 @@ export const initTerminal = () => {
       deps: () => ({
         lines: [
           'Dependencies:',
-          '  patience, discipline      — Remarque',
-          '  hunger, focus             — Cole',
+          '  patience, discipline      (Remarque)',
+          '  hunger, focus             (Cole)',
           '  (no node_modules found. this is intentional.)',
         ],
       }),
@@ -639,22 +638,22 @@ export const initTerminal = () => {
         const v = readVitals();
         // Field p75 across every real load of this site in the last 7 days,
         // from Cloudflare Web Analytics via the analytics Worker. Aggregates
-        // only — three numbers and a sample count.
+        // only, three numbers and a sample count.
         const field = await fetchFieldVitals();
         const row = (label, mine, theirs) =>
           label.padEnd(6) + String(mine).padStart(9) + String(theirs).padStart(13);
         const lines = [
           field ? row('', 'you', 'field p75') : 'measured in this browser',
-          row('FCP', fmtMs(v.fcp), field ? '—' : ''),
+          row('FCP', fmtMs(v.fcp), field ? '–' : ''),
           row('LCP', fmtMs(v.lcp), field ? fmtMs(field.lcpP75) : ''),
-          row('INP', v.inp != null ? fmtMs(v.inp) : '—', field ? fmtMs(field.inpP75) : ''),
+          row('INP', v.inp != null ? fmtMs(v.inp) : '–', field ? fmtMs(field.inpP75) : ''),
           row(
             'CLS',
             v.cls.toFixed(3),
             field && field.clsP75 != null ? field.clsP75.toFixed(3) : '',
           ),
-          row('TTFB', fmtMs(v.ttfb), field ? '—' : ''),
-          row('DCL', fmtMs(v.dcl), field ? '—' : ''),
+          row('TTFB', fmtMs(v.ttfb), field ? '–' : ''),
+          row('DCL', fmtMs(v.dcl), field ? '–' : ''),
           '',
           'transferred  ' +
             fmtKb(v.bytes) +
@@ -670,7 +669,7 @@ export const initTerminal = () => {
             'field p75 is ' + field.samples.toLocaleString() + ' real loads over 7 days.',
           );
         } else {
-          lines.push('(measured in your browser — nothing sent anywhere)');
+          lines.push('(measured in your browser, nothing sent anywhere)');
         }
         return { lines };
       },
@@ -699,13 +698,13 @@ export const initTerminal = () => {
             '',
             acc('verdict: 2 strong overlaps found in the sources checked.'),
             '<span class="terminal-text term-pre">' +
-              esc('  • cargo-deny      partial — license/advisory focus, not ranking') +
+              esc('  • cargo-deny      partial, license/advisory focus, not ranking') +
               '</span>',
             '<span class="terminal-text term-pre">' +
               esc('  • similar (×1)    closest match; see report') +
               '</span>',
             '',
-            dim('note: integrity-scoped — reports only what was found where it looked.'),
+            dim('note: integrity-scoped, reports only what was found where it looked.'),
             dim('      never asserts absence.'),
             '',
             ok('✓ done in 1.84s · JSON written to ./patent.json'),
@@ -722,7 +721,7 @@ export const initTerminal = () => {
             await navigator.serviceWorker.ready;
             return {
               lines: [
-                '● service worker registered — offline-ready',
+                '● service worker registered, offline-ready',
                 'kill your network and reload to test',
               ],
             };
@@ -889,7 +888,7 @@ export const initTerminal = () => {
           input.value = histIdx < hist.length ? hist[histIdx] || '' : '';
         }
       } else if (e.key === 'Tab' && !e.shiftKey) {
-        // Only steal Tab when there's something to complete — an empty input
+        // Only steal Tab when there's something to complete: an empty input
         // has nothing to offer, so let focus move on rather than trap it here.
         // Shift+Tab is never a completion gesture, so it always falls through
         // to native focus movement (backwards out of the field).

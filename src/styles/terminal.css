@@ -152,7 +152,7 @@ html.light .terminal-cmd {
    Inset rather than outset: the input line is often the last row of
    .terminal-body (overflow-y: auto, scrolled to bottom), sitting flush
    against its clip edge with no room below. An outset ring gets its
-   bottom edge cut off there — same failure mode base.css already works
+   bottom edge cut off there. Same failure mode base.css already works
    around for .proj-card/.car-btn on the section containment boundary. */
 .term-input:focus-visible {
   outline: 1px solid rgba(var(--accent-rgb), 0.5);
@@ -170,7 +170,7 @@ html.light .term-input {
 }
 
 /* iOS zooms the viewport whenever a focused input computes under 16px, and it
-   never zooms back — but the terminal is 12px, so a plain 16px input would
+   never zooms back, but the terminal is 12px, so a plain 16px input would
    render what you type visibly larger than the output above it.
 
    So it is genuinely 16px (the zoom heuristic reads computed font-size) and is

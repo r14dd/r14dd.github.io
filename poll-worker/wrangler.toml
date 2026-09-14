@@ -7,7 +7,7 @@ compatibility_date = "2024-12-01"
 # production. It is intentionally NOT stored in this file.
 
 # ALLOW_LAN (CORS allowance for http://192.168.* / http://10.* phone origins) is
-# enabled for local class testing via .dev.vars, so it stays OFF in production —
+# enabled for local class testing via .dev.vars, so it stays OFF in production:
 # prod CORS is limited to riad.cc + localhost.
 
 # Per-session poll state lives in a SQLite-backed Durable Object.

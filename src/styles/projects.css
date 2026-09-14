@@ -482,7 +482,7 @@ body.proj-lock {
   mix-blend-mode: normal;
 }
 
-/* Project tiering. Exactly one card is featured — it runs the full grid width
+/* Project tiering. Exactly one card is featured: it runs the full grid width
    and reads at display size; everything else is a compact index entry whose
    bullets sit behind a disclosure (the modal carries them too). */
 .proj-card-feature {
@@ -559,5 +559,48 @@ html.light .proj-card-feature {
 @media (prefers-reduced-motion: reduce) {
   .feat-more > summary::after {
     transition: none;
+  }
+}
+
+/* The details stagger used to borrow the section-reveal animation, which is a
+   one-shot: it played the first time a dropdown's bullets were ever rendered
+   and never again, so whether a card felt animated depended on whether you had
+   opened it before. Key the stagger on [open] instead so it replays each time. */
+.feat-more[open] > .feat-bullets > li {
+  animation: feat-bullet-in 0.32s var(--ease-out) both;
+}
+
+.feat-more[open] > .feat-bullets > li:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.feat-more[open] > .feat-bullets > li:nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.feat-more[open] > .feat-bullets > li:nth-child(4) {
+  animation-delay: 0.18s;
+}
+
+.feat-more[open] > .feat-bullets > li:nth-child(n + 5) {
+  animation-delay: 0.24s;
+}
+
+@keyframes feat-bullet-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feat-more[open] > .feat-bullets > li {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

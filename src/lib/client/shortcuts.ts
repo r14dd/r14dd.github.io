@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script.
+// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Global keyboard shortcuts: g-then-key section nav, ? for the shortcut
 // overlay, backslash for theme, and Escape routing for whichever layer is
 // open (modal, overlay, find bar).

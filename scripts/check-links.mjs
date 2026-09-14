@@ -2,7 +2,7 @@
 /**
  * Crawls the live site and checks that every link on it still resolves.
  *
- * This runs against https://riad.cc itself, not a local build — no `astro
+ * This runs against https://riad.cc itself, not a local build: no `astro
  * build`, no `npm ci`, nothing to install. A build only proves the HTML
  * generates; it says nothing about whether a link on it still points
  * somewhere, and the thing a reader actually clicks is the deployed site.
@@ -98,7 +98,7 @@ function extractLinks(html, pageUrl) {
     try {
       resolved = new URL(raw, pageUrl);
     } catch {
-      continue; // unparseable — not this script's problem to diagnose
+      continue; // unparseable, not this script's problem to diagnose
     }
     if (resolved.protocol !== 'http:' && resolved.protocol !== 'https:') continue;
     resolved.hash = '';
@@ -138,7 +138,7 @@ const pages = await collectPages();
 
 // Fetch every page, extract its links, remember the first page each unique
 // link was found on. A page that fails to fetch is a dead link in its own
-// right — it is listed in the sitemap, so something should be there.
+// right, because it is listed in the sitemap, so something should be there.
 const foundOn = new Map();
 const pageFailures = [];
 

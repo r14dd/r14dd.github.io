@@ -1,7 +1,7 @@
 import { defineConfig } from 'playwright/test';
 
 // Behavioral smoke suite for the homepage script. Runs against the built site
-// (astro preview). Locally that's the already-installed Chrome — no browser
+// (astro preview). Locally that's the already-installed Chrome, no browser
 // downloads. In CI it's a pinned Playwright chromium (`playwright install`),
 // so the suite doesn't drift with whatever Chrome the runner image ships.
 export default defineConfig({

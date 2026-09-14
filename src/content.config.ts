@@ -2,7 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 // Writing lives as markdown files. Astro builds one page per file and the
-// index builds itself, so adding a piece means adding a file — nothing else.
+// index builds itself, so adding a piece means adding a file, nothing else.
 //
 // `order` is curation, not chronology: the list is arranged by what is worth
 // reading first, and no date is rendered anywhere on the site. `published`

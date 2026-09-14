@@ -6,7 +6,7 @@
 }
 
 /* The card lifts 2px on hover, and it sits flush against the top of two nested
-   clipping boxes: this one, and the scroller inside it — `overflow-x: auto`
+   clipping boxes: this one, and the scroller inside it. `overflow-x: auto`
    forces `overflow-y` to `auto`, so that scroller clips vertically too. With no
    headroom the lift pushed the card's 1px top border past both clip edges and
    the line simply disappeared, leaving only the corner arcs. Both boxes need the

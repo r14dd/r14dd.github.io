@@ -1,5 +1,5 @@
 export type Project = {
-  /** Stable key used to attach RU/AZ translations — never rendered. */
+  /** Stable key used to attach RU/AZ translations, never rendered. */
   id: string;
   name: string;
   tech: string[];
@@ -115,7 +115,7 @@ export const profile: Profile = {
       ],
     },
     {
-      role: 'Head Teaching Assistant — Data Structures',
+      role: 'Head Teaching Assistant: Data Structures',
       org: 'State University of New York at Buffalo',
       location: 'Buffalo, NY',
       period: 'Aug 2022 – May 2024',
@@ -142,7 +142,7 @@ export const profile: Profile = {
   projects: [
     {
       id: 'tappad',
-      name: 'TapPad — Tap-to-Pay for Desktop Games',
+      name: 'TapPad: Tap-to-Pay for Desktop Games',
       tech: ['Rust', 'Tauri', 'ESP32', 'Xsolla', 'WebSocket'],
       impact:
         'Tap a card on a USB NFC pad, pay inside the game window, get the item: tap-to-pay for desktop games built on Xsolla. Built at the Xsolla Baku GameTech Hackathon with a 5-person team.',
@@ -166,7 +166,7 @@ export const profile: Profile = {
       date: 'Jun 2026',
       bullets: [
         'Built concurrent source adapters for 11 registries, from crates.io, npm and PyPI to Docker Hub and Hacker News',
-        'Designed integrity-scoped verdict system that never asserts absence — only reports what was found in sources checked',
+        'Designed integrity-scoped verdict system that never asserts absence, only reports what was found in sources checked',
         'Added interactive ratatui TUI with detail view, browser open, and structured JSON output for CI pipelines',
       ],
       links: {
@@ -191,7 +191,7 @@ export const profile: Profile = {
     },
     {
       id: 'quorumrag',
-      name: 'QuorumRAG.rs — Consensus-Based RAG',
+      name: 'QuorumRAG.rs: Consensus-Based RAG',
       tech: ['Rust', 'Ollama', 'Tokio'],
       impact:
         'Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Achieved 95% recall vs 70% baseline.',
@@ -211,7 +211,7 @@ export const profile: Profile = {
     },
     {
       id: 'almostaykhan',
-      name: 'almostAykhan — ABB Bank RAG Chatbot',
+      name: 'almostAykhan: ABB Bank RAG Chatbot',
       tech: ['Python', 'FastAPI', 'OpenAI', 'FAISS', 'Docker'],
       impact:
         "RAG chatbot answering questions exclusively from ABB Bank's public content with multilingual support and strict context-only guardrails.",
@@ -219,7 +219,7 @@ export const profile: Profile = {
       bullets: [
         'Built a two-service RAG pipeline (gateway + QA) that scrapes, chunks, and indexes bank pages via FAISS',
         'Implemented multilingual support across Azerbaijani, English, and Russian with prompt injection blocking',
-        "Applied distance-gated out-of-scope detection to prevent hallucination — returns 'Bunu bilmirəm' for off-topic queries",
+        "Applied distance-gated out-of-scope detection to prevent hallucination, returning 'Bunu bilmirəm' for off-topic queries",
         'Added SQLite observability and Chart.js query analytics dashboard for monitoring chatbot usage',
       ],
       links: {
@@ -228,7 +228,7 @@ export const profile: Profile = {
     },
     {
       id: 'matchsentinel',
-      name: 'MatchSentinel — Transaction Monitoring Platform',
+      name: 'MatchSentinel: Transaction Monitoring Platform',
       tech: ['Java', 'Spring Boot', 'RabbitMQ', 'PostgreSQL', 'Docker'],
       impact:
         'End-to-end transaction monitoring pipeline with event-driven scoring, async processing via RabbitMQ, and idempotent data handling.',

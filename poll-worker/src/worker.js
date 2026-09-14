@@ -1,5 +1,5 @@
 /**
- * poll-api — Cloudflare Worker + Durable Object (SQLite-backed) for live
+ * poll-api: Cloudflare Worker + Durable Object (SQLite-backed) for live
  * classroom polls.
  *
  * Architecture
@@ -12,7 +12,7 @@
  *     DO's SQLite-backed storage so it survives eviction; a 24h alarm
  *     self-cleans abandoned rooms.
  *
- * Runs fully offline under `wrangler dev` (the DO is emulated locally) — there
+ * Runs fully offline under `wrangler dev` (the DO is emulated locally): there
  * are no external calls.
  */
 
@@ -38,7 +38,7 @@ function safeEqual(a, b) {
 // cheap backstop against a script hammering one poll: cap THIS session's write
 // rate inside its own Durable Object. 300/60s is far above any real class
 // (~30 students x a few rounds ≈ ≤120 vote requests) so it never blocks legit
-// use. In-memory only — no storage writes, per DO instance.
+// use. In-memory only, no storage writes, per DO instance.
 const VOTE_RATE_LIMIT = 300; // max /vote requests per session per window
 const VOTE_RATE_WINDOW_MS = 60 * 1000; // sliding-window length
 
@@ -72,7 +72,7 @@ function json(data, origin, env, status = 200) {
 
 // Absorb polling storms before they reach the Durable Object: /state and
 // /results are polled by every phone in the room, so a 1s edge cache caps DO
-// reads at ~1 per second per session per colo — invisible next to the 3s
+// reads at ~1 per second per session per colo, invisible next to the 3s
 // client poll interval, but it stops a scripted GET flood from burning DO
 // request quota. The cached copy is stored header-bare and CORS is re-derived
 // per request, so one client's Origin never leaks into another's response.
@@ -123,14 +123,14 @@ export default {
     }
 
     try {
-      // GET /health — liveness probe for scripts/check-workers.mjs.
+      // GET /health: liveness probe for scripts/check-workers.mjs.
       //
       // Deliberately does NOT round-trip through a Durable Object: naming a
       // probe session would mint a namespace entry that then exists forever,
       // and this account's DO config is fragile enough (free-tier
       // new_sqlite_classes only) that leaving litter in it is not worth the
       // extra coverage. Checking the binding is present catches the realistic
-      // failure — a deploy that drops or renames it — without persisting
+      // failure (a deploy that drops or renames it) without persisting
       // anything.
       if (method === 'GET' && url.pathname === '/health') {
         const bound = typeof env.POLL_ROOM?.idFromName === 'function';
@@ -209,7 +209,7 @@ export class PollRoom {
     this.open = true;
     this.generation = 0;
     // In-memory sliding window for the /vote flood guard. Deliberately NOT
-    // persisted — it's a cheap per-DO-instance backstop that resets on eviction.
+    // persisted: it's a cheap per-DO-instance backstop that resets on eviction.
     this.voteWindowStart = 0;
     this.voteWindowCount = 0;
     // Hydrate from storage before any request is served.
@@ -288,7 +288,7 @@ export class PollRoom {
 
   // Per-session flood backstop for the write path. Slides a 60s window in
   // memory; returns true once this session exceeds VOTE_RATE_LIMIT /vote
-  // requests within it. No storage work — it runs before anything is written.
+  // requests within it. No storage work, it runs before anything is written.
   voteFlooding() {
     const t = Date.now();
     if (t - this.voteWindowStart >= VOTE_RATE_WINDOW_MS) {
@@ -300,7 +300,7 @@ export class PollRoom {
   }
 
   async vote(voterId, choice, origin) {
-    // Flood guard first — before any validation, dedup, cap, or storage work.
+    // Flood guard first, before any validation, dedup, cap, or storage work.
     if (this.voteFlooding()) {
       return this.reply({ error: 'Too many requests' }, origin, 429);
     }
@@ -312,7 +312,7 @@ export class PollRoom {
     if (prev) return this.reply({ error: 'Already voted', choice: prev }, origin, 409);
     if (!this.open) return this.reply({ ok: false, closed: true }, origin);
     if (this.total() >= VOTE_CAP) {
-      // Cap reached — acknowledge without recording another vote.
+      // Cap reached: acknowledge without recording another vote.
       return this.reply({ ok: true, capped: true }, origin);
     }
     this.counts[choice]++;

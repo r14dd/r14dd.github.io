@@ -3,9 +3,9 @@ main = "src/worker.js"
 compatibility_date = "2024-12-01"
 
 # Secrets (NOT stored in this file, set via `wrangler secret put`):
-#   ANALYTICS_API_TOKEN — Cloudflare API token with Account Analytics:Read,
-#                         used for the GraphQL RUM queries.
-#   ADMIN_KEY           — bearer key the /admin page must present.
+#   ANALYTICS_API_TOKEN: Cloudflare API token with Account Analytics:Read,
+#                        used for the GraphQL RUM queries.
+#   ADMIN_KEY:           bearer key the /admin page must present.
 #
 # Locally both come from .dev.vars (see .dev.vars.example).
 

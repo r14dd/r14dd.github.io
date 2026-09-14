@@ -57,7 +57,7 @@ export const initTerminalDots = () => {
     terminal.classList.add('term-squashed');
 
     // animationend bubbles, so a descendant finishing its own animation used to
-    // clear the squash early — that was the inconsistency. Only the terminal's
+    // clear the squash early, which was the inconsistency. Only the terminal's
     // own animation counts, and a timer backstops a dropped event.
     const done = () => {
       if (!squashing) return;

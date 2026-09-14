@@ -9,14 +9,15 @@
     "build": "astro build",
     "postbuild": "node scripts/check-claims.mjs",
     "preview": "astro preview",
-    "lint": "eslint .",
+    "lint": "eslint . && node scripts/check-no-emdash.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "astro": "astro",
     "check": "astro check",
     "check:workers": "node scripts/check-workers.mjs",
     "check:links": "node scripts/check-links.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check:emdash": "node scripts/check-no-emdash.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

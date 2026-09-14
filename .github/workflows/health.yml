@@ -5,14 +5,14 @@ name: Worker health
 # only thing that will tell anyone.
 #
 # deploy-workers.yml now ships them, so a STALE verdict here no longer means
-# "somebody forgot" — it means a deploy failed, or something changed a Worker
+# "somebody forgot": it means a deploy failed, or something changed a Worker
 # from outside this repo.
 #
 # A failed scheduled run emails the repo owner. That email is the entire point.
 on:
   schedule:
     # 07:00 and 19:00 UTC. GitHub disables scheduled workflows after 60 days
-    # with no repository activity — if the checks ever go quiet for two months,
+    # with no repository activity, so if the checks ever go quiet for two months,
     # that is why, and any push re-enables them.
     - cron: '0 7,19 * * *'
   workflow_dispatch:
@@ -35,6 +35,6 @@ jobs:
         with:
           node-version: 22
 
-      # No `npm ci` — the script has no dependencies, so this stays a
+      # No `npm ci`: the script has no dependencies, so this stays a
       # ten-second job that can run often without costing anything.
       - run: node scripts/check-workers.mjs

@@ -6,8 +6,8 @@ name: Deploy Workers
 # probe went looking for it. Editing a Worker in this repo now deploys it.
 #
 # Every run reconciles all four, not only the directory that changed. Drift has
-# more than one cause — a deploy that failed halfway, an edit made in the
-# dashboard, a branch that never landed — and reconciling the whole set is the
+# more than one cause (a deploy that failed halfway, an edit made in the
+# dashboard, a branch that never landed), and reconciling the whole set is the
 # only version of this that actually holds. `workflow_dispatch` does the same
 # on demand, without a commit.
 on:
@@ -30,8 +30,8 @@ permissions:
 env:
   # Not a secret, and deliberately not one: the same account tag is committed
   # in analytics-worker/wrangler.toml and sits in every dashboard URL. Naming
-  # it here means the API token can be scoped to Workers Scripts:Edit alone —
-  # with the account already known, wrangler never has to list them.
+  # it here means the API token can be scoped to Workers Scripts:Edit alone,
+  # since with the account already known, wrangler never has to list them.
   CLOUDFLARE_ACCOUNT_ID: 90a4414f4f6490a4c4584ca4a1d9f189
 
 jobs:
@@ -69,7 +69,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx -y wrangler@4 deploy --cwd ${{ matrix.dir }}
 
-  # Deploying and believing you deployed are different things — the drift this
+  # Deploying and believing you deployed are different things, and the drift this
   # workflow fixes was invisible for exactly that reason. Ask the live Workers.
   verify:
     needs: deploy

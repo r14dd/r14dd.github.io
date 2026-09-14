@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Cloudflare%20Workers-111827?style=for-the-badge&logo=cloudflare&logoColor=F38020" alt="Cloudflare Workers" />
 </p>
 
-# Riad Mukhtarov — Portfolio
+# Riad Mukhtarov: Portfolio
 
 Minimalist personal portfolio built to present AI and software engineering work with clarity and focus.
 
@@ -16,15 +16,15 @@ Minimalist personal portfolio built to present AI and software engineering work 
 
 ## Highlights
 
-- **Interactive terminal** — composable commands with pipes, tab-completion, history (`ls`, `cat`, `grep`, `head`, `tail`, `wc`, `man riad`, `neofetch`, `philosophy`); fully usable on touch, not desktop-gated
-- **Rust → WebAssembly** — `rrf`, `hash`, `xor` commands lazy-load a prebuilt WASM binary for real in-browser compute
-- **Web Vitals CLI** — `perf` command shows live LCP/FCP/CLS/INP/TTFB/DCL via PerformanceObserver
-- **Edge/geo probing** — `where` command displays timezone, locale, connection info, round-trip latency
-- **Offline PWA** — `offline enable/disable` registers a root-scoped service worker (network-first navigations, stale-while-revalidate assets)
-- **Raft consensus, live** — a real Raft implementation (leader election, log replication, quorum commitment over a lossy simulated network) runs interactively on `/lab`; CI runs the same engine headless and asserts the paper's safety properties (Election Safety, Log Matching, State Machine Safety)
+- **Interactive terminal**: composable commands with pipes, tab-completion, history (`ls`, `cat`, `grep`, `head`, `tail`, `wc`, `man riad`, `neofetch`, `philosophy`); fully usable on touch, not desktop-gated
+- **Rust → WebAssembly**: `rrf`, `hash`, `xor` commands lazy-load a prebuilt WASM binary for real in-browser compute
+- **Web Vitals CLI**: `perf` command shows live LCP/FCP/CLS/INP/TTFB/DCL via PerformanceObserver
+- **Edge/geo probing**: `where` command displays timezone, locale, connection info, round-trip latency
+- **Offline PWA**: `offline enable/disable` registers a root-scoped service worker (network-first navigations, stale-while-revalidate assets)
+- **Raft consensus, live**: a real Raft implementation (leader election, log replication, quorum commitment over a lossy simulated network) runs interactively on `/lab`; CI runs the same engine headless and asserts the paper's safety properties (Election Safety, Log Matching, State Machine Safety)
 - Dark + light theme toggle
 - Accent colors shift by time of day
-- **Three languages, three real pages** — `/`, `/ru/`, `/az/` are each prerendered and indexable with their own `hreflang`, title and description; the in-page switcher swaps without a reload and pushes the matching URL. Both paths render through the same builders, so they cannot drift.
+- **Three languages, three real pages**: `/`, `/ru/`, `/az/` are each prerendered and indexable with their own `hreflang`, title and description; the in-page switcher swaps without a reload and pushes the matching URL. Both paths render through the same builders, so they cannot drift.
 - Command palette (⌘K) with search, section jumps, and actions
 - Spotify now-playing widget with vinyl art, progress bar, and history drawer
 - UI sound effects with mute toggle
@@ -40,10 +40,10 @@ Minimalist personal portfolio built to present AI and software engineering work 
 - **Framework:** Astro 7 (static output)
 - **Language:** TypeScript
 - **Styling:** Custom CSS (no framework)
-- **Animations:** Hand-written CSS transitions driven by `IntersectionObserver` — no animation library
+- **Animations:** Hand-written CSS transitions driven by `IntersectionObserver` (no animation library)
 - **Compute:** Rust → WebAssembly, raw `rustc --target wasm32-unknown-unknown` (843-byte artifact, committed; CI does not compile Rust)
 - **Fonts:** Manrope · Cormorant Garamond · JetBrains Mono, self-hosted with unicode-range subsetting
-- **Runtime dependencies:** 1 (`lenis`) — re-derived from `package.json` on every build by `scripts/check-claims.mjs`
+- **Runtime dependencies:** 1 (`lenis`), re-derived from `package.json` on every build by `scripts/check-claims.mjs`
 - **Backend:** 4 Cloudflare Workers (Spotify proxy, analytics proxy, poll, toys); the toy worker holds 2 Durable Objects
 
 ## Backend
@@ -56,17 +56,17 @@ Minimalist personal portfolio built to present AI and software engineering work 
 | `toy-worker`       | Paper-airplane inbox (Durable Object, SQLite)          |
 
 Each degrades silently: if a Worker is unreachable its widget disappears rather than erroring. That
-is right for a visitor and blind for the owner — nothing on the site would ever say a Worker died.
+is right for a visitor and blind for the owner, so nothing on the site would ever say a Worker died.
 So every Worker also answers `GET /health`, and each one exercises its real dependency rather than
 merely proving the script is deployed: the Spotify token exchange, the Cloudflare Analytics API
 token (uncached, unlike `/vitals`), the Durable Object bindings. A 200 from the public endpoint
-proves much less than it looks like it does — the Spotify proxy returns cached JSON quite happily
+proves much less than it looks like it does: the Spotify proxy returns cached JSON quite happily
 with a dead refresh token.
 
 `npm run check:workers` probes all four. `.github/workflows/health.yml` runs it twice a day, and a
 red run is an email.
 
-Workers used to deploy by hand, and one of them silently didn't for weeks — the probe found a
+Workers used to deploy by hand, and one of them silently didn't for weeks: the probe found a
 deployed script older than its source here. `.github/workflows/deploy-workers.yml` closes that
 gap: a push to `main` touching any `*-worker/` directory reconciles all four (not just the one
 that changed), then re-probes them. It needs one repository secret, `CLOUDFLARE_API_TOKEN`,
@@ -76,7 +76,7 @@ The probe still reports a Worker whose deployed script predates this repo as `ST
 means a deploy failed or something changed a Worker from outside this repo, rather than that
 somebody forgot.
 
-`npm run check:links` crawls the live site — every page, every href and src on it — and checks
+`npm run check:links` crawls the live site (every page, every href and src on it) and checks
 that each unique link still resolves. `.github/workflows/link-check.yml` runs it weekly against
 `riad.cc` itself rather than a local build, since a build only proves the HTML generates and says
 nothing about whether a link on it still points anywhere.
@@ -84,8 +84,8 @@ nothing about whether a link on it still points anywhere.
 ## Claims are tested
 
 `npm run build` runs `scripts/check-claims.mjs`, which re-derives every number this README and
-`/colophon` state — runtime dependency count, page count, font bytes, WASM size, gzipped byte
-budgets, the feature-module and Worker counts above — from the actual `dist/` output and the tree,
+`/colophon` state (runtime dependency count, page count, font bytes, WASM size, gzipped byte
+budgets, the feature-module and Worker counts above) from the actual `dist/` output and the tree,
 and fails the build on drift. It also fails if the docs start advertising technologies the site no
 longer uses.
 
@@ -135,7 +135,7 @@ npm run preview
 
 ## Deployment
 
-GitHub Pages — pushes to `main` deploy via GitHub Actions.
+GitHub Pages: pushes to `main` deploy via GitHub Actions.
 
 ## Credits
 

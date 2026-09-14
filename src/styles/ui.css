@@ -716,7 +716,7 @@ mark.search-highlight-active {
 }
 
 /* The film-grain overlay is a permanent full-screen compositor layer blended
-   every frame — measurable GPU/battery cost on phones for a subtle texture. */
+   every frame: measurable GPU/battery cost on phones for a subtle texture. */
 @media (max-width: 768px) {
   body::after {
     display: none;

@@ -5,7 +5,7 @@
 //
 // All three are emitted, English included. Since /ru/ and /az/ became real
 // prerendered routes, English is the *other* locale for anyone standing on one
-// of them — omitting it meant switching back from /ru/ 404'd and silently fell
+// of them: omitting it meant switching back from /ru/ 404'd and silently fell
 // back to Russian.
 import type { APIRoute } from 'astro';
 import { profiles } from '../../data/profile-i18n';

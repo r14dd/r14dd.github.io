@@ -215,7 +215,7 @@
    here so the light theme's redirection can never be clobbered by an inline
    style (that bug shipped: inline --accent writes beat html.light and light
    mode ran on dark-tuned golds at 1.6:1 contrast). Afternoon is the default
-   :root/html.light palette above/below — it needs no attribute rule. */
+   :root/html.light palette above/below: it needs no attribute rule. */
 :root[data-period='night'] {
   --accent: #8ca0d2;
   --accent-rgb: 140, 160, 210;
@@ -274,7 +274,7 @@ html.light {
 }
 
 /* The theme crossfade. theme.ts adds this class for exactly one toggle and the
-   whole page changes together — no order, no origin, nothing travelling.
+   whole page changes together: no order, no origin, nothing travelling.
 
    Ground before figure is the single exception, and it is not a sequence you
    can watch: the background lands a little before the text does. On one shared
@@ -284,7 +284,7 @@ html.light {
 
    No transition-delay anywhere, deliberately. Nothing here needs one now, and a
    delay on a descendant is re-armed every frame the inherited palette changes
-   under it — the text creeps a few percent and then hangs.
+   under it, and the text creeps a few percent and then hangs.
 
    `!important` because a card's own hover transition is more specific than this
    selector and would otherwise snap that card while the page around it faded. */
@@ -885,7 +885,7 @@ h2 {
   user-select: none;
 }
 
-/* Print: the homepage doubles as a résumé — strip interactive chrome and
+/* Print: the homepage doubles as a résumé, so strip interactive chrome and
    force a light, ink-friendly palette. */
 @media print {
   /* :root[data-period] matches the period selectors' specificity so the
@@ -942,7 +942,7 @@ h2 {
   }
   /* Printing must not depend on how far the reader scrolled: force every
      JS-revealed state visible, exactly like the no-js path. transition: none
-     matters — without it the forced opacity still eases from 0 and a fast
+     matters: without it the forced opacity still eases from 0 and a fast
      print snapshot catches it mid-fade. */
   section[id],
   .scroll-tl-item,
@@ -955,7 +955,7 @@ h2 {
     animation: none !important;
     transition: none !important;
   }
-  /* The hero name is gradient-clipped text with a transparent fill — printers
+  /* The hero name is gradient-clipped text with a transparent fill, and printers
      drop background gradients, which would print a blank name. */
   .hero-word {
     background: none !important;

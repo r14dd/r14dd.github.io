@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 // Hand-rolled rather than @astrojs/rss. The build re-derives the runtime
 // dependency list on every run and fails if it changed, and a feed is forty
-// lines of string building — not worth spending the count on.
+// lines of string building, not worth spending the count on.
 
 const esc = (s: string) =>
   s
@@ -35,7 +35,7 @@ export const GET: APIRoute = async ({ site }) => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Riad Mukhtarov — Writing</title>
+    <title>Riad Mukhtarov: Writing</title>
     <link>${esc(new URL('/writing/', base).href)}</link>
     <description>Notes on the parts of a system that have to stay honest when nobody is checking.</description>
     <language>en</language>

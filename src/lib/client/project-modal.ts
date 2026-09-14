@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script.
+// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Project modal: card click delegation (survives language re-renders),
 // view-transition morph between card and modal, SMIL stripping under
 // reduced motion, and the sim quick-look hand-off.
@@ -10,7 +10,7 @@ import { state } from './state';
 import { openSimOverlay } from './sim-overlay';
 
 export let closeProject = () => {};
-// Open a project modal by a fragment of its name — assigned in init. Lets the
+// Open a project modal by a fragment of its name, assigned in init. Lets the
 // terminal's `raft` command summon the live cluster without faking a card
 // click. Returns false when no project matches.
 export let openProjectByName = (_frag) => false;
@@ -68,7 +68,7 @@ export const initProjectModal = () => {
     const badgesHtml = (p.badges || [])
       .map(
         (b) =>
-          `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ''}"><a class="badge-link" href="${b.link || '#'}" target="_blank" rel="noopener"><span class="badge-count">—</span> ${b.pillLabel}</a> ${b.platform}</span>`,
+          `<span class="badge-stat proj-badge-live" data-badge-api="${b.api || ''}"><a class="badge-link" href="${b.link || '#'}" target="_blank" rel="noopener"><span class="badge-count">–</span> ${b.pillLabel}</a> ${b.platform}</span>`,
       )
       .join(' · ');
     const badgeStats = badgesHtml ? `<p class="proj-stats">${badgesHtml}</p>` : '';

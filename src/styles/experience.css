@@ -120,7 +120,7 @@
 }
 
 /* Line sits 8px in from the section edge: .section-block's content-visibility
-   forces paint containment, so anything left of x=0 would be clipped — the
+   forces paint containment, so anything left of x=0 would be clipped, and the
    8px inset leaves room for the dots' 4px in-view halo. */
 .scroll-tl::before {
   content: '';

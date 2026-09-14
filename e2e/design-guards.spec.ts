@@ -84,13 +84,13 @@ test.describe('phone viewport integrity', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
   test('the Spotify card never overflows the viewport', async ({ page }) => {
-    // Deterministic long-track payload — the shipped bug clipped 52px of the
+    // Deterministic long-track payload: the shipped bug clipped 52px of the
     // card (fit-content + a 480px cap wider than the screen).
     await page.route('**/spotify-now-playing.riad-mrv.workers.dev/**', (r) =>
       r.fulfill({
         contentType: 'application/json',
         body: JSON.stringify({
-          track: 'Crooked Smile (feat. TLC) — extended mix',
+          track: 'Crooked Smile (feat. TLC) - extended mix',
           artist: 'J. Cole, TLC',
           playing: true,
           progress: 61_000,
@@ -160,14 +160,14 @@ test('⌘F belongs to the browser again', async ({ page }) => {
   await ready(page);
   await page.keyboard.press('ControlOrMeta+f');
   await expect(page.locator('#cmd-palette')).not.toHaveClass(/open/);
-  // ⌘K still opens the palette — including a press racing the deferred chunk.
+  // ⌘K still opens the palette, including a press racing the deferred chunk.
   await page.keyboard.press('ControlOrMeta+k');
   await expect(page.locator('#cmd-palette')).toHaveClass(/open/);
 });
 
 test('a ⌘K pressed before the deferred chunk loads still opens the palette', async ({ page }) => {
   await page.goto('/', { waitUntil: 'commit' });
-  // Press as early as the input pipeline allows — usually before idle-load.
+  // Press as early as the input pipeline allows, usually before idle-load.
   await page.locator('#cmd-trigger').waitFor({ state: 'attached' });
   await page.keyboard.press('ControlOrMeta+k');
   await expect(page.locator('#cmd-palette')).toHaveClass(/open/, { timeout: 10_000 });
@@ -189,7 +189,7 @@ test.describe('raft from the terminal', () => {
 });
 
 /* The deferred chunk owns ⌘K *and* everything initShortcuts registers. A key
- * pressed before it lands used to be swallowed — only ⌘K was buffered, so `?`
+ * pressed before it lands used to be swallowed: only ⌘K was buffered, so `?`
  * and g-nav, both advertised in the shortcut overlay, silently did nothing for
  * the first few hundred milliseconds. All of them are buffered and replayed
  * now, and a keystroke pulls the chunk in the way a pointer event always did.
@@ -229,7 +229,7 @@ test.describe('shortcuts pressed before the deferred chunk lands', () => {
 });
 
 /* The terminal dots ship on touch now. They stay 9px for the eye and get an
- * invisible target a thumb can actually land on — without reaching into the
+ * invisible target a thumb can actually land on, without reaching into the
  * first line of terminal output, which would trade one bug for a worse one.
  */
 test.describe('terminal dots are thumb-sized on touch', () => {
@@ -286,7 +286,7 @@ const deadSpot = async (page: Page) => (await deadSpots(page))[0] ?? null;
 // number and the GitHub/crates badge counts all arrive over the network, and
 // the badges land inside project cards, which are full of links. Sample the
 // grid before they arrive and a point that was empty is a link by the time it
-// is clicked — the egg ignores links, so the hit silently never happens. Pin
+// is clicked: the egg ignores links, so the hit silently never happens. Pin
 // the responses so the layout stops moving under the sampler.
 const pinLiveContent = async (page: Page) => {
   const json = (body: unknown) => ({
@@ -338,7 +338,7 @@ test.describe('crack the glass needs five hits, fast', () => {
     await burst(page, 4, 60);
     expect(await shatteredNow(page)).toBe(false);
     // `.ferris` proves the toy batch ran, not that crack-glass's own dynamic
-    // import resolved — without this the assertion above passes just as well
+    // import resolved. Without this the assertion above passes just as well
     // when no listener is attached at all. One more click, still inside the
     // window, so a dead listener fails the test instead of greening it.
     await burst(page, 1, 0);
@@ -358,7 +358,7 @@ test.describe('crack the glass needs five hits, fast', () => {
     await page.goto('/');
     await ready(page);
     await toysLoaded(page);
-    // 4 gaps x 400ms = 1.6s, past CLICK_WINDOW — deliberate clicking, not rage.
+    // 4 gaps x 400ms = 1.6s, past CLICK_WINDOW: deliberate clicking, not rage.
     await burst(page, 5, 400);
     expect(await shatteredNow(page)).toBe(false);
   });
@@ -456,7 +456,7 @@ test.describe('the repair crew is one crew, and it visits every break', () => {
     expect(seen.maxCrews, 'more than one repair crew existed at once').toBe(1);
     expect(seen.crewsMade, 'a second crew was dispatched').toBe(1);
     // The whole conceit is that a crack clears only once someone walks to it.
-    // The hit made mid-walk counts too — it must not vanish unvisited.
+    // The hit made mid-walk counts too, and it must not vanish unvisited.
     // 6 impacts: the break itself (the first four clicks only count, they don't
     // crack), the four spread hits, and the one landing mid-walk.
     expect(seen.cracks).toBe(6);
@@ -492,7 +492,7 @@ test.describe('the testimonial card keeps its border when it lifts', () => {
         try {
           walk(sheet.cssRules);
         } catch {
-          /* cross-origin sheet — nothing of ours lives there */
+          /* cross-origin sheet: nothing of ours lives there */
         }
       }
 
@@ -517,10 +517,10 @@ test.describe('the testimonial card keeps its border when it lifts', () => {
       return { lift, slack, tightest };
     });
 
-    expect(geom.lift, 'no hover lift found — has the rule moved?').toBeGreaterThan(0);
+    expect(geom.lift, 'no hover lift found: has the rule moved?').toBeGreaterThan(0);
     expect(
       geom.slack,
-      `only ${geom.slack}px above the card inside ${geom.tightest}, but hover lifts it ${geom.lift}px — the top border gets clipped`,
+      `only ${geom.slack}px above the card inside ${geom.tightest}, but hover lifts it ${geom.lift}px, the top border gets clipped`,
     ).toBeGreaterThanOrEqual(geom.lift);
   });
 });

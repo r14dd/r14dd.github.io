@@ -2,7 +2,7 @@
 import { profiles } from '../data/profile-i18n';
 
 // Pages outside [...lang] (lab, colophon, poll…) leave `lang` at its 'en'
-// default, so this always resolves — every profile carries the same labels.
+// default, so this always resolves: every profile carries the same labels.
 const { lang = 'en' } = Astro.props;
 const profile = profiles[lang] ?? profiles.en;
 ---

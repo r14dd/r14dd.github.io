@@ -1,4 +1,4 @@
-// @ts-nocheck — verbatim move of the (never type-checked) inline script.
+// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Motion-gated extras: sim in-view activation, section-heading typing on
 // reveal, pull-to-refresh, modal swipe-dismiss, pinch-zoom on sims, and
 // the Konami easter egg. The whole block is skipped under reduced motion.
@@ -47,7 +47,7 @@ export const initGestures = () => {
           typeH2(h2);
         }
       };
-      // This module loads on idle — a section already revealed before we
+      // This module loads on idle, so a section already revealed before we
       // attached will never mutate again, so handle it now.
       if (sec.classList.contains('section-revealed')) {
         typeOnce();

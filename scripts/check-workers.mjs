@@ -4,7 +4,7 @@
  *
  * Everything on riad.cc that talks to a Worker fails soft: a dead endpoint
  * leaves a widget quietly absent instead of showing an error box. That is the
- * right call for a visitor and useless for the owner — nothing, anywhere, says
+ * right call for a visitor and useless for the owner, because nothing, anywhere, says
  * a Worker died. The spotify token could expire tonight and the only symptom
  * would be a line that stopped appearing.
  *
@@ -14,9 +14,9 @@
  * The exit code is the whole interface: 0 means every Worker answered
  * correctly. Zero dependencies on purpose, so CI needs no npm install.
  *
- * Each Worker exposes GET /health that exercises its real dependency — the
+ * Each Worker exposes GET /health that exercises its real dependency (the
  * Spotify token exchange, the Cloudflare GraphQL token, the Durable Object
- * bindings — rather than just proving the script is deployed. A 200 from the
+ * bindings) rather than just proving the script is deployed. A 200 from the
  * public endpoint proves much less than it looks like it does.
  */
 
@@ -74,11 +74,11 @@ async function probe(p) {
   const stale = (why) => ({
     ...p,
     state: 'STALE',
-    detail: `${why} — the deployed script predates this repo. Run: npx wrangler deploy --cwd ${p.dir}`,
+    detail: `${why}: the deployed script predates this repo. Run: npx wrangler deploy --cwd ${p.dir}`,
   });
 
   // The Worker is answering but has no /health route: the deployed script is
-  // older than what is committed here. Worth flagging loudly — it means the
+  // older than what is committed here. Worth flagging loudly, because it means the
   // last edit to that Worker never shipped, and nothing else would notice.
   if (res.status === 404) return stale('no /health route');
 
@@ -99,7 +99,7 @@ async function probe(p) {
 
   if (!res.ok || body?.ok !== true) {
     const detail = body?.error || body?.check || text.slice(0, 120) || '(empty body)';
-    return { ...p, state: 'FAILING', detail: `HTTP ${res.status} — ${detail}` };
+    return { ...p, state: 'FAILING', detail: `HTTP ${res.status}: ${detail}` };
   }
 
   return { ...p, state: 'OK', detail: p.proves };
@@ -122,13 +122,13 @@ if (failed.length === 0) {
 }
 
 // STALE and dead are different emergencies. A stale Worker is probably still
-// serving visitors fine — it just isn't serving this repo's code, so the next
+// serving visitors fine, it just isn't serving this repo's code, so the next
 // edit anyone makes here is building on something that was never shipped.
 for (const r of failed) {
   console.log(
     r.state === 'STALE'
-      ? `  ${r.name}: STALE — deployed code is older than this repo. What it serves (${r.breaks}) may still work, but not from what is committed here.`
-      : `  ${r.name}: ${r.state} — ${r.breaks} is down.`,
+      ? `  ${r.name}: STALE, deployed code is older than this repo. What it serves (${r.breaks}) may still work, but not from what is committed here.`
+      : `  ${r.name}: ${r.state}, ${r.breaks} is down.`,
   );
 }
 console.log('');

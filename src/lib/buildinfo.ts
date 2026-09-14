@@ -27,7 +27,7 @@ export type BuildInfo = {
   count: number; // total commits on the branch
 };
 
-const US = '\x1f'; // unit separator — safe field delimiter
+const US = '\x1f'; // unit separator: safe field delimiter
 
 export function getBuildInfo(limit = 8): BuildInfo {
   const log = sh(`git log -${limit} --pretty=format:%H${US}%h${US}%s${US}%cI${US}%cr`);

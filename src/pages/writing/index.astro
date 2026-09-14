@@ -3,15 +3,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ThemeToggle from '../../components/ThemeToggle.astro';
 import { getCollection } from 'astro:content';
 
-// Curated, not chronological — see src/content.config.ts for why.
+// Curated, not chronological: see src/content.config.ts for why.
 const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order,
 );
 ---
 
 <BaseLayout
-  metaTitle="Writing — Riad Mukhtarov"
-  metaDescription="Notes on building systems that stay honest — LLM verdicts, consensus, and the machinery underneath."
+  metaTitle="Writing: Riad Mukhtarov"
+  metaDescription="Notes on building systems that stay honest: LLM verdicts, consensus, and the machinery underneath."
   lang="en"
 >
   <ThemeToggle />
