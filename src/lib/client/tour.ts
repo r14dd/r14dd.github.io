@@ -5,6 +5,7 @@ import { prefersReducedMotion } from './motion';
 import { smoothScrollTo } from './nav';
 import { state } from './state';
 import * as focusTrap from './focus-trap';
+import { getItem, setItem } from './storage';
 
 const SEEN = 'riad-tour-seen';
 const ROUTES: Record<string, string[]> = {
@@ -27,15 +28,8 @@ export const initTour = () => {
   const labels = () => state.currentProfile?.labels?.tour;
   if (!labels()) return;
 
-  let seen = false;
-  try {
-    seen = localStorage.getItem(SEEN) === '1';
-  } catch {}
-  const markSeen = () => {
-    try {
-      localStorage.setItem(SEEN, '1');
-    } catch {}
-  };
+  const seen = getItem(SEEN) === '1';
+  const markSeen = () => setItem(SEEN, '1');
 
   const html = String.raw;
   const el = (tag: string, cls: string, inner = '') => {

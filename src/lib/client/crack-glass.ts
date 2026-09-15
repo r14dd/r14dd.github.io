@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { state } from './state';
+import { INERT } from './crack-glass-inert';
 
 export const initCrackGlass = () => {
   // Five hits, but at the same rate three used to need (~4.3/sec), widening the
@@ -22,11 +23,7 @@ export const initCrackGlass = () => {
 
   const isInteractive = (el) => {
     if (!el) return false;
-    return (
-      el.closest(
-        'a, button, input, textarea, select, label, [contenteditable], [role="button"], [role="menuitemradio"], .terminal-body, .terminal-dots, .cmd-palette, .proj-modal, .kbd-overlay, .lang-menu, .mobile-nav-menu, .sim-visual, .theme-toggle, .lang-toggle, .cmd-trigger, .side-nav, .side-links, .hero-links, .connect-links, .find-nav-bar, .ferris',
-      ) !== null
-    );
+    return el.closest(INERT) !== null;
   };
 
   const ensurePane = () => {

@@ -6,6 +6,7 @@
 import * as sfx from './sfx';
 import { vitals as _vitals } from './vitals';
 import { prefersReducedMotion, scrollBehavior } from './motion';
+import { getItem, setItem } from './storage';
 
 export const initTerminalBoot = () => {
   if (prefersReducedMotion) return;
@@ -112,7 +113,7 @@ export const initTerminal = () => {
 
   let hist = [];
   try {
-    hist = JSON.parse(localStorage.getItem('term-history') || '[]');
+    hist = JSON.parse(getItem('term-history') || '[]');
     if (!Array.isArray(hist)) hist = [];
   } catch {
     hist = [];
@@ -302,7 +303,7 @@ export const initTerminal = () => {
     };
     const philo = () => ({
       lines: [
-        'The through-line:',
+        t.throughLine || 'The through-line:',
         '',
         '  patent      never asserts absence: it reports only what it',
         '              actually checked, in the sources it reached.',
@@ -410,7 +411,7 @@ export const initTerminal = () => {
             ? projects.map(
                 (x) => x.name + (x.tech && x.tech.length ? ' – ' + x.tech.join(', ') : ''),
               )
-            : ['No projects loaded.'],
+            : [t.noProjectsLoaded || 'No projects loaded.'],
         };
       },
       skills: () => ({
@@ -472,7 +473,12 @@ export const initTerminal = () => {
       man: (args) => {
         const who = (args[0] || 'riad').toLowerCase();
         if (who !== 'riad')
-          return { lines: ['No manual entry for ' + who + '. Try: man riad'], cls: 'muted' };
+          return {
+            lines: [
+              (t.noManualEntry || 'No manual entry for {who}. Try: man riad').replace('{who}', who),
+            ],
+            cls: 'muted',
+          };
         return {
           lines: [
             'RIAD(1)            Personal Manual            RIAD(1)',
@@ -610,14 +616,14 @@ export const initTerminal = () => {
         const sub = (args[0] || '').toLowerCase();
         if (sub === '--pdf' || sub === 'pdf') {
           window.open('/resume.pdf', '_blank');
-          return { html: tx('Opening /resume.pdf…') };
+          return { html: tx(t.openingResumePdf || 'Opening /resume.pdf…') };
         }
         location.href = resume;
         return { html: tx('Opening ' + resume + '…') };
       },
       github: () => {
         window.open(github, '_blank');
-        return { html: tx('Opening github.com/r14dd...') };
+        return { html: tx(t.openingGithub || 'Opening github.com/r14dd...') };
       },
       open: (args) => {
         const w = (args[0] || '').toLowerCase();
@@ -627,7 +633,7 @@ export const initTerminal = () => {
         }
         if (w === 'resume.pdf') {
           window.open('/resume.pdf', '_blank');
-          return { html: tx('Opening /resume.pdf…') };
+          return { html: tx(t.openingResumePdf || 'Opening /resume.pdf…') };
         }
         return {
           lines: ['open: ' + (args[0] || '') + ': not found. try: open resume'],
@@ -832,9 +838,7 @@ export const initTerminal = () => {
 
       if (hist[hist.length - 1] !== line) {
         hist.push(line);
-        try {
-          localStorage.setItem('term-history', JSON.stringify(hist.slice(-100)));
-        } catch {}
+        setItem('term-history', JSON.stringify(hist.slice(-100)));
       }
       histIdx = hist.length;
 

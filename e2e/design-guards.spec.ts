@@ -4,14 +4,12 @@
  * can summon the live Raft cluster.
  */
 import { test, expect, type Page } from 'playwright/test';
+// Imported from the egg's own crack-glass-inert.ts, so a point that passes
+// here is a point it accepts.
+import { INERT } from '../src/lib/client/crack-glass-inert';
 
 const ready = (page: Page) =>
   page.waitForFunction(() => document.documentElement.dataset.jsReady === '1');
-
-// Everything crack-the-glass refuses to treat as a hit. Kept verbatim from the
-// egg's own `isInteractive`, so a point that passes here is a point it accepts.
-const INERT =
-  'a, button, input, textarea, select, label, [contenteditable], [role="button"], [role="menuitemradio"], .terminal-body, .terminal-dots, .cmd-palette, .proj-modal, .kbd-overlay, .lang-menu, .mobile-nav-menu, .sim-visual, .theme-toggle, .lang-toggle, .cmd-trigger, .side-nav, .side-links, .hero-links, .connect-links, .find-nav-bar, .ferris';
 
 // The toys load on requestIdleCallback, so wait for a sibling toy's own DOM to
 // appear rather than sleeping a guessed number of milliseconds.

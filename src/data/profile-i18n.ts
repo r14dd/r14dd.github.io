@@ -76,6 +76,11 @@ type Labels = {
     stat1: string;
     stat2: string;
     stat3: string;
+    throughLine: string;
+    noProjectsLoaded: string;
+    noManualEntry: string;
+    openingResumePdf: string;
+    openingGithub: string;
   };
   // The site's own chrome: overlays, aria-labels, the command palette, the
   // footer. Everything here is control vocabulary, not Riad's prose, but a
@@ -242,6 +247,11 @@ export const profiles: Record<string, I18nProfile> = {
         stat1: '1000+ students taught',
         stat2: '5+ teams led',
         stat3: '4+ yrs shipping',
+        throughLine: 'The through-line:',
+        noProjectsLoaded: 'No projects loaded.',
+        noManualEntry: 'No manual entry for {who}. Try: man riad',
+        openingResumePdf: 'Opening /resume.pdf…',
+        openingGithub: 'Opening github.com/r14dd...',
       },
       chrome: {
         skipToContent: 'Skip to content',
@@ -397,8 +407,8 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Окт 2024 – Ноя 2024',
         bullets: [
-          'Обеспечил 99.9% uptime ИТ-инфраструктуры для 500 международных делегатов, соблюдая жесткие SLA в режиме реального времени',
-          'Решал инциденты инфраструктуры и гибридных сессий в режиме реального времени при жестких требованиях доступности',
+          'Поддерживал доступность ИТ-инфраструктуры на уровне 99,9% для 500+ делегатов при жёстких SLA',
+          'Решал инциденты инфраструктуры и гибридных сессий при жёстких требованиях доступности',
           'Помогал с контролем доступа, усилением устройств и безопасным обращением с системами',
           'Сотрудничал с вендорами и техническими командами для бесперебойной работы',
         ],
@@ -691,6 +701,11 @@ export const profiles: Record<string, I18nProfile> = {
         stat1: '1000+ студентов обучено',
         stat2: '5+ команд',
         stat3: '4+ года в разработке',
+        throughLine: 'Красная нить:',
+        noProjectsLoaded: 'Проекты не загружены.',
+        noManualEntry: 'Нет статьи руководства для «{who}». Попробуйте: man riad',
+        openingResumePdf: 'Открываю /resume.pdf…',
+        openingGithub: 'Открываю github.com/r14dd...',
       },
       chrome: {
         skipToContent: 'Перейти к содержимому',
@@ -805,7 +820,7 @@ export const profiles: Record<string, I18nProfile> = {
       title: 'State University of New York at Buffalo, Бакалавр по направлению Компьютерные Науки',
       meta: 'Авг 2020 – Май 2024 · Buffalo, NY',
       bullets: [
-        'Награды: Премия старшего ассистента преподавателя, многократные отличия списка декана',
+        'Награды: Премия старшего ассистента преподавателя, неоднократно в списке отличников декана',
       ],
     },
   },
@@ -817,7 +832,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Riad Muxtarov',
     },
     about:
-      'Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlər və mürəkkəb infrastruktura fokuslanmaqla. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.',
+      'Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlərə və mürəkkəb infrastruktura fokuslanır. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.',
     experience: [
       {
         role: 'Süni İntellekt üzrə Mühəndis',
@@ -855,12 +870,12 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'Baş tədris assistenti: Məlumat strukturları',
+        role: 'Baş tədris assistenti: Verilənlər strukturları',
         org: 'State University of New York at Buffalo',
         location: 'Buffalo, NY',
         period: 'Avq 2022 – May 2024',
         bullets: [
-          'Scala və Java ilə məlumat strukturları və alqoritmlər üzrə ~1000 tələbəyə dərs keçdim',
+          'Scala və Java ilə verilənlər strukturları və alqoritmlər üzrə ~1000 tələbəyə dərs keçdim',
           '20 TA‑nın işini koordinasiya etdim və kurs prosesini idarə etdim',
           'Qiymətləndirməni akademik dürüstlük üzrə nəzarət etdim',
           'Həftəlik icmallar və debugging dəstəyi göstərdim (~200 tələbə)',
@@ -894,11 +909,11 @@ export const profiles: Record<string, I18nProfile> = {
       patent: {
         name: 'patent',
         impact:
-          'Sadə dildə dev-tool ideyası qəbul edən, open-source reyestrlərində mövcud implementasiyaları axtaran, uyğunluqları lokal embedding-lərlə sıralayan və LLM vasitəsilə əhatəli vərdict yazan CLI.',
+          'Sadə dildə dev-tool ideyası qəbul edən, open-source reyestrlərində mövcud implementasiyaları axtaran, uyğunluqları lokal embedding-lərlə sıralayan və LLM vasitəsilə əhatəli qərar yazan CLI.',
         date: 'İyun 2026',
         bullets: [
           'crates.io, npm və PyPI‑dən Docker Hub və Hacker News‑a qədər 11 reyestr üçün paralel mənbə adapterləri qurdum',
-          'Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli vərdict sistemi qurdum',
+          'Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli qərar sistemi qurdum',
           'Detallı baxış, brauzer açma və CI pipeline-ları üçün strukturlaşdırılmış JSON çıxışı olan interaktiv ratatui TUI əlavə etdim',
         ],
         badges: [
@@ -993,7 +1008,7 @@ export const profiles: Record<string, I18nProfile> = {
     }),
     teaching: [
       {
-        title: 'Məlumat strukturları',
+        title: 'Verilənlər strukturları',
         skills: profile.teaching[0].skills,
       },
       {
@@ -1021,7 +1036,7 @@ export const profiles: Record<string, I18nProfile> = {
       {
         name: 'Oliver Kennedy',
         title: 'Dosent, State University of New York at Buffalo',
-        course: 'Məlumat strukturları',
+        course: 'Verilənlər strukturları',
         headTA: true,
         quote:
           'Onu Project Manager və ya Team Lead vəzifəsinə qoyun, zəmanət verirəm ki, parlayacaq.',
@@ -1142,6 +1157,11 @@ export const profiles: Record<string, I18nProfile> = {
         stat1: '1000+ tələbə tədris edilib',
         stat2: '5+ komanda',
         stat3: '4+ il təcrübə',
+        throughLine: 'Əsas fikir:',
+        noProjectsLoaded: 'Layihələr yüklənməyib.',
+        noManualEntry: '{who} üçün təlimat maddəsi yoxdur. Cəhd edin: man riad',
+        openingResumePdf: '/resume.pdf açılır…',
+        openingGithub: 'github.com/r14dd açılır...',
       },
       chrome: {
         skipToContent: 'Məzmuna keç',
@@ -1211,7 +1231,7 @@ export const profiles: Record<string, I18nProfile> = {
         steps: {
           terminal: {
             title: 'Əsl terminal',
-            text: 'help yazın. Əmrləri və boru kəmərlərini icra edir, bir az Rust isə WebAssembly-yə kompilyasiya olunub.',
+            text: 'help yazın. Əmrləri və onların ardıcıl birləşmələrini icra edir, bir az Rust isə WebAssembly-yə kompilyasiya olunub.',
           },
           experience: {
             title: 'Harada işləmişəm',
