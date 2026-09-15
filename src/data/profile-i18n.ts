@@ -515,7 +515,7 @@ export const profiles: Record<string, I18nProfile> = {
       raft: {
         name: 'Алгоритм консенсуса Raft',
         impact:
-          'Консенсус Raft, сохраняющий согласованность при отказах узлов через лидер-элекцию и репликацию логов.',
+          'Кластер продолжает обслуживать запросы при падении лидера и разделении сети: выдерживает отказ ⌊n/2⌋ узлов, не теряя ни одной зафиксированной записи.',
         date: 'Май 2024',
         bullets: [
           'Реализовал выбор лидера с рандомизированными таймаутами и term-based логическими часами для предотвращения split vote',
@@ -528,7 +528,7 @@ export const profiles: Record<string, I18nProfile> = {
       kademlia: {
         name: 'Распределенная хеш‑таблица (Kademlia)',
         impact:
-          'Kademlia DHT для устойчивого peer-discovery и O(log n) поиска в динамических сетях.',
+          'Любой ключ находится за O(log n) переходов и остаётся доступным, пока узлы приходят и уходят: каждое значение хранится на k ближайших узлах.',
         date: 'Фев 2024',
         bullets: [
           'Реализовал XOR-метрику расстояния с k-bucket таблицами маршрутизации для организации пиров',
@@ -540,7 +540,7 @@ export const profiles: Record<string, I18nProfile> = {
       redis: {
         name: 'Redis Redesign',
         impact:
-          'Двухслойный TTL-кэш, устраняющий несогласованность устаревших данных при сохранении низкой задержки.',
+          'Каждая запись истекает по своему TTL, а сборщик убирает висячие ссылки между слоями: чтения перестают отдавать устаревшие данные без потери скорости на горячем пути.',
         date: 'Дек 2025',
         bullets: [
           'Заменил монолитный кэш на два слоя: key-subkey to id и id to value',
@@ -971,7 +971,7 @@ export const profiles: Record<string, I18nProfile> = {
       raft: {
         name: 'Raft əsaslı konsensus alqoritmi',
         impact:
-          'Lider seçimi və log replikasiyası vasitəsilə node nasazlıqlarında konsistensiyanı qoruyan Raft konsensusu.',
+          'Klaster lider çökəndə və şəbəkə bölünəndə işləməyə davam edir: ⌊n/2⌋ qovşağın sıradan çıxmasına dözür və heç bir təsdiqlənmiş yazını itirmir.',
         date: 'May 2024',
         bullets: [
           'Randomizə edilmiş taymautlar və term-əsaslı məntiqi saatlarla lider seçimi tətbiq etdim',
@@ -984,7 +984,7 @@ export const profiles: Record<string, I18nProfile> = {
       kademlia: {
         name: 'Paylanmış Hash Table (Kademlia)',
         impact:
-          'Dinamik şəbəkələrdə dayanıqlı peer-discovery və O(log n) axtarış üçün Kademlia DHT.',
+          'İstənilən açar O(log n) addıma tapılır və qovşaqlar gəlib-getdikcə tapılmağa davam edir: hər dəyər ən yaxın k qovşaqda saxlanılır.',
         date: 'Fev 2024',
         bullets: [
           'Peer təşkilatı üçün k-bucket marşrutlaşdırma cədvəlləri ilə XOR-əsaslı məsafə metriki tətbiq etdim',
@@ -996,7 +996,7 @@ export const profiles: Record<string, I18nProfile> = {
       redis: {
         name: 'Redis Redesign',
         impact:
-          'Aşağı gecikmə ilə köhnəlmiş məlumat uyğunsuzluğunu aradan qaldıran ikiqat TTL-ə əsaslanan cache.',
+          'Hər yazı öz TTL-i ilə bitir, toplayıcı isə qatlar arasındakı asılı istinadları silir: oxumalar isti yolda gecikmə artmadan köhnəlmiş məlumat qaytarmağı dayandırır.',
         date: 'Dek 2025',
         bullets: [
           'Monolit cache-i iki laylı modelə çevirdim: key-subkey to id və id to value',

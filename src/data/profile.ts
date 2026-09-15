@@ -248,7 +248,7 @@ export const profile: Profile = {
       name: 'Raft-Based Consensus Algorithm',
       tech: ['Go', 'UDP', 'Protobuf'],
       impact:
-        'Raft consensus preserving consistency under node failures via leader election and log replication.',
+        'A cluster that keeps serving through leader crashes and network partitions: up to ⌊n/2⌋ nodes can fail without a committed entry being lost.',
       date: 'May 2024',
       bullets: [
         'Implemented leader election with randomized timeouts and term-based logical clocks to prevent split votes',
@@ -262,7 +262,8 @@ export const profile: Profile = {
       id: 'kademlia',
       name: 'Distributed Hash Table (Kademlia)',
       tech: ['Go', 'TCP', 'Protobuf'],
-      impact: 'Kademlia DHT for resilient peer discovery and O(log n) lookups in dynamic networks.',
+      impact:
+        'Any key is found in O(log n) hops and stays findable as nodes join and leave, with every value held on the k closest peers.',
       date: 'Feb 2024',
       bullets: [
         'Implemented XOR-based distance metric with k-bucket routing tables for peer organization',
@@ -276,7 +277,7 @@ export const profile: Profile = {
       name: 'Redis Redesign',
       tech: ['Rust', 'Tokio', 'Redis'],
       impact:
-        'Two-layer TTL-aware cache eliminating stale-data inconsistency while preserving low-latency access.',
+        'Every entry expires on its TTL and dangling cross-layer references are collected, so reads stop returning stale data at no cost to the hot path.',
       date: 'Dec 2025',
       bullets: [
         'Replaced a monolithic cache with two layers: key-subkey to id mapping and id to value storage',
