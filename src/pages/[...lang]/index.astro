@@ -103,6 +103,7 @@ const structuredData = JSON.stringify({
       type="button"
       aria-haspopup="menu"
       aria-expanded="false"
+      aria-controls="lang-menu"
     >
       <span class="lang-globe" aria-hidden="true">
         <svg
@@ -182,6 +183,7 @@ const structuredData = JSON.stringify({
   <main class="content" id="main-content">
     <section>
       <p class="hero-eyebrow" id="hero-eyebrow">{profile.labels.heroEyebrow}</p>
+      <p class="hero-greeting" id="hero-greeting" aria-hidden="true"></p>
       <h1 id="hero-name">{profile.hero.name}</h1>
       <p class="hero-about" id="hero-about">{profile.about}</p>
 
@@ -529,14 +531,13 @@ const structuredData = JSON.stringify({
 
   <script>
     // Page orchestrator, split in two. Eager: only what the first viewport
-    // needs (hero reveal, terminal, nav, i18n, theme, the Spotify line).
+    // needs (hero reveal, terminal, nav, i18n, theme).
     // Deferred: palette, shortcuts, project modal, gestures, sim overlay,
-    // ambient, loaded right after `load`, or on the first interaction,
-    // whichever comes first. A ⌘K pressed before the chunk lands is buffered
-    // and replayed, so the palette answers the very first press.
+    // ambient, Spotify, badges, loaded right after `load`, or on the first
+    // interaction, whichever comes first. A ⌘K pressed before the chunk
+    // lands is buffered and replayed, so the palette answers the very first
+    // press.
     import * as sfx from '../../lib/client/sfx';
-    import { initSpotify } from '../../lib/client/spotify';
-    import { fetchBadges } from '../../lib/client/badges';
     import { initHeroReveal } from '../../lib/client/hero-reveal';
     import { initTerminalBoot, initTerminal } from '../../lib/client/terminal';
     import { initNav } from '../../lib/client/nav';
@@ -562,9 +563,6 @@ const structuredData = JSON.stringify({
     sfx.init();
 
     initTheme();
-
-    initSpotify();
-    fetchBadges();
 
     let deferredPromise: Promise<typeof import('../../lib/client/deferred')> | null = null;
     const loadDeferred = () => {

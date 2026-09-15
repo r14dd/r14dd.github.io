@@ -41,6 +41,7 @@ playwright-report/
 
 # workers
 .wrangler/
+.dev.vars
 
 # system
 *.orig

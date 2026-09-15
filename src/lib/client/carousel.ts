@@ -1,9 +1,13 @@
+import { state } from './state';
+
 let carouselTimer: ReturnType<typeof setInterval> | null = null;
 let carouselAbort: AbortController | null = null;
 let scrollEndTimer: ReturnType<typeof setTimeout> | null = null;
 let hintObs: IntersectionObserver | null = null;
 let autoObs: IntersectionObserver | null = null;
 const DOT_COUNT = 5;
+
+const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initCarousel() {
   if (carouselTimer) clearInterval(carouselTimer);
@@ -52,10 +56,13 @@ export function initCarousel() {
   scroll.scrollLeft = getSlideWidth();
   scroll.style.scrollBehavior = '';
 
+  const slideLabel = state.currentProfile?.labels?.chrome?.carouselSlide || 'Slide {n}';
   dotsEl.innerHTML = '';
   for (let i = 0; i < DOT_COUNT; i++) {
-    const d = document.createElement('div');
+    const d = document.createElement('button');
+    d.type = 'button';
     d.className = 'car-dot' + (i === 0 ? ' on' : '');
+    d.setAttribute('aria-label', slideLabel.replace('{n}', String(i + 1)));
     d.addEventListener(
       'click',
       () => {
@@ -173,8 +180,19 @@ export function initCarousel() {
     );
   }
 
-  const startAutoplay = () => {
+  // Stays true when there's no #recommendations to observe (autoplay always
+  // wanted in that case); the IntersectionObserver below flips it as the
+  // carousel enters/leaves the viewport.
+  let inView = true;
+
+  const stopAutoplay = () => {
     if (carouselTimer) clearInterval(carouselTimer);
+    carouselTimer = null;
+  };
+
+  const startAutoplay = () => {
+    stopAutoplay();
+    if (prefersReducedMotion() || !inView) return;
     carouselTimer = setInterval(() => {
       const sw = getSlideWidth();
       scroll.scrollBy({ left: sw, behavior: 'smooth' });
@@ -183,10 +201,26 @@ export function initCarousel() {
     }, 13000);
   };
 
+  if (wrap) {
+    // Autoplay competes with anyone reading or navigating the cards under it,
+    // so it stops the moment focus or the pointer is inside and only resumes
+    // once both have left (and only if motion is still wanted at all).
+    wrap.addEventListener('mouseenter', stopAutoplay, { signal });
+    wrap.addEventListener('mouseleave', startAutoplay, { signal });
+    wrap.addEventListener('focusin', stopAutoplay, { signal });
+    wrap.addEventListener('focusout', startAutoplay, { signal });
+  }
+
   let hintDone = false;
   const runHint = () => {
     if (hintDone) return;
     hintDone = true;
+    // The swipe hint is an unprompted multi-step smooth scroll through every
+    // card - the same category of motion as autoplay. `scrollLeft` is
+    // already parked on the first real slide and dot 0 already carries `.on`
+    // (both set above), so skipping straight past this is a no-op, not a
+    // missing initial state.
+    if (prefersReducedMotion()) return;
     const sw = getSlideWidth();
     let step = 0;
     const hintNext = () => {
@@ -228,11 +262,11 @@ export function initCarousel() {
     hintObs.observe(recsSection);
     autoObs = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        inView = entries[0].isIntersecting;
+        if (inView) {
           if (!carouselTimer) startAutoplay();
         } else {
-          if (carouselTimer) clearInterval(carouselTimer);
-          carouselTimer = null;
+          stopAutoplay();
         }
       },
       { threshold: 0 },

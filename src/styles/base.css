@@ -314,9 +314,17 @@ textarea {
 }
 
 :focus-visible {
-  outline: 2px solid rgba(var(--accent-rgb), 0.6);
-  outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* The dark-tuned accents clear contrast at full opacity on dark backgrounds,
+   but the same solid ring on white light-theme surfaces still needs a wider
+   halo to stay unmistakable at a glance; the box-shadow adds that without
+   raising the outline's own opacity (which is what broke AA here before). */
+html.light :focus-visible {
+  box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.25);
 }
 
 /* Elements whose edges touch the section paint-containment boundary get an
@@ -544,6 +552,13 @@ html.no-js .hero-links {
   animation: none !important;
 }
 
+/* No JS means the greeting never gets filled in, so it stays empty forever;
+   reserving its line-height would leave a permanent blank gap under the
+   eyebrow. */
+html.no-js .hero-greeting {
+  display: none;
+}
+
 /* Light surface can't afford the dark theme's alpha-tinted accents: even the
    light-tuned golds fall to ~2.4:1 once multiplied by 0.55–0.7 alpha. Solid
    accent here is 4.5:1+ in every period. */
@@ -552,10 +567,16 @@ html.light .sec-eyebrow,
 html.light .tl-org,
 html.light .scroll-tl-org,
 html.light .terminal-prompt,
-html.light .sim-legend,
 html.light .lab-eyebrow,
 html.light .lab-kicker {
   color: var(--accent);
+}
+
+/* Kept off the accent list above: --muted (~5.7:1) clears AA on its own,
+   same token the dark-theme rule uses, so the legend doesn't need the
+   solid-accent workaround the eyebrows do. */
+html.light .sim-legend {
+  color: var(--muted);
 }
 
 html.light .scroll-tl-item.in-view .scroll-tl-period {
@@ -677,7 +698,9 @@ section[id] {
 .sim-legend {
   margin-top: 0.4rem;
   font-size: 0.75rem;
-  color: rgba(var(--accent-rgb), 0.45);
+  /* Was rgba(accent, 0.45): ~2.3:1 on dark, well under AA for 12px text.
+     --muted clears ~5.6:1 in both themes. */
+  color: var(--muted);
   letter-spacing: 0.01em;
 }
 
@@ -949,6 +972,7 @@ h2 {
   .scroll-tl-bullets li,
   .section-revealed ul li,
   .hero-eyebrow,
+  .hero-greeting,
   .hero-links {
     opacity: 1 !important;
     transform: none !important;

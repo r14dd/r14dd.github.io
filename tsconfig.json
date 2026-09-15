@@ -1,5 +1,5 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "src/pages/index.astro", "src/pages/lab.astro"]
+  "exclude": ["dist", "src/pages/lab.astro"]
 }

@@ -1,6 +1,5 @@
-// @ts-nocheck
 export const initTerminalDots = () => {
-  const terminal = document.querySelector('.terminal-window');
+  const terminal = document.querySelector<HTMLElement>('.terminal-window');
   const dotsRow = document.querySelector('.terminal-dots');
   const redDot = document.querySelector('.dot-red');
   const yellowDot = document.querySelector('.dot-yellow');
@@ -65,7 +64,7 @@ export const initTerminalDots = () => {
       squashing = false;
       terminal.removeEventListener('animationend', onEnd);
     };
-    const onEnd = (ev) => {
+    const onEnd = (ev: AnimationEvent) => {
       if (ev.target !== terminal || ev.animationName !== 'squash-bounce') return;
       done();
     };

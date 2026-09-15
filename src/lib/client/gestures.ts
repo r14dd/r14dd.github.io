@@ -1,4 +1,3 @@
-// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Motion-gated extras: sim in-view activation, section-heading typing on
 // reveal, pull-to-refresh, modal swipe-dismiss, pinch-zoom on sims, and
 // the Konami easter egg. The whole block is skipped under reduced motion.
@@ -21,7 +20,7 @@ export const initGestures = () => {
       },
       { threshold: 0.25 },
     );
-    const observedSimCards = new WeakSet();
+    const observedSimCards = new WeakSet<Element>();
     const observeSims = () => {
       document.querySelectorAll('.proj-card').forEach((card) => {
         if (observedSimCards.has(card) || !card.querySelector('.sim-visual')) return;
@@ -34,7 +33,10 @@ export const initGestures = () => {
     const contentEl = document.querySelector('.content');
     if (contentEl) {
       new MutationObserver((mutations) => {
-        if (mutations.every((m) => m.target.closest && m.target.closest('#spotify-line'))) return;
+        if (
+          mutations.every((m) => m.target instanceof Element && m.target.closest('#spotify-line'))
+        )
+          return;
         observeSims();
       }).observe(contentEl, { childList: true, subtree: true });
     }
@@ -89,7 +91,7 @@ export const initGestures = () => {
               // transform, not top: layout properties during an active touch
               // gesture force layout per touchmove.
               pullEl.style.transform = `translate(-50%, ${Math.min(dy * 0.3, 48) - 16}px)`;
-              pullEl.style.opacity = Math.min((dy - 40) / 80, 1);
+              pullEl.style.opacity = String(Math.min((dy - 40) / 80, 1));
             } else if (dy <= 0) {
               pullEl.classList.remove('visible');
               pulling = false;
@@ -145,7 +147,7 @@ export const initGestures = () => {
           },
           { passive: true },
         );
-        const endDrag = (e) => {
+        const endDrag = (e: TouchEvent) => {
           if (!mDragging) return;
           mDragging = false;
           const dy = e.changedTouches[0].clientY - mStartY;
@@ -173,13 +175,15 @@ export const initGestures = () => {
         let initDist = 0,
           curScale = 1,
           zooming = false,
-          simTarget = null;
-        const getDist = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+          simTarget: HTMLElement | null = null;
+        const getDist = (t: TouchList) =>
+          Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
         modalEl.addEventListener(
           'touchstart',
           (e) => {
             if (e.touches.length !== 2) return;
-            simTarget = e.target.closest('.sim-visual');
+            simTarget =
+              e.target instanceof Element ? e.target.closest<HTMLElement>('.sim-visual') : null;
             if (!simTarget) return;
             zooming = true;
             initDist = getDist(e.touches);

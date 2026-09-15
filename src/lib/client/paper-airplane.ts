@@ -69,6 +69,7 @@ export const initPaperAirplane = () => {
 
       const compose = overlay.querySelector('.airplane-compose');
       compose.classList.add('airplane-folding');
+      sendBtn.disabled = true;
 
       setTimeout(() => {
         compose.style.display = 'none';
@@ -84,9 +85,11 @@ export const initPaperAirplane = () => {
           planeEl.style.setProperty('--fly-y', `${dy}px`);
         }
 
+        planeEl.classList.remove('failed');
+        planeEl.textContent = '✈';
         planeEl.classList.add('flying');
 
-        fetch(`${WORKER_URL}/message`, {
+        const send = fetch(`${WORKER_URL}/message`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -94,13 +97,28 @@ export const initPaperAirplane = () => {
             contact: contact.value.trim() || null,
             honey: honey.value || undefined,
           }),
-        }).catch(() => {});
+          signal: AbortSignal.timeout(8000),
+        })
+          .then((res) => res.ok)
+          .catch(() => false);
 
-        setTimeout(() => {
+        setTimeout(async () => {
+          const ok = await send;
           planeEl.classList.remove('flying');
-          planeEl.classList.add('landed');
-          planeEl.textContent = '✓';
-          setTimeout(close, 800);
+          if (ok) {
+            planeEl.classList.add('landed');
+            planeEl.textContent = '✓';
+            setTimeout(close, 800);
+          } else {
+            planeEl.classList.add('failed');
+            planeEl.textContent = '✕';
+            setTimeout(() => {
+              animWrap.classList.remove('active');
+              compose.style.display = '';
+              compose.classList.remove('airplane-folding');
+              sendBtn.disabled = false;
+            }, 800);
+          }
         }, 1200);
       }, 600);
     });

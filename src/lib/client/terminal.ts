@@ -357,7 +357,7 @@ export const initTerminal = () => {
         return {
           html:
             '<span class="terminal-stats" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.25rem 0.45rem"><span class="term-stat">' +
-            wrapNum(t.stat1 || '2K+ students taught') +
+            wrapNum(t.stat1 || '1000+ students taught') +
             '</span><span class="term-stat-sep">·</span><span class="term-stat">' +
             wrapNum(t.stat2 || '5+ teams led') +
             '</span><span class="term-stat-sep">·</span><span class="term-stat">' +

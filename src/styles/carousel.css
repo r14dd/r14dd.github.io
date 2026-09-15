@@ -190,6 +190,9 @@
 }
 
 .car-dot {
+  appearance: none;
+  border: 0;
+  padding: 0;
   width: 5px;
   height: 5px;
   min-width: 5px;

@@ -319,7 +319,12 @@ const hit = async (page: Page, x: number, y: number) => {
 };
 
 test.describe('crack the glass needs five hits, fast', () => {
-  test.beforeEach(({ page }) => pinLiveContent(page));
+  // Fixed to daytime so `.ferris` (skipped 00:00-06:00) always loads; ferris
+  // only reads the hour once at init, so this leaves every other timer alone.
+  test.beforeEach(async ({ page }) => {
+    await page.clock.setFixedTime(new Date('2026-06-15T14:00:00'));
+    await pinLiveContent(page);
+  });
 
   const burst = async (page: Page, n: number, gapMs: number) => {
     const spot = await deadSpot(page);
@@ -365,7 +370,11 @@ test.describe('crack the glass needs five hits, fast', () => {
 });
 
 test.describe('the repair crew is one crew, and it visits every break', () => {
-  test.beforeEach(({ page }) => pinLiveContent(page));
+  // Same as above: pin the clock so `.ferris` attaches regardless of when this runs.
+  test.beforeEach(async ({ page }) => {
+    await page.clock.setFixedTime(new Date('2026-06-15T14:00:00'));
+    await pinLiveContent(page);
+  });
 
   test('a hit landing mid-walk joins the job instead of dispatching a second crew', async ({
     page,

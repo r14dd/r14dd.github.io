@@ -434,7 +434,8 @@ html.light .crack-ring {
   opacity: 0;
 }
 
-.airplane-plane.landed {
+.airplane-plane.landed,
+.airplane-plane.failed {
   font-size: 18px;
   color: var(--accent);
   opacity: 1;

@@ -180,8 +180,20 @@ export const initProjectModal = () => {
       openSimOverlay(card);
       return;
     }
-    // A compact card's <details> is inside the role="button" card; without
-    // this the disclosure click also opens the modal it was meant to avoid.
+    // .proj-open is the card's real click/keyboard target (a <button> in the
+    // h3); handle it before the guard below so both mouse and the button's
+    // synthesized Enter/Space click open the modal.
+    const openBtn = e.target.closest?.('.proj-open');
+    if (openBtn) {
+      const title = card.querySelector('h3')?.textContent?.trim();
+      const p = (state.currentProfile?.projects || state.I18N.en.projects || []).find(
+        (x) => x.name === title,
+      );
+      if (p) openProject(p, card);
+      return;
+    }
+    // A compact card's <details> summary must not also open the modal it's
+    // meant to avoid; other links/buttons in the card navigate on their own.
     if (e.target.closest('a, button, summary')) return;
     const sel = window.getSelection?.();
     if (sel && sel.toString().length > 0) return;
@@ -189,19 +201,13 @@ export const initProjectModal = () => {
     const p = (state.currentProfile?.projects || state.I18N.en.projects || []).find(
       (x) => x.name === title,
     );
-    if (p) openProject(p, card);
-  });
-  projectsSection?.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    const card = e.target.closest?.('.proj-card');
-    if (!card || !projectsSection.contains(card)) return;
-    if (e.target.closest?.('summary')) return;
-    e.preventDefault();
-    const title = card.querySelector('h3')?.textContent?.trim();
-    const p = (state.currentProfile?.projects || state.I18N.en.projects || []).find(
-      (x) => x.name === title,
-    );
-    if (p) openProject(p, card);
+    if (p) {
+      // The click landed on the card body, not the .proj-open button, so
+      // nothing moved focus there yet. Do it now: close should return focus
+      // to the name button, not wherever it happened to be (often <body>).
+      card.querySelector('.proj-open')?.focus({ preventScroll: true });
+      openProject(p, card);
+    }
   });
   projBackdrop?.addEventListener('click', closeProject);
   projClose?.addEventListener('click', closeProject);

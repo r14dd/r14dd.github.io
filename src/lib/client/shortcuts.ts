@@ -1,4 +1,3 @@
-// @ts-nocheck: verbatim move of the (never type-checked) inline script.
 // Global keyboard shortcuts: g-then-key section nav, ? for the shortcut
 // overlay, backslash for theme, and Escape routing for whichever layer is
 // open (modal, overlay, find bar).
@@ -8,7 +7,7 @@ import { closeProject } from './project-modal';
 import { openKbd, closeKbd, hideFindNav } from './cmd-palette';
 
 export const initShortcuts = () => {
-  const SECTION_KEYS = {
+  const SECTION_KEYS: Record<string, string> = {
     e: 'experience',
     p: 'projects',
     s: 'skills',
@@ -17,10 +16,11 @@ export const initShortcuts = () => {
     c: 'connect',
     m: 'recommendations',
   };
-  const isTypingTarget = (el) =>
-    !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+  const isTypingTarget = (el: Element | null) =>
+    !!el &&
+    (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || (el as HTMLElement).isContentEditable);
   let gPending = false;
-  let gTimer;
+  let gTimer: ReturnType<typeof setTimeout> | undefined;
 
   document.addEventListener('keydown', (e) => {
     if (state.cmdOpen || state.tourOpen || isTypingTarget(document.activeElement)) return;

@@ -147,6 +147,14 @@ test.describe('reduced-motion path (deterministic)', () => {
     await expect(page.locator('#proj-modal')).not.toHaveClass(/open/);
   });
 
+  test('project modal opens from the card name button via keyboard', async ({ page }) => {
+    const openBtn = page.locator('#projects .proj-card').first().locator('.proj-open');
+    await openBtn.scrollIntoViewIfNeeded();
+    await openBtn.focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#proj-modal')).toHaveClass(/open/);
+  });
+
   test('keyboard shortcuts: g-nav, ?, backslash theme', async ({ page }) => {
     await page.keyboard.press('g');
     await page.keyboard.press('p');

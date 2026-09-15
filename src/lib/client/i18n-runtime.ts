@@ -135,6 +135,7 @@ export const initI18n = () => {
     const heroTitle = document.querySelector('main section h1');
     const heroLinks = document.querySelector('.hero-links');
     if (heroTitle) weightReveal(heroTitle, data.hero.name);
+    setText('hero-eyebrow', data.labels.heroEyebrow);
     timeAware.apply(data);
     const heroAbout = document.getElementById('hero-about');
     if (heroAbout) {
@@ -281,7 +282,7 @@ export const initI18n = () => {
   };
 
   const langWrapper = document.querySelector('.lang-switcher');
-  langToggle?.addEventListener('click', () => {
+  langToggle?.addEventListener('click', (event) => {
     const isOpen = langMenu?.classList.contains('open');
     langMenu?.classList.toggle('open', !isOpen);
     langWrapper?.classList.toggle('open', !isOpen);
@@ -292,6 +293,15 @@ export const initI18n = () => {
     if (!isOpen) {
       const current = document.documentElement.lang || 'en';
       for (const l of ['en', 'ru', 'az']) if (l !== current) ensureLang(l).catch(() => {});
+      // Enter/Space on a <button> synthesize a click with detail === 0 (real
+      // pointer clicks are >= 1); that's the signal this open came from the
+      // keyboard, so follow it in like ArrowDown does. Mouse users keep focus
+      // on the toggle, matching what they'd expect.
+      if (event.detail === 0) {
+        const items = Array.from(langMenu?.querySelectorAll('[role="menuitemradio"]') || []);
+        const checked = items.find((el) => el.getAttribute('aria-checked') === 'true');
+        (checked || items[0])?.focus();
+      }
     }
   });
 
@@ -309,6 +319,9 @@ export const initI18n = () => {
         langMenu.classList.remove('open');
         langWrapper?.classList.remove('open');
         langToggle?.setAttribute('aria-expanded', 'false');
+        // The item is about to lose visibility (menu closes -> `visibility:
+        // hidden`), which would otherwise strand focus on a hidden node.
+        langToggle?.focus();
         return;
       }
       setItem('portfolio-lang', lang);
@@ -318,6 +331,7 @@ export const initI18n = () => {
       langMenu.classList.remove('open');
       langWrapper?.classList.remove('open');
       langToggle?.setAttribute('aria-expanded', 'false');
+      langToggle?.focus();
       clearTimeout(langSwitchTimer);
       document.body.classList.add('lang-switching');
       ensureLang(lang).catch(() => {}); // warm the locale cache during the fade
@@ -344,6 +358,58 @@ export const initI18n = () => {
     langMenu.classList.remove('open');
     langWrapper?.classList.remove('open');
     langToggle.setAttribute('aria-expanded', 'false');
+  });
+
+  // Keyboard contract for the menu/menuitemradio pair above: Enter and Space
+  // on the toggle are left to the native click (the click handler above
+  // detects the keyboard-synthesized click via `event.detail === 0` and
+  // focuses in) so they can't race the existing click-based open/close
+  // logic; ArrowDown has no native activation to piggyback on, so it opens
+  // and focuses in directly. Inside the menu, arrow keys move focus between
+  // items with wraparound and Escape closes and hands focus back to the
+  // toggle; Escape is also handled on the toggle itself, since a
+  // mouse-opened menu leaves focus there rather than inside.
+  const closeLangMenu = () => {
+    langMenu?.classList.remove('open');
+    langWrapper?.classList.remove('open');
+    langToggle?.setAttribute('aria-expanded', 'false');
+  };
+  langToggle?.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      if (langMenu?.classList.contains('open')) {
+        event.preventDefault();
+        closeLangMenu();
+        langToggle?.focus();
+      }
+      return;
+    }
+    if (event.key !== 'ArrowDown') return;
+    event.preventDefault();
+    if (!langMenu?.classList.contains('open')) {
+      langMenu?.classList.add('open');
+      langWrapper?.classList.add('open');
+      langToggle?.setAttribute('aria-expanded', 'true');
+      const current = document.documentElement.lang || 'en';
+      for (const l of ['en', 'ru', 'az']) if (l !== current) ensureLang(l).catch(() => {});
+    }
+    const items = Array.from(langMenu?.querySelectorAll('[role="menuitemradio"]') || []);
+    const checked = items.find((el) => el.getAttribute('aria-checked') === 'true');
+    (checked || items[0])?.focus();
+  });
+  langMenu?.addEventListener('keydown', (event) => {
+    const items = Array.from(langMenu.querySelectorAll('[role="menuitemradio"]'));
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeLangMenu();
+      langToggle?.focus();
+      return;
+    }
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    event.preventDefault();
+    const current = items.indexOf(document.activeElement);
+    const step = event.key === 'ArrowDown' ? 1 : -1;
+    const next = items[(current + step + items.length) % items.length];
+    next?.focus();
   });
 
   // Back/forward between locale URLs swaps in place rather than reloading.

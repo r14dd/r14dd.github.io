@@ -232,10 +232,24 @@ export const initTour = () => {
     markSeen();
     pill?.remove();
     pill = null;
+    window.removeEventListener('scroll', dismissOnScroll);
   });
+  const heroBottom =
+    (document.querySelector('#hero-name')?.closest('section') as HTMLElement | null)
+      ?.offsetHeight ?? window.innerHeight;
+  const dismissOnScroll = () => {
+    if (!pill || window.scrollY <= heroBottom * 0.6) return;
+    pill.classList.remove('open');
+    const dying = pill;
+    pill = null;
+    window.removeEventListener('scroll', dismissOnScroll);
+    setTimeout(() => dying.remove(), 300);
+  };
   setTimeout(() => {
     if (state.tourOpen || !pill) return;
     document.body.append(pill);
     requestAnimationFrame(() => pill?.classList.add('open'));
+    window.addEventListener('scroll', dismissOnScroll, { passive: true });
+    dismissOnScroll();
   }, 2600);
 };

@@ -125,6 +125,8 @@ type Labels = {
     nextSlide: string;
     // {current}, {total}
     slideOf: string;
+    // {n}
+    carouselSlide: string;
     switchToLightMode: string;
     switchToDarkMode: string;
     footerRights: string;
@@ -237,7 +239,7 @@ export const profiles: Record<string, I18nProfile> = {
       terminal: {
         role1: 'AI Engineer @ ABB · International Bank of Azerbaijan',
         role2: 'Head of IT @ European Youth Parliament AZ',
-        stat1: '2K+ students taught',
+        stat1: '1000+ students taught',
         stat2: '5+ teams led',
         stat3: '4+ yrs shipping',
       },
@@ -282,6 +284,7 @@ export const profiles: Record<string, I18nProfile> = {
         prevSlide: 'Previous',
         nextSlide: 'Next',
         slideOf: '{current} of {total}',
+        carouselSlide: 'Slide {n}',
         switchToLightMode: 'Switch to light mode',
         switchToDarkMode: 'Switch to dark mode',
         footerRights: 'All rights reserved.',
@@ -649,7 +652,7 @@ export const profiles: Record<string, I18nProfile> = {
         education: 'Академическое образование',
         recommendations: 'Отзывы коллег',
       },
-      heroEyebrow: 'AI & Software инженер · Баку, Азербайджан',
+      heroEyebrow: 'Инженер ИИ и ПО · Баку, Азербайджан',
       meta: {
         titleSuffix: 'AI & Software инженер, Баку',
         description:
@@ -685,7 +688,7 @@ export const profiles: Record<string, I18nProfile> = {
       terminal: {
         role1: 'Инженер ИИ @ ABB · Международный Банк Азербайджана',
         role2: 'Руководитель IT @ Европейский Молодёжный Парламент AZ',
-        stat1: '2000+ студентов обучено',
+        stat1: '1000+ студентов обучено',
         stat2: '5+ команд',
         stat3: '4+ года в разработке',
       },
@@ -730,6 +733,7 @@ export const profiles: Record<string, I18nProfile> = {
         prevSlide: 'Назад',
         nextSlide: 'Вперёд',
         slideOf: '{current} из {total}',
+        carouselSlide: 'Слайд {n}',
         switchToLightMode: 'Включить светлую тему',
         switchToDarkMode: 'Включить тёмную тему',
         footerRights: 'Все права защищены.',
@@ -1135,7 +1139,7 @@ export const profiles: Record<string, I18nProfile> = {
       terminal: {
         role1: 'Süni İntellekt üzrə Mühəndis @ ABB · Azərbaycan Beynəlxalq Bankı',
         role2: 'İT Rəhbəri @ Avropa Gənclər Parlamenti AZ',
-        stat1: '2000+ tələbə tədris edilib',
+        stat1: '1000+ tələbə tədris edilib',
         stat2: '5+ komanda',
         stat3: '4+ il təcrübə',
       },
@@ -1180,6 +1184,7 @@ export const profiles: Record<string, I18nProfile> = {
         prevSlide: 'Əvvəlki',
         nextSlide: 'Növbəti',
         slideOf: '{current} / {total}',
+        carouselSlide: 'Slayd {n}',
         switchToLightMode: 'İşıqlı temaya keç',
         switchToDarkMode: 'Qaranlıq temaya keç',
         footerRights: 'Bütün hüquqlar qorunur.',

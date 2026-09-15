@@ -727,14 +727,16 @@ mark.search-highlight-active {
 
 .tour-pill {
   position: fixed;
-  bottom: calc(2.5rem + env(safe-area-inset-bottom));
-  left: 50%;
-  transform: translateX(-50%) translateY(8px);
+  bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  left: auto;
+  right: 1.5rem;
+  transform: translateY(8px);
   display: flex;
   align-items: center;
   background: var(--surface-panel);
   border: 1px solid rgba(var(--accent-rgb), 0.2);
   border-radius: 999px;
+  white-space: nowrap;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.78rem;
   -webkit-backdrop-filter: blur(12px);
@@ -748,7 +750,7 @@ mark.search-highlight-active {
 }
 .tour-pill.open {
   opacity: 1;
-  transform: translateX(-50%);
+  transform: none;
 }
 .tour-pill button {
   background: none;
@@ -921,6 +923,12 @@ mark.search-highlight-active {
 @media (max-width: 719px) {
   .tour-pill {
     bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) translateY(8px);
+  }
+  .tour-pill.open {
+    transform: translateX(-50%);
   }
   body.tour-open .mobile-nav {
     opacity: 0 !important;

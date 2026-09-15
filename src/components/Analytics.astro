@@ -14,6 +14,8 @@ const CF_BEACON_TOKEN = 'e6e3dc46a5b7488bb4e3fab8ac6ac7ce';
 <script is:inline define:vars={{ token: CF_BEACON_TOKEN }}>
   (function () {
     if (!token) return;
+    // Global Privacy Control is honoured even though the beacon is cookieless.
+    if (navigator.globalPrivacyControl) return;
     try {
       if (localStorage.getItem('riad-notrack') === '1') return;
     } catch {

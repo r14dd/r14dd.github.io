@@ -346,9 +346,9 @@ export const buildProjects = (data: I18nProfile): string => {
       ? `<button class="sim-toggle" type="button" aria-label="${esc(data.labels.simulate)}: ${esc(simLabel)}"><svg class="play-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5a.5.5 0 0 1 .77-.42l8 5a.5.5 0 0 1 0 .84l-8 5A.5.5 0 0 1 4 12.5v-10z"/></svg>${esc(data.labels.simulate)}</button>`
       : '';
     const simSvg = sim ? buildProjectSim(p, data.labels.simLegends) : '';
-    return `<div class="proj-card${sim ? ' has-sim' : ''}${isFeature ? ' proj-card-wide proj-card-feature' : ''}" role="button" tabindex="0" data-project="${esc(p.name)}">
+    return `<article class="proj-card${sim ? ' has-sim' : ''}${isFeature ? ' proj-card-wide proj-card-feature' : ''}" data-project="${esc(p.name)}">
           <div class="proj-card-head">
-            <h3 class="proj-name">${esc(p.name)}</h3>
+            <h3 class="proj-name"><button type="button" class="proj-open" aria-haspopup="dialog">${esc(p.name)}</button></h3>
             <div class="proj-card-actions">
               ${gh}${crates}${docs}${simBtn}
             </div>
@@ -360,7 +360,7 @@ export const buildProjects = (data: I18nProfile): string => {
             ${detail}
           </div>
           ${simSvg}
-        </div>`;
+        </article>`;
   };
   return `
         <div class="sec-eyebrow">${esc(data.labels.eyebrows.projects)}</div>

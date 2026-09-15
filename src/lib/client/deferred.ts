@@ -13,6 +13,7 @@ import { initProjectModal } from './project-modal';
 import { initGestures } from './gestures';
 import { initAmbient } from './ambient';
 import { initTour } from './tour';
+import { initSpotify } from './spotify';
 
 let done = false;
 
@@ -26,5 +27,6 @@ export const initDeferred = () => {
   initGestures();
   initAmbient();
   initTour();
+  initSpotify();
   document.documentElement.dataset.jsReady = '1';
 };

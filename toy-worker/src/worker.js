@@ -13,15 +13,7 @@ export class VisitorCounter {
         headers: { 'Content-Type': 'application/json' },
       });
     }
-    if (request.method !== 'POST') {
-      return new Response('Method Not Allowed', { status: 405 });
-    }
-    let count = (await this.state.storage.get('count')) || 0;
-    count++;
-    await this.state.storage.put('count', count);
-    return new Response(JSON.stringify({ number: count }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response('Method Not Allowed', { status: 405 });
   }
 }
 
@@ -45,10 +37,32 @@ export class MessageBox {
     this.ensureTable();
 
     if (request.method === 'POST') {
-      const { text, contact, honey } = await request.json();
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return new Response(JSON.stringify({ error: 'bad json' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      if (typeof body !== 'object' || body === null) {
+        return new Response(JSON.stringify({ error: 'bad json' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      const { text, contact, honey } = body;
       if (honey) return new Response(JSON.stringify({ ok: true }));
       if (!text || typeof text !== 'string' || text.length > 280) {
         return new Response('Bad Request', { status: 400 });
+      }
+      if (
+        contact !== undefined &&
+        contact !== null &&
+        (typeof contact !== 'string' || contact.length > 120)
+      ) {
+        return new Response(JSON.stringify({ error: 'bad contact' }), { status: 400 });
       }
       const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
       const hourAgo = Date.now() - 3600000;
@@ -159,7 +173,16 @@ export default {
             counter: counter.status,
             messages: box.status,
           }),
-          { status: ok ? 200 : 503, headers: { ...headers, 'Content-Type': 'application/json' } },
+          {
+            status: ok ? 200 : 503,
+            headers: ok
+              ? {
+                  ...headers,
+                  'Content-Type': 'application/json',
+                  'Cache-Control': 'public, max-age=60',
+                }
+              : { ...headers, 'Content-Type': 'application/json' },
+          },
         );
       } catch (e) {
         return new Response(
@@ -173,10 +196,7 @@ export default {
       }
     }
 
-    if (path === '/visitor/increment' && request.method === 'POST') {
-      const id = env.COUNTER.idFromName('global');
-      res = await env.COUNTER.get(id).fetch(request);
-    } else if (path === '/message' && request.method === 'POST') {
+    if (path === '/message' && request.method === 'POST') {
       const id = env.MESSAGES.idFromName('global');
       res = await env.MESSAGES.get(id).fetch(request);
     } else if (path === '/messages' && (request.method === 'GET' || request.method === 'DELETE')) {

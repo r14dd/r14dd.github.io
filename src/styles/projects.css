@@ -169,6 +169,20 @@ html.light .proj-card {
   min-width: 0;
 }
 
+.proj-open {
+  all: unset;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: inline;
+}
+
+.proj-open:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), 0.6);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 .proj-impact {
   font-size: 0.84rem;
   color: var(--text-soft);

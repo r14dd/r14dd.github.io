@@ -14,9 +14,9 @@ export function getPeriod() {
 export function apply(data: any) {
   const p = getPeriod();
   const greetings = data?.labels?.timeGreetings;
-  const eyebrow = document.getElementById('hero-eyebrow');
-  if (eyebrow && greetings?.[p.key]) {
-    eyebrow.textContent = greetings[p.key];
+  const greeting = document.getElementById('hero-greeting');
+  if (greeting && greetings?.[p.key]) {
+    greeting.textContent = greetings[p.key];
   }
   document.documentElement.dataset.period = p.key;
 }
