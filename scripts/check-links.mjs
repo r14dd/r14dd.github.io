@@ -107,8 +107,8 @@ function extractLinks(html, pageUrl) {
   return found;
 }
 
-/** One HEAD, a GET fallback if the server won't answer HEAD, no retries. */
-async function checkUrl(url) {
+/** One HEAD, a GET fallback if the server won't answer HEAD. */
+async function probe(url) {
   // crates.io (and other SPAs behind a CDN) answer 404 to any request that
   // does not say it wants HTML, so a bare probe reads as a dead link.
   const opts = (method) => ({
@@ -132,6 +132,15 @@ async function checkUrl(url) {
       e.name === 'TimeoutError' ? `no answer in ${TIMEOUT_MS / 1000}s` : String(e.message || e);
     return { alive: false, status: why };
   }
+}
+
+// GitHub and GitHub Pages answer the odd 503/504 under load; a link that is
+// fine a few seconds later is not dead. One retry for 5xx or no answer.
+async function checkUrl(url) {
+  const first = await probe(url);
+  if (first.alive || (typeof first.status === 'number' && first.status < 500)) return first;
+  await new Promise((r) => setTimeout(r, 5000));
+  return probe(url);
 }
 
 const pages = await collectPages();
