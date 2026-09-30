@@ -996,3 +996,32 @@ h2 {
     text-decoration: none;
   }
 }
+
+/* Page-to-page navigation crossfades instead of cutting. The `nav` type keeps
+   it apart from the project modal's same-document morph, which turns the root
+   animation off in projects.css. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  html:active-view-transition-type(nav)::view-transition-old(root) {
+    animation: vt-nav-out 0.18s ease both;
+  }
+
+  html:active-view-transition-type(nav)::view-transition-new(root) {
+    animation: vt-nav-in 0.28s ease both;
+  }
+}
+
+@keyframes vt-nav-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-nav-in {
+  from {
+    opacity: 0;
+  }
+}

@@ -119,6 +119,10 @@ import '../styles/ui.css';
         document.getElementById('theme-color-meta')?.setAttribute('content', '#ffffff');
       }
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      // Tag page-to-page transitions so their crossfade (base.css) stays apart
+      // from the project modal's same-document morph.
+      addEventListener('pageswap', (e) => e.viewTransition?.types?.add('nav'));
+      addEventListener('pagereveal', (e) => e.viewTransition?.types?.add('nav'));
     </script>
     <script is:inline define:vars={{ periods: PERIODS }}>
       // Time-of-day accent, keyed to Baku's clock, on every page, not only
