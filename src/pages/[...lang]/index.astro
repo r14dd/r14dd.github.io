@@ -12,6 +12,7 @@ import {
   buildEducation,
   buildSkills,
   buildRecommendations,
+  buildPosts,
   buildConnect,
 } from '../../lib/builders';
 
@@ -166,6 +167,7 @@ const structuredData = JSON.stringify({
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#teaching">{profile.labels.nav.teaching}</a>
     <a href="#recommendations">{profile.labels.nav.recommendations}</a>
+    <a href="#posts">{profile.labels.nav.posts}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
   </nav>
 
@@ -333,6 +335,10 @@ const structuredData = JSON.stringify({
       <Fragment set:html={buildRecommendations(profile)} />
     </section>
 
+    <section id="posts" class="section-block" data-label={profile.labels.headings.posts}>
+      <Fragment set:html={buildPosts(profile)} />
+    </section>
+
     <section id="connect" class="connect-footer">
       <Fragment set:html={buildConnect(profile)} />
     </section>
@@ -350,6 +356,7 @@ const structuredData = JSON.stringify({
       <a href="#skills">{profile.labels.nav.skills}</a>
       <a href="#teaching">{profile.labels.nav.teaching}</a>
       <a href="#recommendations">{profile.labels.nav.recommendations}</a>
+      <a href="#posts">{profile.labels.nav.posts}</a>
       <a href="#connect">{profile.labels.nav.connect}</a>
     </div>
   </nav>

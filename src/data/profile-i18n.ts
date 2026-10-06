@@ -28,6 +28,7 @@ type Labels = {
     education: string;
     skills: string;
     recommendations: string;
+    posts: string;
     connect: string;
   };
   links: {
@@ -45,6 +46,7 @@ type Labels = {
     education: string;
     skills: string;
     recommendations: string;
+    posts: string;
     connect: string;
   };
   eyebrows: {
@@ -54,6 +56,7 @@ type Labels = {
     teaching: string;
     education: string;
     recommendations: string;
+    posts: string;
   };
   heroEyebrow: string;
   // Document title suffix and meta description per locale. /ru/ and /az/ are
@@ -67,6 +70,7 @@ type Labels = {
   headTARole: string;
   simulate: string;
   projectDetails: string;
+  readOnLinkedIn: string;
   simLegends: { raft: string; kademlia: string; redis: string };
   teachingRows: { tools: string; topics: string };
   skillCategories: Record<string, string>;
@@ -181,6 +185,7 @@ export const profiles: Record<string, I18nProfile> = {
         education: 'Education',
         skills: 'Skills',
         recommendations: 'Recommendations',
+        posts: 'Posts',
         connect: 'Connect',
       },
       links: {
@@ -198,6 +203,7 @@ export const profiles: Record<string, I18nProfile> = {
         education: 'Education',
         skills: 'Technical Skills',
         recommendations: 'Recommendations',
+        posts: 'Posts',
         connect: 'Connect',
       },
       eyebrows: {
@@ -207,6 +213,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: 'Teaching experience',
         education: 'Academic background',
         recommendations: 'What colleagues say',
+        posts: 'From LinkedIn',
       },
       heroEyebrow: 'AI & Software Engineer · Baku, Azerbaijan',
       meta: {
@@ -226,6 +233,7 @@ export const profiles: Record<string, I18nProfile> = {
       headTARole: 'Head Teaching Assistant',
       simulate: 'Simulate',
       projectDetails: 'Details',
+      readOnLinkedIn: 'Read on LinkedIn',
       simLegends: {
         raft: 'Leader replicates log entries via AppendEntries RPC',
         kademlia: 'Iterative FIND_NODE lookup converges via XOR distance',
@@ -635,6 +643,7 @@ export const profiles: Record<string, I18nProfile> = {
         education: 'Образование',
         skills: 'Навыки',
         recommendations: 'Рекомендации',
+        posts: 'Посты',
         connect: 'Связь',
       },
       links: {
@@ -652,6 +661,7 @@ export const profiles: Record<string, I18nProfile> = {
         education: 'Образование',
         skills: 'Технические навыки',
         recommendations: 'Рекомендации',
+        posts: 'Посты',
         connect: 'Связь',
       },
       eyebrows: {
@@ -661,6 +671,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: 'Преподавание',
         education: 'Академическое образование',
         recommendations: 'Отзывы коллег',
+        posts: 'Из LinkedIn',
       },
       heroEyebrow: 'Инженер ИИ и ПО · Баку, Азербайджан',
       meta: {
@@ -680,6 +691,7 @@ export const profiles: Record<string, I18nProfile> = {
       headTARole: 'Старший ассистент преподавателя',
       simulate: 'Симуляция',
       projectDetails: 'Подробнее',
+      readOnLinkedIn: 'Читать в LinkedIn',
       simLegends: {
         raft: 'Лидер реплицирует записи лога через AppendEntries RPC',
         kademlia: 'Итеративный поиск FIND_NODE сходится по XOR-расстоянию',
@@ -1091,6 +1103,7 @@ export const profiles: Record<string, I18nProfile> = {
         education: 'Təhsil',
         skills: 'Bacarıqlar',
         recommendations: 'Tövsiyələr',
+        posts: 'Paylaşımlar',
         connect: 'Əlaqə',
       },
       links: {
@@ -1108,6 +1121,7 @@ export const profiles: Record<string, I18nProfile> = {
         education: 'Təhsil',
         skills: 'Texniki bacarıqlar',
         recommendations: 'Tövsiyələr',
+        posts: 'Paylaşımlar',
         connect: 'Əlaqə',
       },
       eyebrows: {
@@ -1117,6 +1131,7 @@ export const profiles: Record<string, I18nProfile> = {
         teaching: 'Tədris təcrübəsi',
         education: 'Akademik təhsil',
         recommendations: 'Həmkarların rəyləri',
+        posts: 'LinkedIn-dən',
       },
       heroEyebrow: 'AI və Proqram Mühəndisi · Bakı, Azərbaycan',
       meta: {
@@ -1136,6 +1151,7 @@ export const profiles: Record<string, I18nProfile> = {
       headTARole: 'Baş tədris assistenti',
       simulate: 'Simulyasiya',
       projectDetails: 'Ətraflı',
+      readOnLinkedIn: 'LinkedIn-də oxuyun',
       simLegends: {
         raft: 'Lider log qeydlərini AppendEntries RPC ilə replikasiya edir',
         kademlia: 'İterativ FIND_NODE axtarışı XOR məsafəsi ilə hədəfə yaxınlaşır',

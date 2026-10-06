@@ -17,6 +17,7 @@ import {
   buildEducation,
   buildSkills,
   buildRecommendations,
+  buildPosts,
   buildConnect,
 } from '../builders';
 import * as timeAware from './time-aware';
@@ -224,6 +225,7 @@ export const initI18n = () => {
       data.labels.nav.skills,
       data.labels.nav.teaching,
       data.labels.nav.recommendations,
+      data.labels.nav.posts,
       data.labels.nav.connect,
     ];
     navLinks.forEach((link, idx) => {
@@ -240,6 +242,7 @@ export const initI18n = () => {
     const eduSection = document.getElementById('education');
     const skillsSection = document.getElementById('skills');
     const recsSection = document.getElementById('recommendations');
+    const postsSection = document.getElementById('posts');
     const connectSection = document.getElementById('connect');
 
     if (expSection) expSection.innerHTML = buildExperience(data);
@@ -251,6 +254,7 @@ export const initI18n = () => {
     if (eduSection) eduSection.innerHTML = buildEducation(data);
     if (skillsSection) skillsSection.innerHTML = buildSkills(data);
     if (recsSection) recsSection.innerHTML = buildRecommendations(data);
+    if (postsSection) postsSection.innerHTML = buildPosts(data);
     if (connectSection) connectSection.innerHTML = buildConnect(data);
 
     [
@@ -260,6 +264,7 @@ export const initI18n = () => {
       eduSection,
       skillsSection,
       recsSection,
+      postsSection,
       connectSection,
     ].forEach((sec) => {
       if (!sec) return;
@@ -274,6 +279,7 @@ export const initI18n = () => {
     eduSection?.setAttribute('data-label', data.labels.headings.education);
     skillsSection?.setAttribute('data-label', data.labels.headings.skills);
     recsSection?.setAttribute('data-label', data.labels.headings.recommendations);
+    postsSection?.setAttribute('data-label', data.labels.headings.posts);
     connectSection?.setAttribute('data-label', data.labels.headings.connect);
 
     initCarousel();

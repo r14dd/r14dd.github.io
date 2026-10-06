@@ -1,0 +1,55 @@
+name: Sync LinkedIn posts
+
+# Re-pulls Riad's LinkedIn posts into src/data/linkedin-posts.json once a week
+# and redeploys when there's something new. LinkedIn walls off bots, and runner
+# IPs may get the same 999 as www.linkedin.com does; a red scheduled run means
+# that, and the site keeps serving the last posts it had.
+#
+# A push made with GITHUB_TOKEN never triggers another workflow, so the push
+# below can't start deploy.yml on its own. workflow_dispatch is the one event
+# that token is allowed to fire, hence the explicit `gh workflow run`.
+on:
+  schedule:
+    # Mondays 06:00 UTC. GitHub disables schedules after 60 days without repo
+    # activity; any push re-enables them.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-linkedin
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+
+      - run: npm ci
+      - run: npm run sync:linkedin
+
+      # The script writes plain JSON.stringify; format first so an unchanged
+      # feed doesn't show up as a diff.
+      - run: npx prettier --write src/data/linkedin-posts.json
+
+      - name: Commit and redeploy if the posts changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- src/data/linkedin-posts.json; then
+            echo "No new posts."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'content: sync LinkedIn posts' -- src/data/linkedin-posts.json
+          git push
+          gh workflow run deploy.yml --ref main

@@ -618,3 +618,25 @@ html.light .proj-card-feature {
     transform: none;
   }
 }
+
+/* LinkedIn posts: the project card, minus the head row. Text keeps its own
+   line breaks; scripts/sync-linkedin.mjs already cuts it to card length. */
+.post-card {
+  grid-row: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.post-text {
+  font-size: 0.84rem;
+  color: var(--text-soft);
+  line-height: 1.55;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.post-link {
+  align-self: flex-start;
+  margin-top: auto;
+}

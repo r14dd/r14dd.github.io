@@ -84,6 +84,12 @@ export const initCmdPalette = () => {
       },
       {
         group: chrome.navigateGroup || 'Navigate',
+        label: nav.posts,
+        icon: 'nav',
+        action: () => scrollCmd('posts'),
+      },
+      {
+        group: chrome.navigateGroup || 'Navigate',
         label: nav.connect,
         icon: 'nav',
         action: () => scrollCmd('connect'),

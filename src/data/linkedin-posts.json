@@ -1,0 +1,32 @@
+[
+  {
+    "url": "https://www.linkedin.com/posts/riadmukhtarov_patent-added-to-the-official-ratatui-showcase-activity-7510604214373482496-LzFx",
+    "postedAt": "2026-09-29T07:39:44.985Z",
+    "text": "Celebrating little victories every day.",
+    "tags": ["rust", "opensource", "ratatui", "terminal"]
+  },
+  {
+    "url": "https://www.linkedin.com/posts/riadmukhtarov_the-downfall-of-computer-science-totally-activity-7501289673156214785-TP4t",
+    "postedAt": "2026-09-03T14:47:05.303Z",
+    "text": "The downfall of computer science totally began the second this industry started normalizing bootcamps.",
+    "tags": []
+  },
+  {
+    "url": "https://www.linkedin.com/posts/riadmukhtarov_assume-the-model-cooperates-with-the-attacker-activity-7501180774101004289-vvau",
+    "postedAt": "2026-09-03T07:34:21.745Z",
+    "text": "It is known that when an AI agent runs shell commands, the code it executes doesn't exist until a prompt asks for it.\n\n\"The model will refuse\" is a layer, not a boundary.\n\nCheck my latest writing on how I isolated a document processing agent on Linux…",
+    "tags": []
+  },
+  {
+    "url": "https://www.linkedin.com/posts/riadmukhtarov_rust-opensource-activity-7474120610554691584-08M5",
+    "postedAt": "2026-06-20T15:26:56.002Z",
+    "text": "Today I am celebrating a milestone in my Rust development journey.\n\npatent has officially reached over 400 stars on GitHub and 400 downloads on crates.io.\n\nThis motivates me to continue open source, continue delivering and learning. Huge thanks to all the…",
+    "tags": ["rust", "opensource"]
+  },
+  {
+    "url": "https://www.linkedin.com/posts/riadmukhtarov_rust-opensource-activity-7468351404793946112-jwqy",
+    "postedAt": "2026-06-04T17:22:10.162Z",
+    "text": "A few days ago I released patent, a Rust TUI that helps answer a simple question:\n\"Has someone already built this?\"\n\nIt searches across multiple package registries and ecosystems so you can quickly check whether your project idea already exists before…",
+    "tags": ["rust", "opensource"]
+  }
+]

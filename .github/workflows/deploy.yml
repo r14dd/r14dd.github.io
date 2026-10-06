@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # sync-linkedin.yml starts this after committing new posts; its push can't.
+  workflow_dispatch:
 
 # The artifact flow (upload-pages-artifact → deploy-pages) publishes
 # atomically: a green run means the site IS live. The previous gh-pages
@@ -64,13 +66,13 @@ jobs:
           retention-days: 7
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         with:
           path: dist
 
   deploy:
     needs: build
-    if: github.event_name == 'push'
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
