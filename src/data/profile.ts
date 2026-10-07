@@ -84,12 +84,7 @@ export const profile: Profile = {
       org: 'ABB - International Bank of Azerbaijan',
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
-      bullets: [
-        'Building an LLM agent platform on LangGraph, LangChain and FastAPI with an OpenAI-compatible streaming API',
-        'Engineering a kernel-enforced agent sandbox: user namespaces, pivot_root, cgroup v2 and seccomp-BPF filtering',
-        'Adding per-user capacity gating, daily token budgets, Postgres-checkpointed threads and HMAC-signed downloads',
-        'Building a weekly AI briefing pipeline: crawl, LLM search, story clustering, slide deck and Gemini podcast',
-      ],
+      bullets: ['Building and security-hardening internal AI infrastructure'],
     },
     {
       role: 'Head of IT',
