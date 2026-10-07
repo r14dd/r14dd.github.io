@@ -5,8 +5,12 @@
 // profile and each post page to link-preview crawlers, which is all this
 // needs. Run `npm run sync:linkedin`, review the JSON diff, commit it. The
 // build never calls LinkedIn, so a blocked fetch can't break a deploy.
+//
+// The profile only lists recent activity, so fetched posts are merged into
+// the existing JSON by URL and never dropped. A post deleted on LinkedIn
+// stays until it is removed from the JSON by hand.
 
-import { writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 const PROFILE = 'https://az.linkedin.com/in/riadmukhtarov';
 const OWN_POST = /https:\/\/www\.linkedin\.com\/posts\/riadmukhtarov_[^"?&]+/g;
@@ -71,7 +75,9 @@ const profile = await get(PROFILE);
 const urls = [...new Set(profile.match(OWN_POST) ?? [])];
 if (urls.length === 0) throw new Error('no posts found on the profile page');
 
-const posts = [];
+const posts = new Map(
+  existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')).map((p) => [p.url, p]) : [],
+);
 for (const url of urls) {
   const raw = postText(await get(url));
   if (!raw) throw new Error(`no text in ${url}`);
@@ -84,9 +90,9 @@ for (const url of urls) {
     .replace(/https:\/\/lnkd\.in\/\S+/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
-  posts.push({ url, postedAt: postedAt(url), text: excerpt(text), tags });
+  posts.set(url, { url, postedAt: postedAt(url), text: excerpt(text), tags });
 }
 
-posts.sort((a, b) => b.postedAt.localeCompare(a.postedAt));
-writeFileSync(OUT, JSON.stringify(posts, null, 2) + '\n');
-console.log(`wrote ${posts.length} posts to src/data/linkedin-posts.json`);
+const sorted = [...posts.values()].sort((a, b) => b.postedAt.localeCompare(a.postedAt));
+writeFileSync(OUT, JSON.stringify(sorted, null, 2) + '\n');
+console.log(`fetched ${urls.length}, wrote ${sorted.length} posts to src/data/linkedin-posts.json`);

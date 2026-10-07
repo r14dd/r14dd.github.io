@@ -524,13 +524,16 @@ export const buildRecommendations = (data: I18nProfile): string => {
 
 // Riad's own LinkedIn posts, synced into JSON by scripts/sync-linkedin.mjs.
 // Post text stays in the language it was written in; only the chrome around
-// it is translated. No dates, same as /writing.
+// it is translated. No dates, same as /writing. The sync never drops a post,
+// so only the newest few ship, keeping the homepage under its gzip budget.
+const POSTS_SHOWN = 6;
 export const buildPosts = (data: I18nProfile): string => {
   return `
         <div class="sec-eyebrow">${esc(data.labels.eyebrows.posts)}</div>
         <h2 class="sec-title">${esc(data.labels.headings.posts)}</h2>
         <div class="proj-grid">
           ${linkedinPosts
+            .slice(0, POSTS_SHOWN)
             .map(
               (p) => `
             <article class="proj-card post-card">
