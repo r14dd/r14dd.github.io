@@ -1,5 +1,5 @@
-// The theme toggle. The accent itself is owned by time-aware.ts (data-period on
-// <html> + base.css). Nothing here may touch accent custom properties.
+// The theme toggle. The accent itself is owned by src/lib/sun.ts (data-period
+// on <html> + base.css). Nothing here may touch accent custom properties.
 import * as sfx from './sfx';
 import { setItem } from './storage';
 import { state } from './state';
