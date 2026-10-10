@@ -8,6 +8,8 @@ export type Project = {
   bullets: string[];
   links?: {
     github?: string;
+    /** Separate mobile-client repo, labelled with its repo name. */
+    mobile?: string;
     demo?: string;
     crates?: string;
     docs?: string;
@@ -140,7 +142,7 @@ export const profile: Profile = {
       name: 'aicell+: Self-Service App for a Mobile Operator',
       tech: ['Django', 'Celery', 'Gemini', 'Milvus', 'React Native'],
       impact:
-        'Self-service app for a mobile operator that shows each subscriber, in manats, where they overpay and fixes it in one tap through Laya, a voice assistant in Azerbaijani and English. Links to the backend API; the Expo mobile client lives in a separate repo (aicell-mobile).',
+        'Self-service app for a mobile operator that shows each subscriber, in manats, where they overpay and fixes it in one tap through Laya, a voice assistant in Azerbaijani and English. The Expo mobile client lives in a separate repo.',
       date: 'Oct 2026',
       bullets: [
         'Added usage insights: eight detectors read per-day and per-app usage, catch repeat pack buys, overage, unused data and short balances before renewal, and price the fix from the live catalogue as a card with a one-tap action',
@@ -151,6 +153,7 @@ export const profile: Profile = {
       ],
       links: {
         github: 'https://github.com/r14dd/aicell-api',
+        mobile: 'https://github.com/r14dd/aicell-mobile',
       },
     },
     {

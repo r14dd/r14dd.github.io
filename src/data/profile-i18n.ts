@@ -444,7 +444,7 @@ export const profiles: Record<string, I18nProfile> = {
       aicell: {
         name: 'aicell+: приложение самообслуживания для мобильного оператора',
         impact:
-          'Приложение самообслуживания для мобильного оператора: показывает каждому абоненту, сколько манатов он переплачивает, и исправляет это в одно касание через Laya, голосового ассистента на азербайджанском и английском. Ссылка ведёт на бэкенд API; мобильный клиент на Expo в отдельном репозитории (aicell-mobile).',
+          'Приложение самообслуживания для мобильного оператора: показывает каждому абоненту, сколько манатов он переплачивает, и исправляет это в одно касание через Laya, голосового ассистента на азербайджанском и английском. Мобильный клиент на Expo в отдельном репозитории.',
         date: 'Окт 2026',
         bullets: [
           'Добавил инсайты по расходу: восемь детекторов читают расход по дням и приложениям, замечают повторные покупки пакетов, оплату сверх пакета, неиспользованный интернет и нехватку баланса перед продлением и считают решение по актуальному каталогу в виде карточки с действием в одно касание',
@@ -912,7 +912,7 @@ export const profiles: Record<string, I18nProfile> = {
       aicell: {
         name: 'aicell+: Mobil operator üçün özünəxidmət tətbiqi',
         impact:
-          'Mobil operator üçün özünəxidmət tətbiqi: hər abunəçiyə harada neçə manat artıq ödədiyini göstərir və Azərbaycan və ingilis dilində danışan səsli köməkçi Laya ilə bunu bir toxunuşla düzəldir. Keçid backend API-yə aparır; Expo mobil klienti ayrıca repozitoriyadadır (aicell-mobile).',
+          'Mobil operator üçün özünəxidmət tətbiqi: hər abunəçiyə harada neçə manat artıq ödədiyini göstərir və Azərbaycan və ingilis dilində danışan səsli köməkçi Laya ilə bunu bir toxunuşla düzəldir. Expo mobil klienti ayrıca repozitoriyadadır.',
         date: 'Okt 2026',
         bullets: [
           'İstifadə insaytları əlavə etdim: səkkiz detektor gündəlik və tətbiq üzrə istifadəni oxuyur, təkrar paket alışlarını, paketdən kənar ödənişi, istifadə olunmayan interneti və yenilənmədən əvvəl balans çatışmazlığını tapır, həlli canlı kataloqdan qiymətləndirib bir toxunuşla icra olunan kart kimi göstərir',
