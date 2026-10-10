@@ -56,3 +56,7 @@ public/resume.pdf
 public/og-en.jpg
 public/og-ru.jpg
 public/og-az.jpg
+
+# graphify auto-rebuild hooks (local only)
+.githooks/post-checkout
+.githooks/post-commit
