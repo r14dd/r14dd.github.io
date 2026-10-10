@@ -442,7 +442,7 @@ export const profiles: Record<string, I18nProfile> = {
     ],
     projects: translateProjects({
       aicell: {
-        name: 'AICell: приложение самообслуживания для мобильного оператора',
+        name: 'aicell+: приложение самообслуживания для мобильного оператора',
         impact:
           'Приложение самообслуживания для мобильного оператора: показывает каждому абоненту, сколько манатов он переплачивает, и исправляет это в одно касание через Laya, голосового ассистента на азербайджанском и английском. Ссылка ведёт на бэкенд API; мобильный клиент на Expo в отдельном репозитории (aicell-mobile).',
         date: 'Окт 2026',
@@ -910,7 +910,7 @@ export const profiles: Record<string, I18nProfile> = {
     ],
     projects: translateProjects({
       aicell: {
-        name: 'AICell: Mobil operator üçün özünəxidmət tətbiqi',
+        name: 'aicell+: Mobil operator üçün özünəxidmət tətbiqi',
         impact:
           'Mobil operator üçün özünəxidmət tətbiqi: hər abunəçiyə harada neçə manat artıq ödədiyini göstərir və Azərbaycan və ingilis dilində danışan səsli köməkçi Laya ilə bunu bir toxunuşla düzəldir. Keçid backend API-yə aparır; Expo mobil klienti ayrıca repozitoriyadadır (aicell-mobile).',
         date: 'Okt 2026',

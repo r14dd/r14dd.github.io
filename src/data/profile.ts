@@ -137,7 +137,7 @@ export const profile: Profile = {
   projects: [
     {
       id: 'aicell',
-      name: 'AICell: Self-Service App for a Mobile Operator',
+      name: 'aicell+: Self-Service App for a Mobile Operator',
       tech: ['Django', 'Celery', 'Gemini', 'Milvus', 'React Native'],
       impact:
         'Self-service app for a mobile operator that shows each subscriber, in manats, where they overpay and fixes it in one tap through Laya, a voice assistant in Azerbaijani and English. Links to the backend API; the Expo mobile client lives in a separate repo (aicell-mobile).',
