@@ -340,11 +340,13 @@ export const buildProjects = (data: I18nProfile): string => {
         : '';
     const ghIcon =
       '<svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>';
+    // With two repos on one card, both links are labelled by repo name.
+    const repoName = (url: string): string => esc(url.split('/').pop() ?? '');
     const gh = p.links?.github
-      ? `<a class="feat-gh" href="${p.links.github}" target="_blank" rel="noopener">${ghIcon}GitHub</a>`
+      ? `<a class="feat-gh" href="${p.links.github}" target="_blank" rel="noopener">${ghIcon}${p.links.mobile ? repoName(p.links.github) : 'GitHub'}</a>`
       : '';
     const mobile = p.links?.mobile
-      ? `<a class="feat-gh" href="${p.links.mobile}" target="_blank" rel="noopener">${ghIcon}${esc(p.links.mobile.split('/').pop() ?? '')}</a>`
+      ? `<a class="feat-gh" href="${p.links.mobile}" target="_blank" rel="noopener">${ghIcon}${repoName(p.links.mobile)}</a>`
       : '';
     const crates = p.links?.crates
       ? `<a class="feat-gh" href="${p.links.crates}" target="_blank" rel="noopener"><svg class="gh-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .5 1 4v8l7 3.5L15 12V4L8 .5zm0 1.62 4.9 2.45L8 6.95 3.1 4.57 8 2.12zM2.5 5.6l4.8 2.4v5.9L2.5 11.5V5.6zm6.2 8.3V8l4.8-2.4v5.9l-4.8 2.4z"/></svg>crates.io</a>`
