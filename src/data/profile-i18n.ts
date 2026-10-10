@@ -441,6 +441,19 @@ export const profiles: Record<string, I18nProfile> = {
       },
     ],
     projects: translateProjects({
+      aicell: {
+        name: 'AICell: приложение самообслуживания для мобильного оператора',
+        impact:
+          'Приложение самообслуживания для мобильного оператора: показывает каждому абоненту, сколько манатов он переплачивает, и исправляет это в одно касание через Laya, голосового ассистента на азербайджанском и английском. Ссылка ведёт на бэкенд API; мобильный клиент на Expo в отдельном репозитории (aicell-mobile).',
+        date: 'Окт 2026',
+        bullets: [
+          'Добавил инсайты по расходу: восемь детекторов читают расход по дням и приложениям, замечают повторные покупки пакетов, оплату сверх пакета, неиспользованный интернет и нехватку баланса перед продлением и считают решение по актуальному каталогу в виде карточки с действием в одно касание',
+          'Построил бэкенд на Django REST: баланс, тарифы, пакеты, SIM и кредитные продукты за 86 документированными эндпоинтами, один путь с блокировкой строки и идемпотентностью для любого изменения баланса',
+          'Построил эндпоинты plan, narrate и done для Laya: LLM выбирает намерение и формулирует фразу, а ответ с числом, которого не дал бэкенд, отбрасывается',
+          'Добавил ассистента поддержки на Gemini с базой знаний в Milvus и памятью по каждому абоненту, потоковыми ответами через SSE и озвученными ответами на голосовые сообщения',
+          'Построил клиент на Expo / React Native с распознаванием и синтезом речи на устройстве: каждая голосовая задача идёт тем же путём, что и ручное нажатие',
+        ],
+      },
       tappad: {
         name: 'TapPad: Tap-to-Pay для десктопных игр',
         impact:
@@ -896,6 +909,19 @@ export const profiles: Record<string, I18nProfile> = {
       },
     ],
     projects: translateProjects({
+      aicell: {
+        name: 'AICell: Mobil operator üçün özünəxidmət tətbiqi',
+        impact:
+          'Mobil operator üçün özünəxidmət tətbiqi: hər abunəçiyə harada neçə manat artıq ödədiyini göstərir və Azərbaycan və ingilis dilində danışan səsli köməkçi Laya ilə bunu bir toxunuşla düzəldir. Keçid backend API-yə aparır; Expo mobil klienti ayrıca repozitoriyadadır (aicell-mobile).',
+        date: 'Okt 2026',
+        bullets: [
+          'İstifadə insaytları əlavə etdim: səkkiz detektor gündəlik və tətbiq üzrə istifadəni oxuyur, təkrar paket alışlarını, paketdən kənar ödənişi, istifadə olunmayan interneti və yenilənmədən əvvəl balans çatışmazlığını tapır, həlli canlı kataloqdan qiymətləndirib bir toxunuşla icra olunan kart kimi göstərir',
+          'Django REST backend-ini qurdum: balans, tariflər, paketlər, SIM və kredit məhsulları 86 sənədləşdirilmiş endpoint arxasında, balansın hər dəyişikliyi üçün sətir kilidli, idempotent vahid yol',
+          'Laya üçün plan, narrate və done endpoint-lərini qurdum: LLM niyyəti seçir və cümləni qurur, backend-in vermədiyi rəqəmi daşıyan cavab atılır',
+          'Milvus bilik bazası və hər abunəçi üçün yaddaşı olan Gemini dəstək köməkçisi əlavə etdim: cavablar SSE ilə axınla gəlir, səsli mesajlara səsli cavab verilir',
+          'Cihazda nitq tanıma və səsləndirmə ilə Expo / React Native klientini qurdum: hər səsli tapşırıq əl ilə toxunuşla eyni yoldan keçir',
+        ],
+      },
       tappad: {
         name: 'TapPad: Masaüstü oyunlar üçün tap-to-pay',
         impact:

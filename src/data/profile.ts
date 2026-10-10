@@ -136,6 +136,24 @@ export const profile: Profile = {
 
   projects: [
     {
+      id: 'aicell',
+      name: 'AICell: Self-Service App for a Mobile Operator',
+      tech: ['Django', 'Celery', 'Gemini', 'Milvus', 'React Native'],
+      impact:
+        'Self-service app for a mobile operator that shows each subscriber, in manats, where they overpay and fixes it in one tap through Laya, a voice assistant in Azerbaijani and English. Links to the backend API; the Expo mobile client lives in a separate repo (aicell-mobile).',
+      date: 'Oct 2026',
+      bullets: [
+        'Added usage insights: eight detectors read per-day and per-app usage, catch repeat pack buys, overage, unused data and short balances before renewal, and price the fix from the live catalogue as a card with a one-tap action',
+        'Built the Django REST backend: billing, tariffs, packs, SIM and credit products behind 86 documented endpoints, with one row-locked, idempotent code path for every balance change',
+        "Built Laya's plan, narrate and done endpoints: the LLM picks the intent and words the sentence, and any answer carrying a number the backend did not supply is thrown away",
+        'Added a Gemini support assistant with a Milvus knowledge base and per-subscriber memory, streaming replies over SSE and answering voice notes with speech',
+        'Built the Expo / React Native client with on-device speech-to-text and TTS, running every voice task through the same code path as a manual tap',
+      ],
+      links: {
+        github: 'https://github.com/r14dd/aicell-api',
+      },
+    },
+    {
       id: 'tappad',
       name: 'TapPad: Tap-to-Pay for Desktop Games',
       tech: ['Rust', 'Tauri', 'ESP32', 'Xsolla', 'WebSocket'],
