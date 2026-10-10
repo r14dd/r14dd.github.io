@@ -17,7 +17,9 @@ export default defineConfig({
     viewport: { width: 1280, height: 900 },
   },
   webServer: {
-    command: 'npm run preview',
+    // --ignore-lock keeps astro preview in the foreground when an AI agent
+    // runs the suite; otherwise it backgrounds itself and Playwright aborts.
+    command: 'npm run preview -- --ignore-lock',
     port: 4321,
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
