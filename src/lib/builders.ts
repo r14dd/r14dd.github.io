@@ -24,6 +24,8 @@ const linkedinPath =
 export const skillLogoMap: Record<string, string> = {
   Rust: '/logos/si-rust.svg',
   Python: '/logos/si-python.svg',
+  'Fantasy Premier League': '/logos/si-premierleague.svg',
+  Markdown: '/logos/si-markdown.svg',
   Go: '/logos/si-go.svg',
   C: '/logos/si-c.svg',
   Axum: '/logos/si-rust.svg',

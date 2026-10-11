@@ -30,7 +30,7 @@ export const claims = {
   wasmBytes: 843,
 
   // budget: gzipped homepage document
-  homepageHtmlGzBudget: 42_000,
+  homepageHtmlGzBudget: 44_000,
 
   // budget: every JS chunk in dist/_astro combined, gzipped. Only a subset
   // loads on any one page; this is the ceiling for the whole site.

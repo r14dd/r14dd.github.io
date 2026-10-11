@@ -466,6 +466,17 @@ export const profiles: Record<string, I18nProfile> = {
           '114 тестов на Rust, clippy pedantic, без unwrap/expect/panic вне тестов, CI с fmt, clippy и cargo audit',
         ],
       },
+      fplbot: {
+        name: 'fplbot: оптимизатор состава для Fantasy Premier League',
+        impact:
+          'Ассистент Fantasy Premier League для терминала: берёт живые данные из публичного FPL API, прогнозирует очки каждого игрока и подбирает лучший допустимый состав, капитана и трансферы на 5 туров вперёд. Только стандартная библиотека Python, без зависимостей и без учётных данных.',
+        date: 'Сен 2026',
+        bullets: [
+          'Прогнозирует очки игрока на тур как сглаженные очки за 90 минут × ожидаемые минуты × коэффициент соперника × доступность, суммируя по горизонту: прозрачная эвристика, не ML',
+          'Собирает состав жадно, затем улучшает локальным поиском с парными заменами, потому что бюджет связывает все позиции; соблюдает квоты по позициям, не больше трёх игроков из клуба и все допустимые схемы',
+          'Пишет еженедельный отчёт в Markdown (основа, капитан, порядок запасных, ранжированные трансферы) с флагами --lock, --exclude и --budget и дисковым кэшем, который бережёт API от еженедельных запусков',
+        ],
+      },
       patent: {
         name: 'patent',
         impact:
@@ -932,6 +943,17 @@ export const profiles: Record<string, I18nProfile> = {
           'Xsolla checkout-u Tauri 2 masaüstü oyun klientində iframe kimi inteqrasiya etdim, sifariş statusunu tamamlanana qədər sorğuladım',
           'ESP32 + RC522 NFC proqram təminatını Rust serial-to-WebSocket körpüsü ilə Rust və JS klient SDK-larına malik ortaq tappad-protocol crate-inə bağladım',
           '114 Rust testi, clippy pedantic, testlərdən kənarda unwrap/expect/panic yoxdur, fmt, clippy və cargo audit ilə CI',
+        ],
+      },
+      fplbot: {
+        name: 'fplbot: Fantasy Premier League üçün heyət optimallaşdırıcısı',
+        impact:
+          'Terminal üçün Fantasy Premier League köməkçisi: açıq FPL API-dən canlı məlumatları götürür, hər oyunçunun xalını proqnozlaşdırır və 5 tur irəliyə ən yaxşı qaydalara uyğun heyəti, kapitanı və transferləri seçir. Yalnız Python standart kitabxanası, asılılıq və giriş məlumatı yoxdur.',
+        date: 'Sen 2026',
+        bullets: [
+          'Oyunçunun turda xalını hamarlanmış 90 dəqiqəlik xal × gözlənilən dəqiqələr × rəqib əmsalı × oyuna hazırlıq kimi hesablayır və üfüq boyunca toplayır: şəffaf evristika, ML deyil',
+          'Heyəti acgöz alqoritmlə qurur, sonra cüt dəyişmələrlə lokal axtarışla yaxşılaşdırır, çünki büdcə bütün mövqeləri bir-birinə bağlayır; mövqe kvotalarına, klubdan ən çox üç oyunçu qaydasına və bütün icazəli sxemlərə əməl edir',
+          '--lock, --exclude və --budget parametrləri ilə həftəlik Markdown hesabatı yazır (əsas heyət, kapitan, ehtiyat sırası, sıralanmış transferlər); disk keşi həftəlik işə salınmaları API-dən uzaq tutur',
         ],
       },
       patent: {

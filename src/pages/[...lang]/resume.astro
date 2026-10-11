@@ -45,7 +45,15 @@ const projects = [...p.resume.projects.map((id) => byId.get(id)!), ...rest].map(
     .filter(([k]) => k !== 'demo')
     .map(([k, url]) => ({
       url,
-      label: k === 'crates' ? 'crates.io' : k === 'github' ? 'GitHub' : 'docs.rs',
+      // With two repos on one card, both links are labelled by repo name.
+      label:
+        k === 'mobile' || (k === 'github' && pr.links?.mobile)
+          ? url.split('/').pop()
+          : k === 'crates'
+            ? 'crates.io'
+            : k === 'github'
+              ? 'GitHub'
+              : 'docs.rs',
     }));
   return {
     ...pr,

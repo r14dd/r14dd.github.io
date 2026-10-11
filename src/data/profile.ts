@@ -174,6 +174,22 @@ export const profile: Profile = {
       },
     },
     {
+      id: 'fplbot',
+      name: 'fplbot: Fantasy Premier League Squad Optimizer',
+      tech: ['Python', 'Fantasy Premier League', 'Markdown'],
+      impact:
+        'Fantasy Premier League assistant for the terminal: pulls live data from the public FPL API, projects points for every player, and picks the best legal squad, captain and transfers over a 5-gameweek horizon. Python stdlib only, no dependencies, no credentials.',
+      date: 'Sep 2026',
+      bullets: [
+        'Projects points per player per gameweek as shrunk points-per-90 × expected minutes × fixture multiplier × availability, summed over the horizon: a transparent heuristic, not ML',
+        'Builds the squad greedily, then improves it by local search with paired swaps, since the budget couples every position; enforces squad quotas, three per club and every legal formation',
+        'Writes a weekly Markdown report (XI, captain, bench order, ranked transfers) with --lock, --exclude and --budget overrides and a disk cache that keeps weekly runs off the API',
+      ],
+      links: {
+        github: 'https://github.com/r14dd/fplbot',
+      },
+    },
+    {
       id: 'patent',
       name: 'patent',
       tech: ['Rust', 'Tokio', 'Ollama', 'ratatui', 'fastembed'],
@@ -419,7 +435,7 @@ export const profile: Profile = {
   ],
   resume: {
     phone: '+994 (50) 899-8676',
-    projects: ['patent', 'quorumrag', 'almostaykhan'],
+    projects: ['patent', 'aicell', 'almostaykhan'],
   },
 
   testimonials: [
