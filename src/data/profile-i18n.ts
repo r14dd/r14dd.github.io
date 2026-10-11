@@ -391,7 +391,13 @@ export const profiles: Record<string, I18nProfile> = {
         org: 'ABB - International Bank of Azerbaijan',
         location: 'Баку, Азербайджан',
         period: 'Апр 2026 – Настоящее время',
-        bullets: ['Разработка и защита внутренней AI‑инфраструктуры'],
+        bullets: [
+          'Разработка внутреннего AI‑агента банка на LangGraph (deep agent), работающего с файлами и документами, и платформы agents‑as‑a‑service поверх него, где любой сотрудник может создавать собственных агентов',
+          'Изолировал каждое действие агента в отдельной песочнице NVIDIA OpenShell для каждого чата: без сетевого выхода, с системными монтированиями только для чтения, Landlock и лимитами CPU, памяти и процессов по профилю, а также JSON‑строкой аудита для каждой команды, привязанной к её трассировке',
+          'Интегрировал LibreChat как чат‑интерфейс банка: вход через каталог сотрудников с проверкой права доступа; формы, заявки и живой чат сервис‑деска банка прямо в сообщениях чата; проверка сигнатур каждого загружаемого файла',
+          'Сохранил данные внутри банка: guardrails блокируют чувствительные веб‑запросы до выхода за пределы сети, лимиты расходов и токенов на пользователя применяются на сервере, а ETL переносит переписки в отчётную базу Postgres',
+          'Сделал систему наблюдаемой и безопасной для изменений: трассировка в Langfuse с одним trace id на ход диалога, ежедневная оценка чата в Langfuse и GitLab CI с линтингом, юнит‑тестами и аудитом зависимостей',
+        ],
       },
       {
         role: 'Руководитель IT',
@@ -870,7 +876,13 @@ export const profiles: Record<string, I18nProfile> = {
         org: 'ABB - International Bank of Azerbaijan',
         location: 'Bakı, Azərbaycan',
         period: 'Apr 2026 – indiyə kimi',
-        bullets: ['Daxili AI infrastrukturunun qurulması və təhlükəsizliyinin gücləndirilməsi'],
+        bullets: [
+          'Bankın daxili AI agentini, fayllar və sənədlərlə işləyən LangGraph deep agent‑i və onun üzərində hər bir əməkdaşın öz agentlərini yarada bildiyi agents‑as‑a‑service platformasını qururam',
+          'Agentin hər bir əməliyyatını hər çat üçün ayrıca NVIDIA OpenShell sandbox‑unda təcrid etdim: şəbəkəyə çıxış yoxdur, sistem qovluqları yalnız oxunuş üçün qoşulur, Landlock və profil üzrə CPU, yaddaş və proses limitləri tətbiq olunur, hər əmr üçün trace‑ə bağlı JSON audit sətri yazılır',
+          'LibreChat‑i bankın çat interfeysi kimi inteqrasiya etdim: işçi kataloqu ilə giriş və giriş hüququnun yoxlanılması; bankın servis‑desk formaları, müraciətləri və canlı çatı birbaşa çat mesajlarında; yüklənən hər faylın imza yoxlanışı',
+          'Məlumatları bankın daxilində saxladım: guardrail‑lər həssas veb‑axtarış sorğularını şəbəkədən çıxmazdan əvvəl bloklayır, istifadəçi üzrə xərc və token limitləri server tərəfində tətbiq olunur, ETL isə söhbətləri hesabat üçün Postgres bazasına köçürür',
+          'Sistemi müşahidə edilə bilən və dəyişiklik üçün təhlükəsiz etdim: hər dialoq addımına bir trace id ilə Langfuse izləməsi, Langfuse‑da gündəlik çat qiymətləndirməsi, linter, unit testlər və asılılıq auditi işlədən GitLab CI',
+        ],
       },
       {
         role: 'İT Rəhbəri',

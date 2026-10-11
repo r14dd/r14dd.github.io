@@ -86,7 +86,13 @@ export const profile: Profile = {
       org: 'ABB - International Bank of Azerbaijan',
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
-      bullets: ['Building and security-hardening internal AI infrastructure'],
+      bullets: [
+        "Building the bank's internal AI agent, a LangGraph deep agent that works with files and documents, and an agents-as-a-service platform on top of it where any employee can build their own agents",
+        'Isolated every agent action in a per-chat NVIDIA OpenShell sandbox with no network egress, read-only system mounts, Landlock and per-profile CPU, memory and process limits, with a JSON audit line for every command, tied to its trace',
+        "Integrated LibreChat as the bank's chat front end: sign-in against the employee directory, gated on an access entitlement; the bank's service-desk forms, tickets and live chat, inline in chat messages; and file-signature checks on every upload",
+        'Kept data inside the bank: guardrails refuse sensitive web-search queries before they leave the network, per-user spend and token limits are enforced server-side, and an ETL moves conversations into a reporting Postgres database',
+        'Made it observable and safe to change: Langfuse tracing with one trace id per turn, a daily chat eval recorded in Langfuse, and GitLab CI running lint, unit tests and a dependency audit',
+      ],
     },
     {
       role: 'Head of IT',
