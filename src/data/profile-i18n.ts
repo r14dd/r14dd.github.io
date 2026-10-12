@@ -379,7 +379,7 @@ export const profiles: Record<string, I18nProfile> = {
     education: {
       title: 'State University of New York at Buffalo, BS in Computer Science',
       meta: 'Aug 2020 – May 2024 · Buffalo, New York',
-      bullets: ["Awards: Undergraduate Teaching Assistant Award, Multiple Dean's List Honors"],
+      bullets: ['Awards: Undergraduate Teaching Assistant Award'],
     },
   },
   ru: {
@@ -398,7 +398,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Апр 2026 – Настоящее время',
         bullets: [
-          'Разрабатываю внутреннего LangGraph-агента банка для работы с файлами и документами и платформу agents-as-a-service',
+          'Руковожу разработкой внутреннего LangGraph-агента банка для документов и платформы agents-as-a-service',
           'Изолировал действия агента в песочнице NVIDIA OpenShell на чат: без сети, Landlock, лимиты, журнал аудита',
           'Сделал систему наблюдаемой: Langfuse на каждый ход, ежедневная оценка чата, GitLab CI с тестами и аудитом',
           'Сохранил данные внутри банка: guardrails для веб-поиска, лимиты расходов и токенов на сервере, ETL в Postgres',
@@ -406,7 +406,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'Руководитель IT',
+        role: 'Руководитель IT (волонтёр)',
         org: 'European Youth Parliament Azerbaijan',
         location: 'Баку, Азербайджан',
         period: 'Фев 2026 – Настоящее время',
@@ -417,11 +417,11 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         role: 'Инженер-программист',
-        org: 'Ministry of Defense',
+        org: 'Ministry of Defense of the Republic of Azerbaijan',
         location: 'Баку, Азербайджан',
         period: 'Янв 2025 – Янв 2026',
         bullets: [
-          'Армейская программа службы: инженер-программист, внутренняя инфраструктура (под NDA)',
+          'Обязательная военная служба: инженер-программист, внутренняя инфраструктура (под NDA)',
           'Работа конфиденциальна и находится под NDA, поэтому подробности раскрыть нельзя',
         ],
       },
@@ -450,7 +450,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'Разработчик программного обеспечения',
+        role: 'Разработчик программного обеспечения (частичная занятость)',
         org: 'EZ Pro Billing and Collection Inc.',
         location: 'New York, NY',
         period: 'Сен 2021 – Май 2023',
@@ -465,7 +465,7 @@ export const profiles: Record<string, I18nProfile> = {
       {
         ...profile.openSource[0],
         prs: '5 принятых PR',
-        period: 'Сен 2026 – Настоящее время',
+        period: 'Сен 2026',
         bullets: [
           'Исправил потоковую передачу вызовов инструментов и разбор ответов в адаптерах AI Gateway для Anthropic, Gemini и LiteLLM',
         ],
@@ -473,7 +473,7 @@ export const profiles: Record<string, I18nProfile> = {
       {
         ...profile.openSource[1],
         prs: '4 принятых PR',
-        period: 'Сен 2026 – Настоящее время',
+        period: 'Сен 2026',
         bullets: [
           'Исправил утечку файлового дескриптора D-Bus без SOCK_CLOEXEC в контейнеры при systemd cgroups',
         ],
@@ -523,7 +523,7 @@ export const profiles: Record<string, I18nProfile> = {
           'CLI, который принимает описание dev-tool идеи на простом языке, ищет по open-source реестрам существующие реализации, ранжирует совпадения локальными эмбеддингами и формирует вердикт через LLM.',
         date: 'Июн 2026',
         bullets: [
-          'Построил конкурентные адаптеры для 11 реестров: от crates.io, npm и PyPI до Docker Hub и Hacker News',
+          'Построил конкурентные адаптеры для 19 источников, от crates.io и PyPI до Hacker News; 500+ звёзд на GitHub',
           'Спроектировал систему вердиктов с ограниченной областью, которая никогда не утверждает отсутствие, а только сообщает о найденном в проверенных источниках',
           'Добавил интерактивный ratatui TUI с детальным просмотром, открытием браузера и структурированным JSON-выводом для CI-пайплайнов',
         ],
@@ -545,10 +545,10 @@ export const profiles: Record<string, I18nProfile> = {
       quorumrag: {
         name: 'QuorumRAG.rs: RAG на основе консенсуса',
         impact:
-          'Мульти-ретриверный RAG с кворумной фильтрацией, требующей согласия между ретриверами перед выдачей результатов. Достигнут recall 95% против 70% baseline.',
+          'Мульти-ретриверный RAG с кворумной фильтрацией, требующей согласия между ретриверами перед выдачей результатов. Находит 19 ответов из 20 против 14 у baseline.',
         date: 'Май 2026',
         bullets: [
-          'Построил мульти-ретриверный ансамбль с rank fusion и кворумной фильтрацией: recall 95% против 70% baseline',
+          'Построил мульти-ретриверный ансамбль с rank fusion и кворумной фильтрацией: recall 19/20 против 14/20 у baseline',
           'Опубликован на crates.io как устанавливаемый Rust-крейт (cargo add quorumrag)',
           'Реализовал обработку перекрывающихся чанков с 50% шагом для предотвращения потери ответов на границах',
           'Добавил параллельное создание эмбеддингов с кэшированием для оптимизации холодного старта',
@@ -895,9 +895,7 @@ export const profiles: Record<string, I18nProfile> = {
     education: {
       title: 'State University of New York at Buffalo, Бакалавр по направлению Компьютерные Науки',
       meta: 'Авг 2020 – Май 2024 · Buffalo, NY',
-      bullets: [
-        'Награды: Премия старшего ассистента преподавателя, неоднократно в списке отличников декана',
-      ],
+      bullets: ['Награды: Премия старшего ассистента преподавателя'],
     },
   },
   az: {
@@ -916,7 +914,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Apr 2026 – indiyə kimi',
         bullets: [
-          'Bankın daxili LangGraph agentini fayllar və sənədlərlə işləmək üçün və agents-as-a-service platformasını qururam',
+          'Bankın sənədlər üçün daxili LangGraph agentinin və agents-as-a-service platformasının hazırlanmasına rəhbərlik edirəm',
           'Agent əməliyyatlarını hər çat üçün NVIDIA OpenShell sandbox-unda təcrid etdim: şəbəkəsiz, Landlock, limitlər, audit',
           'Sistemi müşahidə edilə bilən etdim: Langfuse izləməsi, gündəlik çat qiymətləndirməsi, test və auditli GitLab CI',
           'Məlumatları bankın daxilində saxladım: veb-axtarışa guardrail-lər, server tərəfində xərc və token limitləri, Postgres-ə ETL',
@@ -924,7 +922,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'İT Rəhbəri',
+        role: 'İT Rəhbəri (könüllü)',
         org: 'European Youth Parliament Azerbaijan',
         location: 'Bakı, Azərbaycan',
         period: 'Fev 2026 – indiyə kimi',
@@ -935,11 +933,11 @@ export const profiles: Record<string, I18nProfile> = {
       },
       {
         role: 'Proqram Mühəndisi',
-        org: 'Ministry of Defense',
+        org: 'Ministry of Defense of the Republic of Azerbaijan',
         location: 'Bakı, Azərbaycan',
         period: 'Yan 2025 – Yan 2026',
         bullets: [
-          'Ordu xidməti proqramı: proqram mühəndisi, daxili infrastruktur (NDA çərçivəsində)',
+          'Həqiqi hərbi xidmət: proqram mühəndisi, daxili infrastruktur (NDA çərçivəsində)',
           'İş məxfidir və NDA ilə qorunur, buna görə əlavə təfərrüat paylaşıla bilmir',
         ],
       },
@@ -968,7 +966,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'Proqram mühəndisi',
+        role: 'Proqram mühəndisi (yarımştat)',
         org: 'EZ Pro Billing and Collection Inc.',
         location: 'New York, NY',
         period: 'Sen 2021 – May 2023',
@@ -983,7 +981,7 @@ export const profiles: Record<string, I18nProfile> = {
       {
         ...profile.openSource[0],
         prs: '5 qəbul edilmiş PR',
-        period: 'Sen 2026 – indiyə kimi',
+        period: 'Sen 2026',
         bullets: [
           'AI Gateway-in Anthropic, Gemini və LiteLLM adapterlərində tool-call axınını və cavabların təhlilini düzəltdim',
         ],
@@ -991,7 +989,7 @@ export const profiles: Record<string, I18nProfile> = {
       {
         ...profile.openSource[1],
         prs: '4 qəbul edilmiş PR',
-        period: 'Sen 2026 – indiyə kimi',
+        period: 'Sen 2026',
         bullets: [
           'SOCK_CLOEXEC olmadan açılan D-Bus soketinin fd-sinin systemd cgroups altında konteynerlərə sızmasını düzəltdim',
         ],
@@ -1041,7 +1039,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Sadə dildə dev-tool ideyası qəbul edən, open-source reyestrlərində mövcud implementasiyaları axtaran, uyğunluqları lokal embedding-lərlə sıralayan və LLM vasitəsilə əhatəli qərar yazan CLI.',
         date: 'İyun 2026',
         bullets: [
-          'crates.io, npm və PyPI‑dən Docker Hub və Hacker News‑a qədər 11 reyestr üçün paralel mənbə adapterləri qurdum',
+          'crates.io və PyPI‑dən Hacker News‑a qədər 19 mənbə üçün paralel adapterlər qurdum; GitHub-da 500+ ulduz',
           'Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli qərar sistemi qurdum',
           'Detallı baxış, brauzer açma və CI pipeline-ları üçün strukturlaşdırılmış JSON çıxışı olan interaktiv ratatui TUI əlavə etdim',
         ],
@@ -1063,10 +1061,10 @@ export const profiles: Record<string, I18nProfile> = {
       quorumrag: {
         name: 'QuorumRAG.rs: Konsensus əsaslı RAG',
         impact:
-          'Nəticələri təqdim etməzdən əvvəl retriverlər arası konsensus tələb edən kvorum filtrasiyalı multi-retriver RAG. Baseline 70%-ə qarşı 95% recall əldə edilib.',
+          'Nəticələri təqdim etməzdən əvvəl retriverlər arası konsensus tələb edən kvorum filtrasiyalı multi-retriver RAG. 20 cavabdan 19-unu tapır, baseline isə 14-ünü.',
         date: 'May 2026',
         bullets: [
-          'Rank fusion və kvorum filtrasiyası ilə multi-retriver ansambl qurdum: 70% baseline-a qarşı 95% recall',
+          'Rank fusion və kvorum filtrasiyası ilə multi-retriver ansambl qurdum: 14/20 baseline-a qarşı 19/20 recall',
           'crates.io-da quraşdırıla bilən Rust crate olaraq nəşr edilib (cargo add quorumrag)',
           'Sərhəd bölünmə cavablarının qarşısını almaq üçün 50% addımlı üst-üstə düşən chunk emalı tətbiq etdim',
           'Soyuq başlanğıc performansını optimallaşdırmaq üçün keşləmə ilə paralel embedding əlavə etdim',
@@ -1413,9 +1411,7 @@ export const profiles: Record<string, I18nProfile> = {
     education: {
       title: 'State University of New York at Buffalo, Kompüter Elmləri üzrə Bakalavr',
       meta: 'Avq 2020 – May 2024 · Buffalo, NY',
-      bullets: [
-        'Mükafatlar: Baş Tədris Assistenti Mükafatı, bir neçə dəfə Dekan siyahısına daxil edilmə',
-      ],
+      bullets: ['Mükafatlar: Baş Tədris Assistenti Mükafatı'],
     },
   },
 };

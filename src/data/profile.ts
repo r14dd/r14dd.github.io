@@ -104,7 +104,7 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
       bullets: [
-        "Building the bank's internal LangGraph agent for files and documents and an agents-as-a-service platform",
+        "Leading development of the bank's internal LangGraph document agent and agents-as-a-service platform",
         'Isolated each agent action in a per-chat NVIDIA OpenShell sandbox: no egress, Landlock, limits, audit log',
         'Made it observable: Langfuse tracing per turn, a daily chat eval, and GitLab CI with lint, tests and audit',
         'Kept data in the bank: guardrails on web search, server-side spend and token limits, ETL into Postgres',
@@ -112,7 +112,7 @@ export const profile: Profile = {
       ],
     },
     {
-      role: 'Head of IT',
+      role: 'Head of IT (volunteer)',
       org: 'European Youth Parliament Azerbaijan',
       location: 'Baku, Azerbaijan',
       period: 'Feb 2026 – Present',
@@ -123,11 +123,11 @@ export const profile: Profile = {
     },
     {
       role: 'Software Engineer',
-      org: 'Ministry of Defense',
+      org: 'Ministry of Defense of the Republic of Azerbaijan',
       location: 'Baku, Azerbaijan',
       period: 'Jan 2025 – Jan 2026',
       bullets: [
-        'Army service program: software engineer on internal infrastructure (under NDA)',
+        'Mandatory military service: software engineer on internal infrastructure (under NDA)',
         'The work is confidential under NDA, so no further details can be shared',
       ],
     },
@@ -156,7 +156,7 @@ export const profile: Profile = {
       ],
     },
     {
-      role: 'Software Engineer',
+      role: 'Software Engineer (part-time)',
       org: 'EZ Pro Billing and Collection Inc.',
       location: 'New York, NY',
       period: 'Sep 2021 – May 2023',
@@ -230,7 +230,7 @@ export const profile: Profile = {
         'CLI that takes a plain-English dev-tool idea, searches open-source registries for existing implementations, ranks matches with local embeddings, and writes a scoped verdict via LLM.',
       date: 'Jun 2026',
       bullets: [
-        'Built concurrent source adapters for 11 registries, from crates.io, npm and PyPI to Docker Hub and Hacker News',
+        'Built concurrent adapters for 19 sources, from crates.io and PyPI to Hacker News; 500+ GitHub stars',
         'Designed integrity-scoped verdict system that never asserts absence, only reports what was found in sources checked',
         'Added interactive ratatui TUI with detail view, browser open, and structured JSON output for CI pipelines',
       ],
@@ -259,10 +259,10 @@ export const profile: Profile = {
       name: 'QuorumRAG.rs: Consensus-Based RAG',
       tech: ['Rust', 'Ollama', 'Tokio'],
       impact:
-        'Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Achieved 95% recall vs 70% baseline.',
+        'Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Recalls 19 of 20 answers vs 14 for the baseline.',
       date: 'May 2026',
       bullets: [
-        'Built a multi-retriever ensemble with rank fusion and quorum filtering: 95% recall vs a 70% baseline',
+        'Built a multi-retriever ensemble with rank fusion and quorum filtering: 19/20 recall vs 14/20 baseline',
         'Published to crates.io as an installable Rust crate (cargo add quorumrag)',
         'Implemented overlapping chunk processing with 50% stride to prevent boundary-split answers',
         'Added parallel embedding with caching to optimize cold-start performance',
@@ -472,7 +472,7 @@ export const profile: Profile = {
       url: 'https://github.com/mlflow/mlflow/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
       prs: '5 merged PRs',
       tech: ['Python', 'AI Gateway'],
-      period: 'Sep 2026 – Present',
+      period: 'Sep 2026',
       bullets: [
         "Fixed tool-call streaming and response parsing in the AI Gateway's Anthropic, Gemini and LiteLLM adapters",
       ],
@@ -482,7 +482,7 @@ export const profile: Profile = {
       url: 'https://github.com/youki-dev/youki/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
       prs: '4 merged PRs',
       tech: ['Rust', 'OCI runtime', 'cgroups'],
-      period: 'Sep 2026 – Present',
+      period: 'Sep 2026',
       bullets: [
         'Fixed a D-Bus socket opened without SOCK_CLOEXEC leaking its fd into containers under systemd cgroups',
       ],
@@ -491,17 +491,16 @@ export const profile: Profile = {
 
   resume: {
     phone: '+994 (50) 899-8676',
-    projects: ['patent', 'aicell', 'quorumrag', 'raft'],
+    projects: ['patent', 'quorumrag', 'aicell'],
     roleBullets: [5, 1, 1, 0, 1, 2],
     projectBullets: 1,
     skills: [
-      { category: 'Languages', items: ['Python', 'Rust', 'TypeScript', 'C'] },
+      { category: 'Languages', items: ['Python', 'Rust', 'TypeScript', 'Go', 'C'] },
       {
         category: 'AI & Agents',
         items: [
           'LangGraph',
           'LangChain',
-          'Deep Agents',
           'MCP',
           'Langfuse',
           'OpenAI/Anthropic/Gemini APIs',
@@ -526,14 +525,7 @@ export const profile: Profile = {
       },
       {
         category: 'Infra & Security',
-        items: [
-          'Docker',
-          'OpenShift',
-          'NVIDIA OpenShell',
-          'AWS',
-          'GitLab CI',
-          'Linux namespaces, cgroups and seccomp',
-        ],
+        items: ['Docker', 'OpenShift', 'AWS', 'GitLab CI', 'Linux namespaces, cgroups and seccomp'],
       },
     ],
   },
