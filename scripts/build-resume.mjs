@@ -150,7 +150,8 @@ const tex = String.raw`\documentclass[letterpaper,11pt]{article}
   \href{mailto:${p.email}}{\underline{${esc(p.email)}}} $|$
   \href{${p.links.linkedin}}{\underline{LinkedIn}} $|$
   \href{${p.links.github}}{\underline{GitHub}} $|$
-  \href{${site}}{\underline{riad.cc}}
+  \href{${site}}{\underline{riad.cc}} $|$
+  \href{${site}/writing/}{\underline{Writing}}
 \end{center}
 \section{Experience}
 \resumeSubHeadingListStart

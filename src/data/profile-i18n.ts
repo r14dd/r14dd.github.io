@@ -399,7 +399,7 @@ export const profiles: Record<string, I18nProfile> = {
         period: 'Апр 2026 – Настоящее время',
         bullets: [
           'Руковожу разработкой внутреннего LangGraph-агента банка для документов и платформы agents-as-a-service',
-          'Изолировал действия агента в песочнице NVIDIA OpenShell на чат: без сети, Landlock, лимиты, журнал аудита',
+          'Изолировал каждое действие агента в песочнице на чат (NVIDIA OpenShell, Kata на OpenShift): без сети, Landlock, аудит',
           'Сделал систему наблюдаемой: Langfuse на каждый ход, ежедневная оценка чата, GitLab CI с тестами и аудитом',
           'Сохранил данные внутри банка: guardrails для веб-поиска, лимиты расходов и токенов на сервере, ETL в Postgres',
           'Интегрировал LibreChat как чат-интерфейс банка со входом через каталог сотрудников и формами сервис-деска в чате',
@@ -421,7 +421,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Янв 2025 – Янв 2026',
         bullets: [
-          'Обязательная военная служба: инженер-программист, внутренняя инфраструктура (под NDA)',
+          'Обязательная военная служба: разрабатывал и поддерживал внутренние сервисы на Linux и Python (под NDA)',
           'Работа конфиденциальна и находится под NDA, поэтому подробности раскрыть нельзя',
         ],
       },
@@ -523,7 +523,7 @@ export const profiles: Record<string, I18nProfile> = {
           'CLI, который принимает описание dev-tool идеи на простом языке, ищет по open-source реестрам существующие реализации, ранжирует совпадения локальными эмбеддингами и формирует вердикт через LLM.',
         date: 'Июн 2026',
         bullets: [
-          'Построил конкурентные адаптеры для 19 источников, от crates.io и PyPI до Hacker News; 500+ звёзд на GitHub',
+          'Rust CLI, проверяющий, существует ли инструмент разработчика: 19 параллельных адаптеров, локальное ранжирование, 500+ звёзд на GitHub',
           'Спроектировал систему вердиктов с ограниченной областью, которая никогда не утверждает отсутствие, а только сообщает о найденном в проверенных источниках',
           'Добавил интерактивный ratatui TUI с детальным просмотром, открытием браузера и структурированным JSON-выводом для CI-пайплайнов',
         ],
@@ -915,7 +915,7 @@ export const profiles: Record<string, I18nProfile> = {
         period: 'Apr 2026 – indiyə kimi',
         bullets: [
           'Bankın sənədlər üçün daxili LangGraph agentinin və agents-as-a-service platformasının hazırlanmasına rəhbərlik edirəm',
-          'Agent əməliyyatlarını hər çat üçün NVIDIA OpenShell sandbox-unda təcrid etdim: şəbəkəsiz, Landlock, limitlər, audit',
+          'Hər agent əməliyyatını hər çat üçün sandbox-da təcrid etdim (NVIDIA OpenShell, OpenShift-də Kata): şəbəkəsiz, Landlock, audit',
           'Sistemi müşahidə edilə bilən etdim: Langfuse izləməsi, gündəlik çat qiymətləndirməsi, test və auditli GitLab CI',
           'Məlumatları bankın daxilində saxladım: veb-axtarışa guardrail-lər, server tərəfində xərc və token limitləri, Postgres-ə ETL',
           'LibreChat-i bankın çat interfeysi kimi inteqrasiya etdim: işçi kataloqu ilə giriş və çatda servis-desk formaları',
@@ -937,7 +937,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Yan 2025 – Yan 2026',
         bullets: [
-          'Həqiqi hərbi xidmət: proqram mühəndisi, daxili infrastruktur (NDA çərçivəsində)',
+          'Həqiqi hərbi xidmət: Linux və Python üzərində daxili xidmətlər qurdum və dəstəklədim (NDA çərçivəsində)',
           'İş məxfidir və NDA ilə qorunur, buna görə əlavə təfərrüat paylaşıla bilmir',
         ],
       },
@@ -1039,7 +1039,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Sadə dildə dev-tool ideyası qəbul edən, open-source reyestrlərində mövcud implementasiyaları axtaran, uyğunluqları lokal embedding-lərlə sıralayan və LLM vasitəsilə əhatəli qərar yazan CLI.',
         date: 'İyun 2026',
         bullets: [
-          'crates.io və PyPI‑dən Hacker News‑a qədər 19 mənbə üçün paralel adapterlər qurdum; GitHub-da 500+ ulduz',
+          'Developer alətinin artıq mövcud olub-olmadığını yoxlayan Rust CLI: 19 paralel adapter, lokal sıralama, GitHub-da 500+ ulduz',
           'Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli qərar sistemi qurdum',
           'Detallı baxış, brauzer açma və CI pipeline-ları üçün strukturlaşdırılmış JSON çıxışı olan interaktiv ratatui TUI əlavə etdim',
         ],
