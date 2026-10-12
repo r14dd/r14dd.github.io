@@ -4,8 +4,8 @@ import { profiles } from '../../data/profile-i18n';
 import { getBuildInfo } from '../../lib/buildinfo';
 
 // The résumé as a sheet of paper, in every language the site speaks. The same
-// cut rules as scripts/build-resume.mjs decide what fits on the sheet (four
-// roles, three bullets each; three projects, two bullets each), so this page
+// cut rules as scripts/build-resume.mjs decide what fits on the sheet (every
+// role and p.resume's bullet counts), so this page
 // and the PDF are the same document. Print it (⌘P) and the desk around the
 // sheet disappears; what comes out is the sheet, one page, in your language.
 export function getStaticPaths() {
@@ -20,9 +20,6 @@ const p = profiles[lang];
 const L = p.labels;
 const build = getBuildInfo(1);
 const builtOn = build.builtAt.slice(0, 10);
-const commitUrl = build.head
-  ? `https://github.com/r14dd/r14dd.github.io/commit/${build.head.hash}`
-  : '';
 
 const LANGS = ['en', 'ru', 'az'];
 const resumePath = (l: string) => (l === 'en' ? '/resume/' : `/${l}/resume/`);
@@ -32,8 +29,8 @@ const homePath = lang === 'en' ? '/' : `/${lang}/`;
 // hidden until the reader asks for the whole story (?full). Print always cuts.
 const roles = p.experience.map((e, i) => ({
   ...e,
-  cut: i >= 4,
-  bullets: e.bullets.map((text, j) => ({ text, cut: j >= 3 })),
+  cut: (p.resume.roleBullets[i] ?? 0) === 0,
+  bullets: e.bullets.map((text, j) => ({ text, cut: j >= (p.resume.roleBullets[i] ?? 0) })),
 }));
 const byId = new Map(p.projects.map((pr) => [pr.id, pr]));
 for (const id of p.resume.projects) {
@@ -59,7 +56,7 @@ const projects = [...p.resume.projects.map((id) => byId.get(id)!), ...rest].map(
     ...pr,
     links,
     cut: i >= p.resume.projects.length,
-    bullets: pr.bullets.map((text, j) => ({ text, cut: j >= 2 })),
+    bullets: pr.bullets.map((text, j) => ({ text, cut: j >= p.resume.projectBullets })),
   };
 });
 const [eduDates, eduPlace] = p.education.meta.split(' · ');
@@ -138,17 +135,26 @@ const canonical = `https://riad.cc${resumePath(lang)}`;
       </section>
 
       <section class="sheet-section">
-        <h2>{L.headings.education}</h2>
-        <div class="entry">
-          <div class="entry-row">
-            <strong>{p.education.title}</strong>
-            <span class="entry-when">{eduDates}</span>
-          </div>
-          <div class="entry-row entry-sub">
-            <em>{p.education.bullets.join(' ')}</em>
-            <em>{eduPlace}</em>
-          </div>
-        </div>
+        <h2>{L.headings.openSource}</h2>
+        {
+          p.openSource.map((o) => (
+            <div class="entry">
+              <div class="entry-row">
+                <span class="entry-project">
+                  <strong>{o.name}</strong>
+                  <a href={o.url}>{o.prs}</a>
+                  <span class="entry-tech">{o.tech.join(', ')}</span>
+                </span>
+                <span class="entry-when">{o.period}</span>
+              </div>
+              <ul>
+                {o.bullets.map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
       </section>
 
       <section class="sheet-section">
@@ -158,7 +164,7 @@ const canonical = `https://riad.cc${resumePath(lang)}`;
             <div class="entry" data-cut={pr.cut || undefined}>
               <div class="entry-row">
                 <span class="entry-project">
-                  <strong>{pr.name}</strong>
+                  <strong>{pr.name.split(':')[0]}</strong>
                   {pr.links.map((l) => (
                     <a href={l.url}>{l.label}</a>
                   ))}
@@ -177,13 +183,27 @@ const canonical = `https://riad.cc${resumePath(lang)}`;
       </section>
 
       <section class="sheet-section">
+        <h2>{L.headings.education}</h2>
+        <div class="entry">
+          <div class="entry-row">
+            <strong>{p.education.title}</strong>
+            <span class="entry-when">{eduDates}</span>
+          </div>
+          <div class="entry-row entry-sub">
+            <em>{p.education.bullets.join(' ')}</em>
+            <em>{eduPlace}</em>
+          </div>
+        </div>
+      </section>
+
+      <section class="sheet-section">
         <h2>{L.headings.skills}</h2>
         <dl class="sheet-skills">
           {
-            p.skills.map((s) => (
+            p.resume.skills.map((s) => (
               <div>
                 <dt>{L.skillCategories[s.category] ?? s.category}</dt>
-                <dd>{s.groups.flatMap((g) => g.items).join(', ')}</dd>
+                <dd>{s.items.join(', ')}</dd>
               </div>
             ))
           }
@@ -193,16 +213,6 @@ const canonical = `https://riad.cc${resumePath(lang)}`;
       <footer class="sheet-stamp">
         {L.chrome.resumeBuiltFrom}{' '}
         <a href={homePath}>riad.cc</a>
-        {
-          build.head && (
-            <>
-              <span aria-hidden="true">·</span>
-              <a href={commitUrl} title={build.head.subject}>
-                {build.head.short}
-              </a>
-            </>
-          )
-        }
         <span aria-hidden="true">·</span>
         <time datetime={build.builtAt}>{builtOn}</time>
       </footer>

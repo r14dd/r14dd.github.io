@@ -33,6 +33,8 @@ const esc = (s) =>
     .replace(/[\\{}]/g, (c) => `\\${c}`)
     .replace(/[&%$#_]/g, (c) => `\\${c}`)
     .replace(/~/g, '$\\sim$')
+    .replace(/⌊/g, '$\\lfloor$')
+    .replace(/⌋/g, '$\\rfloor$')
     .replace(/\^/g, '\\textasciicircum{}');
 
 const bullets = (items) =>
@@ -40,13 +42,21 @@ const bullets = (items) =>
     ? `\\resumeItemListStart\n${items.map((b) => `  \\resumeItem{${esc(b)}}`).join('\n')}\n\\resumeItemListEnd`
     : '';
 
-// Four roles, three bullets each: the page fits by cutting, not shrinking.
+// Every role, with p.resume's bullet counts: the page fits by cutting, not shrinking.
 const experience = p.experience
-  .slice(0, 4)
+  .map((e, i) => ({ e, n: p.resume.roleBullets[i] ?? 0 }))
+  .filter(({ n }) => n > 0)
   .map(
-    (e) =>
-      `\\resumeSubheading{${esc(e.role)}}{${esc(e.period)}}{${esc(e.org)}}{${esc(e.location)}}\n${bullets(e.bullets.slice(0, 3))}`,
+    ({ e, n }) =>
+      `\\resumeSubheading{${esc(e.role)}}{${esc(e.period)}}{${esc(e.org)}}{${esc(e.location)}}\n${bullets(e.bullets.slice(0, n))}`,
   )
+  .join('\n');
+
+const openSource = p.openSource
+  .map((o) => {
+    const head = `\\textbf{${esc(o.name)}} \\href{${esc(o.url)}}{\\textit{${esc(o.prs)}}} $|$ \\emph{${esc(o.tech.join(', '))}}`;
+    return `\\resumeProjectHeading{${head}}{${esc(o.period)}}\n${bullets(o.bullets)}`;
+  })
   .join('\n');
 
 const byId = new Map(p.projects.map((pr) => [pr.id, pr]));
@@ -59,37 +69,33 @@ const projects = p.resume.projects
   .map((pr) => {
     const links = Object.entries(pr.links ?? {})
       .filter(([k]) => k !== 'demo')
-      .map(
-        ([k, url]) =>
-          `\\href{${url}}{\\textit{${esc(k === 'crates' ? 'crates.io' : k === 'github' ? 'GitHub' : 'docs.rs')}}}`,
-      )
+      .map(([k, url]) => {
+        // With two repos on one card, both links are labelled by repo name.
+        const label =
+          k === 'mobile' || (k === 'github' && pr.links?.mobile)
+            ? url.split('/').pop()
+            : k === 'crates'
+              ? 'crates.io'
+              : k === 'github'
+                ? 'GitHub'
+                : 'docs.rs';
+        return `\\href{${url}}{\\textit{${esc(label)}}}`;
+      })
       .join(' ');
-    const head = `\\textbf{${esc(pr.name)}} ${links}${links ? ' ' : ''}$|$ \\emph{${esc(pr.tech.join(', '))}}`;
-    return `\\resumeProjectHeading{${head}}{${esc(pr.date ?? '')}}\n${bullets(pr.bullets.slice(0, 2))}`;
+    const head = `\\textbf{${esc(pr.name.split(':')[0])}} ${links}${links ? ' ' : ''}$|$ \\emph{${esc(pr.tech.join(', '))}}`;
+    return `\\resumeProjectHeading{${head}}{${esc(pr.date ?? '')}}\n${bullets(pr.bullets.slice(0, p.resume.projectBullets))}`;
   })
   .join('\n');
 
-const skills = p.skills
-  .map((s) => `\\textbf{${esc(s.category)}}{: ${esc(s.groups.flatMap((g) => g.items).join(', '))}}`)
+const skills = p.resume.skills
+  .map((s) => `\\textbf{${esc(s.category)}}{: ${esc(s.items.join(', '))}}`)
   .join(' \\\\\n');
 
 const [eduDates, eduPlace] = p.education.meta.split(' · ');
 const education = `\\resumeSubheading{${esc(p.education.title)}}{${esc(eduDates)}}{${esc(p.education.bullets.join(' '))}}{${esc(eduPlace)}}`;
 
 const site = 'https://riad.cc';
-const sha = (() => {
-  try {
-    return execFileSync('git', ['rev-parse', '--short', 'HEAD'], {
-      cwd: root,
-      encoding: 'utf8',
-    }).trim();
-  } catch {
-    return '';
-  }
-})();
-const stamp = ['riad.cc/resume', sha, new Date().toISOString().slice(0, 10)]
-  .filter(Boolean)
-  .join(' · ');
+const stamp = ['riad.cc/resume', new Date().toISOString().slice(0, 10)].join(' · ');
 const phoneHref = `tel:${p.resume.phone.replace(/[^+\d]/g, '')}`;
 
 // The preamble is the one from resume.tex (Jake Gutierrez's template, MIT),
@@ -150,13 +156,17 @@ const tex = String.raw`\documentclass[letterpaper,11pt]{article}
 \resumeSubHeadingListStart
 ${experience}
 \resumeSubHeadingListEnd
-\section{Education}
+\section{${p.labels.headings.openSource}}
 \resumeSubHeadingListStart
-${education}
+${openSource}
 \resumeSubHeadingListEnd
 \section{Projects}
 \resumeSubHeadingListStart
 ${projects}
+\resumeSubHeadingListEnd
+\section{Education}
+\resumeSubHeadingListStart
+${education}
 \resumeSubHeadingListEnd
 \section{Technical Skills}
 \begin{itemize}[leftmargin=0.15in, label={}]

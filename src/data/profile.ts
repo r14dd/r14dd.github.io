@@ -17,6 +17,16 @@ export type Project = {
   badges?: { api: string; pillLabel: string; platform: string; link?: string }[];
 };
 
+export type OpenSource = {
+  name: string;
+  /** Merged-PR search for the repo, so the count stays checkable. */
+  url: string;
+  prs: string;
+  tech: string[];
+  period: string;
+  bullets: string[];
+};
+
 export type Teaching = {
   title: string;
   skills: string;
@@ -50,6 +60,7 @@ export type Profile = {
     bullets: string[];
   }[];
   projects: Project[];
+  openSource: OpenSource[];
   teaching: Teaching[];
   skills: {
     category: string;
@@ -61,6 +72,12 @@ export type Profile = {
     phone: string;
     /** Project ids to include, in order. The site shows all projects; the PDF fits one page. */
     projects: string[];
+    /** Bullets kept per role, by position in `experience`; every role is listed. */
+    roleBullets: number[];
+    /** Bullets kept per project. */
+    projectBullets: number;
+    /** The CV's short skills list; the site shows the full one. */
+    skills: { category: string; items: string[] }[];
   };
 };
 
@@ -87,11 +104,11 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
       bullets: [
-        "Building the bank's internal AI agent, a LangGraph deep agent that works with files and documents, and an agents-as-a-service platform on top of it where any employee can build their own agents",
-        'Isolated every agent action in a per-chat NVIDIA OpenShell sandbox with no network egress, read-only system mounts, Landlock and per-profile CPU, memory and process limits, with a JSON audit line for every command, tied to its trace',
-        "Integrated LibreChat as the bank's chat front end: sign-in against the employee directory, gated on an access entitlement; the bank's service-desk forms, tickets and live chat, inline in chat messages; and file-signature checks on every upload",
-        'Kept data inside the bank: guardrails refuse sensitive web-search queries before they leave the network, per-user spend and token limits are enforced server-side, and an ETL moves conversations into a reporting Postgres database',
-        'Made it observable and safe to change: Langfuse tracing with one trace id per turn, a daily chat eval recorded in Langfuse, and GitLab CI running lint, unit tests and a dependency audit',
+        "Building the bank's internal LangGraph agent for files and documents and an agents-as-a-service platform",
+        'Isolated each agent action in a per-chat NVIDIA OpenShell sandbox: no egress, Landlock, limits, audit log',
+        'Made it observable: Langfuse tracing per turn, a daily chat eval, and GitLab CI with lint, tests and audit',
+        'Kept data in the bank: guardrails on web search, server-side spend and token limits, ETL into Postgres',
+        "Integrated LibreChat as the bank's chat front end with directory sign-in and service-desk forms in chat",
       ],
     },
     {
@@ -100,9 +117,18 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Feb 2026 – Present',
       bullets: [
+        'Leading the development team on the website and member tools; owning domains, hosting, email, access',
         'Coordinating the website renewal, internal platform improvements, and new technology rollouts',
-        'Leading the development team on the public website and member-facing tools',
-        'Owning the organization’s domains, hosting, email and access management',
+      ],
+    },
+    {
+      role: 'Software Engineer',
+      org: 'Ministry of Defense',
+      location: 'Baku, Azerbaijan',
+      period: 'Jan 2025 – Jan 2026',
+      bullets: [
+        'Army service program: software engineer on internal infrastructure (under NDA)',
+        'The work is confidential under NDA, so no further details can be shared',
       ],
     },
     {
@@ -123,8 +149,8 @@ export const profile: Profile = {
       location: 'Buffalo, NY',
       period: 'Aug 2022 – May 2024',
       bullets: [
-        'Taught core data structures and algorithms in Scala and Java to ~1000 students',
-        'Managed 20 TAs and coordinated course logistics with faculty',
+        'Taught data structures and algorithms in Scala and Java to ~1000 students; managed 20 TAs',
+        'Coordinated course logistics with faculty',
         'Oversaw grading with emphasis on academic integrity',
         'Provided weekly reviews and debugging support to ~200 students',
       ],
@@ -135,9 +161,9 @@ export const profile: Profile = {
       location: 'New York, NY',
       period: 'Sep 2021 – May 2023',
       bullets: [
-        'Built backend systems using Python and MongoDB with ADA-compliant frontend components',
-        'Developed authentication and task-based point allocation system',
-        'Optimized WebSockets, cutting server load 90% and enabling instant sync',
+        'Built Python and MongoDB backends, including authentication and a task-based point allocation system',
+        'Optimized WebSockets for instant sync across clients',
+        'Built ADA-compliant frontend components',
       ],
     },
   ],
@@ -151,9 +177,10 @@ export const profile: Profile = {
         'Self-service app for a mobile operator that shows each subscriber, in manats, where they overpay and fixes it in one tap through Laya, a voice assistant in Azerbaijani and English. The Expo mobile client lives in a separate repo.',
       date: 'Oct 2026',
       bullets: [
+        'Built Laya, an LLM voice assistant that throws away any answer carrying a number the backend did not supply',
         'Added usage insights: eight detectors read per-day and per-app usage, catch repeat pack buys, overage, unused data and short balances before renewal, and price the fix from the live catalogue as a card with a one-tap action',
         'Built the Django REST backend: billing, tariffs, packs, SIM and credit products behind 86 documented endpoints, with one row-locked, idempotent code path for every balance change',
-        "Built Laya's plan, narrate and done endpoints: the LLM picks the intent and words the sentence, and any answer carrying a number the backend did not supply is thrown away",
+        "Built Laya's plan, narrate and done endpoints: the LLM picks the intent and words the sentence, the backend supplies every number",
         'Added a Gemini support assistant with a Milvus knowledge base and per-subscriber memory, streaming replies over SSE and answering voice notes with speech',
         'Built the Expo / React Native client with on-device speech-to-text and TTS, running every voice task through the same code path as a manual tap',
       ],
@@ -235,8 +262,8 @@ export const profile: Profile = {
         'Multi-retriever RAG with quorum filtering requiring cross-retriever consensus before surfacing evidence. Achieved 95% recall vs 70% baseline.',
       date: 'May 2026',
       bullets: [
+        'Built a multi-retriever ensemble with rank fusion and quorum filtering: 95% recall vs a 70% baseline',
         'Published to crates.io as an installable Rust crate (cargo add quorumrag)',
-        'Built multi-retriever ensemble with Reciprocal Rank Fusion scoring and quorum filtering',
         'Implemented overlapping chunk processing with 50% stride to prevent boundary-split answers',
         'Added parallel embedding with caching to optimize cold-start performance',
         'Clustered evidence via cosine-similarity centroids so the quorum vote operates on semantic groups rather than raw chunks',
@@ -289,9 +316,9 @@ export const profile: Profile = {
         'A cluster that keeps serving through leader crashes and network partitions: up to ⌊n/2⌋ nodes can fail without a committed entry being lost.',
       date: 'May 2024',
       bullets: [
+        'Handled node failures and network partitions while tolerating up to ⌊n/2⌋ server failures',
         'Implemented leader election with randomized timeouts and term-based logical clocks to prevent split votes',
         'Built log replication via AppendEntries RPC with consistency checks and quorum-based commitment',
-        'Handled node failures and network partitions while tolerating up to ⌊n/2⌋ server failures',
         'Enforced safety guarantees ensuring elected leaders always contain all previously committed entries',
         'Designed custom RPC framework over UDP with Protobuf serialization, retransmission, and message deduplication',
       ],
@@ -439,9 +466,76 @@ export const profile: Profile = {
       ],
     },
   ],
+  openSource: [
+    {
+      name: 'MLflow',
+      url: 'https://github.com/mlflow/mlflow/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
+      prs: '5 merged PRs',
+      tech: ['Python', 'AI Gateway'],
+      period: 'Sep 2026 – Present',
+      bullets: [
+        "Fixed tool-call streaming and response parsing in the AI Gateway's Anthropic, Gemini and LiteLLM adapters",
+      ],
+    },
+    {
+      name: 'youki',
+      url: 'https://github.com/youki-dev/youki/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
+      prs: '4 merged PRs',
+      tech: ['Rust', 'OCI runtime', 'cgroups'],
+      period: 'Sep 2026 – Present',
+      bullets: [
+        'Fixed a D-Bus socket opened without SOCK_CLOEXEC leaking its fd into containers under systemd cgroups',
+      ],
+    },
+  ],
+
   resume: {
     phone: '+994 (50) 899-8676',
-    projects: ['patent', 'aicell', 'almostaykhan'],
+    projects: ['patent', 'aicell', 'quorumrag', 'raft'],
+    roleBullets: [5, 1, 1, 0, 1, 2],
+    projectBullets: 1,
+    skills: [
+      { category: 'Languages', items: ['Python', 'Rust', 'TypeScript', 'C'] },
+      {
+        category: 'AI & Agents',
+        items: [
+          'LangGraph',
+          'LangChain',
+          'Deep Agents',
+          'MCP',
+          'Langfuse',
+          'OpenAI/Anthropic/Gemini APIs',
+          'Ollama',
+          'Milvus',
+        ],
+      },
+      {
+        category: 'Backend & Data',
+        items: [
+          'FastAPI',
+          'Django',
+          'Celery',
+          'Axum',
+          'Tokio',
+          'WebSockets',
+          'SSE',
+          'PostgreSQL',
+          'Redis',
+          'MongoDB',
+        ],
+      },
+      {
+        category: 'Infra & Security',
+        items: [
+          'Docker',
+          'OpenShift',
+          'NVIDIA OpenShell',
+          'AWS',
+          'GitLab CI',
+          'Linux namespaces, cgroups and seccomp',
+        ],
+      },
+    ],
   },
 
   testimonials: [

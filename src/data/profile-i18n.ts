@@ -42,6 +42,7 @@ type Labels = {
   headings: {
     experience: string;
     projects: string;
+    openSource: string;
     teaching: string;
     education: string;
     skills: string;
@@ -199,6 +200,7 @@ export const profiles: Record<string, I18nProfile> = {
       headings: {
         experience: 'Experience',
         projects: 'Projects',
+        openSource: 'Open Source',
         teaching: 'Teaching',
         education: 'Education',
         skills: 'Technical Skills',
@@ -241,6 +243,10 @@ export const profiles: Record<string, I18nProfile> = {
       },
       teachingRows: { tools: 'tools', topics: 'topics' },
       skillCategories: {
+        Languages: 'Languages',
+        'AI & Agents': 'AI & Agents',
+        'Backend & Data': 'Backend & Data',
+        'Infra & Security': 'Infra & Security',
         'Programming Languages': 'Programming Languages',
         'Backend & Runtimes': 'Backend & Runtimes',
         'AI, ML & Agentic Systems': 'AI, ML & Agentic Systems',
@@ -392,11 +398,11 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Апр 2026 – Настоящее время',
         bullets: [
-          'Разработка внутреннего AI‑агента банка на LangGraph (deep agent), работающего с файлами и документами, и платформы agents‑as‑a‑service поверх него, где любой сотрудник может создавать собственных агентов',
-          'Изолировал каждое действие агента в отдельной песочнице NVIDIA OpenShell для каждого чата: без сетевого выхода, с системными монтированиями только для чтения, Landlock и лимитами CPU, памяти и процессов по профилю, а также JSON‑строкой аудита для каждой команды, привязанной к её трассировке',
-          'Интегрировал LibreChat как чат‑интерфейс банка: вход через каталог сотрудников с проверкой права доступа; формы, заявки и живой чат сервис‑деска банка прямо в сообщениях чата; проверка сигнатур каждого загружаемого файла',
-          'Сохранил данные внутри банка: guardrails блокируют чувствительные веб‑запросы до выхода за пределы сети, лимиты расходов и токенов на пользователя применяются на сервере, а ETL переносит переписки в отчётную базу Postgres',
-          'Сделал систему наблюдаемой и безопасной для изменений: трассировка в Langfuse с одним trace id на ход диалога, ежедневная оценка чата в Langfuse и GitLab CI с линтингом, юнит‑тестами и аудитом зависимостей',
+          'Разрабатываю внутреннего LangGraph-агента банка для работы с файлами и документами и платформу agents-as-a-service',
+          'Изолировал действия агента в песочнице NVIDIA OpenShell на чат: без сети, Landlock, лимиты, журнал аудита',
+          'Сделал систему наблюдаемой: Langfuse на каждый ход, ежедневная оценка чата, GitLab CI с тестами и аудитом',
+          'Сохранил данные внутри банка: guardrails для веб-поиска, лимиты расходов и токенов на сервере, ETL в Postgres',
+          'Интегрировал LibreChat как чат-интерфейс банка со входом через каталог сотрудников и формами сервис-деска в чате',
         ],
       },
       {
@@ -405,9 +411,18 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Фев 2026 – Настоящее время',
         bullets: [
-          'Координация обновления веб‑сайта, улучшения внутренних платформ и внедрения новых технологических решений',
-          'Руководство командой разработки публичного сайта и инструментов для участников',
-          'Ведение доменов, хостинга, почты и управления доступом организации',
+          'Руковожу командой разработки сайта и инструментов для участников; отвечаю за домены, хостинг, почту и доступ',
+          'Координация обновления веб-сайта, улучшения внутренних платформ и внедрения новых технологий',
+        ],
+      },
+      {
+        role: 'Инженер-программист',
+        org: 'Ministry of Defense',
+        location: 'Баку, Азербайджан',
+        period: 'Янв 2025 – Янв 2026',
+        bullets: [
+          'Армейская программа службы: инженер-программист, внутренняя инфраструктура (под NDA)',
+          'Работа конфиденциальна и находится под NDA, поэтому подробности раскрыть нельзя',
         ],
       },
       {
@@ -428,8 +443,8 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Buffalo, NY',
         period: 'Авг 2022 – Май 2024',
         bullets: [
-          'Проводил занятия по структурам данных и алгоритмам на Scala и Java для ~1000 студентов',
-          'Координировал работу 20 ассистентов и организовывал учебные процессы',
+          'Проводил занятия по структурам данных и алгоритмам на Scala и Java для ~1000 студентов; руководил 20 ассистентами',
+          'Координировал организацию курса с преподавателями',
           'Контролировал оценивание с акцентом на академическую честность',
           'Проводил еженедельные разборы и поддержку отладки для ~200 студентов',
         ],
@@ -440,9 +455,27 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'New York, NY',
         period: 'Сен 2021 – Май 2023',
         bullets: [
-          'Разрабатывал backend‑системы на Python и MongoDB с ADA‑совместимыми фронтенд‑компонентами',
-          'Создал систему аутентификации и распределения баллов по задачам',
-          'Оптимизировал WebSockets: снизил нагрузку сервера на 90% и внедрил мгновенную синхронизацию в распределенной системе',
+          'Разрабатывал backend-системы на Python и MongoDB, включая аутентификацию и систему распределения баллов по задачам',
+          'Оптимизировал WebSockets и обеспечил мгновенную синхронизацию между клиентами',
+          'Создал ADA-совместимые фронтенд-компоненты',
+        ],
+      },
+    ],
+    openSource: [
+      {
+        ...profile.openSource[0],
+        prs: '5 принятых PR',
+        period: 'Сен 2026 – Настоящее время',
+        bullets: [
+          'Исправил потоковую передачу вызовов инструментов и разбор ответов в адаптерах AI Gateway для Anthropic, Gemini и LiteLLM',
+        ],
+      },
+      {
+        ...profile.openSource[1],
+        prs: '4 принятых PR',
+        period: 'Сен 2026 – Настоящее время',
+        bullets: [
+          'Исправил утечку файлового дескриптора D-Bus без SOCK_CLOEXEC в контейнеры при systemd cgroups',
         ],
       },
     ],
@@ -453,6 +486,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Приложение самообслуживания для мобильного оператора: показывает каждому абоненту, сколько манатов он переплачивает, и исправляет это в одно касание через Laya, голосового ассистента на азербайджанском и английском. Мобильный клиент на Expo в отдельном репозитории.',
         date: 'Окт 2026',
         bullets: [
+          'Построил Laya, голосового ассистента на LLM, который отбрасывает любой ответ с числом, которого не дал бэкенд',
           'Добавил инсайты по расходу: восемь детекторов читают расход по дням и приложениям, замечают повторные покупки пакетов, оплату сверх пакета, неиспользованный интернет и нехватку баланса перед продлением и считают решение по актуальному каталогу в виде карточки с действием в одно касание',
           'Построил бэкенд на Django REST: баланс, тарифы, пакеты, SIM и кредитные продукты за 86 документированными эндпоинтами, один путь с блокировкой строки и идемпотентностью для любого изменения баланса',
           'Построил эндпоинты plan, narrate и done для Laya: LLM выбирает намерение и формулирует фразу, а ответ с числом, которого не дал бэкенд, отбрасывается',
@@ -514,8 +548,8 @@ export const profiles: Record<string, I18nProfile> = {
           'Мульти-ретриверный RAG с кворумной фильтрацией, требующей согласия между ретриверами перед выдачей результатов. Достигнут recall 95% против 70% baseline.',
         date: 'Май 2026',
         bullets: [
+          'Построил мульти-ретриверный ансамбль с rank fusion и кворумной фильтрацией: recall 95% против 70% baseline',
           'Опубликован на crates.io как устанавливаемый Rust-крейт (cargo add quorumrag)',
-          'Построил мульти-ретриверный ансамбль с Reciprocal Rank Fusion и кворумной фильтрацией',
           'Реализовал обработку перекрывающихся чанков с 50% шагом для предотвращения потери ответов на границах',
           'Добавил параллельное создание эмбеддингов с кэшированием для оптимизации холодного старта',
           'Кластеризовал доказательства через центроиды косинусного сходства, чтобы кворумное голосование работало по семантическим группам, а не по отдельным фрагментам',
@@ -551,9 +585,9 @@ export const profiles: Record<string, I18nProfile> = {
           'Кластер продолжает обслуживать запросы при падении лидера и разделении сети: выдерживает отказ ⌊n/2⌋ узлов, не теряя ни одной зафиксированной записи.',
         date: 'Май 2024',
         bullets: [
+          'Обработал отказы узлов и сетевые разделения с толерантностью до ⌊n/2⌋ серверных сбоев',
           'Реализовал выбор лидера с рандомизированными таймаутами и term-based логическими часами для предотвращения split vote',
           'Построил репликацию логов через AppendEntries RPC с проверками консистентности и кворумным подтверждением',
-          'Обработал отказы узлов и сетевые разделения с толерантностью до ⌊n/2⌋ серверных сбоев',
           'Обеспечил гарантии безопасности: избранные лидеры всегда содержат все ранее зафиксированные записи',
           'Спроектировал кастомный RPC-фреймворк поверх UDP с Protobuf-сериализацией, ретрансмиссией и дедупликацией сообщений',
         ],
@@ -682,6 +716,7 @@ export const profiles: Record<string, I18nProfile> = {
       headings: {
         experience: 'Опыт',
         projects: 'Проекты',
+        openSource: 'Открытый исходный код',
         teaching: 'Преподавание',
         education: 'Образование',
         skills: 'Технические навыки',
@@ -724,6 +759,10 @@ export const profiles: Record<string, I18nProfile> = {
       },
       teachingRows: { tools: 'инструменты', topics: 'темы' },
       skillCategories: {
+        Languages: 'Языки',
+        'AI & Agents': 'AI и агенты',
+        'Backend & Data': 'Бэкенд и данные',
+        'Infra & Security': 'Инфраструктура и безопасность',
         'Programming Languages': 'Языки программирования',
         'Backend & Runtimes': 'Backend и среды выполнения',
         'AI, ML & Agentic Systems': 'ИИ, ML и агентные системы',
@@ -877,11 +916,11 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Apr 2026 – indiyə kimi',
         bullets: [
-          'Bankın daxili AI agentini, fayllar və sənədlərlə işləyən LangGraph deep agent‑i və onun üzərində hər bir əməkdaşın öz agentlərini yarada bildiyi agents‑as‑a‑service platformasını qururam',
-          'Agentin hər bir əməliyyatını hər çat üçün ayrıca NVIDIA OpenShell sandbox‑unda təcrid etdim: şəbəkəyə çıxış yoxdur, sistem qovluqları yalnız oxunuş üçün qoşulur, Landlock və profil üzrə CPU, yaddaş və proses limitləri tətbiq olunur, hər əmr üçün trace‑ə bağlı JSON audit sətri yazılır',
-          'LibreChat‑i bankın çat interfeysi kimi inteqrasiya etdim: işçi kataloqu ilə giriş və giriş hüququnun yoxlanılması; bankın servis‑desk formaları, müraciətləri və canlı çatı birbaşa çat mesajlarında; yüklənən hər faylın imza yoxlanışı',
-          'Məlumatları bankın daxilində saxladım: guardrail‑lər həssas veb‑axtarış sorğularını şəbəkədən çıxmazdan əvvəl bloklayır, istifadəçi üzrə xərc və token limitləri server tərəfində tətbiq olunur, ETL isə söhbətləri hesabat üçün Postgres bazasına köçürür',
-          'Sistemi müşahidə edilə bilən və dəyişiklik üçün təhlükəsiz etdim: hər dialoq addımına bir trace id ilə Langfuse izləməsi, Langfuse‑da gündəlik çat qiymətləndirməsi, linter, unit testlər və asılılıq auditi işlədən GitLab CI',
+          'Bankın daxili LangGraph agentini fayllar və sənədlərlə işləmək üçün və agents-as-a-service platformasını qururam',
+          'Agent əməliyyatlarını hər çat üçün NVIDIA OpenShell sandbox-unda təcrid etdim: şəbəkəsiz, Landlock, limitlər, audit',
+          'Sistemi müşahidə edilə bilən etdim: Langfuse izləməsi, gündəlik çat qiymətləndirməsi, test və auditli GitLab CI',
+          'Məlumatları bankın daxilində saxladım: veb-axtarışa guardrail-lər, server tərəfində xərc və token limitləri, Postgres-ə ETL',
+          'LibreChat-i bankın çat interfeysi kimi inteqrasiya etdim: işçi kataloqu ilə giriş və çatda servis-desk formaları',
         ],
       },
       {
@@ -890,9 +929,18 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Fev 2026 – indiyə kimi',
         bullets: [
-          'Veb‑saytın yenilənməsi, daxili platformların təkmilləşdirilməsi və təşkilatın fəaliyyətini dəstəkləyən yeni texnoloji həllərin tətbiqi',
-          'İctimai sayt və üzvlər üçün alətlər üzərində tərtibatçı komandasına rəhbərlik',
-          'Təşkilatın domenləri, hostinqi, poçtu və giriş idarəetməsinin aparılması',
+          'Veb-sayt və üzvlər üçün alətlər üzərində komandaya rəhbərlik edirəm; domen, hostinq, poçt və giriş idarəetməsinə cavabdehəm',
+          'Veb-saytın yenilənməsi, daxili platformaların təkmilləşdirilməsi və yeni texnologiyaların tətbiqinin koordinasiyası',
+        ],
+      },
+      {
+        role: 'Proqram Mühəndisi',
+        org: 'Ministry of Defense',
+        location: 'Bakı, Azərbaycan',
+        period: 'Yan 2025 – Yan 2026',
+        bullets: [
+          'Ordu xidməti proqramı: proqram mühəndisi, daxili infrastruktur (NDA çərçivəsində)',
+          'İş məxfidir və NDA ilə qorunur, buna görə əlavə təfərrüat paylaşıla bilmir',
         ],
       },
       {
@@ -913,8 +961,8 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Buffalo, NY',
         period: 'Avq 2022 – May 2024',
         bullets: [
-          'Scala və Java ilə verilənlər strukturları və alqoritmlər üzrə ~1000 tələbəyə dərs keçdim',
-          '20 TA‑nın işini koordinasiya etdim və kurs prosesini idarə etdim',
+          'Scala və Java ilə verilənlər strukturları və alqoritmlər üzrə ~1000 tələbəyə dərs keçdim; 20 TA-ya rəhbərlik etdim',
+          'Kurs logistikasını müəllimlərlə koordinasiya etdim',
           'Qiymətləndirməni akademik dürüstlük üzrə nəzarət etdim',
           'Həftəlik icmallar və debugging dəstəyi göstərdim (~200 tələbə)',
         ],
@@ -925,9 +973,27 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'New York, NY',
         period: 'Sen 2021 – May 2023',
         bullets: [
-          'Python və MongoDB ilə backend sistemlər, ADA‑uyğun frontend komponentlər qurdum',
-          'Autentifikasiya və tapşırıq‑əsaslı xal bölüşdürmə sistemi hazırladım',
-          'WebSocket arxitekturasını optimallaşdırdım, server yükünü 90% azaltdım və ani sinxronizasiya təmin etdim',
+          'Autentifikasiya və tapşırıq əsaslı xal bölüşdürmə sistemi daxil olmaqla Python və MongoDB backend-ləri qurdum',
+          'WebSocket-ləri optimallaşdırdım və müştərilər arasında ani sinxronizasiya təmin etdim',
+          'ADA-uyğun frontend komponentləri qurdum',
+        ],
+      },
+    ],
+    openSource: [
+      {
+        ...profile.openSource[0],
+        prs: '5 qəbul edilmiş PR',
+        period: 'Sen 2026 – indiyə kimi',
+        bullets: [
+          'AI Gateway-in Anthropic, Gemini və LiteLLM adapterlərində tool-call axınını və cavabların təhlilini düzəltdim',
+        ],
+      },
+      {
+        ...profile.openSource[1],
+        prs: '4 qəbul edilmiş PR',
+        period: 'Sen 2026 – indiyə kimi',
+        bullets: [
+          'SOCK_CLOEXEC olmadan açılan D-Bus soketinin fd-sinin systemd cgroups altında konteynerlərə sızmasını düzəltdim',
         ],
       },
     ],
@@ -938,6 +1004,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Mobil operator üçün özünəxidmət tətbiqi: hər abunəçiyə harada neçə manat artıq ödədiyini göstərir və Azərbaycan və ingilis dilində danışan səsli köməkçi Laya ilə bunu bir toxunuşla düzəldir. Expo mobil klienti ayrıca repozitoriyadadır.',
         date: 'Okt 2026',
         bullets: [
+          'Backend-in vermədiyi rəqəmi daşıyan hər cavabı atan LLM səsli köməkçisi Laya-nı qurdum',
           'İstifadə insaytları əlavə etdim: səkkiz detektor gündəlik və tətbiq üzrə istifadəni oxuyur, təkrar paket alışlarını, paketdən kənar ödənişi, istifadə olunmayan interneti və yenilənmədən əvvəl balans çatışmazlığını tapır, həlli canlı kataloqdan qiymətləndirib bir toxunuşla icra olunan kart kimi göstərir',
           'Django REST backend-ini qurdum: balans, tariflər, paketlər, SIM və kredit məhsulları 86 sənədləşdirilmiş endpoint arxasında, balansın hər dəyişikliyi üçün sətir kilidli, idempotent vahid yol',
           'Laya üçün plan, narrate və done endpoint-lərini qurdum: LLM niyyəti seçir və cümləni qurur, backend-in vermədiyi rəqəmi daşıyan cavab atılır',
@@ -999,8 +1066,8 @@ export const profiles: Record<string, I18nProfile> = {
           'Nəticələri təqdim etməzdən əvvəl retriverlər arası konsensus tələb edən kvorum filtrasiyalı multi-retriver RAG. Baseline 70%-ə qarşı 95% recall əldə edilib.',
         date: 'May 2026',
         bullets: [
+          'Rank fusion və kvorum filtrasiyası ilə multi-retriver ansambl qurdum: 70% baseline-a qarşı 95% recall',
           'crates.io-da quraşdırıla bilən Rust crate olaraq nəşr edilib (cargo add quorumrag)',
-          'Reciprocal Rank Fusion skorinqi və kvorum filtrasiyası ilə multi-retriver ansambl qurdum',
           'Sərhəd bölünmə cavablarının qarşısını almaq üçün 50% addımlı üst-üstə düşən chunk emalı tətbiq etdim',
           'Soyuq başlanğıc performansını optimallaşdırmaq üçün keşləmə ilə paralel embedding əlavə etdim',
           'Kvorum səsverməsinin ayrı-ayrı fraqmentlər deyil, semantik qruplar üzərində işləməsi üçün kosinus oxşarlığı sentroidləri ilə sübutları klasterləşdirdim',
@@ -1036,9 +1103,9 @@ export const profiles: Record<string, I18nProfile> = {
           'Klaster lider çökəndə və şəbəkə bölünəndə işləməyə davam edir: ⌊n/2⌋ qovşağın sıradan çıxmasına dözür və heç bir təsdiqlənmiş yazını itirmir.',
         date: 'May 2024',
         bullets: [
+          'Node nasazlıqlarını və şəbəkə bölünmələrini ⌊n/2⌋ server nasazlığına tolerantlıqla idarə etdim',
           'Randomizə edilmiş taymautlar və term-əsaslı məntiqi saatlarla lider seçimi tətbiq etdim',
           'AppendEntries RPC ilə konsistensiya yoxlamaları və kvorum təsdiqli log replikasiyası qurdum',
-          'Node nasazlıqlarını və şəbəkə bölünmələrini ⌊n/2⌋ server nasazlığına tolerantlıqla idarə etdim',
           'Seçilmiş liderlərin həmişə bütün əvvəlcədən təsdiqlənmiş qeydləri ehtiva etməsini təmin etdim',
           'UDP üzərindən Protobuf serializasiyası, retransmissiya və mesaj deduplikasiyası ilə xüsusi RPC framework-u qurdum',
         ],
@@ -1167,6 +1234,7 @@ export const profiles: Record<string, I18nProfile> = {
       headings: {
         experience: 'Təcrübə',
         projects: 'Layihələr',
+        openSource: 'Açıq mənbə',
         teaching: 'Tədris',
         education: 'Təhsil',
         skills: 'Texniki bacarıqlar',
@@ -1209,6 +1277,10 @@ export const profiles: Record<string, I18nProfile> = {
       },
       teachingRows: { tools: 'alətlər', topics: 'mövzular' },
       skillCategories: {
+        Languages: 'Dillər',
+        'AI & Agents': 'AI və agentlər',
+        'Backend & Data': 'Backend və verilənlər',
+        'Infra & Security': 'İnfrastruktur və təhlükəsizlik',
         'Programming Languages': 'Proqramlaşdırma dilləri',
         'Backend & Runtimes': 'Backend və Runtime',
         'AI, ML & Agentic Systems': 'AI, ML və Agent sistemləri',
