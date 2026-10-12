@@ -161,9 +161,8 @@ export const profile: Profile = {
       location: 'New York, NY',
       period: 'Sep 2021 – May 2023',
       bullets: [
-        'Built Python and MongoDB backends, including authentication and a task-based point allocation system',
-        'Optimized WebSockets for instant sync across clients',
-        'Built ADA-compliant frontend components',
+        'Built Python and MongoDB backends: authentication and a task-based point allocation system',
+        'Optimized WebSockets for instant client sync; built ADA-compliant frontend components',
       ],
     },
   ],
@@ -230,7 +229,7 @@ export const profile: Profile = {
         'CLI that takes a plain-English dev-tool idea, searches open-source registries for existing implementations, ranks matches with local embeddings, and writes a scoped verdict via LLM.',
       date: 'Jun 2026',
       bullets: [
-        'Rust CLI that checks if a dev tool exists: 19 concurrent adapters, local ranking, 500+ GitHub stars',
+        'Rust CLI that checks if a dev tool exists: 19 concurrent adapters, 500+ GitHub stars, official ratatui showcase',
         'Designed integrity-scoped verdict system that never asserts absence, only reports what was found in sources checked',
         'Added interactive ratatui TUI with detail view, browser open, and structured JSON output for CI pipelines',
       ],

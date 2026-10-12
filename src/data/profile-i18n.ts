@@ -455,9 +455,8 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'New York, NY',
         period: 'Сен 2021 – Май 2023',
         bullets: [
-          'Разрабатывал backend-системы на Python и MongoDB, включая аутентификацию и систему распределения баллов по задачам',
-          'Оптимизировал WebSockets и обеспечил мгновенную синхронизацию между клиентами',
-          'Создал ADA-совместимые фронтенд-компоненты',
+          'Разрабатывал backend-системы на Python и MongoDB: аутентификация и система распределения баллов по задачам',
+          'Оптимизировал WebSockets для мгновенной синхронизации клиентов; создал ADA-совместимые фронтенд-компоненты',
         ],
       },
     ],
@@ -523,7 +522,7 @@ export const profiles: Record<string, I18nProfile> = {
           'CLI, который принимает описание dev-tool идеи на простом языке, ищет по open-source реестрам существующие реализации, ранжирует совпадения локальными эмбеддингами и формирует вердикт через LLM.',
         date: 'Июн 2026',
         bullets: [
-          'Rust CLI, проверяющий, есть ли dev-инструмент: 19 параллельных адаптеров, локальное ранжирование, 500+ звёзд на GitHub',
+          'Rust CLI, проверяющий, есть ли dev-инструмент: 19 параллельных адаптеров, 500+ звёзд, официальный ratatui showcase',
           'Спроектировал систему вердиктов с ограниченной областью, которая никогда не утверждает отсутствие, а только сообщает о найденном в проверенных источниках',
           'Добавил интерактивный ratatui TUI с детальным просмотром, открытием браузера и структурированным JSON-выводом для CI-пайплайнов',
         ],
@@ -971,9 +970,8 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'New York, NY',
         period: 'Sen 2021 – May 2023',
         bullets: [
-          'Autentifikasiya və tapşırıq əsaslı xal bölüşdürmə sistemi daxil olmaqla Python və MongoDB backend-ləri qurdum',
-          'WebSocket-ləri optimallaşdırdım və müştərilər arasında ani sinxronizasiya təmin etdim',
-          'ADA-uyğun frontend komponentləri qurdum',
+          'Python və MongoDB backend-ləri qurdum: autentifikasiya və tapşırıq əsaslı xal bölüşdürmə sistemi',
+          'WebSocket-ləri optimallaşdırıb ani klient sinxronizasiyası təmin etdim; ADA-uyğun frontend komponentləri qurdum',
         ],
       },
     ],
@@ -1039,7 +1037,7 @@ export const profiles: Record<string, I18nProfile> = {
           'Sadə dildə dev-tool ideyası qəbul edən, open-source reyestrlərində mövcud implementasiyaları axtaran, uyğunluqları lokal embedding-lərlə sıralayan və LLM vasitəsilə əhatəli qərar yazan CLI.',
         date: 'İyun 2026',
         bullets: [
-          'Developer alətinin artıq mövcud olub-olmadığını yoxlayan Rust CLI: 19 paralel adapter, lokal sıralama, GitHub-da 500+ ulduz',
+          'Developer alətinin artıq mövcud olub-olmadığını yoxlayan Rust CLI: 19 paralel adapter, 500+ ulduz, rəsmi ratatui showcase',
           'Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli qərar sistemi qurdum',
           'Detallı baxış, brauzer açma və CI pipeline-ları üçün strukturlaşdırılmış JSON çıxışı olan interaktiv ratatui TUI əlavə etdim',
         ],
