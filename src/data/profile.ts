@@ -112,7 +112,7 @@ export const profile: Profile = {
       ],
     },
     {
-      role: 'Head of IT (volunteer)',
+      role: 'Head of IT',
       org: 'European Youth Parliament Azerbaijan',
       location: 'Baku, Azerbaijan',
       period: 'Feb 2026 – Present',

@@ -406,7 +406,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'Руководитель IT (волонтёр)',
+        role: 'Руководитель IT',
         org: 'European Youth Parliament Azerbaijan',
         location: 'Баку, Азербайджан',
         period: 'Фев 2026 – Настоящее время',
@@ -921,7 +921,7 @@ export const profiles: Record<string, I18nProfile> = {
         ],
       },
       {
-        role: 'İT Rəhbəri (könüllü)',
+        role: 'İT Rəhbəri',
         org: 'European Youth Parliament Azerbaijan',
         location: 'Bakı, Azərbaycan',
         period: 'Fev 2026 – indiyə kimi',
