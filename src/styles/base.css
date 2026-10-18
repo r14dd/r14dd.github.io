@@ -546,7 +546,8 @@ html.no-js section[id],
 html.no-js .scroll-tl-item,
 html.no-js .scroll-tl-bullets li,
 html.no-js .hero-eyebrow,
-html.no-js .hero-links {
+html.no-js .hero-links,
+html.no-js .hero-essays {
   opacity: 1 !important;
   transform: none !important;
   animation: none !important;
@@ -973,7 +974,8 @@ h2 {
   .section-revealed ul li,
   .hero-eyebrow,
   .hero-greeting,
-  .hero-links {
+  .hero-links,
+  .hero-essays {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;

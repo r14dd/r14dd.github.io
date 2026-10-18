@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { profiles } from '../../data/profile-i18n';
 import '../../styles/toys.css';
@@ -8,6 +9,7 @@ import '../../styles/raft.css';
 import {
   buildExperience,
   buildProjects,
+  buildOpenSource,
   buildTeaching,
   buildEducation,
   buildSkills,
@@ -30,6 +32,14 @@ export function getStaticPaths() {
 
 const { lang } = Astro.props;
 const profile = profiles[lang];
+// The client reads only phone and projects from `resume` (terminal.ts
+// resumeText); the one-page cut rules and skill list are for the résumé
+// builders, which import the profile directly.
+const { phone, projects } = profile.resume;
+const clientProfile = { ...profile, resume: { phone, projects } };
+const essays = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 const LANG_ORDER = ['en', 'ru', 'az'];
 const LANG_LABELS: Record<string, string> = {
   en: 'English',
@@ -66,11 +76,25 @@ const structuredData = JSON.stringify({
   localized={true}
 >
   {
+    /* Keys pressed before the module script below runs would be lost, and the
+       bigger the document the wider that window. Catch them here, in parse
+       order, and hand them over when it starts. ⌘K is stopped on the real
+       event: a replayed one is too late to beat the browser's own. */
+  }
+  <script
+    is:inline
+    set:html={`addEventListener('keydown',window.__ekl=e=>{(window.__ek||=[]).push(e);if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k')e.preventDefault()},true)`}
+  />
+  {
     /* Only the locale being served ships inline; the other two load from
        /i18n/<lang>.json on first switch, keeping ~30KB of unused translation
        off the critical path. */
   }
-  <script type="application/json" id="i18n-data" set:html={JSON.stringify({ [lang]: profile })} />
+  <script
+    type="application/json"
+    id="i18n-data"
+    set:html={JSON.stringify({ [lang]: clientProfile })}
+  />
 
   <div class="lang-switcher" aria-label={profile.labels.chrome.controls}>
     <button
@@ -161,11 +185,12 @@ const structuredData = JSON.stringify({
   </div>
 
   <nav class="side-nav" id="side-nav">
-    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#experience">{profile.labels.nav.experience}</a>
     <a href="#projects">{profile.labels.nav.projects}</a>
+    <a href="#open-source">{profile.labels.nav.openSource}</a>
     <a href="#skills">{profile.labels.nav.skills}</a>
     <a href="#teaching">{profile.labels.nav.teaching}</a>
+    <a href="#education">{profile.labels.nav.education}</a>
     <a href="#recommendations">{profile.labels.nav.recommendations}</a>
     <a href="#posts">{profile.labels.nav.posts}</a>
     <a href="#connect">{profile.labels.nav.connect}</a>
@@ -291,13 +316,14 @@ const structuredData = JSON.stringify({
           >{profile.labels.links.resume}</a
         >
       </div>
+
+      <p class="hero-essays">
+        <span class="mono" id="hero-essays-label">{profile.labels.links.writing}</span>
+        {essays.map((e) => <a href={`/writing/${e.id}/`}>{e.data.title}</a>)}
+      </p>
     </section>
 
     <div class="spotify-line" id="spotify-line"></div>
-
-    <section id="education" class="section-block" data-label={profile.labels.headings.education}>
-      <Fragment set:html={buildEducation(profile)} />
-    </section>
 
     <section
       id="experience"
@@ -315,6 +341,10 @@ const structuredData = JSON.stringify({
       <Fragment set:html={buildProjects(profile)} />
     </section>
 
+    <section id="open-source" class="section-block" data-label={profile.labels.headings.openSource}>
+      <Fragment set:html={buildOpenSource(profile)} />
+    </section>
+
     <section
       id="skills"
       class="section-block skill-section"
@@ -325,6 +355,10 @@ const structuredData = JSON.stringify({
 
     <section id="teaching" class="section-block" data-label={profile.labels.headings.teaching}>
       <Fragment set:html={buildTeaching(profile)} />
+    </section>
+
+    <section id="education" class="section-block" data-label={profile.labels.headings.education}>
+      <Fragment set:html={buildEducation(profile)} />
     </section>
 
     <section
@@ -350,11 +384,12 @@ const structuredData = JSON.stringify({
       <span class="mobile-nav-caret">&#9662;</span>
     </button>
     <div class="mobile-nav-menu" id="mobile-nav-menu">
-      <a href="#education">{profile.labels.nav.education}</a>
       <a href="#experience">{profile.labels.nav.experience}</a>
       <a href="#projects">{profile.labels.nav.projects}</a>
+      <a href="#open-source">{profile.labels.nav.openSource}</a>
       <a href="#skills">{profile.labels.nav.skills}</a>
       <a href="#teaching">{profile.labels.nav.teaching}</a>
+      <a href="#education">{profile.labels.nav.education}</a>
       <a href="#recommendations">{profile.labels.nav.recommendations}</a>
       <a href="#posts">{profile.labels.nav.posts}</a>
       <a href="#connect">{profile.labels.nav.connect}</a>
@@ -627,6 +662,11 @@ const structuredData = JSON.stringify({
         bubbles: true,
       });
     };
+    // Take over from the inline catcher: detach it first, or a live ⌘K would
+    // be buffered by both and the palette would open then close.
+    const w = window as any;
+    window.removeEventListener('keydown', w.__ekl, true);
+    for (const e of w.__ek ?? []) earlyKey(e);
     window.addEventListener('keydown', earlyKey, true);
     for (const ev of ['pointerdown', 'touchstart'])
       window.addEventListener(ev, loadDeferred, { once: true, passive: true, capture: true });

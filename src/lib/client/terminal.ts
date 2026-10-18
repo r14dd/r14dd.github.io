@@ -358,11 +358,11 @@ export const initTerminal = () => {
         return {
           html:
             '<span class="terminal-stats" style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.25rem 0.45rem"><span class="term-stat">' +
-            wrapNum(t.stat1 || '1000+ students taught') +
+            wrapNum(t.stat1 || '10 merged PRs') +
             '</span><span class="term-stat-sep">·</span><span class="term-stat">' +
-            wrapNum(t.stat2 || '5+ teams led') +
+            wrapNum(t.stat2 || '4+ yrs shipping') +
             '</span><span class="term-stat-sep">·</span><span class="term-stat">' +
-            wrapNum(t.stat3 || '4+ yrs shipping') +
+            wrapNum(t.stat3 || '1000+ students taught') +
             '</span><span class="term-colophon-wrap"><span class="term-stat-sep">·</span>' +
             '<a class="term-colophon" href="/colophon/">' +
             esc(p.labels?.chrome?.footerColophon || 'Colophon') +

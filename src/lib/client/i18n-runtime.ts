@@ -13,6 +13,7 @@
 import {
   buildExperience,
   buildProjects,
+  buildOpenSource,
   buildTeaching,
   buildEducation,
   buildSkills,
@@ -215,15 +216,17 @@ export const initI18n = () => {
       const writingLink = document.getElementById('side-link-writing');
       if (writingLink) writingLink.textContent = data.labels.links.writing;
     }
+    setText('hero-essays-label', data.labels.links.writing);
 
     if (window._spotifyData) renderSpotify(window._spotifyData);
 
     const labels = [
-      data.labels.nav.education,
       data.labels.nav.experience,
       data.labels.nav.projects,
+      data.labels.nav.openSource,
       data.labels.nav.skills,
       data.labels.nav.teaching,
+      data.labels.nav.education,
       data.labels.nav.recommendations,
       data.labels.nav.posts,
       data.labels.nav.connect,
@@ -238,6 +241,7 @@ export const initI18n = () => {
 
     const expSection = document.getElementById('experience');
     const projSection = document.getElementById('projects');
+    const ossSection = document.getElementById('open-source');
     const teachSection = document.getElementById('teaching');
     const eduSection = document.getElementById('education');
     const skillsSection = document.getElementById('skills');
@@ -250,6 +254,7 @@ export const initI18n = () => {
       projSection.innerHTML = buildProjects(data);
       fetchBadges(projSection);
     }
+    if (ossSection) ossSection.innerHTML = buildOpenSource(data);
     if (teachSection) teachSection.innerHTML = buildTeaching(data);
     if (eduSection) eduSection.innerHTML = buildEducation(data);
     if (skillsSection) skillsSection.innerHTML = buildSkills(data);
@@ -260,6 +265,7 @@ export const initI18n = () => {
     [
       expSection,
       projSection,
+      ossSection,
       teachSection,
       eduSection,
       skillsSection,
@@ -275,6 +281,7 @@ export const initI18n = () => {
 
     expSection?.setAttribute('data-label', data.labels.headings.experience);
     projSection?.setAttribute('data-label', data.labels.headings.projects);
+    ossSection?.setAttribute('data-label', data.labels.headings.openSource);
     teachSection?.setAttribute('data-label', data.labels.headings.teaching);
     eduSection?.setAttribute('data-label', data.labels.headings.education);
     skillsSection?.setAttribute('data-label', data.labels.headings.skills);

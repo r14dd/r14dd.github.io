@@ -48,12 +48,6 @@ export const initCmdPalette = () => {
     return [
       {
         group: chrome.navigateGroup || 'Navigate',
-        label: nav.education,
-        icon: 'nav',
-        action: () => scrollCmd('education'),
-      },
-      {
-        group: chrome.navigateGroup || 'Navigate',
         label: nav.experience,
         icon: 'nav',
         action: () => scrollCmd('experience'),
@@ -66,15 +60,27 @@ export const initCmdPalette = () => {
       },
       {
         group: chrome.navigateGroup || 'Navigate',
-        label: nav.teaching,
+        label: nav.openSource,
         icon: 'nav',
-        action: () => scrollCmd('teaching'),
+        action: () => scrollCmd('open-source'),
       },
       {
         group: chrome.navigateGroup || 'Navigate',
         label: nav.skills,
         icon: 'nav',
         action: () => scrollCmd('skills'),
+      },
+      {
+        group: chrome.navigateGroup || 'Navigate',
+        label: nav.teaching,
+        icon: 'nav',
+        action: () => scrollCmd('teaching'),
+      },
+      {
+        group: chrome.navigateGroup || 'Navigate',
+        label: nav.education,
+        icon: 'nav',
+        action: () => scrollCmd('education'),
       },
       {
         group: chrome.navigateGroup || 'Navigate',

@@ -9,6 +9,9 @@ type ProjectTr = {
   badges?: Project['badges'];
 };
 
+// The hero stat sums the per-repo counts, so the number is typed once per repo.
+const mergedTotal = profile.openSource.reduce((n, o) => n + o.merged, 0);
+
 // Merge a language's project translations over the canonical EN projects by
 // stable id. Positional (index-based) coupling silently attached the wrong
 // links/tech when EN projects were reordered; this throws at build time when
@@ -24,6 +27,7 @@ type Labels = {
   nav: {
     experience: string;
     projects: string;
+    openSource: string;
     teaching: string;
     education: string;
     skills: string;
@@ -53,6 +57,7 @@ type Labels = {
   eyebrows: {
     experience: string;
     projects: string;
+    openSource: string;
     skills: string;
     teaching: string;
     education: string;
@@ -71,6 +76,8 @@ type Labels = {
   headTARole: string;
   simulate: string;
   projectDetails: string;
+  // {n}
+  mergedPrs: string;
   readOnLinkedIn: string;
   simLegends: { raft: string; kademlia: string; redis: string };
   teachingRows: { tools: string; topics: string };
@@ -182,6 +189,7 @@ export const profiles: Record<string, I18nProfile> = {
       nav: {
         experience: 'Experience',
         projects: 'Projects',
+        openSource: 'Open Source',
         teaching: 'Teaching',
         education: 'Education',
         skills: 'Skills',
@@ -211,6 +219,7 @@ export const profiles: Record<string, I18nProfile> = {
       eyebrows: {
         experience: 'Work history',
         projects: 'Selected work',
+        openSource: 'Upstream contributions',
         skills: 'Toolbox',
         teaching: 'Teaching experience',
         education: 'Academic background',
@@ -221,7 +230,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI & Software Engineer, Baku',
         description:
-          'Riad Mukhtarov: AI & software engineer working in Rust and Python. Building distributed systems at ABB, previously taught CS at SUNY Buffalo.',
+          'Riad Mukhtarov: AI & software engineer. Builds the internal LLM agent platform at ABB, with per-chat sandboxes, guardrails, tracing and evals. Previously taught CS at SUNY Buffalo.',
       },
       timeGreetings: {
         morning: 'Good morning from Baku',
@@ -235,6 +244,7 @@ export const profiles: Record<string, I18nProfile> = {
       headTARole: 'Head Teaching Assistant',
       simulate: 'Simulate',
       projectDetails: 'Details',
+      mergedPrs: '{n} merged PRs',
       readOnLinkedIn: 'Read on LinkedIn',
       simLegends: {
         raft: 'Leader replicates log entries via AppendEntries RPC',
@@ -258,9 +268,9 @@ export const profiles: Record<string, I18nProfile> = {
       terminal: {
         role1: 'AI Engineer @ ABB · International Bank of Azerbaijan',
         role2: 'Head of IT @ European Youth Parliament AZ',
-        stat1: '1000+ students taught',
-        stat2: '5+ teams led',
-        stat3: '4+ yrs shipping',
+        stat1: `${mergedTotal} merged PRs`,
+        stat2: '4+ yrs shipping',
+        stat3: '1000+ students taught',
         throughLine: 'The through-line:',
         noProjectsLoaded: 'No projects loaded.',
         noManualEntry: 'No manual entry for {who}. Try: man riad',
@@ -390,7 +400,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Риад Мухтаров',
     },
     about:
-      'разрабатывает ПО и AI-системы на Rust и Python, с акцентом на распределённые системы и сложную инфраструктуру. До этого он преподавал информатику в State University of New York at Buffalo. Любит сложные задачи и чистые абстракции.',
+      'строит внутреннюю платформу LLM-агентов в ABB - International Bank of Azerbaijan: каждое действие агента выполняется в песочнице на чат, с guardrails, трассировкой каждого хода и ежедневной оценкой. До этого он преподавал информатику в State University of New York at Buffalo. Любит сложные задачи и чистые абстракции.',
     experience: [
       {
         role: 'Инженер по искусственному интеллекту',
@@ -422,7 +432,6 @@ export const profiles: Record<string, I18nProfile> = {
         period: 'Янв 2025 – Янв 2026',
         bullets: [
           'Обязательная военная служба: разрабатывал и поддерживал внутренние сервисы на Linux и Python (под NDA)',
-          'Работа конфиденциальна и находится под NDA, поэтому подробности раскрыть нельзя',
         ],
       },
       {
@@ -431,7 +440,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Окт 2024 – Ноя 2024',
         bullets: [
-          'Поддерживал доступность ИТ-инфраструктуры на уровне 99,9% для 500+ делегатов при жёстких SLA',
+          'Поддерживал ИТ-инфраструктуру для 500+ делегатов при жёстких SLA',
           'Решал инциденты инфраструктуры и гибридных сессий при жёстких требованиях доступности',
           'Помогал с контролем доступа, усилением устройств и безопасным обращением с системами',
           'Сотрудничал с вендорами и техническими командами для бесперебойной работы',
@@ -463,15 +472,13 @@ export const profiles: Record<string, I18nProfile> = {
     openSource: [
       {
         ...profile.openSource[0],
-        prs: '5 принятых PR',
-        period: 'Сен 2026',
+        period: 'Сен – Окт 2026',
         bullets: [
-          'Исправил потоковую передачу вызовов инструментов и разбор ответов в адаптерах AI Gateway для Anthropic, Gemini и LiteLLM',
+          'Исправил потоковую передачу вызовов инструментов и разбор ответов в адаптерах AI Gateway для Anthropic, Gemini, LiteLLM и Bedrock',
         ],
       },
       {
         ...profile.openSource[1],
-        prs: '4 принятых PR',
         period: 'Сен 2026',
         bullets: [
           'Исправил утечку файлового дескриптора D-Bus без SOCK_CLOEXEC в контейнеры при systemd cgroups',
@@ -697,6 +704,7 @@ export const profiles: Record<string, I18nProfile> = {
       nav: {
         experience: 'Опыт',
         projects: 'Проекты',
+        openSource: 'Открытый код',
         teaching: 'Преподавание',
         education: 'Образование',
         skills: 'Навыки',
@@ -726,6 +734,7 @@ export const profiles: Record<string, I18nProfile> = {
       eyebrows: {
         experience: 'История работы',
         projects: 'Избранные проекты',
+        openSource: 'Вклад в open source',
         skills: 'Инструменты',
         teaching: 'Преподавание',
         education: 'Академическое образование',
@@ -736,7 +745,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI & Software инженер, Баку',
         description:
-          'Риад Мухтаров: AI и software инженер, работает с Rust и Python. Строит распределённые системы в ABB, ранее преподавал информатику в SUNY Buffalo.',
+          'Риад Мухтаров: AI и software инженер. Строит внутреннюю платформу LLM-агентов в ABB с песочницей на чат, guardrails, трассировкой и оценками. Ранее преподавал информатику в SUNY Buffalo.',
       },
       timeGreetings: {
         morning: 'Доброе утро из Баку',
@@ -750,6 +759,7 @@ export const profiles: Record<string, I18nProfile> = {
       headTARole: 'Старший ассистент преподавателя',
       simulate: 'Симуляция',
       projectDetails: 'Подробнее',
+      mergedPrs: '{n} принятых PR',
       readOnLinkedIn: 'Читать в LinkedIn',
       simLegends: {
         raft: 'Лидер реплицирует записи лога через AppendEntries RPC',
@@ -773,9 +783,9 @@ export const profiles: Record<string, I18nProfile> = {
       terminal: {
         role1: 'Инженер ИИ @ ABB · Международный Банк Азербайджана',
         role2: 'Руководитель IT @ Европейский Молодёжный Парламент AZ',
-        stat1: '1000+ студентов обучено',
-        stat2: '5+ команд',
-        stat3: '4+ года в разработке',
+        stat1: `${mergedTotal} принятых PR`,
+        stat2: '4+ года в разработке',
+        stat3: '1000+ студентов обучено',
         throughLine: 'Красная нить:',
         noProjectsLoaded: 'Проекты не загружены.',
         noManualEntry: 'Нет статьи руководства для «{who}». Попробуйте: man riad',
@@ -905,7 +915,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Riad Muxtarov',
     },
     about:
-      'Rust və Python ilə proqram təminatı və AI sistemləri hazırlayır, paylanmış sistemlərə və mürəkkəb infrastruktura fokuslanır. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.',
+      'ABB - International Bank of Azerbaijan-da daxili LLM agent platformasını qurur: hər agent əməliyyatı hər çat üçün ayrıca sandbox-da, guardrail-lərlə, hər addım izlənərək və gündəlik qiymətləndirmə ilə işləyir. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.',
     experience: [
       {
         role: 'Süni İntellekt üzrə Mühəndis',
@@ -937,7 +947,6 @@ export const profiles: Record<string, I18nProfile> = {
         period: 'Yan 2025 – Yan 2026',
         bullets: [
           'Həqiqi hərbi xidmət: Linux və Python üzərində daxili xidmətlər qurdum və dəstəklədim (NDA çərçivəsində)',
-          'İş məxfidir və NDA ilə qorunur, buna görə əlavə təfərrüat paylaşıla bilmir',
         ],
       },
       {
@@ -946,7 +955,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Okt 2024 – Noy 2024',
         bullets: [
-          '500+ nümayəndə üçün kritik İT infrastrukturu üzrə 99.9% uptime təmin etdim və sərt SLA‑lara əməl etdim',
+          '500+ nümayəndə üçün İT infrastrukturunu sərt SLA‑lar çərçivəsində dəstəklədim',
           'İnfrastruktur və hibrid sessiya insidentlərini real vaxtda həll etdim',
           'Giriş nəzarəti, cihazların sərtləşdirilməsi və təhlükəsiz sistem istifadəsində kömək etdim',
           'Fasiləsiz əməliyyatlar üçün vendor və texniki komandalarla işlədim',
@@ -978,15 +987,13 @@ export const profiles: Record<string, I18nProfile> = {
     openSource: [
       {
         ...profile.openSource[0],
-        prs: '5 qəbul edilmiş PR',
-        period: 'Sen 2026',
+        period: 'Sen – Okt 2026',
         bullets: [
-          'AI Gateway-in Anthropic, Gemini və LiteLLM adapterlərində tool-call axınını və cavabların təhlilini düzəltdim',
+          'AI Gateway-in Anthropic, Gemini, LiteLLM və Bedrock adapterlərində tool-call axınını və cavabların təhlilini düzəltdim',
         ],
       },
       {
         ...profile.openSource[1],
-        prs: '4 qəbul edilmiş PR',
         period: 'Sen 2026',
         bullets: [
           'SOCK_CLOEXEC olmadan açılan D-Bus soketinin fd-sinin systemd cgroups altında konteynerlərə sızmasını düzəltdim',
@@ -1212,6 +1219,7 @@ export const profiles: Record<string, I18nProfile> = {
       nav: {
         experience: 'Təcrübə',
         projects: 'Layihələr',
+        openSource: 'Açıq mənbə',
         teaching: 'Tədris',
         education: 'Təhsil',
         skills: 'Bacarıqlar',
@@ -1241,6 +1249,7 @@ export const profiles: Record<string, I18nProfile> = {
       eyebrows: {
         experience: 'İş təcrübəsi',
         projects: 'Seçilmiş işlər',
+        openSource: 'Açıq mənbəyə töhfələr',
         skills: 'Alətlər',
         teaching: 'Tədris təcrübəsi',
         education: 'Akademik təhsil',
@@ -1251,7 +1260,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI və Proqram Mühəndisi, Bakı',
         description:
-          'Riad Muxtarov: AI və proqram mühəndisi, Rust və Python ilə işləyir. ABB-də paylanmış sistemlər qurur, əvvəllər SUNY Buffalo-da informatika tədris edib.',
+          'Riad Muxtarov: AI və proqram mühəndisi. ABB-də hər çat üçün sandbox, guardrail-lər, izləmə və qiymətləndirmə ilə daxili LLM agent platforması qurur. Əvvəllər SUNY Buffalo-da informatika tədris edib.',
       },
       timeGreetings: {
         morning: 'Bakıdan sabahınız xeyir',
@@ -1265,6 +1274,7 @@ export const profiles: Record<string, I18nProfile> = {
       headTARole: 'Baş tədris assistenti',
       simulate: 'Simulyasiya',
       projectDetails: 'Ətraflı',
+      mergedPrs: '{n} qəbul edilmiş PR',
       readOnLinkedIn: 'LinkedIn-də oxuyun',
       simLegends: {
         raft: 'Lider log qeydlərini AppendEntries RPC ilə replikasiya edir',
@@ -1288,9 +1298,9 @@ export const profiles: Record<string, I18nProfile> = {
       terminal: {
         role1: 'Süni İntellekt üzrə Mühəndis @ ABB · Azərbaycan Beynəlxalq Bankı',
         role2: 'İT Rəhbəri @ Avropa Gənclər Parlamenti AZ',
-        stat1: '1000+ tələbə tədris edilib',
-        stat2: '5+ komanda',
-        stat3: '4+ il təcrübə',
+        stat1: `${mergedTotal} qəbul edilmiş PR`,
+        stat2: '4+ il təcrübə',
+        stat3: '1000+ tələbə tədris edilib',
         throughLine: 'Əsas fikir:',
         noProjectsLoaded: 'Layihələr yüklənməyib.',
         noManualEntry: '{who} üçün təlimat maddəsi yoxdur. Cəhd edin: man riad',

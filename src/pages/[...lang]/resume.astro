@@ -95,7 +95,9 @@ const canonical = `https://riad.cc${resumePath(lang)}`;
         <button type="button" id="print-resume" class="desk-action">
           {L.chrome.resumePrint}<kbd>⌘P</kbd>
         </button>
-        <a class="desk-action" href="/resume.pdf" download>{L.chrome.resumePdf}</a>
+        <a class="desk-action" href="/resume.pdf" download="Riad-Mukhtarov-Resume.pdf"
+          >{L.chrome.resumePdf}</a
+        >
       </div>
     </nav>
 
@@ -143,7 +145,7 @@ const canonical = `https://riad.cc${resumePath(lang)}`;
               <div class="entry-row">
                 <span class="entry-project">
                   <strong>{o.name}</strong>
-                  <a href={o.url}>{o.prs}</a>
+                  <a href={o.url}>{L.mergedPrs.replace('{n}', String(o.merged))}</a>
                   <span class="entry-tech">{o.tech.join(', ')}</span>
                 </span>
                 <span class="entry-when">{o.period}</span>

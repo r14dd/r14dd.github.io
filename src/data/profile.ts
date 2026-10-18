@@ -21,7 +21,8 @@ export type OpenSource = {
   name: string;
   /** Merged-PR search for the repo, so the count stays checkable. */
   url: string;
-  prs: string;
+  /** Merged upstream PRs; labels.mergedPrs renders it and the hero stat sums it. */
+  merged: number;
   tech: string[];
   period: string;
   bullets: string[];
@@ -87,7 +88,7 @@ export const profile: Profile = {
   },
 
   about:
-    'develops software and AI systems in Rust and Python, with a focus on distributed systems and complex infrastructure. Before that, he taught computer science at State University of New York at Buffalo. He likes complicated challenges and clean abstractions.',
+    'builds the internal LLM agent platform at ABB - International Bank of Azerbaijan: every agent action runs in a per-chat sandbox behind guardrails, with per-turn tracing and daily evals. Before that, he taught computer science at State University of New York at Buffalo. He likes complicated challenges and clean abstractions.',
 
   email: 'riad@riad.cc',
 
@@ -128,7 +129,6 @@ export const profile: Profile = {
       period: 'Jan 2025 – Jan 2026',
       bullets: [
         'Mandatory military service: built and maintained internal Linux and Python services (under NDA)',
-        'The work is confidential under NDA, so no further details can be shared',
       ],
     },
     {
@@ -137,7 +137,7 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Oct 2024 – Nov 2024',
       bullets: [
-        'Ensured 99.9% uptime for IT infrastructure supporting 500+ delegates under strict SLAs',
+        'Supported IT infrastructure for 500+ delegates under strict SLAs',
         'Resolved real-time infrastructure and hybrid session incidents under strict availability requirements',
         'Assisted with access control, device hardening, and secure system handling',
         'Collaborated with vendors and technical teams to ensure uninterrupted operations',
@@ -484,17 +484,17 @@ export const profile: Profile = {
     {
       name: 'MLflow',
       url: 'https://github.com/mlflow/mlflow/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
-      prs: '5 merged PRs',
+      merged: 6,
       tech: ['Python', 'AI Gateway'],
-      period: 'Sep 2026',
+      period: 'Sep – Oct 2026',
       bullets: [
-        "Fixed tool-call streaming and response parsing in the AI Gateway's Anthropic, Gemini and LiteLLM adapters",
+        "Fixed tool-call streaming and parsing in AI Gateway's Anthropic, Gemini, LiteLLM and Bedrock adapters",
       ],
     },
     {
       name: 'youki',
       url: 'https://github.com/youki-dev/youki/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
-      prs: '4 merged PRs',
+      merged: 4,
       tech: ['Rust', 'OCI runtime', 'cgroups'],
       period: 'Sep 2026',
       bullets: [
