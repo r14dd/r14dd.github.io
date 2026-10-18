@@ -88,7 +88,7 @@ export const profile: Profile = {
   },
 
   about:
-    'builds the internal LLM agent platform at ABB - International Bank of Azerbaijan: every agent action runs in a per-chat sandbox behind guardrails, with per-turn tracing and daily evals. Before that, he taught computer science at State University of New York at Buffalo. He likes complicated challenges and clean abstractions.',
+    'builds the internal AI infrastructure at the International Bank of Azerbaijan. Before that, he wrote Python and Linux services for governmental institutions and led a team of teaching assistants at the State University of New York at Buffalo. Off the clock, he contributes to the world of open source software and maintains Rust tools of his own.',
 
   email: 'riad@riad.cc',
 

@@ -230,7 +230,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI & Software Engineer, Baku',
         description:
-          'Riad Mukhtarov: AI & software engineer. Builds the internal LLM agent platform at ABB, with per-chat sandboxes, guardrails, tracing and evals. Previously taught CS at SUNY Buffalo.',
+          'Riad Mukhtarov: AI & software engineer. Builds the internal AI infrastructure at the International Bank of Azerbaijan. Previously wrote Python and Linux services for governmental institutions and led a TA team at SUNY Buffalo.',
       },
       timeGreetings: {
         morning: 'Good morning from Baku',
@@ -400,7 +400,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Риад Мухтаров',
     },
     about:
-      'строит внутреннюю платформу LLM-агентов в ABB - International Bank of Azerbaijan: каждое действие агента выполняется в песочнице на чат, с guardrails, трассировкой каждого хода и ежедневной оценкой. До этого он преподавал информатику в State University of New York at Buffalo. Любит сложные задачи и чистые абстракции.',
+      'строит внутреннюю AI-инфраструктуру в Международном банке Азербайджана. До этого он писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов преподавателя в State University of New York at Buffalo. В свободное время он вносит вклад в мир open source и поддерживает собственные инструменты на Rust.',
     experience: [
       {
         role: 'Инженер по искусственному интеллекту',
@@ -745,7 +745,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI & Software инженер, Баку',
         description:
-          'Риад Мухтаров: AI и software инженер. Строит внутреннюю платформу LLM-агентов в ABB с песочницей на чат, guardrails, трассировкой и оценками. Ранее преподавал информатику в SUNY Buffalo.',
+          'Риад Мухтаров: AI и software инженер. Строит внутреннюю AI-инфраструктуру в Международном банке Азербайджана. Ранее писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов в SUNY Buffalo.',
       },
       timeGreetings: {
         morning: 'Доброе утро из Баку',
@@ -915,7 +915,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Riad Muxtarov',
     },
     about:
-      'ABB - International Bank of Azerbaijan-da daxili LLM agent platformasını qurur: hər agent əməliyyatı hər çat üçün ayrıca sandbox-da, guardrail-lərlə, hər addım izlənərək və gündəlik qiymətləndirmə ilə işləyir. Bundan əvvəl o, State University of New York at Buffalo-da kompüter elmləri tədris edib. Mürəkkəb çətinlikləri və təmiz abstraksiyaları sevir.',
+      'Azərbaycan Beynəlxalq Bankında daxili AI infrastrukturunu qurur. Bundan əvvəl o, dövlət qurumları üçün Python və Linux xidmətləri yazıb və State University of New York at Buffalo-da müəllim assistentlərindən ibarət komandaya rəhbərlik edib. Boş vaxtlarında açıq mənbəli proqram təminatı dünyasına töhfə verir və öz Rust alətlərini dəstəkləyir.',
     experience: [
       {
         role: 'Süni İntellekt üzrə Mühəndis',
@@ -1260,7 +1260,7 @@ export const profiles: Record<string, I18nProfile> = {
       meta: {
         titleSuffix: 'AI və Proqram Mühəndisi, Bakı',
         description:
-          'Riad Muxtarov: AI və proqram mühəndisi. ABB-də hər çat üçün sandbox, guardrail-lər, izləmə və qiymətləndirmə ilə daxili LLM agent platforması qurur. Əvvəllər SUNY Buffalo-da informatika tədris edib.',
+          'Riad Muxtarov: AI və proqram mühəndisi. Azərbaycan Beynəlxalq Bankında daxili AI infrastrukturunu qurur. Əvvəllər dövlət qurumları üçün Python və Linux xidmətləri yazıb, SUNY Buffalo-da müəllim assistentləri komandasına rəhbərlik edib.',
       },
       timeGreetings: {
         morning: 'Bakıdan sabahınız xeyir',
