@@ -349,7 +349,7 @@ export const profiles: Record<string, I18nProfile> = {
           },
           experience: {
             title: 'Where I have worked',
-            text: 'Most recent first. The day job is an LLM agent platform for a bank, and the sandbox it runs in.',
+            text: 'Most recent first. The day job is AI infrastructure at a bank.',
           },
           projects: {
             title: 'Things I built',
@@ -864,7 +864,7 @@ export const profiles: Record<string, I18nProfile> = {
           },
           experience: {
             title: 'Где я работал',
-            text: 'Сначала свежее. Основная работа: платформа LLM-агентов для банка и песочница, в которой они запускаются.',
+            text: 'Сначала свежее. Основная работа: AI-инфраструктура в банке.',
           },
           projects: {
             title: 'Что я построил',
@@ -1379,7 +1379,7 @@ export const profiles: Record<string, I18nProfile> = {
           },
           experience: {
             title: 'Harada işləmişəm',
-            text: 'Ən yenisi əvvəldə. Əsas iş: bank üçün LLM agent platforması və onun işlədiyi sandbox.',
+            text: 'Ən yenisi əvvəldə. Əsas iş: bankda AI infrastrukturu.',
           },
           projects: {
             title: 'Qurduqlarım',
