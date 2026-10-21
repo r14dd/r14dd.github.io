@@ -484,7 +484,7 @@ export const profile: Profile = {
     {
       name: 'MLflow',
       url: 'https://github.com/mlflow/mlflow/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
-      merged: 6,
+      merged: 7,
       tech: ['Python', 'AI Gateway'],
       period: 'Sep – Oct 2026',
       bullets: [
