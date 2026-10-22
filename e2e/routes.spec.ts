@@ -76,6 +76,7 @@ const routes: Route[] = [
   { path: '/writing/', main: 'main#main-content' },
   { path: '/writing/assume-the-model-cooperates-with-the-attacker/', main: 'main#main-content' },
   { path: '/admin/', main: 'main#dash' }, // present, but hidden until an admin key unlocks it
+  { path: '/food/', main: 'main#food' }, // unlisted tracker; no fetch on load
 ];
 
 for (const { path, main, homepage } of routes) {

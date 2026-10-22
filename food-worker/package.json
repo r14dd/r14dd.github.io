@@ -1,0 +1,12 @@
+{
+  "name": "food-api",
+  "private": true,
+  "description": "Food estimate API for /food: Cloudflare Worker + Workers AI + a Durable Object gate",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.105.0"
+  }
+}

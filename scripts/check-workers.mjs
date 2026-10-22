@@ -51,6 +51,13 @@ const PROBES = [
     proves: 'the Cloudflare Analytics API token is still valid',
     breaks: "/admin and the terminal's `perf` field column",
   },
+  {
+    name: 'food-api',
+    dir: 'food-worker',
+    url: 'https://food-api.riad-mrv.workers.dev/health',
+    proves: 'the AI and Durable Object bindings and the FOOD_TOKEN secret are all present',
+    breaks: 'the AI button on /food',
+  },
 ];
 
 /**

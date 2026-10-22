@@ -41,7 +41,7 @@ jobs:
       # One Worker failing to deploy must not leave the other three unshipped.
       fail-fast: false
       matrix:
-        dir: [spotify-worker, analytics-worker, poll-worker, toy-worker]
+        dir: [spotify-worker, analytics-worker, poll-worker, toy-worker, food-worker]
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 

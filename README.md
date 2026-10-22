@@ -44,7 +44,7 @@ Minimalist personal portfolio built to present AI and software engineering work 
 - **Compute:** Rust → WebAssembly, raw `rustc --target wasm32-unknown-unknown` (843-byte artifact, committed; CI does not compile Rust)
 - **Fonts:** Manrope · Cormorant Garamond · JetBrains Mono, self-hosted with unicode-range subsetting
 - **Runtime dependencies:** 1 (`lenis`), re-derived from `package.json` on every build by `scripts/check-claims.mjs`
-- **Backend:** 4 Cloudflare Workers (Spotify proxy, analytics proxy, poll, toys); the toy worker holds 2 Durable Objects
+- **Backend:** 5 Cloudflare Workers (Spotify proxy, analytics proxy, poll, toys, food); the toy worker holds 2 Durable Objects
 
 ## Backend
 
@@ -54,6 +54,7 @@ Minimalist personal portfolio built to present AI and software engineering work 
 | `analytics-worker` | Cloudflare Web Analytics GraphQL proxy for `/admin`    |
 | `poll-worker`      | Poll backend                                           |
 | `toy-worker`       | Paper-airplane inbox (Durable Object, SQLite)          |
+| `food-worker`      | Portion estimates for the unlisted `/food` tracker     |
 
 Each degrades silently: if a Worker is unreachable its widget disappears rather than erroring. That
 is right for a visitor and blind for the owner, so nothing on the site would ever say a Worker died.
@@ -63,12 +64,12 @@ token (uncached, unlike `/vitals`), the Durable Object bindings. A 200 from the 
 proves much less than it looks like it does: the Spotify proxy returns cached JSON quite happily
 with a dead refresh token.
 
-`npm run check:workers` probes all four. `.github/workflows/health.yml` runs it twice a day, and a
+`npm run check:workers` probes all five. `.github/workflows/health.yml` runs it twice a day, and a
 red run is an email.
 
 Workers used to deploy by hand, and one of them silently didn't for weeks: the probe found a
 deployed script older than its source here. `.github/workflows/deploy-workers.yml` closes that
-gap: a push to `main` touching any `*-worker/` directory reconciles all four (not just the one
+gap: a push to `main` touching any `*-worker/` directory reconciles all five (not just the one
 that changed), then re-probes them. It needs one repository secret, `CLOUDFLARE_API_TOKEN`,
 scoped to Workers Scripts:Edit; the account id is not a secret and is set in the workflow.
 

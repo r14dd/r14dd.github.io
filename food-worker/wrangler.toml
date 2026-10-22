@@ -1,0 +1,21 @@
+name = "food-api"
+main = "src/worker.js"
+compatibility_date = "2024-12-01"
+
+# FOOD_TOKEN (the bearer token /food sends) is provided via .dev.vars locally
+# and via `wrangler secret put FOOD_TOKEN` in production. It is intentionally
+# NOT stored in this file.
+
+# Workers AI: no API key, billed against the account's free daily allocation.
+[ai]
+binding = "AI"
+
+# Spend and brute-force gate: one Durable Object, so counts are atomic.
+[[durable_objects.bindings]]
+name = "GATE"
+class_name = "Gate"
+
+# MUST be new_sqlite_classes (free-tier eligible), not new_classes.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Gate"]
