@@ -27,16 +27,33 @@
         font-display: swap;
         src: url(/fonts/manrope-latin.woff2) format('woff2');
       }
+      @font-face {
+        font-family: 'Cormorant Garamond';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url(/fonts/font-5.woff2) format('woff2');
+      }
+      @font-face {
+        font-family: 'JetBrains Mono';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url(/fonts/font-11.woff2) format('woff2');
+      }
 
       :root {
         color-scheme: dark;
         --bg: #050505;
-        --fg: #ededed;
-        --mut: #8a8a8a;
-        --line: #232323;
-        --card: #0e0e0e;
-        --acc: #6ea8ff;
+        --fg: #eeeeee;
+        --soft: #a1a1a1;
+        --mut: #888888;
+        --line: rgba(255, 255, 255, 0.08);
+        --card: rgba(12, 12, 12, 0.9);
+        --acc: #c9a55a;
+        --acc-bg: rgba(201, 165, 90, 0.1);
         --ok: #4ade80;
+        --mono: 'JetBrains Mono', ui-monospace, monospace;
       }
       * {
         box-sizing: border-box;
@@ -46,87 +63,179 @@
         background: var(--bg);
         color: var(--fg);
         font:
-          16px/1.4 'Manrope',
+          16px/1.5 'Manrope',
           system-ui,
           sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
       main.shell {
-        max-width: 560px;
+        max-width: 600px;
         margin: 0 auto;
-        padding: 20px 16px 64px;
+        padding: 28px 16px 72px;
+      }
+      .eyebrow {
+        font: 12px/1 var(--mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--acc);
+        margin: 0 0 10px;
       }
       h1 {
-        font-size: 20px;
-        margin: 0 0 4px;
+        font:
+          600 44px/1 'Cormorant Garamond',
+          Georgia,
+          serif;
+        margin: 0 0 20px;
       }
       h1 small {
+        font: 400 13px var(--mono);
+        letter-spacing: 0.1em;
         color: var(--mut);
-        font-weight: 400;
+        margin-left: 10px;
+        vertical-align: middle;
       }
       h2 {
-        font-size: 12px;
+        font: 12px/1 var(--mono);
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        color: var(--acc);
+        margin: 0 0 6px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+        margin: 0 0 16px;
+      }
+      .hint {
         color: var(--mut);
-        margin: 28px 0 8px;
+        font-size: 14px;
+        margin: 0 0 12px;
       }
       .bar {
-        margin: 10px 0;
+        margin: 0 0 14px;
+      }
+      .bar:last-child {
+        margin: 0;
       }
       .bar .t {
         display: flex;
         justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 6px;
+      }
+      .bar .t b {
+        font-weight: 600;
+      }
+      .bar .t span {
+        color: var(--soft);
         font-size: 14px;
       }
       .bar .b {
-        height: 8px;
-        background: var(--line);
-        border-radius: 4px;
+        height: 10px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 5px;
         overflow: hidden;
       }
       .bar .b i {
         display: block;
         height: 100%;
         background: var(--acc);
+        border-radius: 5px;
+        transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .bar.done .b i {
         background: var(--ok);
       }
+      .bar.done .t span {
+        color: var(--ok);
+      }
       .row {
         display: flex;
         gap: 8px;
-        margin: 6px 0;
+        margin: 8px 0 0;
       }
       input,
       button {
         font: inherit;
-        padding: 9px 10px;
+        font-size: 16px;
+        min-height: 46px;
+        padding: 0 14px;
         border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--card);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.04);
         color: var(--fg);
         min-width: 0;
       }
       input {
         flex: 1;
       }
+      input::placeholder {
+        color: var(--mut);
+      }
       input.n {
-        flex: 0 0 84px;
+        flex: 0 0 90px;
       }
       button {
         cursor: pointer;
+        transition:
+          background 0.15s,
+          border-color 0.15s,
+          transform 0.15s;
+      }
+      button:hover {
+        border-color: rgba(201, 165, 90, 0.5);
+      }
+      button:active {
+        transform: scale(0.97);
+      }
+      :focus-visible {
+        outline: 2px solid var(--acc);
+        outline-offset: 2px;
+      }
+      input:focus {
+        border-color: var(--acc);
+        outline: none;
       }
       button.go {
         background: var(--acc);
-        color: #04101f;
+        color: #1a1306;
         border: 0;
+        font-weight: 700;
+      }
+      button.go:hover {
+        background: #d8b668;
+      }
+      button.ai {
+        background: var(--acc-bg);
+        border-color: rgba(201, 165, 90, 0.35);
+        color: var(--acc);
         font-weight: 600;
       }
       button.x {
         background: none;
         border: 0;
         color: var(--mut);
-        padding: 0 6px;
+        min-height: 36px;
+        padding: 0 10px;
+        font-size: 20px;
+      }
+      button.x:hover {
+        color: #ff6b6b;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 10px 0 0;
+      }
+      .chips button {
+        min-height: 36px;
+        padding: 0 14px;
+        border-radius: 999px;
+        font: 13px var(--mono);
+        color: var(--soft);
       }
       ul {
         list-style: none;
@@ -137,117 +246,236 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 8px;
-        padding: 7px 0;
+        gap: 10px;
+        padding: 11px 0;
         border-bottom: 1px solid var(--line);
-        font-size: 15px;
       }
-      li small,
-      .msg {
+      li:last-child {
+        border-bottom: 0;
+      }
+      li small {
         color: var(--mut);
+        font: 12px var(--mono);
+        text-align: right;
+        white-space: nowrap;
       }
-      .msg {
-        font-size: 14px;
-        margin: 6px 0;
-        min-height: 1.2em;
+      #results {
+        margin-top: 6px;
+      }
+      #results li {
+        padding: 0;
       }
       li button.pick {
         flex: 1;
         text-align: left;
         background: none;
         border: 0;
-        padding: 0;
+        border-radius: 8px;
+        padding: 12px 0;
         color: var(--fg);
+        min-height: 48px;
+      }
+      li button.pick:hover {
+        color: var(--acc);
+      }
+      #recs li {
+        cursor: pointer;
+      }
+      #recs li:hover b {
+        text-decoration: underline;
+      }
+      .msg {
+        color: var(--soft);
+        font-size: 14px;
+        margin: 10px 0 0;
+        min-height: 1.3em;
       }
       .picked {
-        color: var(--acc);
+        display: none;
+        border: 1px solid rgba(201, 165, 90, 0.35);
+        background: var(--acc-bg);
+        border-radius: 14px;
+        padding: 14px;
+        margin: 14px 0 0;
+      }
+      .picked.on {
+        display: block;
+      }
+      .picked p {
+        margin: 0;
+        font-weight: 600;
+      }
+      .empty {
+        color: var(--mut);
         font-size: 14px;
-        margin: 8px 0 0;
+        margin: 0;
+        padding: 4px 0;
       }
       .rec b {
         color: var(--acc);
         font-weight: 600;
       }
+      details summary {
+        cursor: pointer;
+        list-style: none;
+        font: 12px/1 var(--mono);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--acc);
+        padding: 4px 0;
+      }
+      details summary::-webkit-details-marker {
+        display: none;
+      }
+      details summary::after {
+        content: ' +';
+      }
+      details[open] summary::after {
+        content: ' \2212';
+      }
+      label.l {
+        display: block;
+        color: var(--soft);
+        font-size: 13px;
+        margin: 14px 0 0;
+      }
+      a {
+        color: var(--acc);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
     </style>
   </head>
   <body>
     <main class="shell" id="food">
+      <p class="eyebrow">/food · private</p>
       <h1>Today <small id="date"></small></h1>
-      <div id="bars"></div>
+      <section class="card" id="bars"></section>
 
-      <h2>Find food</h2>
-      <div class="row">
-        <input id="q" placeholder="food, or a barcode" autocomplete="off" aria-label="Search" />
-        <button id="search" class="go">Search</button>
-        <button id="ai" title="Estimate with AI">AI</button>
-      </div>
-      <div id="msg" class="msg"></div>
-      <ul id="results"></ul>
-      <p id="picked" class="picked"></p>
-      <div class="row">
-        <input
-          id="grams"
-          class="n"
-          type="number"
-          inputmode="decimal"
-          placeholder="g"
-          aria-label="Grams"
-        />
-        <button id="add" class="go">Add</button>
-      </div>
+      <section class="card">
+        <h2>Add food</h2>
+        <p class="hint">
+          Type a food and press Search. Paste a barcode for packaged food. Or describe a meal in
+          words and tap AI estimate.
+        </p>
+        <div class="row">
+          <input
+            id="q"
+            placeholder="e.g. chicken breast, or two eggs"
+            autocomplete="off"
+            aria-label="Search"
+          />
+        </div>
+        <div class="row">
+          <button id="search" class="go" style="flex: 1">Search</button>
+          <button
+            id="ai"
+            class="ai"
+            style="flex: 1"
+            title="Estimate calories and protein from your words">AI estimate</button
+          >
+        </div>
+        <div id="msg" class="msg" role="status"></div>
+        <ul id="results"></ul>
+        <div id="pickbox" class="picked">
+          <p id="picked"></p>
+          <div class="chips" id="quick"></div>
+          <div class="row">
+            <input
+              id="grams"
+              class="n"
+              type="number"
+              inputmode="decimal"
+              placeholder="grams"
+              aria-label="Grams"
+            />
+            <button id="add" class="go" style="flex: 1">Add to today</button>
+          </div>
+        </div>
+      </section>
 
-      <h2>Other (no lookup)</h2>
-      <div class="row">
-        <input id="cname" placeholder="e.g. family dinner" aria-label="Name" />
-        <input
-          id="ckcal"
-          class="n"
-          type="number"
-          inputmode="numeric"
-          placeholder="kcal"
-          aria-label="kcal"
-        />
-        <input
-          id="cprot"
-          class="n"
-          type="number"
-          inputmode="numeric"
-          placeholder="prot"
-          aria-label="Protein"
-        />
-        <button id="cadd">+</button>
-      </div>
+      <section class="card">
+        <h2>Ideas to hit your protein</h2>
+        <p class="hint">Tap one to fill in the amount.</p>
+        <div id="recs" class="rec"></div>
+      </section>
 
-      <h2>To close the gap</h2>
-      <div id="recs" class="rec"></div>
+      <section class="card">
+        <h2>Today's log</h2>
+        <ul id="log"></ul>
+        <p id="logempty" class="empty">Nothing logged yet. Add your first food above.</p>
+      </section>
 
-      <h2>Log</h2>
-      <ul id="log"></ul>
+      <section class="card">
+        <h2>Add by numbers</h2>
+        <p class="hint">For food you can't look up, like a home-cooked dinner.</p>
+        <div class="row">
+          <input id="cname" placeholder="name (e.g. family dinner)" aria-label="Name" />
+        </div>
+        <div class="row">
+          <input
+            id="ckcal"
+            class="n"
+            style="flex: 1"
+            type="number"
+            inputmode="numeric"
+            placeholder="calories"
+            aria-label="kcal"
+          />
+          <input
+            id="cprot"
+            class="n"
+            style="flex: 1"
+            type="number"
+            inputmode="numeric"
+            placeholder="protein (g)"
+            aria-label="Protein"
+          />
+          <button id="cadd" class="go" aria-label="Add">Add</button>
+        </div>
+      </section>
 
-      <h2>Settings</h2>
-      <div class="row">
-        <input
-          id="ukey"
-          placeholder="USDA api.data.gov key"
-          autocomplete="off"
-          aria-label="USDA key"
-        />
-      </div>
-      <div class="row">
-        <input
-          id="tkey"
-          type="password"
-          placeholder="AI token (for the AI button)"
-          autocomplete="off"
-          aria-label="AI token"
-        />
-        <button id="ksave">Save</button>
-      </div>
-      <div class="row">
-        <button id="export">Export</button>
-        <button id="import">Import</button>
-        <input id="file" type="file" accept="application/json" hidden />
-      </div>
+      <section class="card">
+        <details id="settings">
+          <summary>Settings &amp; backup</summary>
+          <label class="l" for="ukey"
+            >USDA key: needed to search generic foods. Free at&nbsp;
+            <a href="https://api.data.gov/signup/" target="_blank" rel="noopener noreferrer"
+              >api.data.gov/signup</a
+            ></label
+          >
+          <div class="row">
+            <input
+              id="ukey"
+              placeholder="paste USDA key"
+              autocomplete="off"
+              aria-label="USDA key"
+            />
+          </div>
+          <label class="l" for="tkey">AI token: needed for the AI estimate button</label>
+          <div class="row">
+            <input
+              id="tkey"
+              type="password"
+              placeholder="paste AI token"
+              autocomplete="off"
+              aria-label="AI token"
+            />
+          </div>
+          <div class="row">
+            <button id="ksave" class="go" style="flex: 1">Save keys</button>
+          </div>
+          <label class="l">Backup: save your history to a file, or load it back</label>
+          <div class="row">
+            <button id="export" style="flex: 1">Export</button>
+            <button id="import" style="flex: 1">Import</button>
+            <input id="file" type="file" accept="application/json" hidden />
+          </div>
+        </details>
+      </section>
     </main>
 
     <script is:inline>
@@ -419,6 +647,21 @@
           picked = { food: f, remote };
           $('picked').textContent =
             f.name + (f.unit ? ' (' + f.unit + ' g per ' + f.unitName + ')' : '');
+          $('pickbox').classList.add('on');
+          const amounts = f.unit
+            ? [1, 2, 3].map((n) => [n + ' ' + f.unitName + (n > 1 ? 's' : ''), n * f.unit])
+            : [50, 100, 150, 200, 300].map((g) => [g + ' g', g]);
+          $('quick').replaceChildren(
+            ...amounts.map(([label, g]) => {
+              const b = el('button', label);
+              b.type = 'button';
+              b.onclick = () => {
+                $('grams').value = g;
+                $('grams').focus();
+              };
+              return b;
+            }),
+          );
           $('grams').focus();
         }
 
@@ -432,7 +675,8 @@
 
         $('add').onclick = () => {
           const g = Number($('grams').value);
-          if (!picked || !(g > 0) || g > 5000) return;
+          if (!picked) return say('Pick a food first.');
+          if (!(g > 0) || g > 5000) return say('Enter an amount in grams, 1 to 5000.');
           const { food, remote } = picked;
           if (remote) {
             const c = getCache();
@@ -450,8 +694,10 @@
             carb: food.v[2] * k,
             fat: food.v[3] * k,
           });
+          say('Added ' + food.name + '.');
           picked = null;
           $('picked').textContent = '';
+          $('pickbox').classList.remove('on');
           $('grams').value = '';
           $('q').focus();
         };
@@ -460,8 +706,11 @@
           const kcal = Number($('ckcal').value);
           const prot = Number($('cprot').value);
           const name = $('cname').value.trim().slice(0, 80) || 'other';
-          if (!num(kcal, 20000) || !num(prot, 20000) || (!kcal && !prot)) return;
+          if (!num(kcal, 20000) || !num(prot, 20000) || (!kcal && !prot)) {
+            return say('Enter calories and/or protein as positive numbers.');
+          }
           addEntry({ name, kcal, prot, carb: 0, fat: 0 });
+          say('Added ' + name + '.');
           $('cname').value = $('ckcal').value = $('cprot').value = '';
         };
 
@@ -473,7 +722,7 @@
         };
         const runSearch = () => {
           const q = $('q').value.trim();
-          if (!q) return;
+          if (!q) return say('Type a food first.');
           const job = /^\d{8,14}$/.test(q) ? lookupBarcode(q) : searchUsda(q);
           job.catch(() => say('Network error. Try again.'));
         };
@@ -517,7 +766,8 @@
         }
         $('ai').onclick = () => {
           const q = $('q').value.trim();
-          if (q) estimate(q).catch(() => say('Network error. Try again.'));
+          if (!q) return say('Describe what you ate first, e.g. two eggs and toast.');
+          estimate(q).catch(() => say('Network error. Try again.'));
         };
         // A block body: an arrow returning `false` from an on* handler cancels the keystroke.
         $('q').onkeydown = (e) => {
@@ -528,7 +778,19 @@
         function bar(label, val, target, unit) {
           const box = el('div', undefined, 'bar' + (val >= target ? ' done' : ''));
           const t = el('div', undefined, 't');
-          t.append(el('span', label), el('span', r(val) + ' / ' + target + unit));
+          const left = target - val;
+          t.append(
+            el('b', label),
+            el(
+              'span',
+              r(val) +
+                ' / ' +
+                target +
+                unit +
+                ' · ' +
+                (left > 0 ? r(left) + unit + ' left' : 'done'),
+            ),
+          );
           const b = el('div', undefined, 'b');
           const i = el('i');
           i.style.width = Math.min(100, (val / target) * 100) + '%';
@@ -550,6 +812,7 @@
           );
           const ul = $('log');
           ul.replaceChildren();
+          $('logempty').hidden = l.length > 0;
           l.forEach((e, i) => {
             const li = el('li');
             li.append(el('span', e.name + (e.g ? ' ' + r(e.g) + ' g' : '')));
@@ -577,7 +840,7 @@
         function recommend(pLeft, kLeft) {
           const box = $('recs');
           box.replaceChildren();
-          if (pLeft <= 0) return box.append(el('p', 'Protein target hit.'));
+          if (pLeft <= 0) return box.append(el('p', 'Protein target hit. Nice work.', 'empty'));
           const out = allFoods()
             .filter((f) => f.v[0] > 0 && f.v[1] / f.v[0] >= 0.08 && !NOT_SUGGESTED.test(f.name))
             .map((f) => {
@@ -600,10 +863,13 @@
             .slice(0, 5);
           if (!out.length) {
             return box.append(
-              el('p', r(pLeft) + ' g protein left but only ' + r(Math.max(kLeft, 0)) + ' kcal.'),
+              el(
+                'p',
+                r(pLeft) + ' g protein left but only ' + r(Math.max(kLeft, 0)) + ' kcal.',
+                'empty',
+              ),
             );
           }
-          box.append(el('p', r(pLeft) + ' g protein, ' + r(kLeft) + ' kcal left:', 'msg'));
           const ul = el('ul');
           for (const { f, g, prot, kcal } of out) {
             const li = el('li');
@@ -613,6 +879,10 @@
             const left = el('span');
             left.append(el('b', f.name), ' ' + amount);
             li.append(left, el('small', '+' + r(prot) + ' g · ' + r(kcal) + ' kcal'));
+            li.onclick = () => {
+              pick(f, false);
+              $('grams').value = g;
+            };
             ul.append(li);
           }
           box.append(ul);
@@ -621,6 +891,7 @@
         // ---- settings ------------------------------------------------------
         $('ukey').value = read(KEY, '');
         $('tkey').value = read(TOKEN, '');
+        if (!$('ukey').value || !$('tkey').value) $('settings').open = true;
         $('ksave').onclick = () => {
           write(KEY, $('ukey').value.trim());
           write(TOKEN, $('tkey').value.trim());
