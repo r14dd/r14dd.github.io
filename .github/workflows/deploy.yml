@@ -7,6 +7,9 @@ on:
     branches: [main]
   # sync-linkedin.yml starts this after committing new posts; its push can't.
   workflow_dispatch:
+  # Refreshes the merged-PR counts, which are read from GitHub at build time.
+  schedule:
+    - cron: '0 6 * * *'
 
 # The artifact flow (upload-pages-artifact → deploy-pages) publishes
 # atomically: a green run means the site IS live. The previous gh-pages
@@ -44,6 +47,9 @@ jobs:
           sudo mv tectonic /usr/local/bin/
 
       - run: npm ci
+      - run: npm run sync:merged
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - run: npm run lint
       - run: npm run format:check
       - run: npm run check

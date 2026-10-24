@@ -484,7 +484,7 @@ export const profile: Profile = {
     {
       name: 'MLflow',
       url: 'https://github.com/mlflow/mlflow/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
-      merged: 7,
+      merged: 8,
       tech: ['Python', 'AI Gateway'],
       period: 'Sep – Oct 2026',
       bullets: [
@@ -500,6 +500,14 @@ export const profile: Profile = {
       bullets: [
         'Fixed a D-Bus socket opened without SOCK_CLOEXEC leaking its fd into containers under systemd cgroups',
       ],
+    },
+    {
+      name: 'ratatui-website',
+      url: 'https://github.com/ratatui/ratatui-website/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
+      merged: 1,
+      tech: ['Rust', 'TUI'],
+      period: 'Sep 2026',
+      bullets: ['Added patent, my Rust terminal UI, to the ratatui showcase'],
     },
   ],
 

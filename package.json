@@ -16,6 +16,7 @@
     "check": "astro check",
     "check:workers": "node scripts/check-workers.mjs",
     "check:links": "node scripts/check-links.mjs",
+    "sync:merged": "node scripts/sync-merged.mjs",
     "sync:linkedin": "node scripts/sync-linkedin.mjs",
     "test:e2e": "playwright test",
     "check:emdash": "node scripts/check-no-emdash.mjs"
