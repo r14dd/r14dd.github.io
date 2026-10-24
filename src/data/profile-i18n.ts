@@ -936,7 +936,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Fev 2026 – indiyə kimi',
         bullets: [
-          'Veb-sayt və üzvlər üçün alətlər üzərində komandaya rəhbərlik edirəm; domen, hostinq, poçt və giriş idarəetməsinə cavabdehəm',
+          'Veb-sayt və üzvlər üçün alətlər üzərində komandaya rəhbərlik edirəm; domen, hostinq, poçt və girişə cavabdehəm',
           'Veb-saytın yenilənməsi, daxili platformaların təkmilləşdirilməsi və yeni texnologiyaların tətbiqinin koordinasiyası',
         ],
       },
@@ -1286,7 +1286,7 @@ export const profiles: Record<string, I18nProfile> = {
         Languages: 'Dillər',
         'AI & Agents': 'AI və agentlər',
         'Backend & Data': 'Backend və verilənlər',
-        'Infra & Security': 'İnfrastruktur və təhlükəsizlik',
+        'Infra & Security': 'İnfra və təhlükəsizlik',
         'Programming Languages': 'Proqramlaşdırma dilləri',
         'Backend & Runtimes': 'Backend və Runtime',
         'AI, ML & Agentic Systems': 'AI, ML və Agent sistemləri',

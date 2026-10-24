@@ -23,6 +23,8 @@ export type OpenSource = {
   url: string;
   /** Merged upstream PRs; labels.mergedPrs renders it and the hero stat sums it. */
   merged: number;
+  /** false keeps it off the one-page resume (site and hero count still include it). */
+  onResume?: boolean;
   tech: string[];
   period: string;
   bullets: string[];
@@ -505,6 +507,7 @@ export const profile: Profile = {
       name: 'ratatui-website',
       url: 'https://github.com/ratatui/ratatui-website/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
       merged: 1,
+      onResume: false,
       tech: ['Rust', 'TUI'],
       period: 'Sep 2026',
       bullets: ['Added patent, my Rust terminal UI, to the ratatui showcase'],

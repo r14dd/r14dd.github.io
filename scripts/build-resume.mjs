@@ -53,6 +53,7 @@ const experience = p.experience
   .join('\n');
 
 const openSource = p.openSource
+  .filter((o) => o.onResume !== false)
   .map((o) => {
     const head = `\\textbf{${esc(o.name)}} \\href{${esc(o.url)}}{\\textit{${esc(p.labels.mergedPrs.replace('{n}', o.merged))}}} $|$ \\emph{${esc(o.tech.join(', '))}}`;
     return `\\resumeProjectHeading{${head}}{${esc(o.period)}}\n${bullets(o.bullets)}`;

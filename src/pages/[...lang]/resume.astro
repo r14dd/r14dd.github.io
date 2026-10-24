@@ -140,23 +140,25 @@ const canonical = `https://riad.cc${resumePath(lang)}`;
       <section class="sheet-section">
         <h2>{L.headings.openSource}</h2>
         {
-          p.openSource.map((o) => (
-            <div class="entry">
-              <div class="entry-row">
-                <span class="entry-project">
-                  <strong>{o.name}</strong>
-                  <a href={o.url}>{L.mergedPrs.replace('{n}', String(o.merged))}</a>
-                  <span class="entry-tech">{o.tech.join(', ')}</span>
-                </span>
-                <span class="entry-when">{o.period}</span>
+          p.openSource
+            .filter((o) => o.onResume !== false)
+            .map((o) => (
+              <div class="entry">
+                <div class="entry-row">
+                  <span class="entry-project">
+                    <strong>{o.name}</strong>
+                    <a href={o.url}>{L.mergedPrs.replace('{n}', String(o.merged))}</a>
+                    <span class="entry-tech">{o.tech.join(', ')}</span>
+                  </span>
+                  <span class="entry-when">{o.period}</span>
+                </div>
+                <ul>
+                  {o.bullets.map((b) => (
+                    <li>{b}</li>
+                  ))}
+                </ul>
               </div>
-              <ul>
-                {o.bullets.map((b) => (
-                  <li>{b}</li>
-                ))}
-              </ul>
-            </div>
-          ))
+            ))
         }
       </section>
 
