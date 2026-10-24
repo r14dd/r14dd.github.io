@@ -21,6 +21,24 @@ const ID_RE = /^[A-Za-z0-9._-]{1,64}$/;
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const VOTE_CAP = 60;
 
+// Game mode scoring: a correct answer is worth 500 plus up to 500 more for
+// speed (linear over the question's time limit, server clock only).
+const GAME_BASE_POINTS = 500;
+const GAME_SPEED_POINTS = 500;
+const GAME_DEFAULT_LIMIT_MS = 20 * 1000;
+const NICK_MAX = 16;
+const BOARD_SIZE = 10;
+
+// Printable, trimmed, length-capped nickname; '' when nothing usable is left.
+function cleanNick(raw) {
+  if (typeof raw !== 'string') return '';
+  return raw
+    .replace(/[\u0000-\u001f\u007f-\u009f<>]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, NICK_MAX);
+}
+
 // Constant-time secret comparison (Cloudflare Workers crypto.subtle extension).
 const _enc = new TextEncoder();
 function safeEqual(a, b) {
@@ -192,6 +210,69 @@ export default {
         return forward(env, session, '/close', origin);
       }
 
+      // ── Game mode (Kahoot-style quiz) ────────────────────────────────────
+      // One session = one game. Phones join once with a nickname, then follow
+      // the presenter's current question; /award scores a question.
+
+      // POST /join {session, voterId, nick}
+      if (method === 'POST' && url.pathname === '/join') {
+        const body = await request.json().catch(() => null);
+        if (!body) return json({ error: 'Invalid JSON' }, origin, env, 400);
+        const { session, voterId, nick } = body;
+        if (!isId(session) || !isId(voterId)) {
+          return json({ error: 'Invalid session or voterId' }, origin, env, 400);
+        }
+        return forward(env, session, '/join', origin, { voterId, nick });
+      }
+
+      // POST /answer {session, voterId, pollId, choice}
+      if (method === 'POST' && url.pathname === '/answer') {
+        const body = await request.json().catch(() => null);
+        if (!body) return json({ error: 'Invalid JSON' }, origin, env, 400);
+        const { session, voterId, pollId, choice } = body;
+        if (!isId(session) || !isId(voterId) || !isId(pollId)) {
+          return json({ error: 'Invalid session, voterId or pollId' }, origin, env, 400);
+        }
+        if (!VALID_CHOICES.has(choice)) {
+          return json({ error: 'Choice must be A, B, C, or D' }, origin, env, 400);
+        }
+        return forward(env, session, '/answer', origin, { voterId, pollId, choice });
+      }
+
+      // GET /game?s=SESSION  (counts-free; phones poll this to follow the presenter)
+      // GET /board?s=SESSION (leaderboard + live counts; presenter polls this)
+      if (method === 'GET' && (url.pathname === '/game' || url.pathname === '/board')) {
+        const session = url.searchParams.get('s');
+        if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
+        return cachedForward(env, ctx, session, url.pathname, origin);
+      }
+
+      // GET /me?s=SESSION&v=VOTERID  (per-player score; not cached)
+      if (method === 'GET' && url.pathname === '/me') {
+        const session = url.searchParams.get('s');
+        const voterId = url.searchParams.get('v');
+        if (!isId(session) || !isId(voterId)) {
+          return json({ error: 'Invalid session or voterId' }, origin, env, 400);
+        }
+        return forward(env, session, '/me', origin, { voterId });
+      }
+
+      // POST /current?s=SESSION {pollId, n, limit}  (admin: presenter landed on a question)
+      // POST /award?s=SESSION {pollId, correct}     (admin: reveal + score a question)
+      if (method === 'POST' && (url.pathname === '/current' || url.pathname === '/award')) {
+        const session = url.searchParams.get('s');
+        if (!isId(session)) return json({ error: 'Invalid session' }, origin, env, 400);
+        const authKey = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
+        if (!safeEqual(authKey, env.RESET_SECRET)) {
+          return json({ error: 'Unauthorized' }, origin, env, 401);
+        }
+        const body = await request.json().catch(() => null);
+        if (!body || !isId(body.pollId)) {
+          return json({ error: 'Invalid pollId' }, origin, env, 400);
+        }
+        return forward(env, session, url.pathname, origin, body);
+      }
+
       return json({ error: 'Not found' }, origin, env, 404);
     } catch {
       return json({ error: 'Internal error' }, origin, env, 500);
@@ -212,6 +293,11 @@ export class PollRoom {
     // persisted: it's a cheap per-DO-instance backstop that resets on eviction.
     this.voteWindowStart = 0;
     this.voteWindowCount = 0;
+    // Game mode (all in the g: storage namespace; see load()).
+    this.players = new Map(); // voterId -> {nick, score, delta}
+    this.questions = new Map(); // pollId -> {n, openedAt, limit, awarded, correct}
+    this.answers = new Map(); // pollId -> Map(voterId -> {choice, t})
+    this.current = null; // pollId the presenter is on
     // Hydrate from storage before any request is served.
     state.blockConcurrencyWhile(async () => {
       await this.load();
@@ -237,6 +323,26 @@ export class PollRoom {
     const stored = await storage.list({ prefix: 'v:' });
     this.voters = new Map();
     for (const [key, choice] of stored) this.voters.set(key.slice(2), choice);
+    // Game keys: g:cur, g:p:<voterId>, g:q:<pollId>, g:a:<pollId>:<voterId>
+    // (ids never contain ':', so splitting on it is safe).
+    const game = await storage.list({ prefix: 'g:' });
+    for (const [key, value] of game) {
+      const [, kind, a, b] = key.split(':');
+      if (kind === 'cur') this.current = value;
+      else if (kind === 'p') this.players.set(a, value);
+      else if (kind === 'q') this.questions.set(a, value);
+      else if (kind === 'a') {
+        if (!this.answers.has(a)) this.answers.set(a, new Map());
+        this.answers.get(a).set(b, value);
+      }
+    }
+  }
+
+  clearGame() {
+    this.players = new Map();
+    this.questions = new Map();
+    this.answers = new Map();
+    this.current = null;
   }
 
   total() {
@@ -281,6 +387,30 @@ export class PollRoom {
       case '/close':
         await this.close();
         return this.reply({ ok: true, open: this.open }, origin);
+      case '/join': {
+        const body = await request.json().catch(() => ({}));
+        return this.join(body.voterId, body.nick, origin);
+      }
+      case '/answer': {
+        const body = await request.json().catch(() => ({}));
+        return this.answer(body.voterId, body.pollId, body.choice, origin);
+      }
+      case '/current': {
+        const body = await request.json().catch(() => ({}));
+        return this.setCurrent(body, origin);
+      }
+      case '/award': {
+        const body = await request.json().catch(() => ({}));
+        return this.award(body.pollId, body.correct, origin);
+      }
+      case '/game':
+        return this.reply(this.gameState(), origin);
+      case '/board':
+        return this.reply(this.board(), origin);
+      case '/me': {
+        const body = await request.json().catch(() => ({}));
+        return this.me(body.voterId, origin);
+      }
       default:
         return this.reply({ error: 'Not found' }, origin, 404);
     }
@@ -323,9 +453,156 @@ export class PollRoom {
     return this.reply({ ok: true, choice }, origin);
   }
 
+  // ── Game mode ───────────────────────────────────────────────────────────
+
+  // The presenter's current question as phones see it. No counts, and the
+  // correct letter only once the question has been awarded.
+  gameState() {
+    const q = this.current ? this.questions.get(this.current) : null;
+    return {
+      current: q ? this.current : null,
+      n: q ? q.n : 0,
+      openedAt: q ? q.openedAt : 0,
+      limit: q ? q.limit : GAME_DEFAULT_LIMIT_MS,
+      awarded: q ? q.awarded : false,
+      correct: q && q.awarded ? q.correct : null,
+      open: this.open,
+      generation: this.generation,
+      players: this.players.size,
+      now: Date.now(),
+    };
+  }
+
+  ranked() {
+    return [...this.players.entries()]
+      .map(([voterId, p]) => ({ voterId, ...p }))
+      .sort((x, y) => y.score - x.score || x.nick.localeCompare(y.nick));
+  }
+
+  // Presenter view: top of the board plus live counts for the current question.
+  board() {
+    const q = this.current ? this.questions.get(this.current) : null;
+    const counts = { A: 0, B: 0, C: 0, D: 0 };
+    const answers = this.current ? this.answers.get(this.current) : null;
+    if (answers) for (const a of answers.values()) counts[a.choice]++;
+    return {
+      ...this.gameState(),
+      answered: answers ? answers.size : 0,
+      counts,
+      correct: q && q.awarded ? q.correct : null,
+      top: this.ranked()
+        .slice(0, BOARD_SIZE)
+        .map(({ nick, score, delta }) => ({ nick, score, delta })),
+    };
+  }
+
+  me(voterId, origin) {
+    const p = this.players.get(voterId);
+    if (!p) return this.reply({ error: 'Not joined' }, origin, 404);
+    const rank = this.ranked().findIndex((r) => r.voterId === voterId) + 1;
+    const answers = this.current ? this.answers.get(this.current) : null;
+    const mine = answers ? answers.get(voterId) : null;
+    return this.reply(
+      {
+        nick: p.nick,
+        score: p.score,
+        delta: p.delta,
+        rank,
+        of: this.players.size,
+        choice: mine ? mine.choice : null,
+      },
+      origin,
+    );
+  }
+
+  async join(voterId, rawNick, origin) {
+    if (this.voteFlooding()) return this.reply({ error: 'Too many requests' }, origin, 429);
+    if (!isId(voterId)) return this.reply({ error: 'Invalid voterId' }, origin, 400);
+    const nick = cleanNick(rawNick);
+    if (!nick) return this.reply({ error: 'Nickname required' }, origin, 400);
+    for (const [id, p] of this.players) {
+      if (id !== voterId && p.nick.toLowerCase() === nick.toLowerCase()) {
+        return this.reply({ error: 'Nickname taken' }, origin, 409);
+      }
+    }
+    const prev = this.players.get(voterId);
+    if (!prev && this.players.size >= VOTE_CAP) {
+      return this.reply({ error: 'Game full' }, origin, 403);
+    }
+    const player = { nick, score: prev ? prev.score : 0, delta: prev ? prev.delta : 0 };
+    this.players.set(voterId, player);
+    await this.state.storage.put('g:p:' + voterId, player);
+    await this.refreshAlarm();
+    return this.reply({ ok: true, nick }, origin);
+  }
+
+  // Presenter landed on a question. Idempotent per pollId: revisiting a slide
+  // keeps its original start time, answers, and awarded state.
+  async setCurrent(body, origin) {
+    const { pollId } = body;
+    const n = Math.max(2, Math.min(4, parseInt(body.n, 10) || 4));
+    let limit = parseInt(body.limit, 10) || GAME_DEFAULT_LIMIT_MS;
+    limit = Math.max(5000, Math.min(120000, limit));
+    if (!this.questions.has(pollId)) {
+      const q = { n, openedAt: Date.now(), limit, awarded: false, correct: null };
+      this.questions.set(pollId, q);
+      await this.state.storage.put('g:q:' + pollId, q);
+    }
+    this.current = pollId;
+    await this.state.storage.put('g:cur', pollId);
+    await this.refreshAlarm();
+    return this.reply({ ok: true, ...this.gameState() }, origin);
+  }
+
+  async answer(voterId, pollId, choice, origin) {
+    if (this.voteFlooding()) return this.reply({ error: 'Too many requests' }, origin, 429);
+    if (!isId(voterId) || !isId(pollId)) return this.reply({ error: 'Invalid id' }, origin, 400);
+    if (!VALID_CHOICES.has(choice)) return this.reply({ error: 'Invalid choice' }, origin, 400);
+    if (!this.players.has(voterId)) return this.reply({ error: 'Not joined' }, origin, 403);
+    const q = this.questions.get(pollId);
+    if (!q || pollId !== this.current) return this.reply({ ok: false, closed: true }, origin);
+    const answers = this.answers.get(pollId) || new Map();
+    const prev = answers.get(voterId);
+    if (prev) return this.reply({ error: 'Already answered', choice: prev.choice }, origin, 409);
+    if (q.awarded || !this.open) return this.reply({ ok: false, closed: true }, origin);
+    const entry = { choice, t: Date.now() - q.openedAt };
+    answers.set(voterId, entry);
+    this.answers.set(pollId, answers);
+    await this.state.storage.put('g:a:' + pollId + ':' + voterId, entry);
+    await this.refreshAlarm();
+    return this.reply({ ok: true, choice }, origin);
+  }
+
+  // Reveal + score a question exactly once; a repeat call changes nothing.
+  async award(pollId, correct, origin) {
+    const q = this.questions.get(pollId);
+    if (!q) return this.reply({ error: 'Unknown question' }, origin, 404);
+    if (!VALID_CHOICES.has(correct)) return this.reply({ error: 'Invalid correct' }, origin, 400);
+    if (q.awarded) return this.reply({ ok: true, already: true, correct: q.correct }, origin);
+    q.awarded = true;
+    q.correct = correct;
+    const answers = this.answers.get(pollId) || new Map();
+    const writes = { ['g:q:' + pollId]: q };
+    for (const [voterId, p] of this.players) {
+      const a = answers.get(voterId);
+      let delta = 0;
+      if (a && a.choice === correct) {
+        const speed = Math.max(0, 1 - a.t / q.limit);
+        delta = GAME_BASE_POINTS + Math.round(GAME_SPEED_POINTS * speed);
+      }
+      p.delta = delta;
+      p.score += delta;
+      writes['g:p:' + voterId] = p;
+    }
+    await this.state.storage.put(writes);
+    await this.refreshAlarm();
+    return this.reply({ ok: true, correct }, origin);
+  }
+
   // Wipe everything and bump the generation so phones detect the new round.
   async reset() {
     await this.state.storage.deleteAll();
+    this.clearGame();
     this.counts = { A: 0, B: 0, C: 0, D: 0 };
     this.voters = new Map();
     this.open = true;
@@ -346,6 +623,7 @@ export class PollRoom {
     // Drop the room entirely: clear storage and reset in-memory state. We do NOT
     // re-persist anything, so an abandoned room leaves no residual rows behind.
     await this.state.storage.deleteAll();
+    this.clearGame();
     this.counts = { A: 0, B: 0, C: 0, D: 0 };
     this.voters = new Map();
     this.open = true;

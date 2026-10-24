@@ -326,6 +326,52 @@ import Analytics from '../components/Analytics.astro';
         outline-offset: 2px;
       }
 
+      /* ── Game mode (?g=): countdown and result card ── */
+      .timer {
+        margin: 0;
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--accent);
+      }
+      .timer[data-low] {
+        color: #e0a96d;
+      }
+      .result {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 20px 22px;
+        text-align: center;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+      }
+      .result:empty {
+        display: none;
+      }
+      .result[data-tone='ok'] {
+        border-color: var(--accent);
+        background: rgba(var(--accent-rgb), 0.12);
+      }
+      .result[data-tone='error'] {
+        border-color: #e2725b;
+      }
+      .result[data-tone='warn'] {
+        border-color: #e0a96d;
+      }
+      .result__title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+      .result__score {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-soft);
+      }
+
       @media (prefers-reduced-motion: reduce) {
         .poll-option {
           transition: none;
@@ -387,6 +433,30 @@ import Analytics from '../components/Analytics.astro';
         />
         <button class="join__btn" type="submit">Join</button>
       </form>
+
+      <!-- Game mode only (?g=): script fills and reveals these. -->
+      <form class="join" id="gjoin" hidden>
+        <label class="join__label" for="gnick">Özünüzə ad seçin</label>
+        <input
+          class="join__input"
+          id="gnick"
+          name="nick"
+          type="text"
+          inputmode="text"
+          maxlength="16"
+          autocapitalize="off"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          enterkeyhint="go"
+          placeholder="ad"
+          aria-describedby="status"
+        />
+        <button class="join__btn" id="gjoin-btn" type="submit">Qoşul</button>
+      </form>
+      <p class="timer" id="gtimer" hidden></p>
+      <div class="options" id="goptions" hidden></div>
+      <div class="result" id="gresult" role="status" aria-live="polite"></div>
 
       <p class="status" id="status" role="status" aria-live="polite"></p>
 
@@ -456,6 +526,475 @@ import Analytics from '../components/Analytics.astro';
         var voterId =
           lsGet('poll-voter') || (crypto.randomUUID && crypto.randomUUID()) || fallbackUuid();
         lsSet('poll-voter', voterId);
+
+        // ── Game mode (?g=<gameId>, no ?s): Kahoot-style quiz, Azerbaijani UI ──
+        // Everything happens in place: reloading would lose the in-memory
+        // voterId on private Safari. The server is the authority on timing.
+        function startGame(gameId) {
+          function el(id) {
+            return document.getElementById(id);
+          }
+          var eyebrowEl = document.querySelector('.eyebrow');
+          var headingEl = document.querySelector('.heading');
+          var promptEl = el('prompt');
+          var statusEl = el('status');
+          var joinForm = el('gjoin');
+          var nickInput = el('gnick');
+          var joinBtn = el('gjoin-btn');
+          var optionsEl = el('goptions');
+          var timerEl = el('gtimer');
+          var resultEl = el('gresult');
+
+          document.documentElement.lang = 'az';
+          document.title = 'Canlı viktorina';
+          eyebrowEl.textContent = 'Canlı viktorina';
+          el('options').hidden = true;
+          el('join').hidden = true;
+
+          if (!/^[A-Za-z0-9._-]{1,64}$/.test(gameId)) {
+            headingEl.textContent = 'Oyun tapılmadı';
+            promptEl.textContent = 'QR kodu yenidən oxudun.';
+            return;
+          }
+
+          var nickKey = 'poll-nick-' + gameId;
+          var nick = '';
+          var playing = false;
+          var joinBusy = false;
+          var gameBusy = false;
+          var meBusy = false;
+          var pollTimer = null;
+          var serverOffset = null; // server ms minus local ms
+          var meScore = null;
+
+          // Current question (null while waiting).
+          var lastCurrent = null;
+          var qOpenedAt = 0;
+          var qLimit = 0;
+          var qAwarded = false;
+          var qOpen = true;
+          var closedLocal = false; // worker said closed:true for this question
+          var answered = null;
+          var inFlight = false;
+          var resultFor = null;
+          var passiveKey = '';
+          var buttons = [];
+
+          function setStatus(msg, tone) {
+            statusEl.textContent = msg || '';
+            if (tone) statusEl.setAttribute('data-tone', tone);
+            else statusEl.removeAttribute('data-tone');
+          }
+
+          function cleanNick(raw) {
+            return String(raw || '')
+              .replace(/[\u0000-\u001f\u007f-\u009f<>]/g, '')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .slice(0, 16);
+          }
+
+          function api(path, init) {
+            init = init || {};
+            init.signal = AbortSignal.timeout(8000);
+            return fetch(WORKER + path, init).then(function (res) {
+              return res
+                .json()
+                .catch(function () {
+                  return {};
+                })
+                .then(function (data) {
+                  return { status: res.status, ok: res.ok, data: data || {} };
+                });
+            });
+          }
+
+          function post(path, body) {
+            return api(path, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body),
+            });
+          }
+
+          function sendJoin(n) {
+            return post('/join', { session: gameId, voterId: voterId, nick: n });
+          }
+
+          function joinError(status) {
+            if (status === 409) return 'Bu ad artıq götürülüb, başqa ad seçin';
+            if (status === 403) return 'Oyun doludur';
+            if (status === 429) return 'Çox sorğu var, bir az sonra yenidən toxunun.';
+            return 'Qoşulmaq alınmadı, yenidən cəhd edin.';
+          }
+
+          function ansKey(pollId) {
+            return 'poll-ans-' + gameId + '-' + pollId;
+          }
+
+          function isClosed() {
+            return qAwarded || !qOpen || closedLocal;
+          }
+
+          function renderWho() {
+            promptEl.textContent = nick + (meScore !== null ? ' · ' + meScore + ' xal' : '');
+          }
+
+          function resetQuestion() {
+            lastCurrent = null;
+            answered = null;
+            inFlight = false;
+            closedLocal = false;
+            resultFor = null;
+            passiveKey = '';
+            buttons = [];
+            optionsEl.textContent = '';
+            optionsEl.hidden = true;
+            timerEl.hidden = true;
+            resultEl.textContent = '';
+            resultEl.removeAttribute('data-tone');
+          }
+
+          function showJoin(msg, tone) {
+            playing = false;
+            resetQuestion();
+            joinForm.hidden = false;
+            nickInput.value = nick;
+            headingEl.textContent = 'Viktorinaya qoşulun';
+            promptEl.textContent = 'Adınız ekranda görünəcək.';
+            setStatus(msg, tone);
+          }
+
+          // Silent idempotent re-join (worker reset, or a stored nick on load).
+          // strict: transient failures throw so the caller can show a network error.
+          function rejoin(strict) {
+            return sendJoin(nick).then(
+              function (r) {
+                if (r.ok && r.data.ok) return true;
+                if (r.status === 409 || r.status === 403 || r.status === 400) {
+                  showJoin(joinError(r.status), 'error');
+                  return false;
+                }
+                if (strict) throw new Error('join ' + r.status);
+                return true;
+              },
+              function (err) {
+                if (strict) throw err;
+                return true;
+              },
+            );
+          }
+
+          function syncButtons() {
+            var closed = isClosed();
+            buttons.forEach(function (b) {
+              b.classList.toggle(
+                'chosen',
+                !!answered && b.getAttribute('data-choice') === answered,
+              );
+              b.disabled = !!answered || inFlight || closed;
+            });
+          }
+
+          // Passive status follows the question state; it is only rewritten when
+          // that state changes, so a transient error message is not wiped by polls.
+          function updatePassive() {
+            var key = qAwarded
+              ? 'awarded'
+              : answered
+                ? 'answered:' + answered
+                : !qOpen || closedLocal
+                  ? 'closed'
+                  : 'open';
+            if (key === passiveKey) return;
+            passiveKey = key;
+            if (key === 'awarded' || key === 'open') setStatus('');
+            else if (key === 'closed') setStatus('Cavab vaxtı bitib.', 'warn');
+            else setStatus('Cavabınız qeyd olundu: ' + answered + '. Nəticəni gözləyin.', 'ok');
+          }
+
+          function markAnswered(pollId, choice) {
+            lsSet(ansKey(pollId), choice);
+            if (pollId !== lastCurrent) return;
+            answered = choice;
+            syncButtons();
+            updatePassive();
+          }
+
+          function send(pollId, choice, retried) {
+            return post('/answer', {
+              session: gameId,
+              voterId: voterId,
+              pollId: pollId,
+              choice: choice,
+            }).then(function (r) {
+              if (r.status === 403 && !retried) {
+                return rejoin(true).then(function (ok) {
+                  return ok ? send(pollId, choice, true) : { aborted: true };
+                });
+              }
+              return r;
+            });
+          }
+
+          function answer(choice) {
+            var pollId = lastCurrent;
+            if (!pollId || answered || inFlight || isClosed()) return;
+            inFlight = true;
+            syncButtons();
+            setStatus('Göndərilir...');
+            send(pollId, choice, false)
+              .then(function (r) {
+                if (pollId === lastCurrent) inFlight = false;
+                if (r.aborted) return; // showJoin already took over the screen
+                if (r.status === 409) {
+                  markAnswered(pollId, r.data.choice || choice);
+                } else if (r.ok && (r.data.closed || r.data.ok === false)) {
+                  if (pollId === lastCurrent) {
+                    closedLocal = true;
+                    syncButtons();
+                    updatePassive();
+                  }
+                } else if (r.ok) {
+                  markAnswered(pollId, r.data.choice || choice);
+                } else {
+                  syncButtons();
+                  setStatus(
+                    r.status === 429
+                      ? 'Çox sorğu var, bir az sonra yenidən toxunun.'
+                      : 'Cavab qeyd olunmadı, yenidən toxunun.',
+                    'error',
+                  );
+                }
+              })
+              .catch(function () {
+                // Timeout / network. Retrying is safe: the server de-dupes by voterId.
+                if (pollId === lastCurrent) inFlight = false;
+                syncButtons();
+                setStatus('Şəbəkə xətası, yenidən toxunun.', 'error');
+              });
+          }
+
+          function newQuestion(g) {
+            resetQuestion();
+            lastCurrent = g.current;
+            var stored = lsGet(ansKey(g.current));
+            answered = /^[A-D]$/.test(stored || '') ? stored : null;
+            var n = Math.max(2, Math.min(4, parseInt(g.n, 10) || 4));
+            for (var i = 0; i < n; i++) {
+              var letter = String.fromCharCode(65 + i);
+              var b = document.createElement('button');
+              b.className = 'poll-option';
+              b.type = 'button';
+              b.setAttribute('data-choice', letter);
+              b.setAttribute('aria-label', letter + ' variantını seçin');
+              var l = document.createElement('span');
+              l.className = 'letter';
+              l.setAttribute('aria-hidden', 'true');
+              l.textContent = letter;
+              var c = document.createElement('span');
+              c.className = 'cue';
+              c.textContent = 'Variant ' + letter;
+              b.appendChild(l);
+              b.appendChild(c);
+              b.addEventListener('click', function (e) {
+                answer(e.currentTarget.getAttribute('data-choice'));
+              });
+              optionsEl.appendChild(b);
+              buttons.push(b);
+            }
+            optionsEl.hidden = false;
+            headingEl.textContent = 'Cavabınızı seçin';
+          }
+
+          function renderResult(correct, me) {
+            var choice = answered || me.choice;
+            var title = document.createElement('div');
+            title.className = 'result__title';
+            var tone;
+            if (choice && choice === correct) {
+              title.textContent = 'Düzgün! +' + me.delta + ' xal';
+              tone = 'ok';
+            } else if (choice) {
+              title.textContent = 'Səhv. Düzgün cavab: ' + correct;
+              tone = 'error';
+            } else {
+              title.textContent = 'Cavab vermədiniz. Düzgün cavab: ' + correct;
+              tone = 'warn';
+            }
+            var score = document.createElement('div');
+            score.className = 'result__score';
+            score.textContent = 'Xalınız: ' + me.score + ' · Yeriniz: ' + me.rank + '/' + me.of;
+            resultEl.textContent = '';
+            resultEl.setAttribute('data-tone', tone);
+            resultEl.appendChild(title);
+            resultEl.appendChild(score);
+          }
+
+          // One /me read. A 404 means the worker forgot us: re-join, retry next tick.
+          function fetchMe() {
+            if (meBusy) return Promise.resolve(null);
+            meBusy = true;
+            return api('/me?s=' + encodeURIComponent(gameId) + '&v=' + encodeURIComponent(voterId))
+              .then(function (r) {
+                if (r.status === 404) {
+                  rejoin(false);
+                  return null;
+                }
+                if (!r.ok || typeof r.data.score !== 'number') return null;
+                meScore = r.data.score;
+                if (playing) renderWho();
+                return r.data;
+              })
+              .catch(function () {
+                return null;
+              })
+              .then(function (me) {
+                meBusy = false;
+                return me;
+              });
+          }
+
+          function applyGame(g) {
+            if (typeof g.now === 'number') {
+              // /game is edge-cached for ~1s, so a sample can be stale: keep the
+              // freshest (largest) offset seen.
+              var off = g.now - Date.now();
+              serverOffset = serverOffset === null ? off : Math.max(serverOffset, off);
+            }
+
+            if (!g.current) {
+              if (lastCurrent !== null) resetQuestion();
+              headingEl.textContent = 'Sual gözlənilir...';
+              renderWho();
+              if (meScore === null) fetchMe();
+              return;
+            }
+
+            if (g.current !== lastCurrent) newQuestion(g);
+            qOpenedAt = g.openedAt;
+            qLimit = g.limit;
+            qOpen = g.open !== false;
+            qAwarded = !!g.awarded;
+            renderWho();
+            syncButtons();
+            updatePassive();
+            tick();
+
+            if (qAwarded && resultFor !== g.current) {
+              var pollId = g.current;
+              var correct = g.correct;
+              fetchMe().then(function (me) {
+                if (!me || pollId !== lastCurrent || resultFor === pollId) return;
+                resultFor = pollId;
+                headingEl.textContent = 'Nəticə';
+                renderResult(correct, me);
+              });
+            }
+          }
+
+          function tick() {
+            if (!lastCurrent || qAwarded || serverOffset === null) {
+              timerEl.hidden = true;
+              return;
+            }
+            var left = Math.max(
+              0,
+              Math.ceil((qOpenedAt + qLimit - (Date.now() + serverOffset)) / 1000),
+            );
+            timerEl.textContent = left + ' san';
+            if (left <= 5) timerEl.setAttribute('data-low', '');
+            else timerEl.removeAttribute('data-low');
+            timerEl.hidden = false;
+          }
+
+          function pollGame() {
+            if (!playing || gameBusy) return;
+            gameBusy = true;
+            api('/game?s=' + encodeURIComponent(gameId))
+              .then(function (r) {
+                if (r.ok && playing) applyGame(r.data);
+              })
+              .catch(function () {
+                /* transient: ignore, try again next tick */
+              })
+              .then(function () {
+                gameBusy = false;
+              });
+          }
+
+          function enterPlay() {
+            playing = true;
+            joinForm.hidden = true;
+            headingEl.textContent = 'Sual gözlənilir...';
+            renderWho();
+            setStatus('');
+            if (!pollTimer) {
+              pollTimer = setInterval(function () {
+                if (!document.hidden) pollGame();
+              }, 1500);
+              setInterval(tick, 250);
+            }
+            pollGame();
+          }
+
+          joinForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (joinBusy) return;
+            var n = cleanNick(nickInput.value);
+            nickInput.value = n;
+            if (!n) {
+              setStatus('Adınızı yazın.', 'warn');
+              nickInput.focus();
+              return;
+            }
+            joinBusy = true;
+            joinBtn.disabled = true;
+            setStatus('Qoşulur...');
+            sendJoin(n)
+              .then(function (r) {
+                if (r.ok && r.data.ok) {
+                  nick = cleanNick(r.data.nick) || n;
+                  lsSet(nickKey, nick);
+                  enterPlay();
+                } else {
+                  setStatus(joinError(r.status), 'error');
+                }
+              })
+              .catch(function () {
+                setStatus('Şəbəkə xətası, yenidən toxunun.', 'error');
+              })
+              .then(function () {
+                joinBusy = false;
+                joinBtn.disabled = false;
+              });
+          });
+
+          nickInput.addEventListener('input', function () {
+            var v = nickInput.value.replace(/[<>]/g, '');
+            if (v !== nickInput.value) nickInput.value = v;
+          });
+
+          document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') pollGame();
+          });
+
+          // Boot: a stored nick re-joins silently, otherwise show the form.
+          nick = cleanNick(lsGet(nickKey));
+          if (nick) {
+            headingEl.textContent = 'Qoşulur...';
+            rejoin(false).then(function (ok) {
+              if (ok) enterPlay();
+            });
+          } else {
+            showJoin('');
+          }
+        }
+
+        if (!session && params.get('g')) {
+          startGame(params.get('g'));
+          return;
+        }
 
         var statusEl = document.getElementById('status');
         var promptEl = document.getElementById('prompt');
