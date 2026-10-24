@@ -512,6 +512,15 @@ export const profile: Profile = {
       period: 'Sep 2026',
       bullets: ['Added patent, my Rust terminal UI, to the ratatui showcase'],
     },
+    {
+      name: 'awesome-ratatui',
+      url: 'https://github.com/ratatui/awesome-ratatui/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
+      merged: 1,
+      onResume: false,
+      tech: ['Rust', 'TUI'],
+      period: 'Jun 2026',
+      bullets: ['Listed patent, my prior-art search TUI, in the awesome-ratatui index'],
+    },
   ],
 
   resume: {
