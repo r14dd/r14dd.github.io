@@ -29,7 +29,7 @@ writeFileSync(file, src);
 
 // Flag upstream repos with merged PRs that have no openSource entry. Course
 // and hackathon orgs are not upstream work; add new ones here if they show up.
-const NOT_UPSTREAM = ['cse442-at-ub', 'xsolla-baku-gametech-hackathon'];
+const NOT_UPSTREAM = ['cse442-at-ub', 'xsolla-baku-gametech-hackathon', 'aykhanstoic'];
 const listed = new Set([...src.matchAll(entry)].map((m) => m[1].toLowerCase()));
 try {
   const q = encodeURIComponent('author:r14dd is:pr is:merged -user:r14dd');
