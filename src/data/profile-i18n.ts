@@ -400,7 +400,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Риад Мухтаров',
     },
     about:
-      'строит внутреннюю AI-инфраструктуру в Международном банке Азербайджана. До этого он писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов преподавателя в State University of New York at Buffalo. В свободное время он вносит вклад в мир open source и поддерживает собственные инструменты на Rust.',
+      'уже более 4 лет в разработке ПО, строит внутреннюю AI-инфраструктуру в Международном банке Азербайджана. До этого он писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов преподавателя в State University of New York at Buffalo. В свободное время он вносит вклад в мир open source и поддерживает собственные инструменты на Rust.',
     experience: [
       {
         role: 'Инженер по искусственному интеллекту',
@@ -408,11 +408,14 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Апр 2026 – Настоящее время',
         bullets: [
-          'Руковожу разработкой внутреннего LangGraph-агента банка для документов и платформы agents-as-a-service',
+          'Руковожу разработкой внутреннего LangGraph-агента банка для документов и платформы agents-as-a-service для 4 000 сотрудников',
           'Изолировал каждое действие агента в песочнице на чат (NVIDIA OpenShell, Kata на OpenShift): без сети, Landlock, аудит',
-          'Сделал систему наблюдаемой: Langfuse на каждый ход, ежедневная оценка чата, GitLab CI с тестами и аудитом',
+          'Написал оценку из 28 кейсов на LLM-as-judge (память, язык, безопасность, навыки, инструменты) с отслеживанием регрессий, датасетами Langfuse и отчётом на почту; 28/28 проходят на октябрь 2026, оценка нашла, что веб-поиск заблокирован в сети банка',
+          'Сделал систему наблюдаемой: Langfuse на каждый ход, GitLab CI с линтером, ~1 700 бэкенд-тестов и аудитом',
           'Сохранил данные внутри банка: guardrails для веб-поиска, лимиты расходов и токенов на сервере, ETL в Postgres',
-          'Интегрировал LibreChat как чат-интерфейс банка со входом через каталог сотрудников и формами сервис-деска в чате',
+          'Интегрировал LibreChat как чат-интерфейс банка со входом через LDAP и формами сервис-деска в чате',
+          'Работает на азербайджанском, русском и английском',
+          'Пишу и рассылаю AI-Newsletter: еженедельный выпуск с апреля 2026 для C-level, департаментов и трайбов, уже 17 выпусков',
         ],
       },
       {
@@ -421,8 +424,9 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Фев 2026 – Настоящее время',
         bullets: [
-          'Руковожу командой разработки сайта и инструментов для участников; отвечаю за домены, хостинг, почту и доступ',
+          'Руковожу командой из 2 человек по сайту и инструментов для участников; отвечаю за домены, хостинг, почту и доступ',
           'Координация обновления веб-сайта, улучшения внутренних платформ и внедрения новых технологий',
+          'Новый сайт утверждён советом до запуска',
         ],
       },
       {
@@ -915,7 +919,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Riad Muxtarov',
     },
     about:
-      'Azərbaycan Beynəlxalq Bankında daxili AI infrastrukturunu qurur. Bundan əvvəl o, dövlət qurumları üçün Python və Linux xidmətləri yazıb və State University of New York at Buffalo-da müəllim assistentlərindən ibarət komandaya rəhbərlik edib. Boş vaxtlarında açıq mənbəli proqram təminatı dünyasına töhfə verir və öz Rust alətlərini dəstəkləyir.',
+      'proqram təminatında 4+ illik təcrübəyə malikdir, Azərbaycan Beynəlxalq Bankında daxili AI infrastrukturunu qurur. Bundan əvvəl o, dövlət qurumları üçün Python və Linux xidmətləri yazıb və State University of New York at Buffalo-da müəllim assistentlərindən ibarət komandaya rəhbərlik edib. Boş vaxtlarında açıq mənbəli proqram təminatı dünyasına töhfə verir və öz Rust alətlərini dəstəkləyir.',
     experience: [
       {
         role: 'Süni İntellekt üzrə Mühəndis',
@@ -923,11 +927,14 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Apr 2026 – indiyə kimi',
         bullets: [
-          'Bankın sənədlər üçün daxili LangGraph agentinin və agents-as-a-service platformasının hazırlanmasına rəhbərlik edirəm',
+          'Bankın sənədlər üçün daxili LangGraph agentinin və agents-as-a-service platformasının 4000 əməkdaş üçün hazırlanmasına rəhbərlik edirəm',
           'Hər agent əməliyyatını hər çat üçün sandbox-da təcrid etdim (NVIDIA OpenShell, OpenShift-də Kata): şəbəkəsiz, Landlock, audit',
-          'Sistemi müşahidə edilə bilən etdim: Langfuse izləməsi, gündəlik çat qiymətləndirməsi, test və auditli GitLab CI',
+          '28 hallıq LLM-as-judge qiymətləndirməsi yazdım (yaddaş, dil, təhlükəsizlik, bacarıqlar, alətlər): reqressiya aşkarlanması, Langfuse datasetləri və e-poçtla hesabat; 2026-cı ilin oktyabrına 28/28 keçir, qiymətləndirmə veb-axtarışın bank şəbəkəsində bloklandığını tapdı',
+          'Sistemi müşahidə edilə bilən etdim: Langfuse izləməsi, lint, ~1 700 backend testi və auditli GitLab CI',
           'Məlumatları bankın daxilində saxladım: veb-axtarışa guardrail-lər, server tərəfində xərc və token limitləri, Postgres-ə ETL',
-          'LibreChat-i bankın çat interfeysi kimi inteqrasiya etdim: işçi kataloqu ilə giriş və çatda servis-desk formaları',
+          'LibreChat-i bankın çat interfeysi kimi inteqrasiya etdim: LDAP ilə giriş və çatda servis-desk formaları',
+          'Azərbaycan, rus və ingilis dillərində xidmət göstərir',
+          'AI-Newsletter yazıb göndərirəm: 2026-cı ilin aprelindən C-level, departamentlər və tribelər üçün həftəlik buraxılış, 17 buraxılış',
         ],
       },
       {
@@ -936,8 +943,9 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Fev 2026 – indiyə kimi',
         bullets: [
-          'Veb-sayt və üzvlər üçün alətlər üzərində komandaya rəhbərlik edirəm; domen, hostinq, poçt və girişə cavabdehəm',
+          'Veb-sayt və üzvlər üçün alətlər üzərində 2 nəfərlik komandaya rəhbərlik edirəm; domen, hostinq, poçt və girişə cavabdehəm',
           'Veb-saytın yenilənməsi, daxili platformaların təkmilləşdirilməsi və yeni texnologiyaların tətbiqinin koordinasiyası',
+          'Yeni veb-sayt işə düşməzdən əvvəl şura tərəfindən təsdiq edildi',
         ],
       },
       {

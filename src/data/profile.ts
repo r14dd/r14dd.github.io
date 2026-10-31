@@ -90,7 +90,7 @@ export const profile: Profile = {
   },
 
   about:
-    'builds the internal AI infrastructure at the International Bank of Azerbaijan. Before that, he wrote Python and Linux services for governmental institutions and led a team of teaching assistants at the State University of New York at Buffalo. Off the clock, he contributes to the world of open source software and maintains Rust tools of his own.',
+    'has 4+ years in software and builds the internal AI infrastructure at the International Bank of Azerbaijan. Before that, he wrote Python and Linux services for governmental institutions and led a team of teaching assistants at the State University of New York at Buffalo. Off the clock, he contributes to the world of open source software and maintains Rust tools of his own.',
 
   email: 'riad@riad.cc',
 
@@ -107,11 +107,14 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
       bullets: [
-        "Leading development of the bank's internal LangGraph document agent and agents-as-a-service platform",
+        "Leading development of the bank's internal LangGraph document agent and agents-as-a-service platform, built for 4,000 employees",
         'Isolated each agent action in a per-chat sandbox (NVIDIA OpenShell, Kata on OpenShift): no egress, Landlock, audit',
-        'Made it observable: Langfuse tracing per turn, a daily chat eval, and GitLab CI with lint, tests and audit',
+        'Built a 28-case LLM-as-judge eval (memory, language, safety, skills, tools) with regression detection, Langfuse datasets and an emailed report; 28/28 passing as of Oct 2026, and it caught web search blocked on the bank network',
+        'Made it observable: Langfuse tracing per turn and GitLab CI with lint, ~1,700 backend tests and audit',
         'Kept data in the bank: guardrails on web search, server-side spend and token limits, ETL into Postgres',
-        "Integrated LibreChat as the bank's chat front end with directory sign-in and service-desk forms in chat",
+        "Integrated LibreChat as the bank's chat front end with LDAP sign-in and service-desk forms in chat",
+        'Serves users in Azerbaijani, Russian and English',
+        'Write and send AI-Newsletter, a weekly issue since April 2026 to C-levels, departments and tribes: 17 issues so far',
       ],
     },
     {
@@ -120,8 +123,9 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Feb 2026 – Present',
       bullets: [
-        'Leading the development team on the website and member tools; owning domains, hosting, email, access',
+        'Leading a team of 2 on the website and member tools; owning domains, hosting, email, access',
         'Coordinating the website renewal, internal platform improvements, and new technology rollouts',
+        'Got the new website approved by the board before launch',
       ],
     },
     {
@@ -382,7 +386,7 @@ export const profile: Profile = {
   skills: [
     {
       category: 'Programming Languages',
-      groups: [{ label: '', items: ['Rust', 'Python', 'TypeScript', 'Go', 'C'] }],
+      groups: [{ label: '', items: ['Rust', 'Python', 'TypeScript', 'C'] }],
     },
     {
       category: 'Backend & Runtimes',
@@ -411,12 +415,12 @@ export const profile: Profile = {
           items: [
             'LangGraph',
             'LangChain',
-            'MCP',
             'Deep Agents',
             'Langfuse',
             'OpenAI API',
             'Anthropic API',
             'Gemini',
+            'Google Cloud (Vertex AI / Gemini: speech APIs)',
             'FAISS',
             'Milvus',
             'RAG',
@@ -526,16 +530,15 @@ export const profile: Profile = {
   resume: {
     phone: '+994 (50) 899-8676',
     projects: ['patent', 'quorumrag', 'aicell'],
-    roleBullets: [5, 1, 1, 0, 1, 2],
+    roleBullets: [6, 1, 1, 0, 1, 2],
     projectBullets: 1,
     skills: [
-      { category: 'Languages', items: ['Python', 'Rust', 'TypeScript', 'Go', 'C'] },
+      { category: 'Languages', items: ['Python', 'Rust', 'TypeScript', 'C'] },
       {
         category: 'AI & Agents',
         items: [
           'LangGraph',
           'LangChain',
-          'MCP',
           'RAG',
           'Guardrails',
           'OpenAI/Anthropic/Gemini APIs',
