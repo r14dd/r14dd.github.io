@@ -107,7 +107,7 @@ export const profile: Profile = {
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
       bullets: [
-        "Leading development of the bank's internal LangGraph document agent and agents-as-a-service platform, built for 4,000 employees",
+        "Leading development of the bank's internal agentic platform, built for 4,000 employees",
         'Isolated each agent action in a per-chat sandbox (NVIDIA OpenShell, Kata on OpenShift): no egress, Landlock, audit',
         'Built a 28-case LLM-as-judge eval (memory, language, safety, skills, tools) with regression detection, Langfuse datasets and an emailed report; 28/28 passing as of Oct 2026, and it caught web search blocked on the bank network',
         'Made it observable: Langfuse tracing per turn and GitLab CI with lint, ~1,700 backend tests and audit',

@@ -408,7 +408,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Баку, Азербайджан',
         period: 'Апр 2026 – Настоящее время',
         bullets: [
-          'Руковожу разработкой внутреннего LangGraph-агента банка для документов и платформы agents-as-a-service для 4 000 сотрудников',
+          'Руковожу разработкой внутренней агентной платформы банка для 4 000 сотрудников',
           'Изолировал каждое действие агента в песочнице на чат (NVIDIA OpenShell, Kata на OpenShift): без сети, Landlock, аудит',
           'Написал оценку из 28 кейсов на LLM-as-judge (память, язык, безопасность, навыки, инструменты) с отслеживанием регрессий, датасетами Langfuse и отчётом на почту; 28/28 проходят на октябрь 2026, оценка нашла, что веб-поиск заблокирован в сети банка',
           'Сделал систему наблюдаемой: Langfuse на каждый ход, GitLab CI с линтером, ~1 700 бэкенд-тестов и аудитом',
@@ -927,7 +927,7 @@ export const profiles: Record<string, I18nProfile> = {
         location: 'Bakı, Azərbaycan',
         period: 'Apr 2026 – indiyə kimi',
         bullets: [
-          'Bankın sənədlər üçün daxili LangGraph agentinin və agents-as-a-service platformasının 4000 əməkdaş üçün hazırlanmasına rəhbərlik edirəm',
+          'Bankın daxili agentik platformasının 4000 əməkdaş üçün hazırlanmasına rəhbərlik edirəm',
           'Hər agent əməliyyatını hər çat üçün sandbox-da təcrid etdim (NVIDIA OpenShell, OpenShift-də Kata): şəbəkəsiz, Landlock, audit',
           '28 hallıq LLM-as-judge qiymətləndirməsi yazdım (yaddaş, dil, təhlükəsizlik, bacarıqlar, alətlər): reqressiya aşkarlanması, Langfuse datasetləri və e-poçtla hesabat; 2026-cı ilin oktyabrına 28/28 keçir, qiymətləndirmə veb-axtarışın bank şəbəkəsində bloklandığını tapdı',
           'Sistemi müşahidə edilə bilən etdim: Langfuse izləməsi, lint, ~1 700 backend testi və auditli GitLab CI',
