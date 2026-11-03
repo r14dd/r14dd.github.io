@@ -56,7 +56,7 @@ const projects = [...p.resume.projects.map((id) => byId.get(id)!), ...rest].map(
     ...pr,
     links,
     cut: i >= p.resume.projects.length,
-    bullets: pr.bullets.map((text, j) => ({ text, cut: j >= p.resume.projectBullets })),
+    bullets: pr.bullets.map((text, j) => ({ text, cut: j >= (p.resume.projectBullets[i] ?? 0) })),
   };
 });
 const [eduDates, eduPlace] = p.education.meta.split(' · ');

@@ -77,8 +77,8 @@ export type Profile = {
     projects: string[];
     /** Bullets kept per role, by position in `experience`; every role is listed. */
     roleBullets: number[];
-    /** Bullets kept per project. */
-    projectBullets: number;
+    /** Bullets kept per project, by position in `projects`. */
+    projectBullets: number[];
     /** The CV's short skills list; the site shows the full one. */
     skills: { category: string; items: string[] }[];
   };
@@ -236,6 +236,7 @@ export const profile: Profile = {
       date: 'Jun 2026',
       bullets: [
         'Rust CLI that checks if a dev tool exists: 19 concurrent adapters, 500+ GitHub stars, official ratatui showcase',
+        'Independently ported to Go by a third-party developer and presented at a Leipzig Gophers meetup',
         'Designed integrity-scoped verdict system that never asserts absence, only reports what was found in sources checked',
         'Added interactive ratatui TUI with detail view, browser open, and structured JSON output for CI pipelines',
       ],
@@ -530,8 +531,8 @@ export const profile: Profile = {
   resume: {
     phone: '+994 (50) 899-8676',
     projects: ['patent', 'quorumrag', 'aicell'],
-    roleBullets: [6, 1, 1, 0, 1, 2],
-    projectBullets: 1,
+    roleBullets: [5, 1, 1, 0, 1, 2],
+    projectBullets: [2, 1, 1],
     skills: [
       { category: 'Languages', items: ['Python', 'Rust', 'TypeScript', 'C'] },
       {

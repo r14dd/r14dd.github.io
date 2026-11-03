@@ -534,6 +534,7 @@ export const profiles: Record<string, I18nProfile> = {
         date: 'Июн 2026',
         bullets: [
           'Rust CLI, проверяющий, есть ли dev-инструмент: 19 параллельных адаптеров, 500+ звёзд, официальный ratatui showcase',
+          'Независимо портирован на Go сторонним разработчиком и представлен на митапе Leipzig Gophers',
           'Спроектировал систему вердиктов с ограниченной областью, которая никогда не утверждает отсутствие, а только сообщает о найденном в проверенных источниках',
           'Добавил интерактивный ratatui TUI с детальным просмотром, открытием браузера и структурированным JSON-выводом для CI-пайплайнов',
         ],
@@ -1053,6 +1054,7 @@ export const profiles: Record<string, I18nProfile> = {
         date: 'İyun 2026',
         bullets: [
           'Developer alətinin artıq mövcud olub-olmadığını yoxlayan Rust CLI: 19 paralel adapter, 500+ ulduz, rəsmi ratatui showcase',
+          'Üçüncü tərəf developer tərəfindən müstəqil olaraq Go-ya port edilib və Leipzig Gophers görüşündə təqdim olunub',
           'Heç vaxt yoxluğu iddia etməyən, yalnız yoxlanılmış mənbələrdə tapılanları bildirən bütövlük əhatəli qərar sistemi qurdum',
           'Detallı baxış, brauzer açma və CI pipeline-ları üçün strukturlaşdırılmış JSON çıxışı olan interaktiv ratatui TUI əlavə etdim',
         ],

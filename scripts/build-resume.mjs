@@ -67,7 +67,7 @@ const projects = p.resume.projects
     if (!pr) throw new Error(`build-resume: resume.projects names unknown project "${id}"`);
     return pr;
   })
-  .map((pr) => {
+  .map((pr, i) => {
     const links = Object.entries(pr.links ?? {})
       .filter(([k]) => k !== 'demo')
       .map(([k, url]) => {
@@ -84,7 +84,7 @@ const projects = p.resume.projects
       })
       .join(' ');
     const head = `\\textbf{${esc(pr.name.split(':')[0])}} ${links}${links ? ' ' : ''}$|$ \\emph{${esc(pr.tech.join(', '))}}`;
-    return `\\resumeProjectHeading{${head}}{${esc(pr.date ?? '')}}\n${bullets(pr.bullets.slice(0, p.resume.projectBullets))}`;
+    return `\\resumeProjectHeading{${head}}{${esc(pr.date ?? '')}}\n${bullets(pr.bullets.slice(0, p.resume.projectBullets[i] ?? 0))}`;
   })
   .join('\n');
 
