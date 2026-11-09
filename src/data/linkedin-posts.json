@@ -1,5 +1,11 @@
 [
   {
+    "url": "https://www.linkedin.com/posts/riadmukhtarov_the-tests-were-the-spec-riad-mukhtarov-activity-7523385075946889216-WVxL",
+    "postedAt": "2026-11-03T14:06:19.841Z",
+    "text": "Having lunch and then seeing that someone in Germany ported patent to Go and gave a talk about it at the Leipzig Gophers meetup. I found out from his email.\n\nHe used my tests as the spec and had it done in 23 hours. He also found 5 bugs I'd missed 😅\nWrote a…",
+    "tags": []
+  },
+  {
     "url": "https://www.linkedin.com/posts/riadmukhtarov_well-well-well-activity-7521815363492147200-T1dI",
     "postedAt": "2026-10-30T06:08:51.228Z",
     "text": "Well well well",
