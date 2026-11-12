@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { profiles } from '../../data/profile-i18n';
+// Page-level, not in BaseLayout: with inlineStylesheets:'always' a layout
+// import would paste this stylesheet into every page on the site.
+import '../../styles/motion.css';
+
+const p = profiles.en;
+const L = p.labels;
+
+const metaTitle = `${p.hero.name}: Scroll motion`;
+const metaDescription = 'Scroll-driven motion in plain CSS. No animation library.';
+
+// One span per word. --i / --n place each word's slice of the scroll range.
+const aboutWords = ('Riad ' + p.about).split(' ');
+
+const connect = [
+  { label: L.links.email, href: `mailto:${p.email}` },
+  { label: L.links.linkedin, href: p.links.linkedin },
+  { label: L.links.github, href: p.links.github },
+  { label: L.links.resume, href: p.links.resume },
+];
+---
+
+<BaseLayout metaTitle={metaTitle} metaDescription={metaDescription} lang="en" noindex>
+  <main id="main-content" class="motion-page">
+    <a class="m-back" href="/lab/">← back to lab</a>
+
+    <header class="m-hero">
+      <p class="m-eyebrow">
+        <span class="m-eyebrow-dot" aria-hidden="true"></span>
+        {L.heroEyebrow}
+      </p>
+      <h1 class="m-name">{p.hero.name}</h1>
+      <p class="m-cue" aria-hidden="true">Scroll</p>
+    </header>
+
+    <p class="m-nosupport">
+      This browser has no scroll-driven animations yet. You are seeing the static layout.
+    </p>
+
+    <div class="m-about" style={`--n:${aboutWords.length}`}>
+      <div class="m-about-pin">
+        <p class="m-about-text">
+          {
+            aboutWords.map((word, i) => (
+              <>
+                <span class="m-word" style={`--i:${i}`}>
+                  {word}
+                </span>{' '}
+              </>
+            ))
+          }
+        </p>
+      </div>
+    </div>
+
+    <div class="m-block">
+      <p class="m-eyebrow">{L.eyebrows.experience}</p>
+      <h2 class="m-h">{L.headings.experience}</h2>
+      <ol class="m-rail">
+        {
+          p.experience.map((e) => (
+            <li class="m-rail-item">
+              <div class="m-rail-body">
+                <p class="m-rail-period">{e.period}</p>
+                <h3 class="m-rail-role">{e.role}</h3>
+                <p class="m-rail-org">{`${e.org} · ${e.location}`}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div class="m-gal" style={`--n:${p.projects.length}`}>
+      <div class="m-gal-pin">
+        <div class="m-gal-head">
+          <p class="m-eyebrow">{L.eyebrows.projects}</p>
+          <h2 class="m-h" id="m-gal-h">{L.headings.projects}</h2>
+        </div>
+        <div
+          class="m-gal-view"
+          role="region"
+          aria-labelledby="m-gal-h"
+          tabindex="0"
+          data-lenis-prevent-horizontal
+        >
+          <ol class="m-gal-track">
+            {
+              p.projects.map((pr) => (
+                <li class="m-card">
+                  <h3 class="m-card-name">{pr.name}</h3>
+                  {pr.date && <p class="m-card-date">{pr.date}</p>}
+                  {pr.impact && <p class="m-card-impact">{pr.impact}</p>}
+                  <p class="m-card-tech">{pr.tech.join(' · ')}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-connect">
+      <h2 class="m-connect-line">{L.connectTagline}</h2>
+      <ul class="m-links">
+        {
+          connect.map((c) => (
+            <li>
+              <a
+                href={c.href}
+                target={c.href.startsWith('http') ? '_blank' : undefined}
+                rel={c.href.startsWith('http') ? 'noopener' : undefined}
+              >
+                {c.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="m-foot">
+      <a class="m-back" href="/lab/">← back to lab</a>
+      <a class="m-back" href="#main-content">top ↑</a>
+    </div>
+  </main>
+</BaseLayout>

@@ -1,4 +1,4 @@
-/* /lab/sw.js: offline service worker for the lab page ONLY.
+/* /lab/sw.js: offline service worker for the /lab pages ONLY.
  *
  * Registered with the default scope of its own location (/lab/), so it can only
  * ever control /lab pages, the main site is never intercepted. Strategy:
@@ -8,7 +8,7 @@
  * Send {type:'purge'} to wipe the cache; unregister from the page to fully clean up.
  */
 const CACHE = 'lab-cache-v1';
-const CORE = ['/lab/', '/lab/lab.wasm'];
+const CORE = ['/lab/', '/lab/motion/', '/lab/lab.wasm'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

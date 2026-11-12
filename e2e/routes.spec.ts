@@ -72,6 +72,7 @@ const routes: Route[] = [
   { path: '/az/resume/', main: 'main#main-content' },
   { path: '/colophon/', main: 'main#main-content' },
   { path: '/lab/', main: '.lab-page' }, // no <main> here; real content wrapper
+  { path: '/lab/motion/', main: 'main#main-content' },
   { path: '/poll/', main: 'main.shell' },
   { path: '/writing/', main: 'main#main-content' },
   { path: '/writing/assume-the-model-cooperates-with-the-attacker/', main: 'main#main-content' },
