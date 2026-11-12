@@ -1,5 +1,7 @@
 # r14dd.github.io
 
+Read `NEXT.md` first: open work and next steps carried over from the previous machine.
+
 Personal site of Riad Mukhtarov (r14dd). Astro 7, `output: "static"`, deployed
 to GitHub Pages by CI on push to main. This is a personal artifact: no SEO
 work (explicitly declined).
