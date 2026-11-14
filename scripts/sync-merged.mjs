@@ -31,6 +31,8 @@ writeFileSync(file, src);
 // and hackathon orgs are not upstream work; add new ones here if they show up.
 const NOT_UPSTREAM = ['cse442-at-ub', 'xsolla-baku-gametech-hackathon', 'aykhanstoic'];
 const listed = new Set([...src.matchAll(entry)].map((m) => m[1].toLowerCase()));
+// An entry whose url searches a whole org (org%3Aratatui) covers every repo in it.
+const listedOrgs = new Set([...src.matchAll(/org%3A([\w-]+)/g)].map((m) => m[1].toLowerCase()));
 try {
   const q = encodeURIComponent('author:r14dd is:pr is:merged -user:r14dd');
   const res = await fetch(`https://api.github.com/search/issues?q=${q}&per_page=100`, { headers });
@@ -38,7 +40,8 @@ try {
   const { items } = await res.json();
   const repos = new Set(items.map((i) => i.repository_url.split('/repos/')[1].toLowerCase()));
   for (const repo of repos) {
-    if (listed.has(repo) || NOT_UPSTREAM.includes(repo.split('/')[0])) continue;
+    const org = repo.split('/')[0];
+    if (listed.has(repo) || listedOrgs.has(org) || NOT_UPSTREAM.includes(org)) continue;
     console.log(
       `::warning title=Unlisted merged PRs::${repo} has merged PRs but no openSource entry in profile.ts`,
     );
