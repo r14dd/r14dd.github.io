@@ -27,17 +27,13 @@ work (explicitly declined).
   hero, dots, emoji toggle) stay unless Riad asks.
 - `/lab` is an experiments sandbox kept off the main site; its WASM is a
   committed prebuilt artifact. CI does not compile Rust.
-- `/genx` is the "Quorum Line" redesign with its own design system
-  (`design-system/`) and project agents (principal-design, principal-swe,
-  design-critic). Use those agents for /genx work.
 
 ## Workers
 
-Four Cloudflare workers (toy APIs), all answering `GET /health`. CI deploys
-them, but the `CLOUDFLARE_API_TOKEN` repo secret is not set yet, so the
-Deploy Workers run on main is EXPECTED red until Riad adds it (a dashboard
-action only he can do; never handle the token value). Wrangler creds exist on
-this machine. Run worker deploys locally instead of handing Riad commands.
+Five Cloudflare workers (toy APIs), all answering `GET /health`. CI deploys
+them on pushes that touch a worker, and Deploy Workers on main is green
+(never handle the token value). Wrangler creds exist on this machine. Run
+worker deploys locally instead of handing Riad commands.
 
 ## Git
 

@@ -10,9 +10,8 @@ State carried over from the old Mac on 2026-11-12.
 
 ## Next steps
 
-1. Run `npm ci`, `npm run build`, `npm run lint`, `npx prettier --check .`, `npm run test:e2e`. Done when all pass. Retry the three `design-guards` flakes; on macOS the `smoke.spec.ts` "language switcher works without JavaScript" test is known to fail locally and pass in CI.
+1. Verified 2026-11-15: build, lint, prettier and e2e pass (82/83). Needs `tectonic` on PATH for the build (prebuilt binary in `~/.local/bin`; `brew install tectonic` compiles LLVM, don't). Retry the three `design-guards` flakes; on macOS the `smoke.spec.ts` "language switcher works without JavaScript" test is known to fail locally and pass in CI.
 2. Preview with `npm run preview -- --ignore-lock` and view `/lab/motion/` at desktop size and 390x844 in Chrome and Safari. Done when the owner has chosen: keep in `/lab`, promote, or drop.
-3. Fix stale `CLAUDE.md` lines: the Workers paragraph (Deploy Workers has been green since September, so the missing-token note is out of date) and the `/genx` bullet (no `/genx` route or `design-system/` exists). Done when `CLAUDE.md` matches `gh run list --workflow "Deploy Workers"` and `ls src/pages`.
 
 ## Gotchas
 
