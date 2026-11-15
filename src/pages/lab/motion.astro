@@ -1,6 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { profiles } from '../../data/profile-i18n';
+import {
+  buildExperience,
+  buildProjects,
+  buildOpenSource,
+  buildSkills,
+  buildTeaching,
+  buildEducation,
+  buildRecommendations,
+  buildPosts,
+  buildConnect,
+  stripParens,
+} from '../../lib/builders';
 // Page-level, not in BaseLayout: with inlineStylesheets:'always' a layout
 // import would paste this stylesheet into every page on the site.
 import '../../styles/motion.css';
@@ -11,119 +23,147 @@ const L = p.labels;
 const metaTitle = `${p.hero.name}: Scroll motion`;
 const metaDescription = 'Scroll-driven motion in plain CSS. No animation library.';
 
-// One span per word. --i / --n place each word's slice of the scroll range.
-const aboutWords = ('Riad ' + p.about).split(' ');
+const nameWords = p.hero.name.split(' ');
 
-const connect = [
-  { label: L.links.email, href: `mailto:${p.email}` },
-  { label: L.links.linkedin, href: p.links.linkedin },
-  { label: L.links.github, href: p.links.github },
-  { label: L.links.resume, href: p.links.resume },
-];
+// One span per word. --i / --n place each word's slice of the scroll range.
+const aboutWords = `${nameWords[0]} ${p.about}`.split(' ');
+
+// Words of the about text that the rest of the profile also names (a skill, or
+// the open-source heading) get an accent underline as they light.
+const norm = (w: string) => w.toLowerCase().replace(/[^\p{L}\p{N}+#]/gu, '');
+const known = new Set(
+  [
+    ...p.skills.flatMap((s) => s.groups.flatMap((g) => g.items.map(stripParens))),
+    ...L.headings.openSource.split(' '),
+  ]
+    .map(norm)
+    .filter((w) => w.length > 2),
+);
+const isKey = (w: string) => known.has(norm(w));
+
+// The open-source count is the one number the builders hand over only inside
+// a sentence, so the count-up reads the same data and renders its own stat.
+const merged = p.openSource.reduce((n, o) => n + o.merged, 0);
+const [mergedPre, mergedPost] = L.mergedPrs.split('{n}');
 ---
 
 <BaseLayout metaTitle={metaTitle} metaDescription={metaDescription} lang="en" noindex>
   <main id="main-content" class="motion-page">
-    <a class="m-back" href="/lab/">← back to lab</a>
+    <div class="m-curtain">
+      <a class="m-back" href="/lab/">← back to lab</a>
 
-    <header class="m-hero">
-      <p class="m-eyebrow">
-        <span class="m-eyebrow-dot" aria-hidden="true"></span>
-        {L.heroEyebrow}
-      </p>
-      <h1 class="m-name">{p.hero.name}</h1>
-      <p class="m-cue" aria-hidden="true">Scroll</p>
-    </header>
-
-    <p class="m-nosupport">
-      This browser has no scroll-driven animations yet. You are seeing the static layout.
-    </p>
-
-    <div class="m-about" style={`--n:${aboutWords.length}`}>
-      <div class="m-about-pin">
-        <p class="m-about-text">
+      <header class="m-hero">
+        <p class="m-eyebrow">
+          <span class="m-eyebrow-dot" aria-hidden="true"></span>
+          {L.heroEyebrow}
+        </p>
+        <h1 class="m-name">
           {
-            aboutWords.map((word, i) => (
+            nameWords.map((word) => (
               <>
-                <span class="m-word" style={`--i:${i}`}>
-                  {word}
+                <span class="hero-word-wrap">
+                  <span class="hero-word">{word}</span>
                 </span>{' '}
               </>
             ))
           }
-        </p>
-      </div>
-    </div>
+        </h1>
+        <p class="m-cue" aria-hidden="true">Scroll</p>
+      </header>
 
-    <div class="m-block">
-      <p class="m-eyebrow">{L.eyebrows.experience}</p>
-      <h2 class="m-h">{L.headings.experience}</h2>
-      <ol class="m-rail">
-        {
-          p.experience.map((e) => (
-            <li class="m-rail-item">
-              <div class="m-rail-body">
-                <p class="m-rail-period">{e.period}</p>
-                <h3 class="m-rail-role">{e.role}</h3>
-                <p class="m-rail-org">{`${e.org} · ${e.location}`}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
+      <p class="m-nosupport">
+        This browser has no scroll-driven animations yet. You are seeing the static layout.
+      </p>
 
-    <div class="m-gal" style={`--n:${p.projects.length}`}>
-      <div class="m-gal-pin">
-        <div class="m-gal-head">
-          <p class="m-eyebrow">{L.eyebrows.projects}</p>
-          <h2 class="m-h" id="m-gal-h">{L.headings.projects}</h2>
-        </div>
-        <div
-          class="m-gal-view"
-          role="region"
-          aria-labelledby="m-gal-h"
-          tabindex="0"
-          data-lenis-prevent-horizontal
-        >
-          <ol class="m-gal-track">
+      <div class="m-scene" data-scene="about" style={`--n:${aboutWords.length}`}>
+        <div class="m-about-pin">
+          <p class="m-about-text">
             {
-              p.projects.map((pr) => (
-                <li class="m-card">
-                  <h3 class="m-card-name">{pr.name}</h3>
-                  {pr.date && <p class="m-card-date">{pr.date}</p>}
-                  {pr.impact && <p class="m-card-impact">{pr.impact}</p>}
-                  <p class="m-card-tech">{pr.tech.join(' · ')}</p>
-                </li>
+              aboutWords.map((word, i) => (
+                <>
+                  <span class={`m-word${isKey(word) ? ' is-key' : ''}`} style={`--i:${i}`}>
+                    {word}
+                  </span>{' '}
+                </>
               ))
             }
-          </ol>
+          </p>
         </div>
+      </div>
+
+      <div class="m-scene" data-scene="experience" style={`--n:${p.experience.length}`}>
+        <Fragment set:html={buildExperience(p)} />
+      </div>
+
+      <div class="m-scene" data-scene="projects" style={`--n:${p.projects.length}`}>
+        <Fragment set:html={buildProjects(p)} />
+      </div>
+
+      <div class="m-scene" data-scene="open-source" style={`--n:${p.openSource.length}`}>
+        <Fragment set:html={buildOpenSource(p)} />
+        <p class="m-stat" style={`--to:${merged}`}>
+          {mergedPre}<span class="m-num"><span class="m-num-text">{merged}</span></span>{mergedPost}
+        </p>
+      </div>
+
+      <div class="m-scene" data-scene="skills" style={`--n:${p.skills.length}`}>
+        <Fragment set:html={buildSkills(p)} />
+      </div>
+
+      <div class="m-scene" data-scene="teaching" style={`--n:${p.teaching.length}`}>
+        <Fragment set:html={buildTeaching(p)} />
+      </div>
+
+      <div class="m-scene" data-scene="education">
+        <Fragment set:html={buildEducation(p)} />
+      </div>
+
+      <div class="m-scene" data-scene="recommendations" style={`--n:${p.testimonials.length}`}>
+        <div class="m-pin" data-lenis-prevent-horizontal>
+          <Fragment set:html={buildRecommendations(p)} />
+          <div class="m-dots" aria-hidden="true">
+            {p.testimonials.map(() => <span />)}
+          </div>
+        </div>
+      </div>
+
+      <div class="m-scene" data-scene="posts">
+        <Fragment set:html={buildPosts(p)} />
       </div>
     </div>
 
-    <div class="m-connect">
-      <h2 class="m-connect-line">{L.connectTagline}</h2>
-      <ul class="m-links">
-        {
-          connect.map((c) => (
-            <li>
-              <a
-                href={c.href}
-                target={c.href.startsWith('http') ? '_blank' : undefined}
-                rel={c.href.startsWith('http') ? 'noopener' : undefined}
-              >
-                {c.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="m-foot">
-      <a class="m-back" href="/lab/">← back to lab</a>
-      <a class="m-back" href="#main-content">top ↑</a>
+    <div class="m-scene m-connect" data-scene="connect">
+      <Fragment set:html={buildConnect(p)} />
+      <div class="m-foot">
+        <a class="m-back" href="/lab/">← back to lab</a>
+        <a class="m-back" href="#main-content">top ↑</a>
+      </div>
     </div>
   </main>
 </BaseLayout>
+
+<script>
+  // Magnetic links: each connect button leans up to 8px toward the cursor.
+  // Fine pointers only, and never when the visitor asked for less motion.
+  const fine = matchMedia('(pointer: fine)').matches;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (fine && !calm) {
+    const MAX = 8;
+    document.querySelectorAll<HTMLElement>('[data-scene="connect"] .cta-btn').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+        const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+        const clamp = (v: number) => Math.max(-1, Math.min(1, v)) * MAX;
+        el.style.transform = `translate(${clamp(dx)}px, ${clamp(dy)}px)`;
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.transform = '';
+      });
+    });
+  }
+  // The project titles open a modal that only the homepage script provides.
+  document.querySelectorAll<HTMLButtonElement>('.proj-open').forEach((b) => {
+    b.disabled = true;
+  });
+</script>
