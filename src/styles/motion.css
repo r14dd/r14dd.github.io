@@ -432,7 +432,7 @@ html.light .motion-page [data-scene='experience'] .scroll-tl-period {
 
 @keyframes m-word-on {
   from {
-    opacity: 0.18;
+    opacity: 0.35;
   }
   to {
     opacity: 1;
@@ -468,10 +468,12 @@ html.light .motion-page [data-scene='experience'] .scroll-tl-period {
 
 @keyframes m-wipe {
   from {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateY(0);
   }
   to {
-    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+    transform: translateY(-4svh);
   }
 }
 
@@ -805,13 +807,13 @@ html.light .motion-page [data-scene='experience'] .scroll-tl-period {
         --m-step: 12px;
         /* The arrival window must not exceed the gap, or the card after next
            is already arriving when a card docks and two cards shrink at once. */
-        --m-arrive: 30svh;
+        --m-arrive: 16svh;
       }
 
       .motion-page [data-scene='projects'] .proj-grid {
         display: flex;
         flex-direction: column;
-        gap: 30svh;
+        gap: 16svh;
         timeline-scope:
           --m-pc-2, --m-pc-3, --m-pc-4, --m-pc-5, --m-pc-6, --m-pc-7, --m-pc-8, --m-pc-9, --m-pc-10,
           --m-pc-11, --m-pc-12;
@@ -831,6 +833,18 @@ html.light .motion-page [data-scene='experience'] .scroll-tl-period {
         background-color: var(--bg);
         background-image: linear-gradient(var(--card-hover), var(--card-hover));
         transform-origin: 50% 0;
+        /* One height for every card, so a taller card never shows below the
+           shorter one docked over it. 22rem fits the tallest collapsed card
+           at 390px wide. */
+        height: min(22rem, calc(100svh - var(--m-top) - 12 * var(--m-step)));
+        overflow: clip;
+      }
+
+      /* An open card outgrows the stack: let it scroll like normal content. */
+      .motion-page [data-scene='projects'] .proj-card:has(details[open]) {
+        position: relative;
+        top: 0;
+        height: auto;
       }
 
       .motion-page [data-scene='projects'] .proj-grid:hover .proj-card {
@@ -1026,7 +1040,7 @@ html.light .motion-page [data-scene='experience'] .scroll-tl-period {
 
     @media (min-height: 640px) {
       .motion-page [data-scene='recommendations'] {
-        height: calc(100svh + (var(--n) - 1) * 70svh);
+        height: calc(100svh + (var(--n) - 1) * 40svh);
         padding-block: 0;
         overflow-x: clip;
         view-timeline-name: --m-recs;

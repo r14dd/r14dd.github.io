@@ -150,13 +150,13 @@ test.describe('/lab/motion, desktop', () => {
     const underline = () => matrixOf(page, '.m-word.is-key', 'm11', lastKey, '::after');
 
     await scrollToY(page, about.top);
-    await expect.poll(() => opacityOf(page, '.m-word', 0)).toBeCloseTo(0.18, 2);
-    expect(await opacityOf(page, '.m-word', last)).toBeCloseTo(0.18, 2);
+    await expect.poll(() => opacityOf(page, '.m-word', 0)).toBeCloseTo(0.35, 2);
+    expect(await opacityOf(page, '.m-word', last)).toBeCloseTo(0.35, 2);
     expect(await underline()).toBe(0);
 
     await scrollToY(page, about.top + pinLength * 0.5);
     await expect.poll(() => opacityOf(page, '.m-word', 0)).toBe(1);
-    expect(await opacityOf(page, '.m-word', last)).toBeCloseTo(0.18, 2);
+    expect(await opacityOf(page, '.m-word', last)).toBeCloseTo(0.35, 2);
     expect(await viewportTop(page, '.m-about-pin')).toBe(0);
 
     await scrollToY(page, about.top + pinLength);

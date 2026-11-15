@@ -166,4 +166,12 @@ const [mergedPre, mergedPost] = L.mergedPrs.split('{n}');
   document.querySelectorAll<HTMLButtonElement>('.proj-open').forEach((b) => {
     b.disabled = true;
   });
+  // The connect footer sits under the curtain, so the browser thinks a focused
+  // link is already in view. Uncover it whenever focus lands inside.
+  document.querySelector('[data-scene="connect"]')?.addEventListener('focusin', () => {
+    const end = document.documentElement.scrollHeight;
+    const lenis = (window as { __lenis?: { scrollTo(y: number, o?: object): void } }).__lenis;
+    if (lenis) lenis.scrollTo(end, { immediate: true, force: true });
+    else window.scrollTo({ top: end, behavior: 'instant' });
+  });
 </script>
