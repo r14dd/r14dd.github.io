@@ -491,9 +491,9 @@ export const profile: Profile = {
     {
       name: 'MLflow',
       url: 'https://github.com/mlflow/mlflow/pulls?q=is%3Apr+author%3Ar14dd+is%3Amerged',
-      merged: 8,
+      merged: 9,
       tech: ['Python', 'AI Gateway'],
-      period: 'Sep – Oct 2026',
+      period: 'Sep – Nov 2026',
       bullets: [
         "Fixed tool-call streaming and parsing in AI Gateway's Anthropic, Gemini, LiteLLM and Bedrock adapters",
       ],
