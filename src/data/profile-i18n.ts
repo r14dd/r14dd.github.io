@@ -400,10 +400,10 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Риад Мухтаров',
     },
     about:
-      'уже более 4 лет в разработке ПО, строит внутреннюю AI-инфраструктуру в Международном банке Азербайджана. До этого он писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов преподавателя в State University of New York at Buffalo. В свободное время он вносит вклад в мир open source и поддерживает собственные инструменты на Rust.',
+      'инженер ИИ в Международном банке Азербайджана, ведёт разработку внутренней агентной платформы для 4 000 сотрудников. Более 4 лет в разработке ПО; до этого он писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов преподавателя в State University of New York at Buffalo. В свободное время он вносит вклад в мир open source и поддерживает собственные инструменты на Rust.',
     experience: [
       {
-        role: 'Инженер по искусственному интеллекту',
+        role: 'Инженер по искусственному интеллекту II',
         org: 'ABB - International Bank of Azerbaijan',
         location: 'Баку, Азербайджан',
         period: 'Апр 2026 – Настоящее время',
@@ -920,10 +920,10 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Riad Muxtarov',
     },
     about:
-      'proqram təminatında 4+ illik təcrübəyə malikdir, Azərbaycan Beynəlxalq Bankında daxili AI infrastrukturunu qurur. Bundan əvvəl o, dövlət qurumları üçün Python və Linux xidmətləri yazıb və State University of New York at Buffalo-da müəllim assistentlərindən ibarət komandaya rəhbərlik edib. Boş vaxtlarında açıq mənbəli proqram təminatı dünyasına töhfə verir və öz Rust alətlərini dəstəkləyir.',
+      'Azərbaycan Beynəlxalq Bankında süni intellekt mühəndisidir, 4000 əməkdaş üçün daxili agentik platformanın hazırlanmasına rəhbərlik edir. Proqram təminatında 4+ illik təcrübəyə malikdir; bundan əvvəl o, dövlət qurumları üçün Python və Linux xidmətləri yazıb və State University of New York at Buffalo-da müəllim assistentlərindən ibarət komandaya rəhbərlik edib. Boş vaxtlarında açıq mənbəli proqram təminatı dünyasına töhfə verir və öz Rust alətlərini dəstəkləyir.',
     experience: [
       {
-        role: 'Süni İntellekt üzrə Mühəndis',
+        role: 'Süni İntellekt üzrə Mühəndis II',
         org: 'ABB - International Bank of Azerbaijan',
         location: 'Bakı, Azərbaycan',
         period: 'Apr 2026 – indiyə kimi',

@@ -90,7 +90,7 @@ export const profile: Profile = {
   },
 
   about:
-    'has 4+ years in software and builds the internal AI infrastructure at the International Bank of Azerbaijan. Before that, he wrote Python and Linux services for governmental institutions and led a team of teaching assistants at the State University of New York at Buffalo. Off the clock, he contributes to the world of open source software and maintains Rust tools of his own.',
+    'is an AI engineer at the International Bank of Azerbaijan, leading development of its internal agentic platform for 4,000 employees. He has 4+ years in software; before that, he wrote Python and Linux services for governmental institutions and led a team of teaching assistants at the State University of New York at Buffalo. Off the clock, he contributes to the world of open source software and maintains Rust tools of his own.',
 
   email: 'riad@riad.cc',
 
@@ -102,7 +102,7 @@ export const profile: Profile = {
 
   experience: [
     {
-      role: 'Artificial Intelligence Engineer',
+      role: 'Artificial Intelligence Engineer II',
       org: 'ABB - International Bank of Azerbaijan',
       location: 'Baku, Azerbaijan',
       period: 'Apr 2026 – Present',
