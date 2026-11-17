@@ -269,7 +269,7 @@ export const profiles: Record<string, I18nProfile> = {
         role1: 'AI Engineer @ ABB · International Bank of Azerbaijan',
         role2: 'Head of IT @ European Youth Parliament AZ',
         stat1: `${mergedTotal} merged PRs`,
-        stat2: '4+ yrs shipping',
+        stat2: '5 yrs shipping',
         stat3: '1000+ students taught',
         throughLine: 'The through-line:',
         noProjectsLoaded: 'No projects loaded.',
@@ -400,7 +400,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Риад Мухтаров',
     },
     about:
-      'инженер ИИ в Международном банке Азербайджана, ведёт разработку внутренней агентной платформы для 4 000 сотрудников. Более 4 лет в разработке ПО; до этого он писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов преподавателя в State University of New York at Buffalo. В свободное время он вносит вклад в мир open source и поддерживает собственные инструменты на Rust.',
+      'инженер ИИ в Международном банке Азербайджана, ведёт разработку внутренней агентной платформы для 4 000 сотрудников. 5 лет в разработке ПО; до этого он писал Python- и Linux-сервисы для государственных учреждений и руководил командой ассистентов преподавателя в State University of New York at Buffalo. В свободное время он вносит вклад в мир open source и поддерживает собственные инструменты на Rust.',
     experience: [
       {
         role: 'Инженер по искусственному интеллекту II',
@@ -789,7 +789,7 @@ export const profiles: Record<string, I18nProfile> = {
         role1: 'Инженер ИИ @ ABB · Международный Банк Азербайджана',
         role2: 'Руководитель IT @ Европейский Молодёжный Парламент AZ',
         stat1: `${mergedTotal} принятых PR`,
-        stat2: '4+ года в разработке',
+        stat2: '5 лет в разработке',
         stat3: '1000+ студентов обучено',
         throughLine: 'Красная нить:',
         noProjectsLoaded: 'Проекты не загружены.',
@@ -920,7 +920,7 @@ export const profiles: Record<string, I18nProfile> = {
       name: 'Riad Muxtarov',
     },
     about:
-      'Azərbaycan Beynəlxalq Bankında süni intellekt mühəndisidir, 4000 əməkdaş üçün daxili agentik platformanın hazırlanmasına rəhbərlik edir. Proqram təminatında 4+ illik təcrübəyə malikdir; bundan əvvəl o, dövlət qurumları üçün Python və Linux xidmətləri yazıb və State University of New York at Buffalo-da müəllim assistentlərindən ibarət komandaya rəhbərlik edib. Boş vaxtlarında açıq mənbəli proqram təminatı dünyasına töhfə verir və öz Rust alətlərini dəstəkləyir.',
+      'Azərbaycan Beynəlxalq Bankında süni intellekt mühəndisidir, 4000 əməkdaş üçün daxili agentik platformanın hazırlanmasına rəhbərlik edir. Proqram təminatında 5 illik təcrübəyə malikdir; bundan əvvəl o, dövlət qurumları üçün Python və Linux xidmətləri yazıb və State University of New York at Buffalo-da müəllim assistentlərindən ibarət komandaya rəhbərlik edib. Boş vaxtlarında açıq mənbəli proqram təminatı dünyasına töhfə verir və öz Rust alətlərini dəstəkləyir.',
     experience: [
       {
         role: 'Süni İntellekt üzrə Mühəndis II',
@@ -1309,7 +1309,7 @@ export const profiles: Record<string, I18nProfile> = {
         role1: 'Süni İntellekt üzrə Mühəndis @ ABB · Azərbaycan Beynəlxalq Bankı',
         role2: 'İT Rəhbəri @ Avropa Gənclər Parlamenti AZ',
         stat1: `${mergedTotal} qəbul edilmiş PR`,
-        stat2: '4+ il təcrübə',
+        stat2: '5 il təcrübə',
         stat3: '1000+ tələbə tədris edilib',
         throughLine: 'Əsas fikir:',
         noProjectsLoaded: 'Layihələr yüklənməyib.',
